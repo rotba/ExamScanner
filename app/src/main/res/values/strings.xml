@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Check</string>
+    <string name="scan_examinee_exam">Scan Examinee Exam</string>
 </resources>
