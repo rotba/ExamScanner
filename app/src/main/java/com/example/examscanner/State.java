@@ -16,6 +16,10 @@ public abstract class State {
 
     public abstract void onInitialCreate(MainActivity mainActivity);
 
+    public int getGraderId() {
+        return 0;
+    }
+
     private static class AnonymousState extends State{
         @Override
         public void onInitialCreate(MainActivity mainActivity) {

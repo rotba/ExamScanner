@@ -7,9 +7,13 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.examscanner.ui.home.HomeFragment"
+        android:name="com.example.examscanner.components.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_createExamFragment"
+            app:destination="@id/createExamFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -54,4 +58,9 @@
         android:id="@+id/authenticationActivity"
         android:name="com.example.examscanner.AuthenticationActivity"
         android:label="AuthenticationActivity" />
+    <fragment
+        android:id="@+id/createExamFragment"
+        android:name="com.example.examscanner.components.create_exam.CreateExamFragment"
+        android:label="fragment_create_exam"
+        tools:layout="@layout/fragment_create_exam" />
 </navigation>
