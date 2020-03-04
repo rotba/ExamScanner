@@ -61,7 +61,8 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-
-
+    public HomeViewModel getHomeViewModel(){
+        return homeViewModel;
+    }
 
 }
