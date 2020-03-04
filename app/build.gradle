@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 28
+
     defaultConfig {
         applicationId "com.example.examscanner"
         minSdkVersion 15
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -17,9 +17,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        String sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDir sharedTestDir
+        }
+        androidTest {
+            java.srcDir sharedTestDir
+        }
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
+    def testRunner = "1.1.1"
+    def espressoCore = "3.1.1"
+    def jUnit = "1.1.0"
+    def robolectric = "4.3"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'
@@ -28,11 +46,46 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+//
+//
+//
+//    androidTestImplementation "androidx.test:runner:$testRunner"
+//    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCore"
+//    androidTestImplementation "androidx.test.ext:junit:$jUnit"
     apply plugin: "androidx.navigation.safeargs"
+
 
     //noinspection GradleCompatible
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+    //local tests
+//    testImplementation 'junit:junit:4.12'
+//    testImplementation "androidx.test:runner:$testRunner"
+//    testImplementation "androidx.test.espresso:espresso-core:$espressoCore"
+//    testImplementation "androidx.test.ext:junit:$jUnit"
+//    testImplementation "org.robolectric:robolectric:$robolectric"
+//    testImplementation 'androidx.test:rules:1.1.1'
+//    testImplementation 'androidx.test:runner:1.1.1'
+
+    // Testing-only dependencies
+    androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion;
+    androidTestImplementation 'androidx.test.ext:junit:' + rootProject.extJUnitVersion;
+    androidTestImplementation 'androidx.test:runner:' + rootProject.runnerVersion;
+    androidTestImplementation 'androidx.test:rules:' + rootProject.rulesVersion;
+    androidTestImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion;
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:' + rootProject.espressoVersion;
+    androidTestImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion;
+    androidTestImplementation 'androidx.test.ext:junit:' + rootProject.extJUnitVersion;
+    androidTestImplementation 'org.robolectric:annotations:' + rootProject.robolectricVersion;
+
+    testImplementation 'androidx.test:core:' + rootProject.coreVersion;
+    testImplementation 'androidx.test.ext:junit:' + rootProject.extJUnitVersion;
+    testImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion;
+    testImplementation 'androidx.test.espresso:espresso-intents:' + rootProject.espressoVersion;
+    testImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion;
+    testImplementation 'androidx.test.ext:junit:' + rootProject.extJUnitVersion;
+    testImplementation 'org.robolectric:robolectric:' + rootProject.robolectricVersion;
 }
