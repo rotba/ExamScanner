@@ -5,7 +5,7 @@ android {
     buildToolsVersion rootProject.buildToolsVersion
     defaultConfig {
         applicationId "com.example.examscanner"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -21,6 +21,10 @@ android {
         unitTests {
             includeAndroidResources = true
         }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }
 
@@ -58,4 +62,14 @@ dependencies {
     testImplementation 'androidx.test.espresso:espresso-intents:' + rootProject.espressoVersion
     testImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion
     testImplementation 'org.json:json:20140107'
+
+    // CameraX core library using the camera2 implementation
+    def camerax_version = "1.0.0-beta01"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    // If you want to use the CameraX View class
+    implementation "androidx.camera:camera-view:1.0.0-alpha08"
+    // If you want to use the CameraX Extensions library
+    implementation "androidx.camera:camera-extensions:1.0.0-alpha08"
+    // If you want to use the CameraX Lifecycle library
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
 }
