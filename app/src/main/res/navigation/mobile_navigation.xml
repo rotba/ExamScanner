@@ -19,7 +19,11 @@
         android:id="@+id/nav_gallery"
         android:name="com.example.examscanner.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_gallery" >
+        <action
+            android:id="@+id/action_nav_gallery_to_navigationScanExam"
+            app:destination="@id/navigationScanExam" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -63,4 +67,17 @@
         android:name="com.example.examscanner.components.create_exam.CreateExamFragment"
         android:label="fragment_create_exam"
         tools:layout="@layout/fragment_create_exam" />
+    <navigation
+        android:id="@+id/navigationScanExam"
+        app:startDestination="@id/scanFragment2" >
+        <activity
+            android:id="@+id/scanExamActivity"
+            android:name="com.example.examscanner.components.scan_exam.ScanExamActivity"
+            android:label="ScanExamActivity" />
+        <fragment
+            android:id="@+id/scanFragment2"
+            android:name="com.example.examscanner.components.scan_exam.scan.ScanFragment"
+            android:label="Scan"
+            tools:layout="@layout/fragment_scan" />
+    </navigation>
 </navigation>
