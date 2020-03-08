@@ -1,32 +1,29 @@
-package com.example.examscanner.components.scan_exam.scan;
+package com.example.examscanner.components.scan_exam.capture;
 
 import android.Manifest;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.camera2.Camera2Config;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.CameraXConfig;
+import androidx.camera.core.ImageCapture;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.examscanner.R;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -39,19 +36,28 @@ import java.util.concurrent.ExecutionException;
  * Activities that contain this fragment must implement the
  * create an instance of this fragment.
  */
-public class ScanFragment extends Fragment implements CameraXConfig.Provider {
+public class CaptureFragment extends Fragment implements CameraXConfig.Provider {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private View root;
-    private ScanViewModel scanViewModel;
+    private CaptureViewModel captureViewModel;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
+    @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        scanViewModel =
-                ViewModelProviders.of(this).get(ScanViewModel.class);
+        captureViewModel =
+                ViewModelProviders.of(this).get(CaptureViewModel.class);
+//        View subContainer = inflater.inflate(R.id.camera_ui_container, null);
         root = inflater.inflate(R.layout.fragment_scan, container, false);
         handleCamera();
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout container = (ConstraintLayout)view;
+        View.inflate(requireContext(), R.layout.camera_ui_container, container);
     }
 
     private void handleCamera() {
@@ -71,12 +77,18 @@ public class ScanFragment extends Fragment implements CameraXConfig.Provider {
         }, ContextCompat.getMainExecutor(getActivity()));
     }
 
+    @SuppressLint("RestrictedApi")
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder()
                 .setTargetName("Preview")
                 .build();
         PreviewView previewView = (PreviewView)root.findViewById(R.id.preview_view);
         preview.setSurfaceProvider(previewView.getPreviewSurfaceProvider());
+        ImageCapture imageCapture =
+                new ImageCapture.Builder()
+                        .setTargetRotation(getActivity().getWindowManager().getDefaultDisplay().getRotation())
+                        .build();
+
 
         CameraSelector cameraSelector =
                 new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();

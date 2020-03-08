@@ -1,10 +1,8 @@
 package com.example.examscanner;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import com.example.examscanner.components.scan_exam.scan.ScanFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
