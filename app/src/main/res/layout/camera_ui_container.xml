@@ -25,7 +25,7 @@
 
     <!-- Camera control and gallery buttons -->
     <TextView
-        android:id="@+id/unprocessed_captures_text"
+        android:id="@+id/capture_processing_progress"
         android:layout_width="@dimen/round_button_medium"
         android:layout_height="@dimen/round_button_medium"
         android:layout_marginBottom="@dimen/margin_xlarge"
@@ -34,7 +34,7 @@
         android:padding="@dimen/spacing_small"
 
         android:scaleType="fitCenter"
-        android:text="0"
+        android:text="0/0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 

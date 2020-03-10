@@ -3,21 +3,16 @@ package com.example.examscanner.components.home;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 
 import com.example.examscanner.AbstractComponentInstrumentedTest;
 import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
-import com.example.examscanner.State;
-import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.Factory;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 
 import java.util.List;
@@ -46,7 +41,7 @@ public class MyAdapterInstrumentedTest extends AbstractComponentInstrumentedTest
     }
 
     private void navigateToHome() {
-        onView(ViewMatchers.withId(R.id.bLogin))
+        onView(ViewMatchers.withId(R.id.button_login))
                 .perform(ViewActions.click());
     }
 

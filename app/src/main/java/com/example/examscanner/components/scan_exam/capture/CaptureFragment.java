@@ -48,7 +48,7 @@ public class CaptureFragment extends Fragment implements CameraXConfig.Provider 
         captureViewModel =
                 ViewModelProviders.of(this).get(CaptureViewModel.class);
 //        View subContainer = inflater.inflate(R.id.camera_ui_container, null);
-        root = inflater.inflate(R.layout.fragment_scan, container, false);
+        root = inflater.inflate(R.layout.fragment_capture, container, false);
         handleCamera();
         return root;
     }

@@ -78,6 +78,6 @@
             android:id="@+id/scanFragment2"
             android:name="com.example.examscanner.components.scan_exam.capture.CaptureFragment"
             android:label="Scan"
-            tools:layout="@layout/fragment_scan" />
+            tools:layout="@layout/fragment_capture" />
     </navigation>
 </navigation>

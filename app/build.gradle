@@ -69,5 +69,7 @@ dependencies {
     testImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion
     testImplementation 'org.json:json:20140107'
 
+
+
     apply plugin: "androidx.navigation.safeargs"
 }

@@ -17,7 +17,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     private void initializeEventHandlers() {
-        Button logginB = (Button)findViewById(R.id.bLogin);
+        Button logginB = (Button)findViewById(R.id.button_login);
         logginB.setOnClickListener(new LogginHandler(this));
     }
 
