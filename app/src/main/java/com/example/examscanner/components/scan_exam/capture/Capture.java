@@ -1,11 +1,13 @@
 package com.example.examscanner.components.scan_exam.capture;
 
-import android.graphics.Bitmap;
+
+import androidx.camera.core.ImageCapture;
+
 
 public class Capture {
-    private Bitmap bm;
+    private ImageCapture.OutputFileResults captureResults;
 
-    public Capture(Bitmap bm) {
-        this.bm = bm;
+    public Capture(ImageCapture.OutputFileResults captureResults) {
+        this.captureResults = captureResults;
     }
 }

@@ -35,6 +35,11 @@ public class CaptureFragmentTest extends StateFullTest {
     public void testTheNumberOfUnprocessedCapturesUpdates() {
         assertUserSeeProgress(0,0);
         onView(withId(R.id.capture_image_button)).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         assertUserSeeProgress(0,1);
     }
 

@@ -29,10 +29,9 @@
         android:layout_width="@dimen/round_button_medium"
         android:layout_height="@dimen/round_button_medium"
         android:layout_marginBottom="@dimen/margin_xlarge"
-        android:background="@android:color/transparent"
+        android:background="@android:color/darker_gray"
         android:contentDescription="@string/switch_camera_button_alt"
         android:padding="@dimen/spacing_small"
-
         android:scaleType="fitCenter"
         android:text="0/0"
         app:layout_constraintBottom_toBottomOf="parent"
