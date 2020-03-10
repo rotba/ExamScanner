@@ -1,6 +1,5 @@
 package com.example.examscanner.ui.gallery;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.ScanExamActivity;
 
 public class GalleryFragment extends Fragment {
 

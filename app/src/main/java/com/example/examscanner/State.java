@@ -20,6 +20,8 @@ public abstract class State {
         return 0;
     }
 
+    public void logout(){ instance = null;};
+
     private static class AnonymousState extends State{
         @Override
         public void onInitialCreate(MainActivity mainActivity) {

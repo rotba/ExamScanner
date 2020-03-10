@@ -70,10 +70,6 @@
     <navigation
         android:id="@+id/navigationScanExam"
         app:startDestination="@id/scanFragment2" >
-        <activity
-            android:id="@+id/scanExamActivity"
-            android:name="com.example.examscanner.components.scan_exam.ScanExamActivity"
-            android:label="ScanExamActivity" />
         <fragment
             android:id="@+id/scanFragment2"
             android:name="com.example.examscanner.components.scan_exam.capture.CaptureFragment"

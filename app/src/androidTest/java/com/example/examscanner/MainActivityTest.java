@@ -11,16 +11,10 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-public class MainActivityTest {
-    @Rule
-    public ActivityScenarioRule<MainActivity> mainActivityScenarioRule=
-            new ActivityScenarioRule<MainActivity>(MainActivity.class);
-
-
+public class MainActivityTest extends StateFullTest {
 
     @Test
     public void testAfterLoginHomeIsDisplayed() {
-        onView(withId(R.id.button_login)).perform(click());
         onView(withId(R.id.home)).check(matches(isDisplayed()));
     }
 }

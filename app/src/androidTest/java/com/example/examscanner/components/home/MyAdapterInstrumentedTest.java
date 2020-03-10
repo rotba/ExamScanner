@@ -8,6 +8,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import com.example.examscanner.AbstractComponentInstrumentedTest;
 import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
+import com.example.examscanner.StateFullTest;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.Factory;
 
@@ -24,25 +25,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
-public class MyAdapterInstrumentedTest extends AbstractComponentInstrumentedTest {
-
-    @Rule
-    public ActivityScenarioRule<MainActivity> activityScenarioRule =
-            new ActivityScenarioRule<MainActivity>(MainActivity.class);
-
-
+public class MyAdapterInstrumentedTest extends StateFullTest {
 
     @Test
     public void testTheGraderSeesOnlyHisExams() {
-        navigateToHome();
         for (Exam e: getCurrentGraderExams()) {
             onView(withText(e.toString())).check(matches(isDisplayed()));
         }
-    }
-
-    private void navigateToHome() {
-        onView(ViewMatchers.withId(R.id.button_login))
-                .perform(ViewActions.click());
     }
 
     private List<Exam> getCurrentGraderExams() {
