@@ -32,12 +32,10 @@ public class CameraManager implements CameraXConfig.Provider{
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private FragmentActivity activity;
     private ImageCapture imageCapture;
-    private Handler captureHandler;
     private View root;
 
-    public CameraManager(FragmentActivity activity, Handler captureHandler, View root) {
+    public CameraManager(FragmentActivity activity, View root) {
         this.activity = activity;
-        this.captureHandler = captureHandler;
         this.root = root;
     }
 
@@ -70,7 +68,7 @@ public class CameraManager implements CameraXConfig.Provider{
                 new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         cameraProvider.bindToLifecycle((LifecycleOwner)activity, cameraSelector, preview, imageCapture);
     }
-    public View.OnClickListener getClickLIstener(){
+    public View.OnClickListener getClickLIstener(Handler handler){
         ImageCapture.OutputFileOptions outputFileOptions =
                 new ImageCapture.OutputFileOptions.Builder(new File(activity.getFilesDir(), "filename")).build();
         ImageCapture.OutputFileOptions finalOutputFileOptions = outputFileOptions;
@@ -85,7 +83,7 @@ public class CameraManager implements CameraXConfig.Provider{
                             @Override
                             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                                 Message completeMessage =
-                                        captureHandler.obtainMessage(-1, outputFileResults);
+                                        handler.obtainMessage(-1, outputFileResults);
                                 completeMessage.sendToTarget();
                             }
 

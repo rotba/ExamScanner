@@ -35,12 +35,16 @@ public class CaptureFragmentTest extends StateFullTest {
     public void testTheNumberOfUnprocessedCapturesUpdates() {
         assertUserSeeProgress(0,0);
         onView(withId(R.id.capture_image_button)).perform(click());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        sleepSingleCaptureTakingTime();
         assertUserSeeProgress(0,1);
+    }
+
+    @Test
+    public void testTheNumberOfProcessedAndUnprocessedCapturesUpdates() {
+        assertUserSeeProgress(0,0);
+        onView(withId(R.id.capture_image_button)).perform(click());
+        sleepSingleCaptureProcessingTime();
+        assertUserSeeProgress(1,1);
     }
 
     private void assertUserSeeProgress(int processed, int outOf) {
@@ -55,5 +59,20 @@ public class CaptureFragmentTest extends StateFullTest {
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withText(R.string.gallery_button_alt)).perform(click());
         onView(withText(R.string.start_scan_exam)).perform(click());
+    }
+
+    private static void sleepSingleCaptureTakingTime() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void sleepSingleCaptureProcessingTime() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -37,10 +37,24 @@ import android.widget.TextView;
 import com.example.examscanner.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import org.reactivestreams.Subscription;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -52,6 +66,7 @@ public class CaptureFragment extends Fragment  {
     private CameraManager cameraManager;
     private CameraPermissionRequester permissionRequester;
     private CaptureViewModel captureViewModel;
+    private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -61,23 +76,26 @@ public class CaptureFragment extends Fragment  {
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
         captureViewModel =
                 ViewModelProviders.of(this).get(CaptureViewModel.class);
-        captureViewModel.init();
-        captureViewModel.getCaptures().observe(this, new Observer<Queue<Capture>>() {
+        captureViewModel.getNumOfTotalCaptures().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(Queue<Capture> captures) {
-                ((TextView)root.findViewById(R.id.capture_processing_progress)).setText("0/"+captures.size());
+            public void onChanged(Integer totalCaptures) {
+                ((TextView)root.findViewById(R.id.capture_processing_progress))
+                        .setText(
+                                captureViewModel.getNumOfProcessedCaptures().getValue()+"/"+totalCaptures
+                        );
             }
         });
-        Handler captureClickHandler = new Handler(Looper.getMainLooper()){
+        captureViewModel.getNumOfProcessedCaptures().observe(this, new Observer<Integer>() {
             @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                captureViewModel.processCapture(new Capture(((ImageCapture.OutputFileResults)msg.obj)));;
+            public void onChanged(Integer processedCaptures) {
+                ((TextView)root.findViewById(R.id.capture_processing_progress))
+                        .setText(
+                                processedCaptures+"/"+captureViewModel.getNumOfTotalCaptures().getValue()
+                        );
             }
-        };
+        });
         cameraManager = new CameraManager(
                 getActivity(),
-                captureClickHandler,
                 root
         );
         permissionRequester = new CameraPermissionRequester(
@@ -94,7 +112,29 @@ public class CaptureFragment extends Fragment  {
         super.onViewCreated(view, savedInstanceState);
         ConstraintLayout container = (ConstraintLayout)view;
         View v = View.inflate(requireContext(), R.layout.camera_ui_container, container);
-        ((AppCompatImageButton)v.findViewById(R.id.capture_image_button)).setOnClickListener(cameraManager.getClickLIstener());
+        ((AppCompatImageButton)v.findViewById(R.id.capture_image_button))
+                .setOnClickListener(cameraManager.getClickLIstener(
+                        new Handler(Looper.getMainLooper()){
+                            @Override
+                            public void handleMessage(Message msg) {
+                                super.handleMessage(msg);
+                                captureViewModel.consumeCapture(new Capture(((ImageCapture.OutputFileResults)msg.obj)));
+                                processRequestDisposableContainer.add(Flowable.fromCallable(()->{
+                                    captureViewModel.processCapture();
+                                    return "hey";
+                                })
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<String>() {
+                                    @Override
+                                    public void accept(String s) throws Exception {
+                                        captureViewModel.postProcessCapture();
+                                    }
+                                })
+                                );
+                            }
+                        }
+                ));
     }
 
     @Override
