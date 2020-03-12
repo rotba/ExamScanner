@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -26,17 +27,22 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class CameraManager implements CameraXConfig.Provider{
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private FragmentActivity activity;
     private ImageCapture imageCapture;
     private View root;
+    private ExecutorService executor;
 
     public CameraManager(FragmentActivity activity, View root) {
         this.activity = activity;
         this.root = root;
+        executor = Executors.newSingleThreadExecutor();
     }
 
     public void setUp() {
@@ -46,8 +52,8 @@ public class CameraManager implements CameraXConfig.Provider{
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
                 bindPreview(cameraProvider);
             } catch (ExecutionException | InterruptedException e) {
-                // No errors need to be handled for this Future.
-                // This should never be reached.
+                Log.d(TAG, "setUp()");
+                e.printStackTrace();
             }
         }, ContextCompat.getMainExecutor(activity));
     }
@@ -67,7 +73,9 @@ public class CameraManager implements CameraXConfig.Provider{
         CameraSelector cameraSelector =
                 new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         cameraProvider.bindToLifecycle((LifecycleOwner)activity, cameraSelector, preview, imageCapture);
+        System.out.println("Asd");
     }
+
     public View.OnClickListener getClickLIstener(Handler handler){
         ImageCapture.OutputFileOptions outputFileOptions =
                 new ImageCapture.OutputFileOptions.Builder(new File(activity.getFilesDir(), "filename")).build();
@@ -77,7 +85,7 @@ public class CameraManager implements CameraXConfig.Provider{
             public void onClick(View view) {
                 imageCapture.takePicture(
                         finalOutputFileOptions,
-                        Executors.newSingleThreadExecutor(),
+                        executor,
                         new ImageCapture.OnImageSavedCallback(){
                             @RequiresApi(api = Build.VERSION_CODES.P)
                             @Override
@@ -89,7 +97,8 @@ public class CameraManager implements CameraXConfig.Provider{
 
                             @Override
                             public void onError(@NonNull ImageCaptureException exception) {
-                                System.out.println("asd");
+                                Log.d(TAG, "imageCapture.takePicture()");
+                                exception.printStackTrace();
                             }
                         }
 
@@ -101,5 +110,8 @@ public class CameraManager implements CameraXConfig.Provider{
     @Override
     public CameraXConfig getCameraXConfig() {
         return Camera2Config.defaultConfig();
+    }
+    public void onDestroy(){
+        executor.shutdown();
     }
 }

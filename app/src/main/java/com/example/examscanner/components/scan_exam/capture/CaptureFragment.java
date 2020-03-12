@@ -1,60 +1,36 @@
 package com.example.examscanner.components.scan_exam.capture;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.camera.camera2.Camera2Config;
-import androidx.camera.core.CameraSelector;
-import androidx.camera.core.CameraXConfig;
-import androidx.camera.core.ImageCapture;
-import androidx.camera.core.ImageCaptureException;
-import androidx.camera.core.Preview;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.view.PreviewView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.camera.core.ImageCapture;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.examscanner.R;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import org.reactivestreams.Subscription;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -119,18 +95,22 @@ public class CaptureFragment extends Fragment  {
                             public void handleMessage(Message msg) {
                                 super.handleMessage(msg);
                                 captureViewModel.consumeCapture(new Capture(((ImageCapture.OutputFileResults)msg.obj)));
-                                processRequestDisposableContainer.add(Flowable.fromCallable(()->{
-                                    captureViewModel.processCapture();
-                                    return "hey";
-                                })
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<String>() {
-                                    @Override
-                                    public void accept(String s) throws Exception {
-                                        captureViewModel.postProcessCapture();
-                                    }
-                                })
+                                processRequestDisposableContainer.add(
+                                        Completable.fromCallable(()->{captureViewModel.processCapture();return "Done";})
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeWith(new DisposableCompletableObserver(){
+                                            @Override
+                                            public void onComplete() {
+                                                captureViewModel.postProcessCapture();
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+                                                Log.d(TAG, "captureViewModel.processCapture() with ");
+                                                e.printStackTrace();
+                                            }
+                                        })
                                 );
                             }
                         }
@@ -141,5 +121,11 @@ public class CaptureFragment extends Fragment  {
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
         permissionRequester.onRequestPermissionsResult(requestCode,permissions, grantResults);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        cameraManager.onDestroy();
     }
 }
