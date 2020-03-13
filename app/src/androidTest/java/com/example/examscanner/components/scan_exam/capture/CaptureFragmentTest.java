@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.capture;
 
 
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -8,6 +9,8 @@ import com.example.examscanner.AbstractComponentInstrumentedTest;
 import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
+
+import junit.framework.AssertionFailedError;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,9 +23,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
+import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
+import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureTakingTime;
 
 @RunWith(AndroidJUnit4.class)
 public class CaptureFragmentTest extends StateFullTest {
+
 
 
     @Override
@@ -37,7 +44,11 @@ public class CaptureFragmentTest extends StateFullTest {
         sleepCameraPreviewSetupTime();
         onView(withId(R.id.capture_image_button)).perform(click());
         sleepSingleCaptureTakingTime();
-        assertUserSeeProgress(0,1);
+        try {
+            assertUserSeeProgress(0,1);
+        }catch (NoMatchingViewException e){
+            assertUserSeeProgress(1,1);
+        }
     }
 
     @Test
@@ -63,26 +74,5 @@ public class CaptureFragmentTest extends StateFullTest {
         onView(withText(R.string.start_scan_exam)).perform(click());
     }
 
-    private static void sleepCameraPreviewSetupTime() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private static void sleepSingleCaptureTakingTime() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    private static void sleepSingleCaptureProcessingTime() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }

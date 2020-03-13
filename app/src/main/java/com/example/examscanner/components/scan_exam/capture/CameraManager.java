@@ -95,6 +95,7 @@ public class CameraManager implements CameraXConfig.Provider{
                                 completeMessage.sendToTarget();
                             }
 
+                            @SuppressLint("RestrictedApi")
                             @Override
                             public void onError(@NonNull ImageCaptureException exception) {
                                 Log.d(TAG, "imageCapture.takePicture()");

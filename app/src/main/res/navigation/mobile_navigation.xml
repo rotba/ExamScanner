@@ -69,11 +69,19 @@
         tools:layout="@layout/fragment_create_exam" />
     <navigation
         android:id="@+id/navigationScanExam"
-        app:startDestination="@id/scanFragment2" >
+        app:startDestination="@id/captureFragment" >
         <fragment
-            android:id="@+id/scanFragment2"
+            android:id="@+id/captureFragment"
             android:name="com.example.examscanner.components.scan_exam.capture.CaptureFragment"
             android:label="Scan"
-            tools:layout="@layout/fragment_capture" />
+            tools:layout="@layout/fragment_capture" >
+            <action
+                android:id="@+id/action_captureFragment_to_cornerDetectionFragment"
+                app:destination="@id/cornerDetectionFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/cornerDetectionFragment"
+            android:name="com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment"
+            android:label="CornerDetectionFragment" />
     </navigation>
 </navigation>

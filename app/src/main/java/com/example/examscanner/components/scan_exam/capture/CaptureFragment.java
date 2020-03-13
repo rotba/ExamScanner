@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
 
@@ -51,7 +53,10 @@ public class CaptureFragment extends Fragment  {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
         captureViewModel =
-                ViewModelProviders.of(this).get(CaptureViewModel.class);
+                ViewModelProviders.of(
+                        this,
+                        new CaptureViewModelFactory(getActivity())
+                ).get(CaptureViewModel.class);
         captureViewModel.getNumOfTotalCaptures().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer totalCaptures) {
@@ -96,7 +101,9 @@ public class CaptureFragment extends Fragment  {
                                 super.handleMessage(msg);
                                 captureViewModel.consumeCapture(new Capture(((ImageCapture.OutputFileResults)msg.obj)));
                                 processRequestDisposableContainer.add(
-                                        Completable.fromCallable(()->{captureViewModel.processCapture();return "Done";})
+                                        Completable.fromCallable(()->{
+                                            captureViewModel.processCapture();return "Done";
+                                        })
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribeWith(new DisposableCompletableObserver(){
@@ -115,6 +122,13 @@ public class CaptureFragment extends Fragment  {
                             }
                         }
                 ));
+        ((Button)v.findViewById(R.id.button_move_to_detect_corners)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).
+                        navigate(R.id.action_captureFragment_to_cornerDetectionFragment);
+            }
+        });
     }
 
     @Override
