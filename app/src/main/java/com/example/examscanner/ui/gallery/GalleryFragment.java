@@ -41,6 +41,14 @@ public class GalleryFragment extends Fragment {
 //                startActivity(new Intent(getActivity(), ScanExamActivity.class));
             }
         });
+
+        ((Button)root.findViewById(R.id.button_resolve_answers)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_nav_gallery_to_fragment_resolve_answers);
+//                startActivity(new Intent(getActivity(), ScanExamActivity.class));
+            }
+        });
         return root;
     }
 }

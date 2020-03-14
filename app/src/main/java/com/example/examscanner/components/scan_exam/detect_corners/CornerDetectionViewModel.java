@@ -25,4 +25,7 @@ public class CornerDetectionViewModel extends ViewModel {
     public LiveData<Integer> getNumberOfTotalCaptures() {
         return mNumberOfTotalCaptures;
     }
+    public ProcessedCapture getProcessedCapture(){
+        return new ProcessedCapture();
+    }
 }

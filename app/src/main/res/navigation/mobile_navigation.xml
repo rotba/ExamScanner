@@ -23,6 +23,12 @@
         <action
             android:id="@+id/action_nav_gallery_to_navigationScanExam"
             app:destination="@id/navigationScanExam" />
+        <action
+            android:id="@+id/action_nav_gallery_to_navigationScanExam2"
+            app:destination="@id/navigationScanExam" />
+        <action
+            android:id="@+id/action_nav_gallery_to_fragment_resolve_answers"
+            app:destination="@id/fragment_resolve_answers" />
     </fragment>
 
     <fragment
@@ -84,4 +90,9 @@
             android:name="com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment"
             android:label="CornerDetectionFragment" />
     </navigation>
+    <fragment
+        android:id="@+id/fragment_resolve_answers"
+        android:name="com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersFragment"
+        android:label="fragment_resolve_answers2"
+        tools:layout="@layout/fragment_resolve_answers2" />
 </navigation>
