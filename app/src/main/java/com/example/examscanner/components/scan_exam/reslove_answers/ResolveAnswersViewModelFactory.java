@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModelFactory;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
 
 public class ResolveAnswersViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity fragmentActivity;
@@ -19,12 +20,19 @@ public class ResolveAnswersViewModelFactory implements ViewModelProvider.Factory
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new ResolveAnswersViewModel(
-//                ViewModelProviders.of(fragmentActivity).get(CornerDetectionViewModel.class)
-                ViewModelProviders.of(
+        return (T) ViewModelProviders.of(
                         fragmentActivity,
-                        new CornerDetectionViewModelFactory(fragmentActivity)
-                ).get(CornerDetectionViewModel.class)
-        );
+                        new InitialFactory()
+                ).get(ResolveAnswersViewModel.class);
+    }
+
+    private class InitialFactory implements ViewModelProvider.Factory{
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new ResolveAnswersViewModel(
+                    new ImageProcessingFactory().create()
+            );
+        }
     }
 }

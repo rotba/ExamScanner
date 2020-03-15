@@ -4,12 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
 
@@ -36,5 +40,33 @@ public class CornerDetectionFragment extends Fragment {
         ((TextView)view.findViewById(R.id.textView_relative_cirrent_location)).setText(
                 "1/"+cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
         );
+        ((TextView)view.findViewById(R.id.textView_detection_progress)).setText(
+                "0/"+cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
+        );
+        ((ImageView)view.findViewById(R.id.imageView_tmp_curr_image)).setImageBitmap(
+                cornerDetectionViewModel.tmpGetCurrBitmap()
+        );
+        cornerDetectionViewModel.getNumberOfAnswersScannedCaptures().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                ((TextView)view.findViewById(R.id.textView_detection_progress)).setText(
+                        integer+"/"+cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
+                );
+            }
+        });
+        ((Button)view.findViewById(R.id.button_nav_to_resolve_answers)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).
+                        navigate(R.id.action_cornerDetectionFragment_to_fragment_resolve_answers);
+            }
+        });
+        ((Button)view.findViewById(R.id.button_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cornerDetectionViewModel.transformAndScanAnswers();
+                cornerDetectionViewModel.postProcessTransformAndScanAnswers();
+            }
+        });
     }
 }

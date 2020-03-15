@@ -37,7 +37,6 @@ public class CaptureViewModel extends ViewModel {
 
     public void processCapture(){
         cornerDetectionViewModel.detectCorners(unProcessedCaptures.remove());
-
     }
 
     public void postProcessCapture(){

@@ -1,5 +1,7 @@
 package com.example.examscanner;
 
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         State.getState().onInitialCreate(this);
+        sApplication = this;
     }
 
     @Override
@@ -76,6 +79,17 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
+
+    private static MainActivity sApplication;
+
+    public static Context gettApplication() {
+        return sApplication;
+    }
+
+    public static Context getContext() {
+        return gettApplication().getApplicationContext();
+    }
+
 
 
 }

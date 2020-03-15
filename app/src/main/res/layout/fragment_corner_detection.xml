@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/imageView_tmp_curr_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button_approve"
+            android:id="@+id/button_approve_and_scan_answers"
             android:layout_width="78dp"
             android:layout_height="74dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +38,7 @@
             app:layout_constraintVertical_bias="0.492" />
 
         <Button
-            android:id="@+id/resolve_answers"
+            android:id="@+id/button_nav_to_resolve_answers"
             android:layout_width="64dp"
             android:layout_height="72dp"
             app:layout_constraintBottom_toBottomOf="parent"
