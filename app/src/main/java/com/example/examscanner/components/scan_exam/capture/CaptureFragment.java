@@ -57,24 +57,6 @@ public class CaptureFragment extends Fragment  {
                         this,
                         new CaptureViewModelFactory(getActivity())
                 ).get(CaptureViewModel.class);
-        captureViewModel.getNumOfTotalCaptures().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer totalCaptures) {
-                ((TextView)root.findViewById(R.id.capture_processing_progress))
-                        .setText(
-                                captureViewModel.getNumOfProcessedCaptures().getValue()+"/"+totalCaptures
-                        );
-            }
-        });
-        captureViewModel.getNumOfProcessedCaptures().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer processedCaptures) {
-                ((TextView)root.findViewById(R.id.capture_processing_progress))
-                        .setText(
-                                processedCaptures+"/"+captureViewModel.getNumOfTotalCaptures().getValue()
-                        );
-            }
-        });
         cameraManager = new CameraManager(
                 getActivity(),
                 root
@@ -102,7 +84,8 @@ public class CaptureFragment extends Fragment  {
                                 captureViewModel.consumeCapture(new Capture(((ImageCapture.OutputFileResults)msg.obj)));
                                 processRequestDisposableContainer.add(
                                         Completable.fromCallable(()->{
-                                            captureViewModel.processCapture();return "Done";
+                                            captureViewModel.processCapture();
+                                            return "Done";
                                         })
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
@@ -127,6 +110,24 @@ public class CaptureFragment extends Fragment  {
             public void onClick(View view) {
                 Navigation.findNavController(view).
                         navigate(R.id.action_captureFragment_to_cornerDetectionFragment);
+            }
+        });
+        captureViewModel.getNumOfTotalCaptures().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer totalCaptures) {
+                ((TextView)view.findViewById(R.id.capture_processing_progress))
+                        .setText(
+                                captureViewModel.getNumOfProcessedCaptures().getValue()+"/"+totalCaptures
+                        );
+            }
+        });
+        captureViewModel.getNumOfProcessedCaptures().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer processedCaptures) {
+                ((TextView)view.findViewById(R.id.capture_processing_progress))
+                        .setText(
+                                processedCaptures+"/"+captureViewModel.getNumOfTotalCaptures().getValue()
+                        );
             }
         });
     }

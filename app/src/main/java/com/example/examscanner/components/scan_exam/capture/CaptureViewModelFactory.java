@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModelFactory;
+
 public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
     public CaptureViewModelFactory(FragmentActivity activity) {
@@ -15,6 +18,11 @@ public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T)ViewModelProviders.of(activity).get(CaptureViewModel.class);
+        return (T) new CaptureViewModel(
+                ViewModelProviders.of(
+                        activity,
+                        new CornerDetectionViewModelFactory(activity)
+                ).get(CornerDetectionViewModel.class)
+        );
     }
 }

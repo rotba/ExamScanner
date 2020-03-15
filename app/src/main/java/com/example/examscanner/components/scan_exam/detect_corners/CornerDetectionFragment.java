@@ -25,7 +25,7 @@ public class CornerDetectionFragment extends Fragment {
                 ).get(CornerDetectionViewModel.class);
         View root =inflater.inflate(R.layout.fragment_corner_detection, container, false);
         ((TextView)root.findViewById(R.id.textView_relative_cirrent_location)).setText(
-                "1/"+cornerDetectionViewModel.getNumberOfTotalCaptures().getValue()
+                "1/"+cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
         );
         return inflater.inflate(R.layout.fragment_corner_detection, container, false);
     }
@@ -34,7 +34,7 @@ public class CornerDetectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((TextView)view.findViewById(R.id.textView_relative_cirrent_location)).setText(
-                "1/"+cornerDetectionViewModel.getNumberOfTotalCaptures().getValue()
+                "1/"+cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
         );
     }
 }

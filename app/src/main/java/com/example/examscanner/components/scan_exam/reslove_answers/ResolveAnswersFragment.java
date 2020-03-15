@@ -40,7 +40,7 @@ public class ResolveAnswersFragment extends Fragment {
                 );
             }
         });
-        return inflater.inflate(R.layout.fragment_resolve_answers, container, false);
+        return root;
     }
 
     @Override
