@@ -1,7 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.graphics.Bitmap;
-import android.view.TextureView;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -36,10 +35,6 @@ public class CornerDetectionViewModel extends ViewModel {
 
     public LiveData<Integer> getNumberOfAnswersScannedCaptures() {
         return resolveAnswersViewModel.getNumberOfAnswersScannedCaptures();
-    }
-
-    public ProcessedCapture getProcessedCapture(){
-        return new ProcessedCapture();
     }
 
     public void detectCorners(Capture capture) {
