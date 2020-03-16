@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.graphics.Bitmap;
+import android.view.TextureView;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -17,7 +18,7 @@ import java.util.List;
 
 
 public class CornerDetectionViewModel extends ViewModel {
-    private List<CornerDetectedCapture> cornerDetectedCaptures;
+    private List<MutableLiveData<CornerDetectedCapture>> cornerDetectedCaptures;
     private MutableLiveData<Integer> mNumberOfCornerDetectedCaptures;
     private ImageProcessingFacade imageProcessor;
     private ResolveAnswersViewModel resolveAnswersViewModel;
@@ -44,7 +45,7 @@ public class CornerDetectionViewModel extends ViewModel {
     public void detectCorners(Capture capture) {
         ICornerDetectionResult result = imageProcessor.detectCorners(capture);
         cornerDetectedCaptures.add(
-                new CornerDetectedCapture(result.getBitmap())
+                new MutableLiveData<>(new CornerDetectedCapture(result.getBitmap()))
         );
     }
 
@@ -54,23 +55,32 @@ public class CornerDetectionViewModel extends ViewModel {
 
 //    public void processCornerDetectedCapture(CornerDetectedCapture cornerDetectedCapture){
     public void transformAndScanAnswers(){
-        cornerDetectedCaptures.get(0).setBitmap(
+        CornerDetectedCapture currCapture =cornerDetectedCaptures.get(0).getValue();
+        currCapture.setBitmap(
                 imageProcessor.transformToRectangle(
-                        cornerDetectedCaptures.get(0).getBitmap(),
-                        cornerDetectedCaptures.get(0).getUpperLeft(),
-                        cornerDetectedCaptures.get(0).getUpperRight(),
-                        cornerDetectedCaptures.get(0).getBottomRight(),
-                        cornerDetectedCaptures.get(0).getBottomLeft()
+                        currCapture.getBitmap(),
+                        currCapture.getUpperLeft(),
+                        currCapture.getUpperRight(),
+                        currCapture.getBottomRight(),
+                        currCapture.getBottomLeft()
                 )
         );
-        resolveAnswersViewModel.scanAnswers(cornerDetectedCaptures.get(0).getBitmap());
+        resolveAnswersViewModel.scanAnswers(currCapture.getBitmap());
     }
 
     public Bitmap tmpGetCurrBitmap(){
-        return cornerDetectedCaptures.get(0).getBitmap();
+        return cornerDetectedCaptures.get(0).getValue().getBitmap();
     }
 
     public void postProcessTransformAndScanAnswers() {
         resolveAnswersViewModel.postProcessScanAnswers();
+    }
+
+    public List<MutableLiveData<CornerDetectedCapture>> getCornerDetectedCaptures() {
+        return cornerDetectedCaptures;
+    }
+
+    public MutableLiveData<CornerDetectedCapture> getCornerDetectedCaptureById(int captureId) {
+        return cornerDetectedCaptures.get(captureId);
     }
 }

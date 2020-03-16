@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
 
         homeViewModel.init();
 
-        homeViewModel.getExams().observe(this, new Observer<List<Exam>>() {
+        homeViewModel.getExams().observe(getActivity(), new Observer<List<Exam>>() {
             @Override
             public void onChanged(List<Exam> exams) {
                 mAdapter.notifyDataSetChanged();

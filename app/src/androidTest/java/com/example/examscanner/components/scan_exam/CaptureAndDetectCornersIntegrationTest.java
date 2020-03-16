@@ -16,7 +16,7 @@ import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPrev
 import static com.example.examscanner.components.scan_exam.Utils.sleepMovingFromCaptureToDetectCorners;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
 
-public class CaptureAndDetectCornersIntegrationTest {
+public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
     @Test
     public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe() {
         navToCapture();
@@ -30,6 +30,41 @@ public class CaptureAndDetectCornersIntegrationTest {
         sleepMovingFromCaptureToDetectCorners();
         onView(withText("1/2")).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
+        navToCapture();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 2;
+        for (int i = 0; i <numOfCaptures ; i++) {
+            onView(withId(R.id.capture_image_button)).perform(click());
+            sleepSingleCaptureProcessingTime();
+        }
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        sleepMovingFromCaptureToDetectCorners();
+        onView(withContentDescription("Navigate up")).perform(click());
+        sleepCameraPreviewSetupTime();
+        onView(withText("2/2")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
+        navToCapture();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 2;
+        for (int i = 0; i <numOfCaptures ; i++) {
+            onView(withId(R.id.capture_image_button)).perform(click());
+            sleepSingleCaptureProcessingTime();
+        }
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        sleepMovingFromCaptureToDetectCorners();
+        onView(withContentDescription("Navigate up")).perform(click());
+        sleepCameraPreviewSetupTime();
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        sleepMovingFromCaptureToDetectCorners();
+        onView(withText("1/2")).check(matches(isDisplayed()));
+    }
+
     private void navToCapture() {
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withText(R.string.gallery_button_alt)).perform(click());

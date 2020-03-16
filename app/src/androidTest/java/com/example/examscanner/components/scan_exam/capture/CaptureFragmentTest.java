@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -15,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.example.examscanner.AbstractComponentInstrumentedTest;
 import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
+import com.example.examscanner.State;
 import com.example.examscanner.StateFullTest;
 
 import junit.framework.AssertionFailedError;
@@ -34,15 +36,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureTakingTime;
+import static com.example.examscanner.components.scan_exam.capture.CaptureUtils.assertUserSeeProgress;
 
 @RunWith(AndroidJUnit4.class)
 public class CaptureFragmentTest {
 
-
+    private FragmentScenario<CaptureFragment> scenario;
 
     @Before
     public void setUp() {
-        FragmentScenario<CaptureFragment> scenario =
+        scenario =
                 FragmentScenario.launchInContainer(CaptureFragment.class);
     }
 
@@ -68,13 +71,21 @@ public class CaptureFragmentTest {
         assertUserSeeProgress(1,1);
     }
 
-    private void assertUserSeeProgress(int processed, int outOf) {
-        onView(withText(xOutOfY(processed,outOf))).check(matches(isDisplayed()));
+    @Test
+    public void testDataSurvives() {
+//        mainActivityScenarioRule.launchActivity(null);
+        sleepCameraPreviewSetupTime();
+        onView(withId(R.id.capture_image_button)).perform(click());
+        sleepSingleCaptureProcessingTime();
+        scenario.moveToState(Lifecycle.State.INITIALIZED);
+//        scenario.moveToState(Lifecycle.State.STARTED);
+//        scenario.moveToState(Lifecycle.State.RESUMED);
+        assertUserSeeProgress(1, 1);
     }
 
-    private static String xOutOfY(int x, int y){
-        return Integer.toString(x) +"/"+Integer.toString(y);
-    }
+
+
+
 
 //    private void navToCapture() {
 //        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());

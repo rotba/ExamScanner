@@ -27,6 +27,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,12 +38,12 @@ public class CameraManager implements CameraXConfig.Provider{
     private FragmentActivity activity;
     private ImageCapture imageCapture;
     private View root;
-    private ExecutorService executor;
+    private Executor executor;
 
     public CameraManager(FragmentActivity activity, View root) {
         this.activity = activity;
         this.root = root;
-        executor = Executors.newSingleThreadExecutor();
+        executor = ContextCompat.getMainExecutor(activity);
     }
 
     public void setUp() {
@@ -55,7 +56,7 @@ public class CameraManager implements CameraXConfig.Provider{
                 Log.d(TAG, "setUp()");
                 e.printStackTrace();
             }
-        }, ContextCompat.getMainExecutor(activity));
+        }, executor);
     }
     @SuppressLint("RestrictedApi")
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
@@ -72,8 +73,7 @@ public class CameraManager implements CameraXConfig.Provider{
 
         CameraSelector cameraSelector =
                 new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
-        cameraProvider.bindToLifecycle((LifecycleOwner)activity, cameraSelector, preview, imageCapture);
-        System.out.println("Asd");
+        cameraProvider.bindToLifecycle(activity, cameraSelector, preview, imageCapture);
     }
 
     public View.OnClickListener getClickLIstener(Handler handler){
@@ -99,6 +99,7 @@ public class CameraManager implements CameraXConfig.Provider{
                             @Override
                             public void onError(@NonNull ImageCaptureException exception) {
                                 Log.d(TAG, "imageCapture.takePicture()");
+                                CameraManager.this.onDestroy();
                                 exception.printStackTrace();
                             }
                         }
@@ -112,7 +113,33 @@ public class CameraManager implements CameraXConfig.Provider{
     public CameraXConfig getCameraXConfig() {
         return Camera2Config.defaultConfig();
     }
+    @SuppressLint("RestrictedApi")
     public void onDestroy(){
-        executor.shutdown();
+        cameraProviderFuture = ProcessCameraProvider.getInstance(activity);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                cameraProvider.shutdown();
+            } catch (ExecutionException | InterruptedException e) {
+                Log.d(TAG, "onPause()");
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(activity));
+    }
+    public void onPause(){
+        cameraProviderFuture = ProcessCameraProvider.getInstance(activity);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                unbind(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                Log.d(TAG, "onPause()");
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(activity));
+    }
+
+    private void unbind(ProcessCameraProvider cameraProvider) {
+        cameraProvider.unbindAll();
     }
 }

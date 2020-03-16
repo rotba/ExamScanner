@@ -143,4 +143,10 @@ public class CaptureFragment extends Fragment  {
         super.onDestroyView();
         cameraManager.onDestroy();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        cameraManager.onPause();
+    }
 }

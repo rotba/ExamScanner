@@ -31,4 +31,12 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
+    public static void sleepScreenRotationTime(){
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -55,6 +55,7 @@ dependencies {
     implementation("androidx.fragment:fragment-testing:" + fragment_version, {
         exclude group: 'androidx.test', module: 'core'
     })
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // androidTest
     androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
