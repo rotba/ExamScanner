@@ -29,7 +29,12 @@ public class ResolveAnswersViewModel extends ViewModel {
         scannedCaptures = new ArrayList<>();
     }
 
+    private int i =0;
     public LiveData<Integer> getNumOfIdentified() {
+        i++;
+        if(scannedCaptures.size()>0){
+            mNumOfIdentified.setValue(scannedCaptures.size());
+        }
         return mNumOfIdentified;
     }
 

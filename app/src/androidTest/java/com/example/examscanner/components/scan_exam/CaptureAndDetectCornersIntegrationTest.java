@@ -16,7 +16,7 @@ import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPrev
 import static com.example.examscanner.components.scan_exam.Utils.sleepMovingFromCaptureToDetectCorners;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
 
-public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
+public class CaptureAndDetectCornersIntegrationTest {
     @Test
     public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe() {
         navToCapture();

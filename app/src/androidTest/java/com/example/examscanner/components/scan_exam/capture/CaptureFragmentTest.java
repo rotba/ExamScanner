@@ -1,6 +1,13 @@
 package com.example.examscanner.components.scan_exam.capture;
 
 
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentFactory;
+import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -12,6 +19,7 @@ import com.example.examscanner.StateFullTest;
 
 import junit.framework.AssertionFailedError;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,14 +36,14 @@ import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCapt
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureTakingTime;
 
 @RunWith(AndroidJUnit4.class)
-public class CaptureFragmentTest extends StateFullTest {
+public class CaptureFragmentTest {
 
 
 
-    @Override
+    @Before
     public void setUp() {
-        super.setUp();
-        navToCapture();
+        FragmentScenario<CaptureFragment> scenario =
+                FragmentScenario.launchInContainer(CaptureFragment.class);
     }
 
     @Test
@@ -68,11 +76,11 @@ public class CaptureFragmentTest extends StateFullTest {
         return Integer.toString(x) +"/"+Integer.toString(y);
     }
 
-    private void navToCapture() {
-        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
-        onView(withText(R.string.gallery_button_alt)).perform(click());
-        onView(withText(R.string.start_scan_exam)).perform(click());
-    }
+//    private void navToCapture() {
+//        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
+//        onView(withText(R.string.gallery_button_alt)).perform(click());
+//        onView(withText(R.string.start_scan_exam)).perform(click());
+//    }
 
 
 }

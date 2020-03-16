@@ -8,19 +8,23 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.examscanner.R;
 
 public class ResolveAnswersFragment extends Fragment {
+    public static final String TAG ="ResolveAnswersFragment";
     private ResolveAnswersViewModel resolveAnswersViewModel;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        resolveAnswersViewModel = ViewModelProviders.of(
-                this,
+        resolveAnswersViewModel = new ViewModelProvider(
+                this.getActivity(),
                 new ResolveAnswersViewModelFactory(getActivity())
         ).get(ResolveAnswersViewModel.class);
         View root = inflater.inflate(R.layout.fragment_resolve_answers, container, false);

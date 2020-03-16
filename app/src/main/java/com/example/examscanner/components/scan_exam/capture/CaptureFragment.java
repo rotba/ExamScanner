@@ -11,12 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.camera.core.ImageCapture;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -75,7 +75,7 @@ public class CaptureFragment extends Fragment  {
         super.onViewCreated(view, savedInstanceState);
         ConstraintLayout container = (ConstraintLayout)view;
         View v = View.inflate(requireContext(), R.layout.camera_ui_container, container);
-        ((AppCompatImageButton)v.findViewById(R.id.capture_image_button))
+        ((ImageButton)v.findViewById(R.id.capture_image_button))
                 .setOnClickListener(cameraManager.getClickLIstener(
                         new Handler(Looper.getMainLooper()){
                             @Override

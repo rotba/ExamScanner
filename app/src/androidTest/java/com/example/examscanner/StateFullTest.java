@@ -1,6 +1,9 @@
 package com.example.examscanner;
 
+import android.app.Activity;
+
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.rule.ActivityTestRule;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,8 +15,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
     @Rule
-    public ActivityScenarioRule<MainActivity> mainActivityScenarioRule=
-            new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityScenarioRule=
+            new ActivityTestRule<MainActivity>(MainActivity.class);
     @Before
     @Override
     public void setUp() {
