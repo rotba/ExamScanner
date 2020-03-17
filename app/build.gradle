@@ -58,4 +58,5 @@ dependencies {
     testImplementation 'androidx.test.espresso:espresso-intents:' + rootProject.espressoVersion
     testImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion
     testImplementation 'org.json:json:20140107'
+    implementation project(path: ':openCVLibrary343')
 }
