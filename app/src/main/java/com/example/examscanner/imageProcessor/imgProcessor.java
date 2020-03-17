@@ -5,16 +5,21 @@ import android.graphics.Bitmap;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
+import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.features2d.FastFeatureDetector;
+import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -183,5 +188,21 @@ public class imgProcessor {
             chunkedImages.add(cropped);
         }
         return chunkedImages;
+    }
+
+    public List<KeyPoint> cornerDetection(Mat inputImg){
+
+        MatOfKeyPoint points = new MatOfKeyPoint();
+        int threshold = 20;
+        boolean nonMaxSup = true;
+        // initiate FAST object with chosen values
+        FastFeatureDetector fast = FastFeatureDetector.create(threshold, nonMaxSup, FastFeatureDetector.TYPE_7_12);
+        // find and draw the keypoints
+        fast.detect(inputImg, points);
+
+        Scalar redColor = new Scalar(255, 0, 0);
+        Mat mRgba = inputImg.clone();
+        Features2d.drawKeypoints(mRgba, points, mRgba, redColor);
+        return points.toList();
     }
 }
