@@ -32,6 +32,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
                 CornerDetectionCapturesAdapter.this.position.setValue(position+1);
             }
         });
+
     }
 
     @NonNull
@@ -43,6 +44,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         f.setArguments(b);
         return f;
     }
+
 
     @Override
     public int getItemCount() {

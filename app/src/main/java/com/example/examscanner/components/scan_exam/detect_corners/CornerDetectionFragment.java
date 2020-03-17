@@ -1,7 +1,9 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,6 +42,7 @@ public class CornerDetectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewPager2 viewPager = (ViewPager2)view.findViewById(R.id.viewPager2_corner_detected_captures);
+//        viewPager.setUserInputEnabled(false);
 //        viewPagerAdapter = new ViewPagerAdapter(getActivity(), cornerDetectionViewModel.getCornerDetectedCaptures(),viewPager);
         CornerDetectionCapturesAdapter cornerDetectionCapturesAdapter = new CornerDetectionCapturesAdapter(getActivity(), cornerDetectionViewModel.getCornerDetectedCaptures(), viewPager);
         viewPager.setAdapter(cornerDetectionCapturesAdapter);
@@ -85,5 +88,7 @@ public class CornerDetectionFragment extends Fragment {
                 cornerDetectionViewModel.postProcessTransformAndScanAnswers();
             }
         });
+
+
     }
 }

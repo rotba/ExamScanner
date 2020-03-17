@@ -33,18 +33,21 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.examscanner.components.scan_exam.Utils.navFromHomeToCapture;
 import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureTakingTime;
 import static com.example.examscanner.components.scan_exam.capture.CaptureUtils.assertUserSeeProgress;
 
 @RunWith(AndroidJUnit4.class)
-public class CaptureFragmentTest {
+public class CaptureFragmentTest{
 
     private FragmentScenario<CaptureFragment> scenario;
 
     @Before
     public void setUp() {
+//        super.setUp();
+//        navFromHomeToCapture();
         scenario =
                 FragmentScenario.launchInContainer(CaptureFragment.class);
     }

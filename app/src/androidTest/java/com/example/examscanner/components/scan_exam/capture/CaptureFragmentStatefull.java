@@ -20,6 +20,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.examscanner.components.scan_exam.Utils.navFromHomeToCapture;
 import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
 import static com.example.examscanner.components.scan_exam.Utils.sleepScreenRotationTime;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
@@ -30,7 +31,7 @@ public class CaptureFragmentStatefull extends StateFullTest {
     @Before
     public void setUp() {
         super.setUp();
-        navToCapture();
+        navFromHomeToCapture();
 
     }
 
@@ -44,11 +45,5 @@ public class CaptureFragmentStatefull extends StateFullTest {
         mainActivityScenarioRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sleepScreenRotationTime();
         assertUserSeeProgress(1, 1);
-    }
-
-    private void navToCapture() {
-        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
-        onView(withText(R.string.gallery_button_alt)).perform(click());
-        onView(withText(R.string.start_scan_exam)).perform(click());
     }
 }

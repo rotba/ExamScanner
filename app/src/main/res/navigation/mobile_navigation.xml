@@ -80,7 +80,7 @@
             android:id="@+id/captureFragment"
             android:name="com.example.examscanner.components.scan_exam.capture.CaptureFragment"
             android:label="Scan"
-            tools:layout="@layout/fragment_capture" >
+            tools:layout="@layout/fragment_capture_old" >
             <action
                 android:id="@+id/action_captureFragment_to_cornerDetectionFragment"
                 app:destination="@id/cornerDetectionFragment" />

@@ -69,13 +69,13 @@ public class CaptureFragment extends Fragment  {
         return root;
     }
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint({"WrongViewCast", "RestrictedApi"})
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ConstraintLayout container = (ConstraintLayout)view;
-        View v = View.inflate(requireContext(), R.layout.camera_ui_container, container);
-        ((ImageButton)v.findViewById(R.id.capture_image_button))
+//        View v = View.inflate(requireContext(), R.layout.camera_ui_container, container);
+        ((ImageButton)view.findViewById(R.id.capture_image_button))
                 .setOnClickListener(cameraManager.getClickLIstener(
                         new Handler(Looper.getMainLooper()){
                             @Override
@@ -105,7 +105,7 @@ public class CaptureFragment extends Fragment  {
                             }
                         }
                 ));
-        ((Button)v.findViewById(R.id.button_move_to_detect_corners)).setOnClickListener(new View.OnClickListener() {
+        ((Button)view.findViewById(R.id.button_move_to_detect_corners)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).
