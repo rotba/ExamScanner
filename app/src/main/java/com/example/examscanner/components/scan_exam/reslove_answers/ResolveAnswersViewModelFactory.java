@@ -8,37 +8,30 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
+import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 public class ResolveAnswersViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity fragmentActivity;
-    ImageProcessingFacade imageProcessor;
+    ImageProcessingFacade imageProcessor = new ImageProcessingFactory().create();
+    Repository<ScannedCapture>repo = new ScannedCaptureRepositoryFactory().create();
 
     public ResolveAnswersViewModelFactory(FragmentActivity fragmentActivity) {
         this.fragmentActivity = fragmentActivity;
-        this.imageProcessor = new ImageProcessingFactory().create();
     }
 
-    public ResolveAnswersViewModelFactory(FragmentActivity activity, ImageProcessingFacade imageProcessor) {
-        this.fragmentActivity = activity;
-        this.imageProcessor = imageProcessor;
-    }
+//    public ResolveAnswersViewModelFactory(FragmentActivity activity, ImageProcessingFacade imageProcessor) {
+//        this.fragmentActivity = activity;
+//        this.imageProcessor = imageProcessor;
+//    }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new ViewModelProvider(
-                fragmentActivity,
-                new InitialFactory()
-        ).get(ResolveAnswersViewModel.class);
-    }
-
-    private class InitialFactory implements ViewModelProvider.Factory {
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new ResolveAnswersViewModel(
-                    imageProcessor
-            );
-        }
+        return (T) new ResolveAnswersViewModel(
+                imageProcessor,
+                repo
+        );
     }
 }

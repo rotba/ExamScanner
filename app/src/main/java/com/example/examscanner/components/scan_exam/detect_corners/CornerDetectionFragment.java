@@ -46,12 +46,12 @@ public class CornerDetectionFragment extends Fragment {
 //        viewPagerAdapter = new ViewPagerAdapter(getActivity(), cornerDetectionViewModel.getCornerDetectedCaptures(),viewPager);
         CornerDetectionCapturesAdapter cornerDetectionCapturesAdapter = new CornerDetectionCapturesAdapter(getActivity(), cornerDetectionViewModel.getCornerDetectedCaptures(), viewPager);
         viewPager.setAdapter(cornerDetectionCapturesAdapter);
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-            }
-        });
+//        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+//            }
+//        });
         ((TextView)view.findViewById(R.id.textView_relative_cirrent_location)).setText(
                 "1/"+cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
         );

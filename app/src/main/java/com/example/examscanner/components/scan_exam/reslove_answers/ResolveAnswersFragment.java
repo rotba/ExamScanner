@@ -8,11 +8,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
 
@@ -28,32 +27,27 @@ public class ResolveAnswersFragment extends Fragment {
                 new ResolveAnswersViewModelFactory(getActivity())
         ).get(ResolveAnswersViewModel.class);
         View root = inflater.inflate(R.layout.fragment_resolve_answers, container, false);
-        resolveAnswersViewModel.getNumOfIdentified().observe(getActivity(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                ((TextView)root.findViewById(R.id.textView_num_of_identified)).setText(
-                        "Identified: "+ resolveAnswersViewModel.getNumOfIdentified().getValue()
-                );
-            }
-        });
-        resolveAnswersViewModel.getNumOfUnidentified().observe(getActivity(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                ((TextView)root.findViewById(R.id.textView_num_of_unidentified)).setText(
-                        "Unidentified: "+ resolveAnswersViewModel.getNumOfUnidentified().getValue()
-                );
-            }
-        });
         return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ((TextView)view.findViewById(R.id.textView_num_of_identified)).setText(
-                "Identified: "+ resolveAnswersViewModel.getNumOfIdentified().getValue()
-        );
-        ((TextView)view.findViewById(R.id.textView_num_of_unidentified)).setText(
-                "Unidentified: "+ resolveAnswersViewModel.getNumOfUnidentified().getValue()
-        );
+//        ((TextView)view.findViewById(R.id.textView_num_of_identified)).setText(
+//                "Identified: "+ resolveAnswersViewModel.getNumOfIdentified().getValue()
+//        );
+//        ((TextView)view.findViewById(R.id.textView_num_of_unidentified)).setText(
+//                "Unidentified: "+ resolveAnswersViewModel.getNumOfUnidentified().getValue()
+//        );
+        ViewPager2 viewPager = (ViewPager2)view.findViewById(R.id.viewPager2_scanned_captures);
+        ScannedCapturesAdapter scannedCapturesAdapter = new ScannedCapturesAdapter(getActivity(), resolveAnswersViewModel.getScannedCaptures(), viewPager);
+        viewPager.setAdapter(scannedCapturesAdapter);
+        scannedCapturesAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                ((TextView)view.findViewById(R.id.textView_progress_feedback)).setText(
+                        integer+"/"+resolveAnswersViewModel.getScannedCaptures().size()
+                );
+            }
+        });
     }
 }
