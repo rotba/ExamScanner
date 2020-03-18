@@ -1,5 +1,10 @@
 package com.example.examscanner.components.scan_exam;
 
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
+import androidx.test.runner.AndroidJUnitRunner;
+
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
@@ -7,6 +12,7 @@ import com.example.examscanner.image_processing.ImageProcessingFactory;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -20,6 +26,7 @@ import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPrev
 import static com.example.examscanner.components.scan_exam.Utils.sleepMovingFromCaptureToDetectCorners;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
 
+@RunWith(AndroidJUnit4.class)
 public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
 
     private ImageProcessingFacade imageProcessor;
