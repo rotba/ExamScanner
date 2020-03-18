@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.examscanner.components.scan_exam.capture.CornerDetectedCapture;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 
 import java.util.List;
 

@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.examscanner.components.scan_exam.capture.Capture;
-import com.example.examscanner.components.scan_exam.capture.CornerDetectedCapture;
-import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
+import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
+import com.example.examscanner.image_processing.IScannedCapture;
+import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.image_processing.ICornerDetectionResult;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 
@@ -19,14 +21,22 @@ import java.util.List;
 public class CornerDetectionViewModel extends ViewModel {
     private List<MutableLiveData<CornerDetectedCapture>> cornerDetectedCaptures;
     private MutableLiveData<Integer> mNumberOfCornerDetectedCaptures;
+    private MutableLiveData<Integer> mNumberOfAnswersScannedCaptures;
     private ImageProcessingFacade imageProcessor;
-    private ResolveAnswersViewModel resolveAnswersViewModel;
+    private Repository<CornerDetectedCapture> cdcRepo;
+    private Repository<ScannedCapture> scRepo;
 
-    public CornerDetectionViewModel(ImageProcessingFacade imageProcessor, ResolveAnswersViewModel resolveAnswersViewModel) {
-        this.resolveAnswersViewModel =resolveAnswersViewModel;
+
+    public CornerDetectionViewModel(ImageProcessingFacade imageProcessor, Repository<CornerDetectedCapture> cdcRepo, Repository<ScannedCapture> scRepo) {
+        this.cdcRepo =cdcRepo;
+        this.scRepo = scRepo;
         this.imageProcessor=imageProcessor;
-        this.cornerDetectedCaptures = new ArrayList<>();
+        cornerDetectedCaptures = new ArrayList<>();
+        for (CornerDetectedCapture cdc:this.cdcRepo.get(c->true)) {
+            cornerDetectedCaptures.add(new MutableLiveData<CornerDetectedCapture>(cdc));
+        }
         mNumberOfCornerDetectedCaptures = new MutableLiveData<>(this.cornerDetectedCaptures.size());
+        mNumberOfAnswersScannedCaptures = new MutableLiveData<>(0);
     }
 
     public LiveData<Integer> getNumberOfCornerDetectedCaptures() {
@@ -34,15 +44,15 @@ public class CornerDetectionViewModel extends ViewModel {
     }
 
     public LiveData<Integer> getNumberOfAnswersScannedCaptures() {
-        return resolveAnswersViewModel.getNumberOfAnswersScannedCaptures();
+        return mNumberOfAnswersScannedCaptures;
     }
 
-    public void detectCorners(Capture capture) {
-        ICornerDetectionResult result = imageProcessor.detectCorners(capture);
-        cornerDetectedCaptures.add(
-                new MutableLiveData<>(new CornerDetectedCapture(result.getBitmap()))
-        );
-    }
+//    public void detectCorners(Capture capture) {
+//        ICornerDetectionResult result = imageProcessor.detectCorners(capture);
+//        cornerDetectedCaptures.add(
+//                new MutableLiveData<>(new CornerDetectedCapture(result.getBitmap()))
+//        );
+//    }
 
     public void postProcessCornerDetection() {
         mNumberOfCornerDetectedCaptures.setValue(mNumberOfCornerDetectedCaptures.getValue()+1);
@@ -60,7 +70,11 @@ public class CornerDetectionViewModel extends ViewModel {
                         currCapture.getBottomLeft()
                 )
         );
-        resolveAnswersViewModel.scanAnswers(currCapture.getBitmap());
+        scRepo.create(convert(imageProcessor.scanAnswers(currCapture.getBitmap())));
+    }
+
+    private ScannedCapture convert(IScannedCapture scanAnswers) {
+        return new ScannedCapture(scanAnswers.getIdentified(),scanAnswers.getUnidentified(),scanAnswers.getAnswers());
     }
 
     public Bitmap tmpGetCurrBitmap(){
@@ -68,7 +82,7 @@ public class CornerDetectionViewModel extends ViewModel {
     }
 
     public void postProcessTransformAndScanAnswers() {
-        resolveAnswersViewModel.postProcessScanAnswers();
+        mNumberOfAnswersScannedCaptures.setValue(scRepo.get(sc->true).size());
     }
 
     public List<MutableLiveData<CornerDetectedCapture>> getCornerDetectedCaptures() {

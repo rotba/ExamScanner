@@ -36,7 +36,7 @@ public class GraderRepository implements Repository<Grader> {
     }
 
     @Override
-    public void set(Grader grader) {
+    public void create(Grader grader) {
 
     }
 

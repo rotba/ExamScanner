@@ -1,4 +1,4 @@
-package com.example.examscanner.components.scan_exam.capture;
+package com.example.examscanner.repositories.corner_detected_capture;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;

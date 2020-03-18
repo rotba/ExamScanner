@@ -22,11 +22,9 @@ public class NullImageProcessingProvider implements ImageProcessingFacade {
         return new ICornerDetectionResult() {
             @Override
             public Bitmap getBitmap() {
-                Context context = MainActivity.getContext();
-                AssetManager assetManager = context.getAssets();
                 try {
-                    return BitmapFactory.decodeStream(assetManager.open("temp_test.jpg"));
-                } catch (IOException e) {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return null;

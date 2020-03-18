@@ -1,4 +1,4 @@
-package com.example.examscanner.components.scan_exam.reslove_answers;
+package com.example.examscanner.repositories.scanned_capture;
 
 public class ScannedCapture {
     private int identified;

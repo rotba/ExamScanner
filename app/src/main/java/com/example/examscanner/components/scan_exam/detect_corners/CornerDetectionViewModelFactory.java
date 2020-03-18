@@ -2,15 +2,13 @@ package com.example.examscanner.components.scan_exam.detect_corners;
 
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
-import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModelFactory;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
+import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 public class CornerDetectionViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
@@ -22,22 +20,22 @@ public class CornerDetectionViewModelFactory implements ViewModelProvider.Factor
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) ViewModelProviders.of(
-                activity,
-                new InitialFactory())
-                .get(CornerDetectionViewModel.class
-                );
+        return (T)new CornerDetectionViewModel(
+                new ImageProcessingFactory().create(),
+                new CornerDetectedCaptureRepositoryFacrory().create(),
+                new ScannedCaptureRepositoryFactory().create()
+        );
     }
 
-    private class InitialFactory implements ViewModelProvider.Factory{
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T)new CornerDetectionViewModel(
-                    new ImageProcessingFactory().create(),
-                    new ResolveAnswersViewModelFactory(activity)
-                            .create(ResolveAnswersViewModel.class)
-            );
-        }
-    }
+//    private class InitialFactory implements ViewModelProvider.Factory{
+//        @NonNull
+//        @Override
+//        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+//            return (T)new CornerDetectionViewModel(
+//                    new ImageProcessingFactory().create(),
+//                    new ResolveAnswersViewModelFactory(activity)
+//                            .create(ResolveAnswersViewModel.class)
+//            );
+//        }
+//    }
 }

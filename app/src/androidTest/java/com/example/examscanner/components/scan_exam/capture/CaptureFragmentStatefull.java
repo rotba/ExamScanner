@@ -34,16 +34,4 @@ public class CaptureFragmentStatefull extends StateFullTest {
         navFromHomeToCapture();
 
     }
-
-    @Test
-    public void testDataSurvives() {
-        sleepCameraPreviewSetupTime();
-        onView(withId(R.id.capture_image_button)).perform(click());
-        sleepSingleCaptureProcessingTime();
-        mainActivityScenarioRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        sleepScreenRotationTime();
-        mainActivityScenarioRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        sleepScreenRotationTime();
-        assertUserSeeProgress(1, 1);
-    }
 }

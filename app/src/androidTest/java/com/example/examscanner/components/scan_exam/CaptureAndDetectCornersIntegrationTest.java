@@ -2,7 +2,10 @@ package com.example.examscanner.components.scan_exam;
 
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
+import com.example.examscanner.image_processing.ImageProcessingFacade;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -12,11 +15,22 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.examscanner.components.scan_exam.Utils.TEMP_TESTImageProcessor;
 import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
 import static com.example.examscanner.components.scan_exam.Utils.sleepMovingFromCaptureToDetectCorners;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
 
 public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
+
+    private ImageProcessingFacade imageProcessor;
+
+//    @Before
+//    @Override
+//    public void setUp() {
+//        super.setUp();
+//        imageProcessor = TEMP_TESTImageProcessor();
+//    }
+
     @Test
     public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe() {
         navToCapture();

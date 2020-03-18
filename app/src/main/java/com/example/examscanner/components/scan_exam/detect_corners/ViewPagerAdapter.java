@@ -1,21 +1,19 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.capture.CornerDetectedCapture;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 
 import java.util.List;
 

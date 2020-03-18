@@ -71,7 +71,7 @@ public class ExamRepository implements Repository<Exam> {
     }
 
     @Override
-    public void set(Exam exam) {
+    public void create(Exam exam) {
 
     }
 

@@ -37,7 +37,7 @@ public class VersionRepository implements Repository<Version> {
     }
 
     @Override
-    public void set(Version version) {
+    public void create(Version version) {
 
     }
 

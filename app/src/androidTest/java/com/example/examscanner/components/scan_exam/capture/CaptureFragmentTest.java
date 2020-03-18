@@ -2,6 +2,7 @@ package com.example.examscanner.components.scan_exam.capture;
 
 
 import android.os.Bundle;
+import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,9 +10,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.Lifecycle;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.uiautomator.UiDevice;
 
 import com.example.examscanner.AbstractComponentInstrumentedTest;
 import com.example.examscanner.MainActivity;
@@ -21,6 +24,7 @@ import com.example.examscanner.StateFullTest;
 
 import junit.framework.AssertionFailedError;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,6 +37,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.example.examscanner.components.scan_exam.Utils.navFromHomeToCapture;
 import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
@@ -43,6 +48,7 @@ import static com.example.examscanner.components.scan_exam.capture.CaptureUtils.
 public class CaptureFragmentTest{
 
     private FragmentScenario<CaptureFragment> scenario;
+    private UiDevice device;
 
     @Before
     public void setUp() {
@@ -51,6 +57,16 @@ public class CaptureFragmentTest{
         scenario =
                 FragmentScenario.launchInContainer(CaptureFragment.class);
     }
+
+//    @After
+//    public void tearDown(){
+////        device = UiDevice.getInstance(getInstrumentation());
+//        try {
+//            device.setOrientationNatural();
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Test
     public void testTheNumberOfUnprocessedCapturesUpdates() {
@@ -74,15 +90,22 @@ public class CaptureFragmentTest{
         assertUserSeeProgress(1,1);
     }
 
-    @Test
-    public void testDataSurvives() {
-//        mainActivityScenarioRule.launchActivity(null);
+    @Test//TODO - fix
+    public void testDataSurvivesRotation() {
+        device = UiDevice.getInstance(getInstrumentation());
         sleepCameraPreviewSetupTime();
         onView(withId(R.id.capture_image_button)).perform(click());
         sleepSingleCaptureProcessingTime();
-        scenario.moveToState(Lifecycle.State.INITIALIZED);
-//        scenario.moveToState(Lifecycle.State.STARTED);
-//        scenario.moveToState(Lifecycle.State.RESUMED);
+        try {
+            device.setOrientationLeft();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        try {
+            device.setOrientationNatural();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         assertUserSeeProgress(1, 1);
     }
 

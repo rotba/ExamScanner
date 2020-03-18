@@ -6,13 +6,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.image_processing.IScannedCapture;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
+import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Attributes;
 
 public class ResolveAnswersViewModel extends ViewModel {
     private MutableLiveData<Integer> mNumOfIdentified;
