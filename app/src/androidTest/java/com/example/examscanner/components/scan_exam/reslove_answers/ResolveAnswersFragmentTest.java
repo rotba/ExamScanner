@@ -34,12 +34,13 @@ public class ResolveAnswersFragmentTest extends StateFullTest {
         repo = new ScannedCaptureRepositoryFactory().create();
     }
     @Test
-    public void test40Idnetified10UnidentfiedVisible() {
+    public void test34CHecked4Conflicted15MissingVisible() {
         repo.create(ScannedCapturesInstancesFactory.instance1());
         repo.create(ScannedCapturesInstancesFactory.instance1());
         FragmentScenario.launchInContainer(ResolveAnswersFragment.class);
-        onView(withText("Identified: 38")).check(matches(isDisplayed()));
-        onView(withText("Unidentified: 15")).check(matches(isDisplayed()));
+        onView(withText("Checked: 34")).check(matches(isDisplayed()));
+        onView(withText("Conflicted: 4")).check(matches(isDisplayed()));
+        onView(withText("Missing: 15")).check(matches(isDisplayed()));
     }
 
     @Test

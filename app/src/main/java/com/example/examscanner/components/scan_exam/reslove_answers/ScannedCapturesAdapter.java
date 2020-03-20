@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.reslove_answers;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
@@ -60,13 +62,17 @@ class ScannedCapturesAdapter extends RecyclerView.Adapter<ScannedCapturesAdapter
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         scannedCaptures.get(position).observe(activity, new Observer<ScannedCapture>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onChanged(ScannedCapture scannedCapture) {
-                holder.identifeidTextView.setText(
-                        "Identified: "+scannedCapture.getIdentified()
+                holder.checkedTextView.setText(
+                        "Checked: "+scannedCapture.getCheckedAmount()
                 );
-                holder.unidentifeidTextView.setText(
-                        "Unidentified: "+scannedCapture.getUnidentified()
+                holder.conflicredTextView.setText(
+                        "Conflicted: "+scannedCapture.getConflictedAmount()
+                );
+                holder.missingTextView.setText(
+                        "Missing: "+scannedCapture.getMissingAmount()
                 );
             }
         });
@@ -78,12 +84,14 @@ class ScannedCapturesAdapter extends RecyclerView.Adapter<ScannedCapturesAdapter
         return scannedCaptures.size();
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView identifeidTextView;
-        TextView unidentifeidTextView;
+        TextView checkedTextView;
+        TextView conflicredTextView;
+        TextView missingTextView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            identifeidTextView = itemView.findViewById(R.id.textView_identified);
-            unidentifeidTextView = itemView.findViewById(R.id.textView_unidentified);
+            checkedTextView = itemView.findViewById(R.id.textView_checked);
+            conflicredTextView = itemView.findViewById(R.id.textView_conflicted);
+            missingTextView = itemView.findViewById(R.id.textView2_missing);
         }
 
     }

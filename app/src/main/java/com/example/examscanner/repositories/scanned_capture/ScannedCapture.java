@@ -1,11 +1,13 @@
 package com.example.examscanner.repositories.scanned_capture;
 
-import android.graphics.Point;
 import android.graphics.PointF;
+import android.os.Build;
 
-import java.lang.reflect.Array;
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 
 public class ScannedCapture {
@@ -20,20 +22,22 @@ public class ScannedCapture {
         this.answers = new ArrayList<>();
         for (int i = 0; i <numOfAnswersDetected ; i++) {
             if(selections[i] >0){
-                answers.add(new ResolvedAnswer(answersIds[i], new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i]), selections[i]));
+                answers.add(new CheckedAnswer(answersIds[i], new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i]), selections[i]));
             }else{
-                answers.add(new UnresolvedFramedAnswer(answersIds[i] , new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i])));
+                answers.add(new ConflictedAnswer(answersIds[i] , new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i])));
             }
         }
 
-        for (int ansId = 1; ansId <= numOfTotalAnswers && !in(ansId,answersIds); ansId++) {
-            answers.add(new UnresolvedAnswer(ansId));
+        for (int ansId = 1; ansId <= numOfTotalAnswers; ansId++) {
+            if(!in(ansId,answersIds)){
+                answers.add(new MissingAnswer(ansId));
+            }
         }
     }
 
     private boolean in(int item, int[] arr){
         for (int i = 0; i <arr.length ; i++) {
-            if (arr[0]==i)return true;
+            if (arr[i]==item)return true;
         }
         return false;
     }
@@ -48,12 +52,27 @@ public class ScannedCapture {
         throw new NoSuchAnswerException("Asked for: "+ id+" but there are only "+answers.size()+" answers");
     }
 
-    public int getIdentified() {
-        return identified;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int amountOf(Predicate<Answer> pred){
+        int ans = 0;
+        for (Answer a: answers)
+            if(pred.test(a))ans++;
+        return ans;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int getCheckedAmount() {
+        return amountOf(a -> a.isChecked());
     }
 
-    public int getUnidentified() {
-        return unidentified;
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int getConflictedAmount() {
+        return amountOf(a -> a.isConflicted());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int getMissingAmount() {
+        return amountOf(a -> a.isMissing());
     }
 
     private abstract class Answer{
@@ -64,34 +83,57 @@ public class ScannedCapture {
             this.id = id;
         }
         public int getId(){return id;}
+        public boolean isChecked(){
+            return false;
+        }
+        public boolean isConflicted(){
+            return false;
+        }
+        public boolean isMissing(){
+            return false;
+        }
     }
-    private class ResolvedAnswer extends Answer{
+    private class CheckedAnswer extends Answer{
 
         private final PointF upperLeft;
         private final PointF bottomRight;
         private final int selection;
 
-        public ResolvedAnswer(int id, PointF upperLeft, PointF bottomRight, int selection) {
+        public CheckedAnswer(int id, PointF upperLeft, PointF bottomRight, int selection) {
             super(id);
             this.upperLeft = upperLeft;
             this.bottomRight = bottomRight;
             this.selection = selection;
         }
+
+        @Override
+        public boolean isChecked() {
+            return true;
+        }
     }
-    private class UnresolvedFramedAnswer extends Answer{
+    private class ConflictedAnswer extends Answer{
         private final PointF upperLeft;
         private final PointF bottomRight;
 
-        public UnresolvedFramedAnswer(int id, PointF upperLeft, PointF bottomRight) {
+        public ConflictedAnswer(int id, PointF upperLeft, PointF bottomRight) {
             super(id);
             this.upperLeft = upperLeft;
             this.bottomRight = bottomRight;
         }
-    }
-    private class UnresolvedAnswer extends Answer{
 
-        public UnresolvedAnswer(int id) {
+        @Override
+        public boolean isConflicted() {
+            return true;
+        }
+    }
+    private class MissingAnswer extends Answer{
+        public MissingAnswer(int id) {
             super(id);
+        }
+
+        @Override
+        public boolean isMissing() {
+            return true;
         }
     }
     private class NoSuchAnswerException extends Exception{

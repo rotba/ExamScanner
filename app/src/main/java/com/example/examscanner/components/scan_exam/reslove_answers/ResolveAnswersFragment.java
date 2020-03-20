@@ -32,12 +32,6 @@ public class ResolveAnswersFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        ((TextView)view.findViewById(R.id.textView_num_of_identified)).setText(
-//                "Identified: "+ resolveAnswersViewModel.getNumOfIdentified().getValue()
-//        );
-//        ((TextView)view.findViewById(R.id.textView_num_of_unidentified)).setText(
-//                "Unidentified: "+ resolveAnswersViewModel.getNumOfUnidentified().getValue()
-//        );
         ViewPager2 viewPager = (ViewPager2)view.findViewById(R.id.viewPager2_scanned_captures);
         ScannedCapturesAdapter scannedCapturesAdapter = new ScannedCapturesAdapter(getActivity(), resolveAnswersViewModel.getScannedCaptures(), viewPager);
         viewPager.setAdapter(scannedCapturesAdapter);
