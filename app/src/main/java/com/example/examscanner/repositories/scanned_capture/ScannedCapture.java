@@ -1,6 +1,7 @@
 package com.example.examscanner.repositories.scanned_capture;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -13,15 +14,15 @@ public class ScannedCapture {
     private List<Answer> answers;
 
 
-    public ScannedCapture(int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, int[] lefts, int[] tops, int[] rights, int[] bottoms, int[] selections) {
+    public ScannedCapture(int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
         this.identified=numOfAnswersDetected;
         this.unidentified=numOfTotalAnswers - numOfAnswersDetected;
         this.answers = new ArrayList<>();
         for (int i = 0; i <numOfAnswersDetected ; i++) {
             if(selections[i] >0){
-                answers.add(new ResolvedAnswer(answersIds[i], new Point(lefts[i],tops[i]), new Point(rights[i],bottoms[i]), selections[i]));
+                answers.add(new ResolvedAnswer(answersIds[i], new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i]), selections[i]));
             }else{
-                answers.add(new UnresolvedFramedAnswer(answersIds[i] , new Point(lefts[i],tops[i]), new Point(rights[i],bottoms[i])));
+                answers.add(new UnresolvedFramedAnswer(answersIds[i] , new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i])));
             }
         }
 
@@ -66,11 +67,11 @@ public class ScannedCapture {
     }
     private class ResolvedAnswer extends Answer{
 
-        private final Point upperLeft;
-        private final Point bottomRight;
+        private final PointF upperLeft;
+        private final PointF bottomRight;
         private final int selection;
 
-        public ResolvedAnswer(int id, Point upperLeft, Point bottomRight, int selection) {
+        public ResolvedAnswer(int id, PointF upperLeft, PointF bottomRight, int selection) {
             super(id);
             this.upperLeft = upperLeft;
             this.bottomRight = bottomRight;
@@ -78,10 +79,10 @@ public class ScannedCapture {
         }
     }
     private class UnresolvedFramedAnswer extends Answer{
-        private final Point upperLeft;
-        private final Point bottomRight;
+        private final PointF upperLeft;
+        private final PointF bottomRight;
 
-        public UnresolvedFramedAnswer(int id, Point upperLeft, Point bottomRight) {
+        public UnresolvedFramedAnswer(int id, PointF upperLeft, PointF bottomRight) {
             super(id);
             this.upperLeft = upperLeft;
             this.bottomRight = bottomRight;

@@ -12,6 +12,7 @@ import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -26,6 +27,7 @@ import static com.example.examscanner.components.scan_exam.Utils.sleepScreenRota
 import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
 import static com.example.examscanner.components.scan_exam.capture.CaptureUtils.assertUserSeeProgress;
 
+@Ignore
 public class CaptureFragmentStatefull extends StateFullTest {
     @Override
     @Before

@@ -68,7 +68,7 @@ public class CornerDetectionViewModel extends ViewModel {
     public void scanAnswers(CornerDetectedCapture cdc){
         ScanAnswersConsumer consumer = new ScanAnswersConsumer() {
             @Override
-            public void consume(int numOfAnswersDetected, int[] answersIds, int[] lefts, int[] tops, int[] rights, int[] bottoms, int[] selections) {
+            public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 scRepo.create(new ScannedCapture(exam.getNumOfAnswers(),numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections));
             }
         };

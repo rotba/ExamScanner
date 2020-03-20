@@ -35,17 +35,17 @@ public class ResolveAnswersFragmentTest extends StateFullTest {
     }
     @Test
     public void test40Idnetified10UnidentfiedVisible() {
-        repo.create(new ScannedCapture(40,10,null));
-        repo.create(new ScannedCapture(35,15,null));
+        repo.create(ScannedCapturesInstancesFactory.instance1());
+        repo.create(ScannedCapturesInstancesFactory.instance1());
         FragmentScenario.launchInContainer(ResolveAnswersFragment.class);
-        onView(withText("Identified: 40")).check(matches(isDisplayed()));
-        onView(withText("Unidentified: 10")).check(matches(isDisplayed()));
+        onView(withText("Identified: 38")).check(matches(isDisplayed()));
+        onView(withText("Unidentified: 15")).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSwiping() {
-        repo.create(new ScannedCapture(40,10,null));
-        repo.create(new ScannedCapture(35,15,null));
+        repo.create(ScannedCapturesInstancesFactory.instance1());
+        repo.create(ScannedCapturesInstancesFactory.instance1());
         FragmentScenario.launchInContainer(ResolveAnswersFragment.class);
         onView(withText("1/2")).check(matches(isDisplayed()));
         onView(withId(R.id.viewPager2_scanned_captures)).perform(ViewActions.swipeLeft());
