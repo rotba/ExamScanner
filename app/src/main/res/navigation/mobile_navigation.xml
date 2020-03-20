@@ -105,6 +105,24 @@
             android:id="@+id/fragment_resolve_answers"
             android:name="com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersFragment"
             android:label="fragment_resolve_answers2"
-            tools:layout="@layout/fragment_resolve_answers2" />
+            tools:layout="@layout/fragment_resolve_answers2" >
+            <action
+                android:id="@+id/action_fragment_resolve_answers_to_resolveOneScanFragment"
+                app:destination="@id/resolveConflictedAnswersFragment" >
+                <argument
+                    android:name="scanId"
+                    app:argType="integer"
+                    android:defaultValue="-1" />
+            </action>
+        </fragment>
+        <fragment
+            android:id="@+id/resolveConflictedAnswersFragment"
+            android:name="com.example.examscanner.components.scan_exam.reslove_answers.resolve_conflicted_answers.ResolveConflictedAnswersFragment"
+            android:label="Resolve Conflicted Answers">
+            <argument
+                android:name="scanId"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        </fragment>
     </navigation>
 </navigation>

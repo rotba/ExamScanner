@@ -1,5 +1,6 @@
 package com.example.examscanner.repositories.scanned_capture;
 
+import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.os.Build;
 
@@ -11,14 +12,12 @@ import java.util.function.Predicate;
 
 
 public class ScannedCapture {
-    private int identified;
-    private int unidentified;
     private List<Answer> answers;
+    private Bitmap bm;
 
 
-    public ScannedCapture(int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-        this.identified=numOfAnswersDetected;
-        this.unidentified=numOfTotalAnswers - numOfAnswersDetected;
+    public ScannedCapture(Bitmap bm,int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
+        this.bm=bm;
         this.answers = new ArrayList<>();
         for (int i = 0; i <numOfAnswersDetected ; i++) {
             if(selections[i] >0){
@@ -40,6 +39,14 @@ public class ScannedCapture {
             if (arr[i]==item)return true;
         }
         return false;
+    }
+
+    public List<ConflictedAnswer> getConflictedAnswers(){
+        List<ConflictedAnswer> ans = new ArrayList<>();
+        for (Answer a: answers) {
+            a.addMe(ans);
+        }
+        return ans;
     }
 
     private Answer getZeroBasedAnswer(int index){
@@ -75,67 +82,11 @@ public class ScannedCapture {
         return amountOf(a -> a.isMissing());
     }
 
-    private abstract class Answer{
-
-        private final int id;
-
-        public Answer(int id) {
-            this.id = id;
-        }
-        public int getId(){return id;}
-        public boolean isChecked(){
-            return false;
-        }
-        public boolean isConflicted(){
-            return false;
-        }
-        public boolean isMissing(){
-            return false;
-        }
+    public Bitmap getBm() {
+        return bm;
     }
-    private class CheckedAnswer extends Answer{
 
-        private final PointF upperLeft;
-        private final PointF bottomRight;
-        private final int selection;
 
-        public CheckedAnswer(int id, PointF upperLeft, PointF bottomRight, int selection) {
-            super(id);
-            this.upperLeft = upperLeft;
-            this.bottomRight = bottomRight;
-            this.selection = selection;
-        }
-
-        @Override
-        public boolean isChecked() {
-            return true;
-        }
-    }
-    private class ConflictedAnswer extends Answer{
-        private final PointF upperLeft;
-        private final PointF bottomRight;
-
-        public ConflictedAnswer(int id, PointF upperLeft, PointF bottomRight) {
-            super(id);
-            this.upperLeft = upperLeft;
-            this.bottomRight = bottomRight;
-        }
-
-        @Override
-        public boolean isConflicted() {
-            return true;
-        }
-    }
-    private class MissingAnswer extends Answer{
-        public MissingAnswer(int id) {
-            super(id);
-        }
-
-        @Override
-        public boolean isMissing() {
-            return true;
-        }
-    }
     private class NoSuchAnswerException extends Exception{
         public NoSuchAnswerException(String message) {
             super(message);

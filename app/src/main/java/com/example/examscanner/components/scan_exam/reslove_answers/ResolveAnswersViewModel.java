@@ -1,19 +1,15 @@
 package com.example.examscanner.components.scan_exam.reslove_answers;
 
-import android.graphics.Bitmap;
-
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.scanned_capture.ConflictedAnswer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.SSLSession;
 
 public class ResolveAnswersViewModel extends ViewModel {
 //    private MutableLiveData<Integer> mNumOfIdentified;
@@ -70,5 +66,13 @@ public class ResolveAnswersViewModel extends ViewModel {
 
     public MutableLiveData<ScannedCapture> getScannedCapture(int captureId) {
         return scannedCaptures.get(captureId);
+    }
+
+    public List<MutableLiveData<ConflictedAnswer>> getConflictedAnswers(int scanId) {
+        List<MutableLiveData<ConflictedAnswer>> ans = new ArrayList<>();
+        for (ConflictedAnswer ca:scannedCaptures.get(scanId).getValue().getConflictedAnswers()) {
+            ans.add(new MutableLiveData<>(ca));
+        }
+        return ans;
     }
 }

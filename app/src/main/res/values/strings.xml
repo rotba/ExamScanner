@@ -35,4 +35,12 @@
     <string name="resolve_answers">Resolve Answers</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="answers_is_1">1</string>
+    <string name="answers_is_5">5</string>
+    <string name="answers_is_6">6</string>
+    <string name="answers_is_7">7</string>
+    <string name="answers_is_no_answer">No Answer</string>
+    <string name="answers_is_2">2</string>
+    <string name="answers_is_3">3</string>
+    <string name="answers_is_4">4</string>
 </resources>
