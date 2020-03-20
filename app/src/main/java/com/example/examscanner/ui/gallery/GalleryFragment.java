@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
@@ -37,6 +38,8 @@ public class GalleryFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                NavDirections action = GalleryFragmentDirections.actionNavGalleryToNavigationScanExam();
+                action.getArguments().putInt("examId",-1);
                 Navigation.findNavController(view).navigate(R.id.action_nav_gallery_to_navigationScanExam);
 //                startActivity(new Intent(getActivity(), ScanExamActivity.class));
             }

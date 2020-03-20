@@ -21,6 +21,8 @@ import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
 import com.example.examscanner.State;
 import com.example.examscanner.StateFullTest;
+import com.example.examscanner.components.scan_exam.detect_corners.EmptyRepositoryFactory;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 
 import junit.framework.AssertionFailedError;
 
@@ -54,8 +56,11 @@ public class CaptureFragmentTest{
     public void setUp() {
 //        super.setUp();
 //        navFromHomeToCapture();
+        CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(EmptyRepositoryFactory.create());
+        Bundle b = new Bundle();
+        b.putInt("examId", -1);
         scenario =
-                FragmentScenario.launchInContainer(CaptureFragment.class);
+                FragmentScenario.launchInContainer(CaptureFragment.class, b);
     }
 
 //    @After

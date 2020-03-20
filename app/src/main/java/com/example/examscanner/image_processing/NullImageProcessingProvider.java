@@ -16,21 +16,9 @@ import java.io.IOException;
 
 import static android.os.Environment.DIRECTORY_PICTURES;
 
+
 public class NullImageProcessingProvider implements ImageProcessingFacade {
-    @Override
-    public ICornerDetectionResult detectCorners(Object o) {
-        return new ICornerDetectionResult() {
-            @Override
-            public Bitmap getBitmap() {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        };
-    }
+
 
     @Override
     public Bitmap transformToRectangle(Bitmap bitmap, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
@@ -38,32 +26,17 @@ public class NullImageProcessingProvider implements ImageProcessingFacade {
     }
 
     @Override
-    public Object foo(Object d) {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
+        consumer.consume(0,null,null,null,null,null,null);
     }
 
     @Override
-    public IScannedCapture scanAnswers(Bitmap bitmap) {
-        return new IScannedCapture() {
-            @Override
-            public int getIdentified() {
-                return 40;
-            }
+    public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
+        consumer.consume(0,null,null,null,null,null,null);
+    }
 
-            @Override
-            public int getUnidentified() {
-                return 10;
-            }
-
-            @Override
-            public int[] getAnswers() {
-                return new int[0];
-            }
-        };
+    @Override
+    public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
+        consumer.consume(null,null,null,null);
     }
 }

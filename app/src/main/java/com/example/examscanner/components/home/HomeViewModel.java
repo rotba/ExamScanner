@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.examscanner.State;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
-import com.example.examscanner.repositories.exam.Factory;
+import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<List<Exam>> mExams;
-    private Repository<Exam> examRepository = new Factory().create();
+    private Repository<Exam> examRepository = new ExamRepositoryFactory().create();
 
     public LiveData<List<Exam>> getExams() {
         return mExams;

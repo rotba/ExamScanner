@@ -22,9 +22,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentArgs;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentDirections;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -52,11 +56,11 @@ public class CaptureFragment extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
-        captureViewModel =
-                ViewModelProviders.of(
-                        this,
-                        new CaptureViewModelFactory(getActivity())
-                ).get(CaptureViewModel.class);
+        CaptureViewModelFactory factory = new CaptureViewModelFactory(
+                getActivity(),
+                CaptureFragmentArgs.fromBundle(getArguments()).getExamId()
+        );
+        captureViewModel =ViewModelProviders.of(this,factory).get(CaptureViewModel.class);
         cameraManager = new CameraManager(
                 getActivity(),
                 root
@@ -108,8 +112,10 @@ public class CaptureFragment extends Fragment  {
         ((Button)view.findViewById(R.id.button_move_to_detect_corners)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).
-                        navigate(R.id.action_captureFragment_to_cornerDetectionFragment);
+                CaptureFragmentDirections.ActionCaptureFragmentToCornerDetectionFragment action =
+                        CaptureFragmentDirections.actionCaptureFragmentToCornerDetectionFragment();
+                action.setExamId(captureViewModel.getExamId());
+                Navigation.findNavController(view).navigate(action);
             }
         });
         captureViewModel.getNumOfTotalCaptures().observe(getActivity(), new Observer<Integer>() {

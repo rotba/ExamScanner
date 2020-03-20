@@ -14,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.examscanner.R;
 
@@ -29,10 +31,8 @@ public class CornerDetectionCardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         captureId = getArguments().getInt(CornerDetectionCapturesAdapter.positionKey());
-        cornerDetectionViewModel = new ViewModelProvider(
-                getActivity(),
-                new CornerDetectionViewModelFactory(getActivity())
-        ).get(CornerDetectionViewModel.class);
+        CornerDetectionViewModelFactory factory =new CornerDetectionViewModelFactory();
+        cornerDetectionViewModel = new ViewModelProvider(getActivity(),factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.item_corner_detected_capture, container, false);
         ((ImageView) root.findViewById(R.id.imageView2_corner_detected_capture)).setImageBitmap(
                 cornerDetectionViewModel.getCornerDetectedCaptureById(captureId).getValue().getBitmap()

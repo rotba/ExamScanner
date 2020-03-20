@@ -5,9 +5,17 @@ import android.graphics.Point;
 
 public class CornerDetectedCapture {
     private Bitmap bm;
+    private Point upperLeft;
+    private Point upperRight;
+    private Point bottomRight;
+    private Point bottomLeft;
 
-    public CornerDetectedCapture(Bitmap bm) {
+public CornerDetectedCapture(Bitmap bm, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
         this.bm = bm;
+        this.upperLeft = upperLeft;
+        this.upperRight = upperRight;
+        this.bottomRight = bottomRight;
+        this.bottomLeft = bottomLeft;
     }
 
     public Bitmap getBitmap() {

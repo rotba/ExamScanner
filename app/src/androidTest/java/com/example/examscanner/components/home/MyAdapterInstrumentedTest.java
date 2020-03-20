@@ -1,18 +1,10 @@
 package com.example.examscanner.components.home;
 
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-
-import com.example.examscanner.AbstractComponentInstrumentedTest;
-import com.example.examscanner.MainActivity;
-import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
 import com.example.examscanner.repositories.exam.Exam;
-import com.example.examscanner.repositories.exam.Factory;
+import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 
-import org.junit.Rule;
 import org.junit.Test;
 
 
@@ -35,7 +27,7 @@ public class MyAdapterInstrumentedTest extends StateFullTest {
     }
 
     private List<Exam> getCurrentGraderExams() {
-        return new Factory().create().get(new Predicate<Exam>() {
+        return new ExamRepositoryFactory().create().get(new Predicate<Exam>() {
             @Override
             public boolean test(Exam exam) {
                 return exam.associatedWithGrader(getCurrentGraderId());

@@ -7,8 +7,12 @@ import androidx.test.runner.AndroidJUnitRunner;
 
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModelFactory;
+import com.example.examscanner.components.scan_exam.detect_corners.EmptyRepositoryFactory;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +35,12 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
 
     private ImageProcessingFacade imageProcessor;
 
-//    @Before
-//    @Override
-//    public void setUp() {
-//        super.setUp();
-//        imageProcessor = TEMP_TESTImageProcessor();
-//    }
+    @Before
+    @Override
+    public void setUp() {
+        super.setUp();
+        CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(EmptyRepositoryFactory.create());
+    }
 
     @Test
     public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe() {

@@ -8,9 +8,9 @@ import android.graphics.Point;
 
 import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
-import com.example.examscanner.image_processing.ICornerDetectionResult;
-import com.example.examscanner.image_processing.IScannedCapture;
+import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
+import com.example.examscanner.image_processing.ScanAnswersConsumer;
 
 import java.io.IOException;
 
@@ -77,35 +77,23 @@ public class Utils {
     public static ImageProcessingFacade TEMP_TESTImageProcessor(){
         return new ImageProcessingFacade() {
             @Override
-            public Object foo(Object d) {
-                return null;
-            }
-
-            @Override
-            public ICornerDetectionResult detectCorners(Object o) {
-                return new ICornerDetectionResult() {
-                    @Override
-                    public Bitmap getBitmap() {
-                        Context context = MainActivity.getContext();
-                        AssetManager assetManager = context.getAssets();
-                        try {
-                            return BitmapFactory.decodeStream(assetManager.open("temp_test.jpg"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-                };
+            public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
+                consumer.consume(null,null,null,null);
             }
 
             @Override
             public Bitmap transformToRectangle(Bitmap bitmap, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
-                return null;
+                return bitmap;
             }
 
             @Override
-            public IScannedCapture scanAnswers(Bitmap bitmap) {
-                return null;
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
+                consumer.consume(0,null,null,null,null,null,null);
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
+                consumer.consume(0,null,null,null,null,null,null);
             }
         };
     }

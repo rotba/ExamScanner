@@ -1,10 +1,7 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.os.Bundle;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.espresso.action.ViewActions;
@@ -13,8 +10,7 @@ import androidx.test.rule.ActivityTestRule;
 import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.Utils;
-import com.example.examscanner.image_processing.ICornerDetectionResult;
-import com.example.examscanner.image_processing.IScannedCapture;
+import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
@@ -23,8 +19,6 @@ import com.example.examscanner.repositories.corner_detected_capture.CornerDetect
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -47,18 +41,22 @@ public class CornerDetectionFragmentTest {
 
     @Test
     public void testCorrentPositionPointer() {
-        repo.create(convert(imageProcessor.detectCorners(null)));
-        repo.create(convert(imageProcessor.detectCorners(null)));
-        FragmentScenario.launchInContainer(CornerDetectionFragment.class);
+        DetectCornersConsumer consumer = new DetectCornersConsumer() {
+            @Override
+            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+                repo.create(new CornerDetectedCapture(null,upperLeft, upperRight, bottomLeft, bottomRight));
+            }
+        };
+        imageProcessor.detectCorners(null, consumer);
+        imageProcessor.detectCorners(null, consumer);
+        Bundle b = new Bundle();
+        b.putInt("examId", -1);
+        FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
         onView(withText("1/2")).check(matches(isDisplayed()));
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
         onView(withText("2/2")).check(matches(isDisplayed()));
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeRight());
         onView(withText("1/2")).check(matches(isDisplayed()));
-    }
-
-    private CornerDetectedCapture convert(ICornerDetectionResult icr){
-        return new CornerDetectedCapture(icr.getBitmap());
     }
 
 

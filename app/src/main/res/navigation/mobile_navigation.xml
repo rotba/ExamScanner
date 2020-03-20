@@ -54,11 +54,6 @@
         android:name="com.example.examscanner.ui.send.SendFragment"
         android:label="@string/menu_send"
         tools:layout="@layout/fragment_send" />
-    <fragment
-        android:id="@+id/authenticationFragment3"
-        android:name="com.example.examscanner.ui.authentication.AuthenticationFragment"
-        android:label="fragment_authentication"
-        tools:layout="@layout/fragment_authentication" />
     <activity
         android:id="@+id/mainActivity2"
         android:name="com.example.examscanner.MainActivity"
@@ -81,9 +76,18 @@
             android:name="com.example.examscanner.components.scan_exam.capture.CaptureFragment"
             android:label="Scan"
             tools:layout="@layout/fragment_capture_old" >
+            <argument
+                android:name="examId"
+                app:argType="integer"
+                android:defaultValue="-1" />
             <action
                 android:id="@+id/action_captureFragment_to_cornerDetectionFragment"
-                app:destination="@id/cornerDetectionFragment" />
+                app:destination="@id/cornerDetectionFragment" >
+                <argument
+                    android:name="examId"
+                    app:argType="integer"
+                    android:defaultValue="-1" />
+            </action>
         </fragment>
         <fragment
             android:id="@+id/cornerDetectionFragment"
@@ -92,6 +96,10 @@
             <action
                 android:id="@+id/action_cornerDetectionFragment_to_fragment_resolve_answers"
                 app:destination="@id/fragment_resolve_answers" />
+            <argument
+                android:name="examId"
+                app:argType="integer"
+                android:defaultValue="-1" />
         </fragment>
         <fragment
             android:id="@+id/fragment_resolve_answers"

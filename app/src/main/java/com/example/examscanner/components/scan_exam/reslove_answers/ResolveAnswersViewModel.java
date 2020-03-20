@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.examscanner.image_processing.IScannedCapture;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
@@ -39,17 +38,6 @@ public class ResolveAnswersViewModel extends ViewModel {
 
     public LiveData<Integer> getNumOfUnidentified() {
         return mNumOfUnidentified;
-    }
-
-    public void scanAnswers(Bitmap bitmap) {
-        IScannedCapture iScannedCapture = imageProcessor.scanAnswers(bitmap);
-        scannedCaptures.add(
-                new ScannedCapture(
-                        iScannedCapture.getIdentified(),
-                        iScannedCapture.getUnidentified(),
-                        iScannedCapture.getAnswers()
-                )
-        );
     }
 
     public void postProcessScanAnswers(){

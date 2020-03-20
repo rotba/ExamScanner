@@ -10,8 +10,11 @@ import com.example.examscanner.repositories.corner_detected_capture.CornerDetect
 
 public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
-    public CaptureViewModelFactory(FragmentActivity activity) {
+    private int examID;
+
+    public CaptureViewModelFactory(FragmentActivity activity, int examID) {
         this.activity=activity;
+        this.examID = examID;
     }
 
     @NonNull
@@ -19,7 +22,8 @@ public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T) new CaptureViewModel(
                 new CornerDetectedCaptureRepositoryFacrory().create(),
-                new ImageProcessingFactory().create()
+                new ImageProcessingFactory().create(),
+                examID
         );
     }
 }
