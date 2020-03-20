@@ -8,14 +8,19 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
+import com.example.examscanner.repositories.exam.Exam;
+import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 public class CornerDetectionViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
+    private Exam exam;
 
-    public CornerDetectionViewModelFactory(FragmentActivity activity) {
+    public CornerDetectionViewModelFactory(FragmentActivity activity, int examId) {
         this.activity = activity;
+        this.exam = new ExamRepositoryFactory().create().get(examId);
     }
+    public CornerDetectionViewModelFactory() {}
 
     @NonNull
     @Override
@@ -23,7 +28,8 @@ public class CornerDetectionViewModelFactory implements ViewModelProvider.Factor
         return (T)new CornerDetectionViewModel(
                 new ImageProcessingFactory().create(),
                 new CornerDetectedCaptureRepositoryFacrory().create(),
-                new ScannedCaptureRepositoryFactory().create()
+                new ScannedCaptureRepositoryFactory().create(),
+                exam
         );
     }
 

@@ -42,4 +42,8 @@ public class Exam {
     public String toString() {
         return courseName+" "+ moed;
     }
+
+    public int getNumOfAnswers() {
+        return -1;
+    }
 }

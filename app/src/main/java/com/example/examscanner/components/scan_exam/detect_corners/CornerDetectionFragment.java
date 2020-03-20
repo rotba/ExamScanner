@@ -13,24 +13,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.scan_exam.capture.CaptureFragmentArgs;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 
 public class CornerDetectionFragment extends Fragment {
     private CornerDetectionViewModel cornerDetectionViewModel;
-//    private ViewPagerAdapter viewPagerAdapter;
-//    private CornerDetectionCapturesAdapter cornerDetectionCapturesAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        cornerDetectionViewModel =
-                ViewModelProviders.of(
-                        this,
-                        new CornerDetectionViewModelFactory(getActivity())
-                ).get(CornerDetectionViewModel.class);
+
+        CornerDetectionViewModelFactory factory =
+                new CornerDetectionViewModelFactory(
+                        getActivity(),
+                        CaptureFragmentArgs.fromBundle(getArguments()).getExamId()
+                );
+        cornerDetectionViewModel =new ViewModelProvider(this,factory).get(CornerDetectionViewModel.class);
         View root =inflater.inflate(R.layout.fragment_corner_detection, container, false);
         ((TextView)root.findViewById(R.id.textView_relative_cirrent_location)).setText(
                 "1/"+cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
@@ -42,8 +45,6 @@ public class CornerDetectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewPager2 viewPager = (ViewPager2)view.findViewById(R.id.viewPager2_corner_detected_captures);
-//        viewPager.setUserInputEnabled(false);
-//        viewPagerAdapter = new ViewPagerAdapter(getActivity(), cornerDetectionViewModel.getCornerDetectedCaptures(),viewPager);
         CornerDetectionCapturesAdapter cornerDetectionCapturesAdapter = new CornerDetectionCapturesAdapter(getActivity(), cornerDetectionViewModel.getCornerDetectedCaptures(), viewPager);
         viewPager.setAdapter(cornerDetectionCapturesAdapter);
 //        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -84,11 +85,15 @@ public class CornerDetectionFragment extends Fragment {
         ((Button)view.findViewById(R.id.button_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cornerDetectionViewModel.transformAndScanAnswers();
+                int currentCaptureId = cornerDetectionCapturesAdapter.getPosition().getValue()-1;
+                CornerDetectedCapture cdc = cornerDetectionViewModel.getCornerDetectedCaptureById(currentCaptureId).getValue();
+                cornerDetectionViewModel.transformToRectangle(cdc);
+                cornerDetectionViewModel.scanAnswers(cdc);
                 cornerDetectionViewModel.postProcessTransformAndScanAnswers();
             }
         });
 
-
     }
+
+
 }

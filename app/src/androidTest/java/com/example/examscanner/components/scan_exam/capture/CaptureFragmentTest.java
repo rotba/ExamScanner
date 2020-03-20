@@ -58,8 +58,10 @@ public class CaptureFragmentTest{
 //        super.setUp();
 //        navFromHomeToCapture();
         CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(EmptyRepositoryFactory.create());
+        Bundle b = new Bundle();
+        b.putInt("examId", -1);
         scenario =
-                FragmentScenario.launchInContainer(CaptureFragment.class);
+                FragmentScenario.launchInContainer(CaptureFragment.class, b);
         sleepCameraPreviewSetupTime();
     }
 

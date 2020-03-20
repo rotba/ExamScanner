@@ -1,21 +1,18 @@
 package com.example.examscanner.components.scan_exam.capture;
 
-import android.os.Build;
+import android.graphics.Point;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
-import com.example.examscanner.image_processing.ICornerDetectionResult;
+import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.function.Predicate;
 
 
 public class CaptureViewModel extends ViewModel {
@@ -24,10 +21,11 @@ public class CaptureViewModel extends ViewModel {
     private Queue<Capture> unProcessedCaptures;
     private Repository<CornerDetectedCapture> cdcRepo;
     private ImageProcessingFacade imageProcessor;
+    private int examId;
 
 
-
-    public CaptureViewModel(Repository<CornerDetectedCapture> cdcRepo, ImageProcessingFacade imageProcessor) {
+    public CaptureViewModel(Repository<CornerDetectedCapture> cdcRepo, ImageProcessingFacade imageProcessor, int examId) {
+        this.examId = examId;
         unProcessedCaptures = new LinkedList<>();
         mNumOfTotalCaptures = new MutableLiveData<>(unProcessedCaptures.size());
         this.cdcRepo=cdcRepo;
@@ -49,22 +47,24 @@ public class CaptureViewModel extends ViewModel {
     }
 
     public void processCapture(){
-        cdcRepo.create(
-                convert(imageProcessor.detectCorners(unProcessedCaptures.remove()))
+        Capture capture = unProcessedCaptures.remove();
+        imageProcessor.detectCorners(
+                capture.getBitmap(),
+                new DetectCornersConsumer() {
+                    @Override
+                    public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+                        cdcRepo.create(new CornerDetectedCapture(capture.getBitmap(), upperLeft, upperRight, bottomLeft, bottomRight));
+                    }
+                }
         );
+
     }
 
     public void postProcessCapture(){
         mNumOfProcessedCaptures.setValue(cdcRepo.get(cornerDetectedCapture -> true).size());
     }
 
-    public CornerDetectedCapture convert(ICornerDetectionResult icdr){
-        return new CornerDetectedCapture(icdr.getBitmap());
+    public int getExamId() {
+        return examId;
     }
-
-
-
-
-
-
 }
