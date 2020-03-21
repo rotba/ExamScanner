@@ -54,7 +54,7 @@
             app:layout_constraintVertical_bias="0.492" />
 
         <Button
-            android:id="@+id/button_nav_to_resolve_answers"
+            android:id="@+id/button_cd_nav_to_resolve_answers"
             android:layout_width="64dp"
             android:layout_height="72dp"
             android:layout_marginEnd="48dp"

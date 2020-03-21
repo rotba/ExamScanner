@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.reslove_answers;
 
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactory;
+import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 public class ScannedCapturesInstancesFactory {
@@ -8,7 +9,7 @@ public class ScannedCapturesInstancesFactory {
     /**
      * @return instance with 52 answers and 40 sucessfully detected answers. corresponds to assets/test_jpg_1.jpg
      */
-    public static ScannedCapture instance1() {
+    public static ScannedCapture instance1(Repository<ScannedCapture> repo) {
         int[] answersIds = {
                 1, 3, 4, 6, 8, 9,
                 10, 12, 13, 15, 16, 18, 19,
@@ -42,6 +43,6 @@ public class ScannedCapturesInstancesFactory {
         assert rights.length == bottoms.length;
         assert bottoms.length == selections.length;
         assert selections.length == answersIds.length;
-        return new ScannedCapture(BitmapsInstancesFactory.getTestJpg1(), 53, answersIds.length, answersIds, lefts, tops, rights, bottoms, selections);
+        return new ScannedCapture(repo.genId(),BitmapsInstancesFactory.getTestJpg1(), 53, answersIds.length, answersIds, lefts, tops, rights, bottoms, selections);
     }
 }

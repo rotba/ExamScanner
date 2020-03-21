@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.reslove_answers.resolve_conflicted_answers;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,7 @@ import com.example.examscanner.repositories.scanned_capture.ConflictedAnswer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAdapter.ViewHolder> {
@@ -58,14 +61,26 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         return new ViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ConflictedAnswer ca = scannedCapture.getValue().getConflictedAnswers().get(position);
+        List<ConflictedAnswer> cas =  scannedCapture.getValue().getConflictedAnswers();
+        cas.sort(new Comparator<ConflictedAnswer>() {
+            @Override
+            public int compare(ConflictedAnswer c1, ConflictedAnswer c2) {
+                return Integer.valueOf(c1.getId()).compareTo(c2.getId());
+            }
+        });
+        ConflictedAnswer ca = cas.get(position);
         Bitmap bm = scannedCapture.getValue().getBm();
         holder.answerFrameImageView.setImageBitmap(generateCAnswerFrame(ca,bm));
         resolutionSubscribers.add(new ResolutionSubscriber(position+1) {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResolution(Choice c) {
+                ScannedCapture val =scannedCapture.getValue();
+                val.resolve(ca,ca.resolve(c));
+                scannedCapture.setValue(val);
                 switch (c){
                     case NO_ANSWER:
                         holder.resolutionTextView.setText("No Answer");

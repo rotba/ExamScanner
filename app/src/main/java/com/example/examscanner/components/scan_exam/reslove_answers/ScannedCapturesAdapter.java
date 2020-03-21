@@ -83,6 +83,11 @@ class ScannedCapturesAdapter extends RecyclerView.Adapter<ScannedCapturesAdapter
     public int getItemCount() {
         return scannedCaptures.size();
     }
+
+    public int getCurrentScanId() {
+        return scannedCaptures.get(position.getValue()-1).getValue().getId();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView checkedTextView;
         TextView conflicredTextView;

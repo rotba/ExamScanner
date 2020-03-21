@@ -3,6 +3,7 @@ package com.example.examscanner.components.scan_exam.reslove_answers.resolve_con
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -60,6 +61,12 @@ public class ResolveConflictedAnswersFragment extends Fragment {
                 }
             });
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        resolveAnswersViewModel.commitResolutions(scanId);
+        super.onDestroy();
     }
 
     private Choice getChoice(Button b) {

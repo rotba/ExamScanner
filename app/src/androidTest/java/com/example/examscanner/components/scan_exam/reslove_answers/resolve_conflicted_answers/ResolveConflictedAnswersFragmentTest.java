@@ -42,8 +42,8 @@ public class ResolveConflictedAnswersFragmentTest {
 
     @Test
     public void testAllButtonsAndHintAreVisible() {
-        repo.create(ScannedCapturesInstancesFactory.instance1());
-        repo.create(ScannedCapturesInstancesFactory.instance1());
+        repo.create(ScannedCapturesInstancesFactory.instance1(repo));
+        repo.create(ScannedCapturesInstancesFactory.instance1(repo));
         FragmentScenario.launch(ResolveAnswersFragment.class);
         Bundle b = new Bundle();
         b.putInt("scanId",0);
@@ -60,8 +60,8 @@ public class ResolveConflictedAnswersFragmentTest {
 
     @Test
     public void testResolutionFeedback() {
-        repo.create(ScannedCapturesInstancesFactory.instance1());
-        repo.create(ScannedCapturesInstancesFactory.instance1());
+        repo.create(ScannedCapturesInstancesFactory.instance1(repo));
+        repo.create(ScannedCapturesInstancesFactory.instance1(repo));
         FragmentScenario.launch(ResolveAnswersFragment.class);
         Bundle b = new Bundle();
         b.putInt("scanId",0);
@@ -87,8 +87,8 @@ public class ResolveConflictedAnswersFragmentTest {
     @Test
     @Ignore
     public void testViewHoldersAreUpdatingIndepentendtly() {
-        repo.create(ScannedCapturesInstancesFactory.instance1());
-        repo.create(ScannedCapturesInstancesFactory.instance1());
+        repo.create(ScannedCapturesInstancesFactory.instance1(repo));
+        repo.create(ScannedCapturesInstancesFactory.instance1(repo));
         FragmentScenario.launch(ResolveAnswersFragment.class);
         Bundle b = new Bundle();
         b.putInt("scanId",0);

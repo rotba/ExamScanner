@@ -21,7 +21,6 @@ public class CheckedAnswer extends Answer{
         return true;
     }
 
-    @Override
-    public void addMe(List<ConflictedAnswer> l) {}
+
 
 }

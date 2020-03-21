@@ -4,6 +4,6 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 public class NullScannedCapture extends ScannedCapture {
     public NullScannedCapture() {
-        super(null,0,0,null,null,null,null,null,null);
+        super(-1,null,0,0,null,null,null,null,null,null);
     }
 }

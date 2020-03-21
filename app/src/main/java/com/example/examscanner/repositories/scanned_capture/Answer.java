@@ -16,9 +16,13 @@ public abstract class Answer {
     public boolean isConflicted(){
         return false;
     }
+    public boolean isResolvedConflictedMissing(){
+        return false;
+    }
     public boolean isMissing(){
         return false;
     }
+    public Answer commitResolution(){return this;};
+    public void addMe(List<ConflictedAnswer> l){return;};
 
-    public abstract void addMe(List<ConflictedAnswer> l);
 }

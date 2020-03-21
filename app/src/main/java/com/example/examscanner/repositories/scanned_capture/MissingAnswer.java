@@ -12,6 +12,4 @@ public class MissingAnswer extends Answer{
         return true;
     }
 
-    @Override
-    public void addMe(List<ConflictedAnswer> l) {}
 }

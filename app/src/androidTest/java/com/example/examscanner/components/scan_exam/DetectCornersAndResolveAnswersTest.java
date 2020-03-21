@@ -29,7 +29,6 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     private Repository<CornerDetectedCapture> repo;
     private ImageProcessingFacade imageProcessor;
 
-
     @Before
     @Override
     public void setUp() {
@@ -38,7 +37,6 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
         imageProcessor = nullIP();
         repo = new CornerDetectedCaptureRepositoryFacrory().create();
-        // Create a TestNavHostController
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg1(), new DetectCornersConsumer() {
             @Override
             public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
@@ -65,7 +63,7 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         Utils.sleepCDFragmentSetupTime();
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
-        onView(withId(R.id.button_nav_to_resolve_answers)).perform(click());
+        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withId(R.id.textView_ra_progress_feedback)).check(matches(withText("1/2")));
     }
 
@@ -74,7 +72,7 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         Utils.sleepCDFragmentSetupTime();
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
-        onView(withId(R.id.button_nav_to_resolve_answers)).perform(click());
+        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withContentDescription("Navigate up")).perform(click());
         onView(withId(R.id.textView_cd_processing_progress)).check(matches(withText("2/3")));
     }
@@ -84,7 +82,7 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         Utils.sleepCDFragmentSetupTime();
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
-        onView(withId(R.id.button_nav_to_resolve_answers)).perform(click());
+        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withContentDescription("Navigate up")).perform(click());
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));
     }

@@ -82,7 +82,7 @@
         android:label="fragment_resolve_answers2"
         tools:layout="@layout/fragment_resolve_answers2" >
         <action
-            android:id="@+id/action_fragment_resolve_answers_to_resolveOneScanFragment"
+            android:id="@+id/action_fragment_resolve_answers_to_resolveConflictedAnswersFragment"
             app:destination="@id/resolveConflictedAnswersFragment" >
             <argument
                 android:name="scanId"

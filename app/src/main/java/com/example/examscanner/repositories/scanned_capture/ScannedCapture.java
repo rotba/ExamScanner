@@ -14,9 +14,10 @@ import java.util.function.Predicate;
 public class ScannedCapture {
     private List<Answer> answers;
     private Bitmap bm;
+    private int id;
 
 
-    public ScannedCapture(Bitmap bm,int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
+    public ScannedCapture(int id, Bitmap bm,int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
         this.bm=bm;
         this.answers = new ArrayList<>();
         for (int i = 0; i <numOfAnswersDetected ; i++) {
@@ -32,6 +33,7 @@ public class ScannedCapture {
                 answers.add(new MissingAnswer(ansId));
             }
         }
+        this.id = id;
     }
 
     private boolean in(int item, int[] arr){
@@ -84,6 +86,28 @@ public class ScannedCapture {
 
     public Bitmap getBm() {
         return bm;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void resolve(ConflictedAnswer ca, ResolvedConflictedAnswer resolve) {
+        answers.removeIf((answer -> answer.getId()==ca.getId()));
+        answers.add(resolve);
+    }
+
+    public void commitResolutions() {
+        List<Answer> newAnswers = new ArrayList<>();
+        for (Answer a:answers) {
+            newAnswers.add(a.commitResolution());
+        }
+        setAnswers(newAnswers);
+    }
+
+    private void setAnswers(List<Answer> newAnswers) {
+        answers=newAnswers;
     }
 
 

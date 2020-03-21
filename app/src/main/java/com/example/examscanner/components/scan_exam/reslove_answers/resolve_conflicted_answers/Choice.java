@@ -1,6 +1,6 @@
 package com.example.examscanner.components.scan_exam.reslove_answers.resolve_conflicted_answers;
 
-enum Choice {
+public enum Choice {
     ONE(1),
     TWO(2),
     THREE(3),

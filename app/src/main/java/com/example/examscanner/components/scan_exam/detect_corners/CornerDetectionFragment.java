@@ -87,7 +87,7 @@ public class CornerDetectionFragment extends Fragment {
                 );
             }
         });
-        ((Button) view.findViewById(R.id.button_nav_to_resolve_answers)).setOnClickListener(new View.OnClickListener() {
+        ((Button) view.findViewById(R.id.button_cd_nav_to_resolve_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavDirections action =CornerDetectionFragmentDirections.actionCornerDetectionFragmentToFragmentResolveAnswers();

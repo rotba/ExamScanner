@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
@@ -41,6 +44,14 @@ public class ResolveAnswersFragment extends Fragment {
                 ((TextView)view.findViewById(R.id.textView_ra_progress_feedback)).setText(
                         integer+"/"+resolveAnswersViewModel.getScannedCaptures().size()
                 );
+            }
+        });
+        ((Button)view.findViewById(R.id.button_ra_resolve_conflicts)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ResolveAnswersFragmentDirections.ActionFragmentResolveAnswersToResolveConflictedAnswersFragment action = ResolveAnswersFragmentDirections.actionFragmentResolveAnswersToResolveConflictedAnswersFragment();
+                action.setScanId(scannedCapturesAdapter.getCurrentScanId());
+                Navigation.findNavController(view).navigate(action);
             }
         });
     }

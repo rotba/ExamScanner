@@ -75,4 +75,10 @@ public class ResolveAnswersViewModel extends ViewModel {
         }
         return ans;
     }
+
+    public void commitResolutions(int scanId) {
+        ScannedCapture scannedCapture = getScannedCapture(scanId).getValue();
+        scannedCapture.commitResolutions();
+        getScannedCapture(scanId).setValue(scannedCapture);
+    }
 }

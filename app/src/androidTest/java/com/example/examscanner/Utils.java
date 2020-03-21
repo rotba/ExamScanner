@@ -1,24 +1,11 @@
 package com.example.examscanner;
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.examscanner.MainActivity;
-import com.example.examscanner.R;
-import com.example.examscanner.image_processing.DetectCornersConsumer;
-import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.image_processing.ScanAnswersConsumer;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-
-import java.io.IOException;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -56,6 +43,11 @@ public class Utils {
         navFromHomeToCapture();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
     }
+    public static void navFromHomeToResolveAnswers() {
+        navFromHomeToDetecteCorners();
+        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
+    }
+
     public static void sleepCameraPreviewSetupTime() {
         try {
             Thread.sleep(1000);
@@ -63,7 +55,6 @@ public class Utils {
             e.printStackTrace();
         }
     }
-
     public static void sleepSwipingTime() {
         try {
             Thread.sleep(1000);
@@ -71,6 +62,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
     public static void sleepSingleCaptureTakingTime() {
         try {
             Thread.sleep(1000);
@@ -86,7 +78,6 @@ public class Utils {
             e.printStackTrace();
         }
     }
-
     public static void sleepMovingFromCaptureToDetectCorners() {
         try {
             Thread.sleep(3000);
@@ -101,6 +92,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
     public static void sleepRectangleTransformationTime(){
         try {
             Thread.sleep(2000);

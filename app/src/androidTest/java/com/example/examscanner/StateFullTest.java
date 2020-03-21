@@ -17,8 +17,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityScenarioRule=
-            new ActivityTestRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> mainActivityScenarioRule=
+            new ActivityScenarioRule<MainActivity>(MainActivity.class);
     @Before
     @Override
     public void setUp() {
