@@ -38,7 +38,7 @@ public class ResolveAnswersFragment extends Fragment {
         scannedCapturesAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                ((TextView)view.findViewById(R.id.textView_progress_feedback)).setText(
+                ((TextView)view.findViewById(R.id.textView_ra_progress_feedback)).setText(
                         integer+"/"+resolveAnswersViewModel.getScannedCaptures().size()
                 );
             }

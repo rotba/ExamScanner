@@ -38,9 +38,9 @@ public class GalleryFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavDirections action = GalleryFragmentDirections.actionNavGalleryToNavigationScanExam();
-                action.getArguments().putInt("examId",-1);
-                Navigation.findNavController(view).navigate(R.id.action_nav_gallery_to_navigationScanExam);
+                GalleryFragmentDirections.ActionNavGalleryToCaptureFragment2 action = GalleryFragmentDirections.actionNavGalleryToCaptureFragment2();
+                action.setExamId(-1);
+                Navigation.findNavController(view).navigate(action);
 //                startActivity(new Intent(getActivity(), ScanExamActivity.class));
             }
         });
@@ -48,7 +48,7 @@ public class GalleryFragment extends Fragment {
         ((Button)root.findViewById(R.id.button_resolve_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_nav_gallery_to_fragment_resolve_answers);
+//                Navigation.findNavController(view).navigate(R.id.action_nav_gallery_to_fragment_resolve_answers);
 //                startActivity(new Intent(getActivity(), ScanExamActivity.class));
             }
         });

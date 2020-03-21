@@ -1,8 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -30,7 +28,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
     private List<ProgressBarHandler> pbHandles;
     private ViewPager2 viewPager2;
-    private LinkedList<FragmentLink> viewsModel;
+    private LinkedList<PositionLink> positionLL;
     private Object currLinkPointer;
     public CornerDetectionCapturesAdapter(@NonNull FragmentActivity fragmentActivity, List<MutableLiveData<CornerDetectedCapture>> cornerDetectedCaptures, ViewPager2 viewPager2) {
         super(fragmentActivity);
@@ -46,12 +44,12 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
             }
         });
         pbHandles = new ArrayList<>();
-        viewsModel = new LinkedList<>();
+        positionLL = new LinkedList<>();
         for (int i = 0; i <this.cornerDetectedCaptures.size() ; i++) {
-            viewsModel.addLast(new FragmentLink(i,i));
+            positionLL.addLast(new PositionLink(i,i));
         }
 //        currLinkPointer = viewsModel.getFirst().second;
-        mItemCount = new MutableLiveData<>(viewsModel.size());
+        mItemCount = new MutableLiveData<>(positionLL.size());
     }
 
     @NonNull
@@ -61,9 +59,16 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         pbHandles.add(pbh);
         CornerDetectionCardFragment f =  new CornerDetectionCardFragment(pbh);
         Bundle b = new Bundle();
-        b.putInt(captureId(), cornerDetectedCaptures.get(position).getValue().getId());
+        b.putInt(captureId(), cornerDetectedCaptures.get(getOriginelPosition(position)).getValue().getId());
         f.setArguments(b);
         return f;
+    }
+
+    private int getOriginelPosition(int currentPosition){
+        for (PositionLink link: positionLL) {
+            if(link.getCurrentPosition()==currentPosition)return link.getOriginalPosition();
+        }
+        return -1;
     }
 
     public void notifiProcessBegun(int position){
@@ -74,12 +79,12 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
     public void handleProcessFinish(int position){
         notifiProcessFinished(position);
-        for (FragmentLink link: viewsModel) {
+        for (PositionLink link: positionLL) {
             if(link.getCurrentPosition()>=position)
                 link.setCurrentPosition(link.getCurrentPosition()-1);
         }
-        viewsModel.remove(position);
-        mItemCount.setValue(viewsModel.size());
+        positionLL.remove(position);
+        mItemCount.setValue(positionLL.size());
         this.notifyItemRemoved(position);
     }
     public void notifiProcessFinished(int position){
@@ -91,7 +96,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
     @Override
     public long getItemId(int position) {
         long currentPos = super.getItemId(position);
-        for (FragmentLink link:viewsModel) {
+        for (PositionLink link: positionLL) {
             if(currentPos==link.currentPosition) return link.getOriginalPosition();
         }
         return -1;
@@ -111,6 +116,14 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
     public static String captureId(){
         return "captureId";
+    }
+
+    public int getCDCaptureInPosition(int adapterBasedOPosition) {
+        for (PositionLink link: positionLL) {
+            if(link.getCurrentPosition()==adapterBasedOPosition)
+                return cornerDetectedCaptures.get(link.getOriginalPosition()).getValue().getId();
+        }
+        return -1;
     }
 
     public class ProgressBarHandler implements com.example.examscanner.components.scan_exam.detect_corners.ProgressBarHandler{
@@ -141,7 +154,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         }
     }
 
-    private class FragmentLink{
+    private class PositionLink {
         private int originalPosition;
         private int currentPosition;
 
@@ -157,7 +170,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
             return currentPosition;
         }
 
-        public FragmentLink(int originalPosition, int currentPosition) {
+        public PositionLink(int originalPosition, int currentPosition) {
             this.originalPosition = originalPosition;
             this.currentPosition = currentPosition;
         }

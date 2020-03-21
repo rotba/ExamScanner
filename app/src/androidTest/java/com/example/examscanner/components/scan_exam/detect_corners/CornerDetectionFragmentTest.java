@@ -23,7 +23,6 @@ import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -85,11 +84,11 @@ public class CornerDetectionFragmentTest {
         Bundle b = new Bundle();
         b.putInt("examId", -1);
         FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
-        onView(withId(R.id.textView_processing_progress)).check(matches(withText("0/2")));
+        onView(withId(R.id.textView_cd_processing_progress)).check(matches(withText("0/2")));
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
-        onView(withId(R.id.textView_processing_progress)).check(matches(withText("1/2")));
+        onView(withId(R.id.textView_cd_processing_progress)).check(matches(withText("1/2")));
     }
 
     @Test
@@ -128,7 +127,7 @@ public class CornerDetectionFragmentTest {
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
-        onView(withId(R.id.textView_relative_cirrent_location)).check(matches(withText("1/1")));
+        onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));
     }
     @Test
     public void testOnFinishProcessFragmentIsDiscarded3Captures() {;
@@ -156,6 +155,6 @@ public class CornerDetectionFragmentTest {
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
-        onView(withId(R.id.textView_relative_cirrent_location)).check(matches(withText("1/2")));
+        onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/2")));
     }
 }

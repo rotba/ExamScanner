@@ -66,7 +66,7 @@
             app:layout_constraintVertical_bias="0.489" />
 
         <TextView
-            android:id="@+id/textView_processing_progress"
+            android:id="@+id/textView_cd_processing_progress"
             android:layout_width="74dp"
             android:layout_height="66dp"
             android:background="@drawable/background_border"
@@ -85,7 +85,7 @@
         tools:layout_editor_absoluteX="-2dp">
 
         <TextView
-            android:id="@+id/textView_relative_cirrent_location"
+            android:id="@+id/textView_cd_current_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"

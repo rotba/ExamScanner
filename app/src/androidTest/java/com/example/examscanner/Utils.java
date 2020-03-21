@@ -51,7 +51,9 @@ public class Utils {
             }
         };
     }
-    public static void navFromCaptureToDetectCorners(){
+
+    public static void navFromHomeToDetecteCorners() {
+        navFromHomeToCapture();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
     }
     public static void sleepCameraPreviewSetupTime() {
@@ -61,6 +63,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
     public static void sleepSwipingTime() {
         try {
             Thread.sleep(1000);
@@ -68,7 +71,6 @@ public class Utils {
             e.printStackTrace();
         }
     }
-
     public static void sleepSingleCaptureTakingTime() {
         try {
             Thread.sleep(1000);
@@ -76,6 +78,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
     public static void sleepSingleCaptureProcessingTime() {
         try {
             Thread.sleep(3000);
@@ -91,7 +94,6 @@ public class Utils {
             e.printStackTrace();
         }
     }
-
     public static void sleepScreenRotationTime(){
         try {
             Thread.sleep(1500);
@@ -106,6 +108,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
     public static void sleepScanAnswersTime(){
         try {
             Thread.sleep(3000);
@@ -114,4 +117,11 @@ public class Utils {
         }
     }
 
+    public static void sleepCDFragmentSetupTime() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

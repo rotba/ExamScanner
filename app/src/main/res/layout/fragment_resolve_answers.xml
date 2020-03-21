@@ -67,7 +67,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView_progress_feedback"
+        android:id="@+id/textView_ra_progress_feedback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"

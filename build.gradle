@@ -39,5 +39,6 @@ ext {
     fragment_version = "1.2.2"
     uiautomatorVersion = "2.2.0"
     rulesVersion = '1.1.1'
+    nav_version = '2.3.0-alpha04'
 
 }

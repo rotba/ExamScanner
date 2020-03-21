@@ -24,6 +24,7 @@ public class CornerDetectionViewModel extends ViewModel {
     private ImageProcessingFacade imageProcessor;
     private Repository<CornerDetectedCapture> cdcRepo;
     private Repository<ScannedCapture> scRepo;
+    private List<Integer> thisSessionProcessedCaptures;
     private Exam exam;
 
 
@@ -38,6 +39,7 @@ public class CornerDetectionViewModel extends ViewModel {
         mNumberOfCornerDetectedCaptures = new MutableLiveData<>(this.cornerDetectedCaptures.size());
         mNumberOfAnswersScannedCaptures = new MutableLiveData<>(0);
         this.exam = exam;
+        thisSessionProcessedCaptures = new ArrayList<>();
     }
 
     public LiveData<Integer> getNumberOfCornerDetectedCaptures() {
@@ -49,9 +51,6 @@ public class CornerDetectionViewModel extends ViewModel {
     }
 
 
-    public void postProcessCornerDetection() {
-        mNumberOfCornerDetectedCaptures.setValue(mNumberOfCornerDetectedCaptures.getValue() + 1);
-    }
 
     public void transformToRectangle(CornerDetectedCapture cdc) {
         cdc.setBitmap(
@@ -76,12 +75,17 @@ public class CornerDetectionViewModel extends ViewModel {
     }
 
 
-    public void postProcessTransformAndScanAnswers() {
+    public void postProcessTransformAndScanAnswers(int captureId) {
+        thisSessionProcessedCaptures.add(captureId);
         mNumberOfAnswersScannedCaptures.setValue(scRepo.get(sc -> true).size());
     }
 
-    public List<MutableLiveData<CornerDetectedCapture>> getCornerDetectedCaptures() {
-        return cornerDetectedCaptures;
+    public List<MutableLiveData<CornerDetectedCapture>> getPreProcessedCornerDetectedCaptures() {
+        List<MutableLiveData<CornerDetectedCapture>> ans = new ArrayList<>();
+        for (MutableLiveData<CornerDetectedCapture> cdc:cornerDetectedCaptures) {
+            if(!thisSessionProcessedCaptures.contains(cdc.getValue().getId())) ans.add(cdc);
+        }
+        return ans;
     }
 
     public MutableLiveData<CornerDetectedCapture> getCornerDetectedCaptureById(int captureId) {

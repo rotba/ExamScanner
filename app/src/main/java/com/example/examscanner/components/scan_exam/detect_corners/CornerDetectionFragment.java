@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -45,7 +45,7 @@ public class CornerDetectionFragment extends Fragment {
                 );
         cornerDetectionViewModel = new ViewModelProvider(this, factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_corner_detection, container, false);
-        ((TextView) root.findViewById(R.id.textView_relative_cirrent_location)).setText(
+        ((TextView) root.findViewById(R.id.textView_cd_current_position)).setText(
                 "1/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
         );
         return inflater.inflate(R.layout.fragment_corner_detection, container, false);
@@ -55,15 +55,15 @@ public class CornerDetectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewPager2 viewPager = (ViewPager2) view.findViewById(R.id.viewPager2_corner_detected_captures);
-        cornerDetectionCapturesAdapter = new CornerDetectionCapturesAdapter(getActivity(), cornerDetectionViewModel.getCornerDetectedCaptures(), viewPager);
+        cornerDetectionCapturesAdapter = new CornerDetectionCapturesAdapter(getActivity(), cornerDetectionViewModel.getPreProcessedCornerDetectedCaptures(), viewPager);
         viewPager.setAdapter(cornerDetectionCapturesAdapter);
-        ((TextView) view.findViewById(R.id.textView_relative_cirrent_location)).setText(
+        ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
                 "1/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
         );
         cornerDetectionCapturesAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                ((TextView) view.findViewById(R.id.textView_relative_cirrent_location)).setText(
+                ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
                         integer + "/" + cornerDetectionCapturesAdapter.getmItemCount().getValue()
                 );
             }
@@ -71,18 +71,18 @@ public class CornerDetectionFragment extends Fragment {
         cornerDetectionCapturesAdapter.getmItemCount().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                ((TextView) view.findViewById(R.id.textView_relative_cirrent_location)).setText(
+                ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
                         cornerDetectionCapturesAdapter.getPosition().getValue() + "/" + integer
                 );
             }
         });
-        ((TextView) view.findViewById(R.id.textView_processing_progress)).setText(
+        ((TextView) view.findViewById(R.id.textView_cd_processing_progress)).setText(
                 "0/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
         );
         cornerDetectionViewModel.getNumberOfAnswersScannedCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                ((TextView) view.findViewById(R.id.textView_processing_progress)).setText(
+                ((TextView) view.findViewById(R.id.textView_cd_processing_progress)).setText(
                         integer + "/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
                 );
             }
@@ -90,16 +90,17 @@ public class CornerDetectionFragment extends Fragment {
         ((Button) view.findViewById(R.id.button_nav_to_resolve_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).
-                        navigate(R.id.action_cornerDetectionFragment_to_fragment_resolve_answers);
+                NavDirections action =CornerDetectionFragmentDirections.actionCornerDetectionFragmentToFragmentResolveAnswers();
+                Navigation.findNavController(view).navigate(action);
             }
         });
         ((Button) view.findViewById(R.id.button_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue() - 1;
+                int cdcId = cornerDetectionCapturesAdapter.getCDCaptureInPosition(adapterBasedOPosition);
                 cornerDetectionCapturesAdapter.notifiProcessBegun(adapterBasedOPosition);
-                CornerDetectedCapture cdc = cornerDetectionViewModel.getCornerDetectedCaptureById(adapterBasedOPosition).getValue();
+                CornerDetectedCapture cdc = cornerDetectionViewModel.getCornerDetectedCaptureById(cdcId).getValue();
                 processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc,adapterBasedOPosition));
             }
         });
@@ -118,7 +119,7 @@ public class CornerDetectionFragment extends Fragment {
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        cornerDetectionViewModel.postProcessTransformAndScanAnswers();
+                        cornerDetectionViewModel.postProcessTransformAndScanAnswers(cdc.getId());
                         cornerDetectionCapturesAdapter.handleProcessFinish(adapterBasedOPosition);
                     }
 
