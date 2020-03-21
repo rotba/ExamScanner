@@ -31,6 +31,7 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
     private final ViewPager2 viewPager;
     private LayoutInflater inflater;
     private MutableLiveData<Integer> position;
+
     public ConflictedAnswersAdapter(FragmentActivity activity, MutableLiveData<ScannedCapture> scannedCapture, ViewPager2 viewPager) {
         this.inflater = LayoutInflater.from(activity);
         this.scannedCapture = scannedCapture;
@@ -40,7 +41,7 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                ConflictedAnswersAdapter.this.position.setValue(position+1);
+                ConflictedAnswersAdapter.this.position.setValue(position + 1);
             }
         });
         resolutionSubscribers = new ArrayList<>();
@@ -64,40 +65,30 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        List<ConflictedAnswer> cas =  scannedCapture.getValue().getConflictedAnswers();
+        ConflictedAnswer ca = getConflictedAnswer(position);
+        Bitmap bm = scannedCapture.getValue().getBm();
+        holder.answerFrameImageView.setImageBitmap(generateCAnswerFrame(ca, bm));
+        resolutionSubscribers.add(new ResolutionSubscriber(position + 1,scannedCapture,ca, holder));
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private ConflictedAnswer getConflictedAnswer(int position) {
+        List<ConflictedAnswer> cas = scannedCapture.getValue().getConflictedAnswers();
         cas.sort(new Comparator<ConflictedAnswer>() {
             @Override
             public int compare(ConflictedAnswer c1, ConflictedAnswer c2) {
                 return Integer.valueOf(c1.getId()).compareTo(c2.getId());
             }
         });
-        ConflictedAnswer ca = cas.get(position);
-        Bitmap bm = scannedCapture.getValue().getBm();
-        holder.answerFrameImageView.setImageBitmap(generateCAnswerFrame(ca,bm));
-        resolutionSubscribers.add(new ResolutionSubscriber(position+1) {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onResolution(Choice c) {
-                ScannedCapture val =scannedCapture.getValue();
-                val.resolve(ca,ca.resolve(c));
-                scannedCapture.setValue(val);
-                switch (c){
-                    case NO_ANSWER:
-                        holder.resolutionTextView.setText("No Answer");
-                        return;
-                    default:
-                        holder.resolutionTextView.setText(Integer.toString(c.value));
-                }
-            }
-        });
+        return cas.get(position);
     }
 
+
     private Bitmap generateCAnswerFrame(ConflictedAnswer ca, Bitmap bm) {
-        int firstX = (int)(ca.getUpperLeft().x *bm.getWidth());
-        int firstY = (int)(ca.getUpperLeft().y *bm.getHeight());
-        int width =  (int)(ca.getBottomRight().x *bm.getWidth()) -firstX;
-        int height =  (int)(ca.getBottomRight().y *bm.getHeight()) -firstY;
-        return Bitmap.createBitmap(bm, firstX,firstY,width, height);
+        int firstX = (int) (ca.getUpperLeft().x * bm.getWidth());
+        int firstY = (int) (ca.getUpperLeft().y * bm.getHeight());
+        int width = (int) (ca.getBottomRight().x * bm.getWidth()) - firstX;
+        int height = (int) (ca.getBottomRight().y * bm.getHeight()) - firstY;
+        return Bitmap.createBitmap(bm, firstX, firstY, width, height);
     }
 
     @Override
@@ -106,8 +97,8 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
     }
 
     public ResolutionSubscriber getCurrentCAResolutionSubscriber() {
-        for (ResolutionSubscriber rs: resolutionSubscribers) {
-            if(rs.isCurrent(getPosition())){
+        for (ResolutionSubscriber rs : resolutionSubscribers) {
+            if (rs.isCurrent(getPosition())) {
                 return rs;
             }
         }
@@ -117,22 +108,43 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView answerFrameImageView;
+
         TextView resolutionTextView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            answerFrameImageView =itemView.findViewById(R.id.imageView_conflicted_answer_frame);
+            answerFrameImageView = itemView.findViewById(R.id.imageView_conflicted_answer_frame);
             resolutionTextView = itemView.findViewById(R.id.textView_resolution);
         }
     }
-
-    public abstract class ResolutionSubscriber {
+    public class ResolutionSubscriber {
         private int poistion;
+        private final MutableLiveData<ScannedCapture> sc;
+        private final ConflictedAnswer ca;
+        private ViewHolder holder;
 
-        public ResolutionSubscriber(int poistion) {
+        public ResolutionSubscriber(int poistion, MutableLiveData<ScannedCapture> sc, ConflictedAnswer ca, ViewHolder holder) {
             this.poistion = poistion;
+            this.sc = sc;
+            this.ca = ca;
+            this.holder = holder;
         }
-        public abstract  void onResolution(Choice c);
 
-        public boolean isCurrent(MutableLiveData<Integer> position){return  position.getValue()==this.poistion;}
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public void onResolution(Choice c) {
+            ScannedCapture val = scannedCapture.getValue();
+            val.resolve(ca, ca.resolve(c));
+            scannedCapture.setValue(val);
+            switch (c) {
+                case NO_ANSWER:
+                    holder.resolutionTextView.setText("No Answer");
+                    return;
+                default:
+                    holder.resolutionTextView.setText(Integer.toString(c.value));
+            }
+        }
+        public boolean isCurrent(MutableLiveData<Integer> position) {
+            return position.getValue() == this.poistion;
+        }
     }
 }
