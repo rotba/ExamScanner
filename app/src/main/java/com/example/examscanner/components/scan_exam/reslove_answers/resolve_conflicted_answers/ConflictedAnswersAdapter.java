@@ -32,6 +32,7 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
     private LayoutInflater inflater;
     private MutableLiveData<Integer> position;
 
+
     public ConflictedAnswersAdapter(FragmentActivity activity, MutableLiveData<ScannedCapture> scannedCapture, ViewPager2 viewPager) {
         this.inflater = LayoutInflater.from(activity);
         this.scannedCapture = scannedCapture;
@@ -104,6 +105,9 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         }
         return null;
     }
+
+
+
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
