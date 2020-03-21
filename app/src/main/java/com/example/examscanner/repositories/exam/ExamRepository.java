@@ -26,6 +26,8 @@ public class ExamRepository implements Repository<Exam> {
     private FilterHandler filterrer = new FilterHandler();
     private static ExamRepository instance;
     private static final String TAG = "ExamRepository";
+    private int currAvailableId = 0;
+
     public static ExamRepository getInstance(){
         if (instance==null){
             instance = new ExamRepository();
@@ -112,5 +114,11 @@ public class ExamRepository implements Repository<Exam> {
             }
             return ans;
         }
+    }
+    @Override
+    public int genId() {
+        int ans = currAvailableId;
+        currAvailableId++;
+        return ans;
     }
 }

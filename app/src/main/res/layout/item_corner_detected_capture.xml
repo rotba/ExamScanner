@@ -105,4 +105,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/corner" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar2_scanning_answers"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2_corner_detected_capture"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2_corner_detected_capture"
+        app:layout_constraintStart_toStartOf="@+id/imageView2_corner_detected_capture"
+        app:layout_constraintTop_toTopOf="@+id/imageView2_corner_detected_capture" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class EmptyRepositoryFactory {
+public class SCEmptyRepositoryFactory {
     public static Repository<ScannedCapture> create(){
         return new Repository<ScannedCapture>() {
+            private int currAvialbleId = 0;
             private List<ScannedCapture> data = new ArrayList<>();
             @Override
             public int getId() {
@@ -43,6 +44,10 @@ public class EmptyRepositoryFactory {
             @Override
             public void delete(int id) {
 
+            }
+            @Override
+            public int genId() {
+                return currAvialbleId++;
             }
         };
     }

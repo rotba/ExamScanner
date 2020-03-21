@@ -85,6 +85,9 @@ public class CornerDetectionViewModel extends ViewModel {
     }
 
     public MutableLiveData<CornerDetectedCapture> getCornerDetectedCaptureById(int captureId) {
-        return cornerDetectedCaptures.get(captureId);
+        for (MutableLiveData<CornerDetectedCapture> cdc :cornerDetectedCaptures) {
+            if(cdc.getValue().getId()==captureId) return cdc;
+        }
+        return null;
     }
 }

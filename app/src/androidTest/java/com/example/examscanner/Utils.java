@@ -1,4 +1,4 @@
-package com.example.examscanner.components.scan_exam;
+package com.example.examscanner;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -99,27 +99,19 @@ public class Utils {
             e.printStackTrace();
         }
     }
-    public static ImageProcessingFacade TEMP_TESTImageProcessor(){
-        return new ImageProcessingFacade() {
-            @Override
-            public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
-                consumer.consume(null,null,null,null);
-            }
-
-            @Override
-            public Bitmap transformToRectangle(Bitmap bitmap, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
-                return bitmap;
-            }
-
-            @Override
-            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
-                consumer.consume(0,null,null,null,null,null,null);
-            }
-
-            @Override
-            public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
-                consumer.consume(0,null,null,null,null,null,null);
-            }
-        };
+    public static void sleepRectangleTransformationTime(){
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+    public static void sleepScanAnswersTime(){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

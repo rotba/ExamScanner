@@ -4,47 +4,29 @@ package com.example.examscanner.components.scan_exam.capture;
 import android.os.Bundle;
 import android.os.RemoteException;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
-import androidx.lifecycle.Lifecycle;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 
-import com.example.examscanner.AbstractComponentInstrumentedTest;
-import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
-import com.example.examscanner.State;
-import com.example.examscanner.StateFullTest;
-import com.example.examscanner.components.scan_exam.detect_corners.EmptyRepositoryFactory;
+import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 
-import junit.framework.AssertionFailedError;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.example.examscanner.components.scan_exam.Utils.navFromHomeToCapture;
-import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
-import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
-import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureTakingTime;
+import static com.example.examscanner.Utils.sleepCameraPreviewSetupTime;
+import static com.example.examscanner.Utils.sleepSingleCaptureProcessingTime;
+import static com.example.examscanner.Utils.sleepSingleCaptureTakingTime;
 import static com.example.examscanner.components.scan_exam.capture.CaptureUtils.assertUserSeeProgress;
 
 @RunWith(AndroidJUnit4.class)
@@ -57,7 +39,7 @@ public class CaptureFragmentTest{
     public void setUp() {
 //        super.setUp();
 //        navFromHomeToCapture();
-        CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(EmptyRepositoryFactory.create());
+        CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
         Bundle b = new Bundle();
         b.putInt("examId", -1);
         scenario =

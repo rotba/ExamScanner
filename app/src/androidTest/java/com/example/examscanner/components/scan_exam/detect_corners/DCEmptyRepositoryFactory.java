@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class EmptyRepositoryFactory {
+public class DCEmptyRepositoryFactory {
     public static Repository<CornerDetectedCapture> create(){
         return new Repository<CornerDetectedCapture>() {
             private List<CornerDetectedCapture> data = new ArrayList<>();
+            private int currAvialbleId = 0;
             @Override
             public int getId() {
                 return 0;
@@ -42,6 +43,11 @@ public class EmptyRepositoryFactory {
             @Override
             public void delete(int id) {
 
+            }
+
+            @Override
+            public int genId() {
+                return currAvialbleId++;
             }
         };
     }

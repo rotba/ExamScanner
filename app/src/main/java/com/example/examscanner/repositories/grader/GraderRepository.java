@@ -11,6 +11,7 @@ public class GraderRepository implements Repository<Grader> {
     private Facade comFacade = new CommunicationFacadeFactory().create();
     private static GraderRepository instance;
     private static final String TAG = "GraderRepository";
+
     public static GraderRepository getInstance(){
         if (instance==null){
             instance = new GraderRepository();
@@ -48,5 +49,9 @@ public class GraderRepository implements Repository<Grader> {
     @Override
     public void delete(int id) {
 
+    }
+    @Override
+    public int genId() {
+        return -1;
     }
 }

@@ -2,16 +2,11 @@ package com.example.examscanner.components.scan_exam;
 
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
-import androidx.test.runner.AndroidJUnitRunner;
 
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModelFactory;
-import com.example.examscanner.components.scan_exam.detect_corners.EmptyRepositoryFactory;
+import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.image_processing.ImageProcessingFactory;
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 
 import org.junit.Before;
@@ -25,10 +20,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.examscanner.components.scan_exam.Utils.TEMP_TESTImageProcessor;
-import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
-import static com.example.examscanner.components.scan_exam.Utils.sleepMovingFromCaptureToDetectCorners;
-import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
+import static com.example.examscanner.Utils.sleepCameraPreviewSetupTime;
+import static com.example.examscanner.Utils.sleepMovingFromCaptureToDetectCorners;
+import static com.example.examscanner.Utils.sleepSingleCaptureProcessingTime;
 
 @RunWith(AndroidJUnit4.class)
 public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
@@ -39,7 +33,7 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
     @Override
     public void setUp() {
         super.setUp();
-        CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(EmptyRepositoryFactory.create());
+        CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
     }
 
     @Test

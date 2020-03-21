@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class CornerDetectedCaptureRepository implements Repository<CornerDetectedCapture> {
+    private int currAvailableId;
     private static CornerDetectedCaptureRepository instance;
     private List<CornerDetectedCapture> data = new ArrayList<>();
     public static CornerDetectedCaptureRepository getInstance(){
@@ -54,5 +55,12 @@ public class CornerDetectedCaptureRepository implements Repository<CornerDetecte
     @Override
     public void delete(int id) {
 
+    }
+
+    @Override
+    public int genId() {
+        int ans = currAvailableId;
+        currAvailableId++;
+        return ans;
     }
 }

@@ -53,7 +53,7 @@ public class CaptureViewModel extends ViewModel {
                 new DetectCornersConsumer() {
                     @Override
                     public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
-                        cdcRepo.create(new CornerDetectedCapture(capture.getBitmap(), upperLeft, upperRight, bottomLeft, bottomRight));
+                        cdcRepo.create(new CornerDetectedCapture(cdcRepo.genId(),capture.getBitmap(), upperLeft, upperRight, bottomLeft, bottomRight));
                     }
                 }
         );

@@ -21,7 +21,7 @@ import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
 import com.example.examscanner.State;
 import com.example.examscanner.StateFullTest;
-import com.example.examscanner.components.scan_exam.detect_corners.EmptyRepositoryFactory;
+import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 
 import junit.framework.AssertionFailedError;
@@ -41,10 +41,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.example.examscanner.components.scan_exam.Utils.navFromHomeToCapture;
-import static com.example.examscanner.components.scan_exam.Utils.sleepCameraPreviewSetupTime;
-import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureProcessingTime;
-import static com.example.examscanner.components.scan_exam.Utils.sleepSingleCaptureTakingTime;
+import static com.example.examscanner.Utils.navFromHomeToCapture;
+import static com.example.examscanner.Utils.sleepCameraPreviewSetupTime;
+import static com.example.examscanner.Utils.sleepSingleCaptureProcessingTime;
+import static com.example.examscanner.Utils.sleepSingleCaptureTakingTime;
 import static com.example.examscanner.components.scan_exam.capture.CaptureUtils.assertUserSeeProgress;
 
 @RunWith(AndroidJUnit4.class)

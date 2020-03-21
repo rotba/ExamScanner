@@ -4,13 +4,15 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 
 public class CornerDetectedCapture {
+    private int id;
     private Bitmap bm;
     private Point upperLeft;
     private Point upperRight;
     private Point bottomRight;
     private Point bottomLeft;
 
-public CornerDetectedCapture(Bitmap bm, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
+    public CornerDetectedCapture(int id, Bitmap bm, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
+        this.id = id;
         this.bm = bm;
         this.upperLeft = upperLeft;
         this.upperRight = upperRight;
@@ -21,6 +23,11 @@ public CornerDetectedCapture(Bitmap bm, Point upperLeft, Point upperRight, Point
     public Bitmap getBitmap() {
         return bm;
     }
+
+    public int getId() {
+        return id;
+    }
+
     public void setBitmap(Bitmap bm) {
         this.bm = bm;
     }

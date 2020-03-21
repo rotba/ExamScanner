@@ -5,11 +5,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
-import com.example.examscanner.components.scan_exam.Utils;
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment;
+import com.example.examscanner.Utils;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.Repository;
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
@@ -22,6 +20,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 
 @RunWith(AndroidJUnit4.class)
 public class ResolveAnswersFragmentTest extends StateFullTest {
@@ -29,8 +28,8 @@ public class ResolveAnswersFragmentTest extends StateFullTest {
     private Repository<ScannedCapture> repo;
     @Before
     public void setUp() {
-        ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(EmptyRepositoryFactory.create());
-        imageProcessor = Utils.TEMP_TESTImageProcessor();
+        ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
+        imageProcessor = nullIP();
         repo = new ScannedCaptureRepositoryFactory().create();
     }
     @Test

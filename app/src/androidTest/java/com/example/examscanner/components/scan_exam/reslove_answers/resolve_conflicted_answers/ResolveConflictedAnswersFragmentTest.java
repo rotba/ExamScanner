@@ -5,9 +5,8 @@ import android.os.Bundle;
 import androidx.fragment.app.testing.FragmentScenario;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.Utils;
-import com.example.examscanner.components.scan_exam.reslove_answers.EmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersFragment;
+import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.ScannedCapturesInstancesFactory;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.Repository;
@@ -18,8 +17,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
@@ -29,17 +26,17 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.examscanner.components.scan_exam.Utils.currentVisChild;
+import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
+import static com.example.examscanner.Utils.currentVisChild;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.not;
 
 public class ResolveConflictedAnswersFragmentTest {
     private ImageProcessingFacade imageProcessor;
     private Repository<ScannedCapture> repo;
     @Before
     public void setUp() {
-        ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(EmptyRepositoryFactory.create());
-        imageProcessor = Utils.TEMP_TESTImageProcessor();
+        ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
+        imageProcessor = nullIP();
         repo = new ScannedCaptureRepositoryFactory().create();
     }
 
@@ -102,7 +99,5 @@ public class ResolveConflictedAnswersFragmentTest {
         onView(withText("7")).perform(click());
         onView(allOf(withId(R.id.textView_resolution), isDescendantOfA(currentVisChild(withId(R.id.viewPager2_conflicted_answers))))).check(matches(withText("7")));
         onView(withId(R.id.viewPager2_conflicted_answers)).perform(swipeRight());
-
-
     }
 }

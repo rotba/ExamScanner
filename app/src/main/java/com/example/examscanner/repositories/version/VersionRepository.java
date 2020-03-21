@@ -50,4 +50,8 @@ public class VersionRepository implements Repository<Version> {
     public void delete(int id) {
 
     }
+    @Override
+    public int genId() {
+        return -1;
+    }
 }
