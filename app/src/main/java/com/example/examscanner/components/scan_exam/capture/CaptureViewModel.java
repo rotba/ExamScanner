@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.capture;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -52,7 +53,7 @@ public class CaptureViewModel extends ViewModel {
                 capture.getBitmap(),
                 new DetectCornersConsumer() {
                     @Override
-                    public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+                    public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                         cdcRepo.create(new CornerDetectedCapture(cdcRepo.genId(),capture.getBitmap(), upperLeft, upperRight, bottomLeft, bottomRight));
                     }
                 }

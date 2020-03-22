@@ -1,6 +1,6 @@
 package com.example.examscanner.components.scan_exam;
 
-import android.graphics.Point;
+import android.graphics.PointF;
 
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
@@ -39,19 +39,19 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         repo = new CornerDetectedCaptureRepositoryFacrory().create();
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg1(), new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(), BitmapsInstancesFactory.getTestJpg1(), upperLeft, upperRight, bottomLeft, bottomRight));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg2(), new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(), BitmapsInstancesFactory.getTestJpg2(), upperLeft, upperRight, bottomLeft, bottomRight));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg3(), new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(), BitmapsInstancesFactory.getTestJpg3(), upperLeft, upperRight, bottomLeft, bottomRight));
             }
         });

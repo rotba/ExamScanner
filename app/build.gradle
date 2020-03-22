@@ -90,4 +90,5 @@ dependencies {
     debugImplementation 'androidx.test:monitor:' + rootProject.coreVersion
 
     apply plugin: "androidx.navigation.safeargs"
+    implementation project(path: ':openCVLibrary343')
 }

@@ -1,6 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
-import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.Bundle;
 
 import androidx.fragment.app.testing.FragmentScenario;
@@ -55,7 +55,7 @@ public class CornerDetectionFragmentTest {
     public void testCorrentPositionPointer() {
         DetectCornersConsumer consumer = new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(),null,upperLeft, upperRight, bottomLeft, bottomRight));
             }
         };
@@ -75,7 +75,7 @@ public class CornerDetectionFragmentTest {
     public void testProcessingFeedback() {
         DetectCornersConsumer consumer = new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(),null,upperLeft, upperRight, bottomLeft, bottomRight));
             }
         };
@@ -95,7 +95,7 @@ public class CornerDetectionFragmentTest {
     public void testProgressIndicator() {
         DetectCornersConsumer consumer = new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(),BitmapsInstancesFactory.getTestJpg1(),upperLeft, upperRight, bottomLeft, bottomRight));
             }
         };
@@ -115,7 +115,7 @@ public class CornerDetectionFragmentTest {
     public void testOnFinishProcessFragmentIsDiscarded2Captures() {
         DetectCornersConsumer consumer = new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(),BitmapsInstancesFactory.getTestJpg1(),upperLeft, upperRight, bottomLeft, bottomRight));
             }
         };
@@ -133,19 +133,19 @@ public class CornerDetectionFragmentTest {
     public void testOnFinishProcessFragmentIsDiscarded3Captures() {;
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg1(), new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(),BitmapsInstancesFactory.getTestJpg1(),upperLeft, upperRight, bottomLeft, bottomRight));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg2(), new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(),BitmapsInstancesFactory.getTestJpg2(),upperLeft, upperRight, bottomLeft, bottomRight));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg3(), new DetectCornersConsumer() {
             @Override
-            public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight) {
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                 repo.create(new CornerDetectedCapture(repo.genId(),BitmapsInstancesFactory.getTestJpg3(),upperLeft, upperRight, bottomLeft, bottomRight));
             }
         });

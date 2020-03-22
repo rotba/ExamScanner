@@ -1,10 +1,15 @@
 package com.example.examscanner.imageProcessor;
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.icu.lang.UProperty;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+
+import com.example.examscanner.image_processing.DetectCornersConsumer;
+import com.example.examscanner.image_processing.ImageProcessingFacade;
+import com.example.examscanner.image_processing.ScanAnswersConsumer;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -47,7 +52,17 @@ public class imgProcessor implements ImageProcessingFacade {
         Point upperRight = getUpperRight(filtered);
         Point bottomLeft = getBottomLeft(filtered);
         Point bottomRight = getBottomRight(filtered);
-        consumer.consume(upperLeft, upperRight, bottomLeft, bottomRight);
+        consumer.consume(
+                new PointF((float)upperLeft.x, (float) upperLeft.y),
+                new PointF((float)upperRight.x,(float)upperRight.y),
+                new PointF((float)bottomLeft.x,(float)bottomLeft.y),
+                new PointF((float)bottomRight.x,(float)bottomRight.y)
+        );
+    }
+
+    @Override
+    public Bitmap transformToRectangle(Bitmap bitmap, android.graphics.Point upperLeft, android.graphics.Point upperRight, android.graphics.Point bottomRight, android.graphics.Point bottomLeft) {
+        return null;
     }
 
     private Point getBottomRight(List<Point> points) {
@@ -107,8 +122,7 @@ public class imgProcessor implements ImageProcessingFacade {
         return pointsWithoutDuplicates;
     }
 
-    // TODO
-    public Bitmap transformToRectangle(Bitmap bitmap, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft){}
+
 
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer){
 

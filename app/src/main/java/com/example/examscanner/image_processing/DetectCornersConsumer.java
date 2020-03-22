@@ -1,7 +1,8 @@
 package com.example.examscanner.image_processing;
 
-import android.graphics.Point;
+
+import android.graphics.PointF;
 
 public interface DetectCornersConsumer {
-    public void consume(Point upperLeft, Point upperRight, Point bottomLeft, Point bottomRight);
+    public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight);
 }

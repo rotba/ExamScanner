@@ -62,6 +62,6 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
 
     private void resolveAndSwipe(String s) {
         onView(withText(s)).perform(click());
-        onView(withId(R.id.viewPager2_conflicted_answers)).perform(swipeLeft());
+
     }
 }
