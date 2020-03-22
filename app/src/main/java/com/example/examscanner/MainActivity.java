@@ -1,20 +1,16 @@
 package com.example.examscanner;
 
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.view.View;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.examscanner.stubs.StubImageProcessingFactory;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -27,10 +23,12 @@ import android.view.Menu;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private static boolean stubsMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if(stubsMode) ImageProcessingFactory.ONLYFORSTUBBINGsetTestInstance(StubImageProcessingFactory.create(this));
         State.getState().onInitialCreate(this);
     }
 
