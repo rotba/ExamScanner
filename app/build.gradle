@@ -80,6 +80,8 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:' + rootProject.robolectricVersion
     testImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion
     testImplementation 'androidx.test.espresso:espresso-intents:' + rootProject.espressoVersion
+    testImplementation 'androidx.test:rules:' + rootProject.rulesVersion
+    testImplementation 'androidx.test:runner:' + rootProject.runnerVersion
     testImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion
     testImplementation 'org.json:json:20140107'
 

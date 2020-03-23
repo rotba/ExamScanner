@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
-        OpenCVLoader.initDebug();
+//        OpenCVLoader.initDebug();
 //        if(stubsMode) ImageProcessingFactory.ONLYFORSTUBBINGsetTestInstance(StubImageProcessingFactory.create(this));
         State.getState().onInitialCreate(this);
     }
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToAuthentication() {
-        startActivity(new Intent(this,AuthenticationActivity.class));
+        startActivity(new Intent(this, AuthenticationActivity.class));
     }
 
     public void createHome() {
@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
-
 
 
 }
