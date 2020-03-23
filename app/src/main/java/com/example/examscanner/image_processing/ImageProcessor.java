@@ -1,4 +1,4 @@
-package com.example.examscanner.imageProcessor;
+package com.example.examscanner.image_processing;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
+import com.example.examscanner.stubs.BitmapInatancesFactory;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -35,12 +36,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class imgProcessor implements ImageProcessingFacade {
+public class ImageProcessor implements ImageProcessingFacade {
 
     // given an image of an exam try to detect the 4 corners of the exam
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void detectCorners(Bitmap bm, DetectCornersConsumer consumer){
-
         Mat mat = new Mat();
         Bitmap bmp32 = bm.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, mat);
@@ -62,7 +62,12 @@ public class imgProcessor implements ImageProcessingFacade {
 
     @Override
     public Bitmap transformToRectangle(Bitmap bitmap, android.graphics.Point upperLeft, android.graphics.Point upperRight, android.graphics.Point bottomRight, android.graphics.Point bottomLeft) {
-        return null;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     private Point getBottomRight(List<Point> points) {
@@ -129,7 +134,10 @@ public class imgProcessor implements ImageProcessingFacade {
         Mat exam = new Mat();
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, exam);
-        Mat img_template = Imgcodecs.imread("template.png");
+//        Mat img_template = Imgcodecs.imread("template.png");
+        Bitmap bm = BitmapInatancesFactory.getTestTemplate1();
+        Mat img_template = new Mat();
+        Utils.bitmapToMat(bm, img_template);
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
         float tops[] = new float[amountOfQuestions];
@@ -145,7 +153,10 @@ public class imgProcessor implements ImageProcessingFacade {
         Mat exam = new Mat();
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, exam);
-        Mat img_template = Imgcodecs.imread("template.png");
+        Bitmap bm = BitmapInatancesFactory.getTestTemplate1();
+        Mat img_template = new Mat();
+        Utils.bitmapToMat(bm, img_template);
+//        Mat img_template = Imgcodecs.imread("template.png");
         Map<Point, Integer> answersMap = findQuestions(exam, img_template);
         int amountOfQuestions = answersMap.size();
         int answersIds[] = new int[amountOfQuestions];
@@ -380,7 +391,7 @@ public class imgProcessor implements ImageProcessingFacade {
 
         Scalar redColor = new Scalar(255, 0, 0);
         Mat mRgba = inputImg.clone();
-        Features2d.drawKeypoints(mRgba, pointsMat, mRgba, redColor);
+//        Features2d.drawKeypoints(mRgba, pointsMat, mRgba, redColor);
         List<Point> points = pointsMat.toList().stream().map(p -> p.pt).collect(Collectors.toList());
         return points;
     }

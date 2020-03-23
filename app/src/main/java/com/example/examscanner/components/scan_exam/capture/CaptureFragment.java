@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.capture;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +30,7 @@ import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentArgs;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentDirections;
+import com.example.examscanner.stubs.BitmapInatancesFactory;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -65,6 +67,7 @@ public class CaptureFragment extends Fragment  {
                 getActivity(),
                 root
         );
+
         permissionRequester = new CameraPermissionRequester(
                 ()-> cameraManager.setUp(),
                 getActivity()
@@ -85,7 +88,9 @@ public class CaptureFragment extends Fragment  {
                             @Override
                             public void handleMessage(Message msg) {
                                 super.handleMessage(msg);
-                                captureViewModel.consumeCapture(new Capture(((ImageCapture.OutputFileResults)msg.obj)));
+                                BitmapInatancesFactory.setContext(getContext());
+                                Bitmap bm = BitmapInatancesFactory.getTestJpg1();//TODO extract real image
+                                captureViewModel.consumeCapture(new Capture(bm));
                                 processRequestDisposableContainer.add(
                                         Completable.fromCallable(()->{
                                             captureViewModel.processCapture();

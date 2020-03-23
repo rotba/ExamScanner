@@ -18,6 +18,7 @@ public class BitmapInatancesFactory {
     private static final String testJpg1FilePath = "test_jpg_1.jpg";
     private static final String testJpg2FilePath = "test_jpg_2.jpg";
     private static final String testJpg3FilePath = "test_jpg_3.jpg";
+    private static final String testTemplate1FilePath = "test_template_1.jpg";
     private static Context context;
     public static Bitmap getTestJpg1(){
         return getBitmapFromAssets(testJpg1FilePath);
@@ -28,6 +29,9 @@ public class BitmapInatancesFactory {
     }
     public static Bitmap getTestJpg3() {
         return getBitmapFromAssets(testJpg3FilePath);
+    }
+    public static Bitmap getTestTemplate1() {
+        return getBitmapFromAssets(testTemplate1FilePath);
     }
 
     @Nullable
@@ -46,6 +50,9 @@ public class BitmapInatancesFactory {
     }
 
     public static void setContext(MainActivity mainActivity) {
+        context= mainActivity;
+    }
+    public static void setContext(Context mainActivity) {
         context= mainActivity;
     }
 

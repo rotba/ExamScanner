@@ -44,6 +44,6 @@ public class Exam {
     }
 
     public int getNumOfAnswers() {
-        return -1;
+        return 53;
     }
 }
