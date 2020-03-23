@@ -82,6 +82,7 @@ dependencies {
     androidTestImplementation 'androidx.navigation:navigation-testing:'+ rootProject.nav_version
 
 
+
     // test
     testImplementation 'androidx.test:core:' + rootProject.coreVersion;
     testImplementation 'androidx.test.ext:junit:' + rootProject.extJUnitVersion
@@ -93,6 +94,7 @@ dependencies {
     testImplementation 'androidx.test.espresso:espresso-intents:' + rootProject.espressoVersion
     testImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion
     testImplementation 'org.json:json:20140107'
+    testImplementation project(path: ':openCVLibrary343')
 
 
     debugImplementation 'androidx.fragment:fragment-testing:' + fragment_version
