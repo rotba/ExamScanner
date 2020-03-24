@@ -16,11 +16,11 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 
-import com.example.examscanner.AbstractComponentInstrumentedTest;
+import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.MainActivity;
 import com.example.examscanner.R;
 import com.example.examscanner.State;
-import com.example.examscanner.StateFullTest;
+import com.example.examscanner.components.scan_exam.StateFullTest;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 

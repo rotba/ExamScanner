@@ -2,6 +2,7 @@ package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.espresso.action.ViewActions;
@@ -16,10 +17,14 @@ import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
+import com.example.examscanner.stubs.BitmapInatancesFactory;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -27,6 +32,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static com.example.examscanner.ImageProcessorsGenerator.slowIP;
 import static com.example.examscanner.Utils.sleepRectangleTransformationTime;
@@ -34,8 +40,10 @@ import static com.example.examscanner.Utils.sleepScanAnswersTime;
 import static org.hamcrest.Matchers.not;
 
 public class CornerDetectionFragmentTest {
+    private static final String TAG = "CornerDetectionFragmentTest";
     private  Repository<CornerDetectedCapture> repo;
     private ImageProcessingFacade imageProcessor;
+    private BaseLoaderCallback mLoaderCallback;
 
     @Before
     public void setUp() {
@@ -44,6 +52,7 @@ public class CornerDetectionFragmentTest {
         imageProcessor = nullIP();
         repo = new CornerDetectedCaptureRepositoryFacrory().create();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(slowIP());
+        BitmapInatancesFactory.setContext(getInstrumentation().getContext());
     }
     @After
     public void tearDown(){
@@ -76,14 +85,16 @@ public class CornerDetectionFragmentTest {
         DetectCornersConsumer consumer = new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                repo.create(new CornerDetectedCapture(repo.genId(),null,upperLeft, upperRight, bottomLeft, bottomRight));
+                repo.create(new CornerDetectedCapture(repo.genId(),BitmapsInstancesFactory.getTestJpg1(),upperLeft, upperRight, bottomLeft, bottomRight));
             }
         };
-        imageProcessor.detectCorners(null, consumer);
-        imageProcessor.detectCorners(null, consumer);
+        imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg1(), consumer);
+        imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg1(), consumer);
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
         Bundle b = new Bundle();
         b.putInt("examId", -1);
-        FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
+        FragmentScenario<CornerDetectionFragment> s = FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
+        hey(s);
         onView(withId(R.id.textView_cd_processing_progress)).check(matches(withText("0/2")));
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
@@ -121,9 +132,12 @@ public class CornerDetectionFragmentTest {
         };
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg1(), consumer);
         imageProcessor.detectCorners(BitmapsInstancesFactory.getTestJpg2(), consumer);
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
+
         Bundle b = new Bundle();
         b.putInt("examId", -1);
-        FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
+        FragmentScenario<CornerDetectionFragment> s =  FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
+        hey(s);
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
@@ -149,12 +163,44 @@ public class CornerDetectionFragmentTest {
                 repo.create(new CornerDetectedCapture(repo.genId(),BitmapsInstancesFactory.getTestJpg3(),upperLeft, upperRight, bottomLeft, bottomRight));
             }
         });
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
         Bundle b = new Bundle();
         b.putInt("examId", -1);
-        FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
+        FragmentScenario<CornerDetectionFragment> scenraio =  FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
+        hey(scenraio);
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/2")));
+    }
+
+    private void hey(FragmentScenario<CornerDetectionFragment> scenraio) {
+        scenraio.onFragment(fragment -> {
+            mLoaderCallback = new BaseLoaderCallback(fragment.getActivity()) {
+                @Override
+                public void onManagerConnected(int status) {
+                    switch (status) {
+                        case LoaderCallbackInterface.SUCCESS: {
+                            Log.i("MainActivity", "OpenCV loaded successfully");
+                        }
+                        break;
+                        default: {
+                            super.onManagerConnected(status);
+                        }
+                        break;
+                    }
+                }
+            };
+        });
+
+        scenraio.onFragment(fragment -> {
+            if (!OpenCVLoader.initDebug()) {
+                Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+                OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_4_0, fragment.getActivity(), mLoaderCallback);
+            } else {
+                Log.d(TAG, "OpenCV library found inside package. Using it!");
+                mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            }
+        });
     }
 }

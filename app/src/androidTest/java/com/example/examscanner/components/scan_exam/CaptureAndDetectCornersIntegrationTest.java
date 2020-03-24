@@ -4,7 +4,6 @@ package com.example.examscanner.components.scan_exam;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.R;
-import com.example.examscanner.StateFullTest;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
@@ -39,6 +38,7 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
     @Test
     public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe() {
         navToCapture();
+        sleepCameraPreviewSetupTime();
         sleepCameraPreviewSetupTime();
         int numOfCaptures = 2;
         for (int i = 0; i <numOfCaptures ; i++) {

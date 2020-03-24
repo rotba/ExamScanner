@@ -1,13 +1,6 @@
 package com.example.examscanner.components.scan_exam.reslove_answers;
 
-import androidx.fragment.app.testing.FragmentScenario;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.navigation.testing.TestNavHostController;
-import androidx.test.core.app.ApplicationProvider;
-
-import com.example.examscanner.R;
-import com.example.examscanner.StateFullTest;
+import com.example.examscanner.components.scan_exam.StateFullTest;
 import com.example.examscanner.Utils;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.Repository;
@@ -19,7 +12,6 @@ import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;

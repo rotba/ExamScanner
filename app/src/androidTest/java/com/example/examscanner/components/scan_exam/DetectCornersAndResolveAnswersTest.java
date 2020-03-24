@@ -3,7 +3,6 @@ package com.example.examscanner.components.scan_exam;
 import android.graphics.PointF;
 
 import com.example.examscanner.R;
-import com.example.examscanner.StateFullTest;
 import com.example.examscanner.Utils;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
@@ -96,9 +95,13 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition() {
         Utils.sleepCDFragmentSetupTime();
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.viewPager2_corner_detected_captures)).perform(swipeLeft());
         onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
         onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withContentDescription("Navigate up")).perform(click());
+        Utils.sleepScanAnswersTime();
+        Utils.sleepScanAnswersTime();
+        Utils.sleepScanAnswersTime();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));
     }
 

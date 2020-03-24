@@ -135,6 +135,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, exam);
 //        Mat img_template = Imgcodecs.imread("template.png");
+
         Bitmap bm = BitmapInatancesFactory.getTestTemplate1();
         Mat img_template = new Mat();
         Utils.bitmapToMat(bm, img_template);

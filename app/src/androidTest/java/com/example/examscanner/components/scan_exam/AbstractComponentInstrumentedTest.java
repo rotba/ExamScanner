@@ -1,4 +1,4 @@
-package com.example.examscanner;
+package com.example.examscanner.components.scan_exam;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 

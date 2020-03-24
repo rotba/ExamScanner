@@ -1,8 +1,7 @@
 package com.example.examscanner;
 
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import com.example.examscanner.components.scan_exam.StateFullTest;
 
-import org.junit.Rule;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
