@@ -1,4 +1,4 @@
-package com.example.examscanner.stubs;
+package com.example.examscanner.components.scan_exam;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -7,19 +7,15 @@ import android.graphics.BitmapFactory;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.example.examscanner.MainActivity;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class BitmapInatancesFactory {
+public class BitmapsInstancesFactoryAndroidTest {
     private static final String testJpg1FilePath = "test_jpg_1.jpg";
     private static final String testJpg2FilePath = "test_jpg_2.jpg";
     private static final String testJpg3FilePath = "test_jpg_3.jpg";
-    private static final String testTemplate1FilePath = "test_template_1.jpg";
-    private static Context context;
     public static Bitmap getTestJpg1(){
         return getBitmapFromAssets(testJpg1FilePath);
     }
@@ -30,12 +26,10 @@ public class BitmapInatancesFactory {
     public static Bitmap getTestJpg3() {
         return getBitmapFromAssets(testJpg3FilePath);
     }
-    public static Bitmap getTestTemplate1() {
-        return getBitmapFromAssets(testTemplate1FilePath);
-    }
 
     @Nullable
     private static Bitmap getBitmapFromAssets(String path) {
+        Context context = InstrumentationRegistry.getInstrumentation().getContext();
         AssetManager assetManager = context.getAssets();
         InputStream istr;
         Bitmap bitmap = null;
@@ -49,18 +43,5 @@ public class BitmapInatancesFactory {
         return bitmap;
     }
 
-    public static void setContext(MainActivity mainActivity) {
-        context= mainActivity;
-    }
-    public static void setContext(Context mainActivity) {
-        context= mainActivity;
-    }
-
-    public static Bitmap getRandom() {
-        return getTestJpg1();
-//        double random = Math.random();
-//        if(random<0.33)return getTestJpg1();
-//        if(random<0.66)return getTestJpg2();
-//        return getTestJpg3();
-    }
 }
+

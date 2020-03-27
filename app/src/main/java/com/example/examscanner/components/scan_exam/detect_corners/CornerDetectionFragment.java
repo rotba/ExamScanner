@@ -30,6 +30,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class CornerDetectionFragment extends Fragment {
+    private static final String TAG = "ExamScanner";
     private CornerDetectionViewModel cornerDetectionViewModel;
     private CornerDetectionCapturesAdapter cornerDetectionCapturesAdapter;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
@@ -125,7 +126,7 @@ public class CornerDetectionFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CornerDetectionFragment", "generateCaptureScanningCompletable");
+                        Log.d(TAG, "generateCaptureScanningCompletable");
                         e.printStackTrace();
                         cornerDetectionCapturesAdapter.notifiProcessFinished(adapterBasedOPosition);
                     }

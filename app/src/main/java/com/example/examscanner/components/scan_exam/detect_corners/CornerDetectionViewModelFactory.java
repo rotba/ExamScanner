@@ -11,6 +11,7 @@ import com.example.examscanner.repositories.corner_detected_capture.CornerDetect
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
+import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 public class CornerDetectionViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
@@ -26,7 +27,7 @@ public class CornerDetectionViewModelFactory implements ViewModelProvider.Factor
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T)new CornerDetectionViewModel(
-                new ImageProcessingFactory().create(),
+                new ImageProcessingFactory(new BitmapInstancesFactory(activity)).create(),
                 new CornerDetectedCaptureRepositoryFacrory().create(),
                 new ScannedCaptureRepositoryFactory().create(),
                 exam

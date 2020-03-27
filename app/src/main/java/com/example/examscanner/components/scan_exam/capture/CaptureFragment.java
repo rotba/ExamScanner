@@ -18,19 +18,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.camera.core.ImageCapture;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment;
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentArgs;
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentDirections;
-import com.example.examscanner.stubs.BitmapInatancesFactory;
+import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -51,12 +46,14 @@ public class CaptureFragment extends Fragment  {
     private CameraPermissionRequester permissionRequester;
     private CaptureViewModel captureViewModel;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
+    private Msg2BitmapMapper m2bmMapper;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        m2bmMapper = new Msg2BitmapFactory(getActivity()).create();
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
         CaptureViewModelFactory factory = new CaptureViewModelFactory(
                 getActivity(),
@@ -88,9 +85,7 @@ public class CaptureFragment extends Fragment  {
                             @Override
                             public void handleMessage(Message msg) {
                                 super.handleMessage(msg);
-                                BitmapInatancesFactory.setContext(getContext());
-                                Bitmap bm = BitmapInatancesFactory.getTestJpg1();//TODO extract real image
-                                captureViewModel.consumeCapture(new Capture(bm));
+                                captureViewModel.consumeCapture(new Capture(m2bmMapper.map(msg)));
                                 processRequestDisposableContainer.add(
                                         Completable.fromCallable(()->{
                                             captureViewModel.processCapture();

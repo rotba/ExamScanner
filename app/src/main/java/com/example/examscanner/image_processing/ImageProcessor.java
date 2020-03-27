@@ -2,41 +2,36 @@ package com.example.examscanner.image_processing;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.icu.lang.UProperty;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.examscanner.image_processing.DetectCornersConsumer;
-import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.image_processing.ScanAnswersConsumer;
-import com.example.examscanner.stubs.BitmapInatancesFactory;
+import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
-import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.features2d.FastFeatureDetector;
-import org.opencv.features2d.Features2d;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ImageProcessor implements ImageProcessingFacade {
+    private BitmapInstancesFactory bmFact;//TODO - remove dependecy
+    public ImageProcessor(BitmapInstancesFactory bmFact) {
+        this.bmFact = bmFact;
+    }
 
     // given an image of an exam try to detect the 4 corners of the exam
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -136,7 +131,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         Utils.bitmapToMat(bmp32, exam);
 //        Mat img_template = Imgcodecs.imread("template.png");
 
-        Bitmap bm = BitmapInatancesFactory.getTestTemplate1();
+        Bitmap bm = bmFact.getTestTemplate1();
         Mat img_template = new Mat();
         Utils.bitmapToMat(bm, img_template);
         int answersIds[] = new int[amountOfQuestions];
@@ -154,7 +149,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         Mat exam = new Mat();
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, exam);
-        Bitmap bm = BitmapInatancesFactory.getTestTemplate1();
+        Bitmap bm = bmFact.getTestTemplate1();
         Mat img_template = new Mat();
         Utils.bitmapToMat(bm, img_template);
 //        Mat img_template = Imgcodecs.imread("template.png");

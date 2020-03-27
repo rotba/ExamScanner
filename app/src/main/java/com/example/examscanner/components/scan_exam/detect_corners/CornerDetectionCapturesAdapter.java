@@ -29,7 +29,6 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
     private List<ProgressBarHandler> pbHandles;
     private ViewPager2 viewPager2;
     private LinkedList<PositionLink> positionLL;
-    private Object currLinkPointer;
     public CornerDetectionCapturesAdapter(@NonNull FragmentActivity fragmentActivity, List<MutableLiveData<CornerDetectedCapture>> cornerDetectedCaptures, ViewPager2 viewPager2) {
         super(fragmentActivity);
         this.cornerDetectedCaptures = cornerDetectedCaptures;
@@ -66,7 +65,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
     private int getOriginelPosition(int currentPosition){
         for (PositionLink link: positionLL) {
-            if(link.getCurrentPosition()==currentPosition)return link.getOriginalPosition();
+            if(link.getVirtualPosition()==currentPosition)return link.getOriginalPosition();
         }
         return -1;
     }
@@ -80,13 +79,18 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
     public void handleProcessFinish(int position){
         notifiProcessFinished(position);
         for (PositionLink link: positionLL) {
-            if(link.getCurrentPosition()>=position)
-                link.setCurrentPosition(link.getCurrentPosition()-1);
+            if(link.getVirtualPosition()>=position)
+                link.setVirtualPosition(link.getVirtualPosition()-1);
         }
-        positionLL.remove(position);
-        mItemCount.setValue(positionLL.size());
+//        positionLL.remove(position);
+        mItemCount.setValue(getVirtualSize());
         this.notifyItemRemoved(position);
     }
+
+    private int getVirtualSize() {
+        
+    }
+
     public void notifiProcessFinished(int position){
         for (ProgressBarHandler pbh: pbHandles) {
             if (position==pbh.getPosition()) pbh.onProcessingFinished();
@@ -97,7 +101,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
     public long getItemId(int position) {
         long currentPos = super.getItemId(position);
         for (PositionLink link: positionLL) {
-            if(currentPos==link.currentPosition) return link.getOriginalPosition();
+            if(currentPos==link.virtualPosition) return link.getOriginalPosition();
         }
         return -1;
     }
@@ -120,7 +124,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
     public int getCDCaptureInPosition(int adapterBasedOPosition) {
         for (PositionLink link: positionLL) {
-            if(link.getCurrentPosition()==adapterBasedOPosition)
+            if(link.getVirtualPosition()==adapterBasedOPosition)
                 return cornerDetectedCaptures.get(link.getOriginalPosition()).getValue().getId();
         }
         return -1;
@@ -156,23 +160,23 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
     private class PositionLink {
         private int originalPosition;
-        private int currentPosition;
+        private int virtualPosition;
 
-        public void setCurrentPosition(int currentPosition) {
-            this.currentPosition = currentPosition;
+        public void setVirtualPosition(int virtualPosition) {
+            this.virtualPosition = virtualPosition;
         }
 
         public int getOriginalPosition() {
             return originalPosition;
         }
 
-        public int getCurrentPosition() {
-            return currentPosition;
+        public int getVirtualPosition() {
+            return virtualPosition;
         }
 
         public PositionLink(int originalPosition, int currentPosition) {
             this.originalPosition = originalPosition;
-            this.currentPosition = currentPosition;
+            this.virtualPosition = currentPosition;
         }
     }
 }

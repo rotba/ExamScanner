@@ -11,14 +11,16 @@ import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
+import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 public class ResolveAnswersViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity fragmentActivity;
-    ImageProcessingFacade imageProcessor = new ImageProcessingFactory().create();
+    ImageProcessingFacade imageProcessor;
     Repository<ScannedCapture>repo = new ScannedCaptureRepositoryFactory().create();
 
     public ResolveAnswersViewModelFactory(FragmentActivity fragmentActivity) {
         this.fragmentActivity = fragmentActivity;
+        this.imageProcessor = new ImageProcessingFactory(new BitmapInstancesFactory(fragmentActivity)).create();
     }
 
 //    public ResolveAnswersViewModelFactory(FragmentActivity activity, ImageProcessingFacade imageProcessor) {

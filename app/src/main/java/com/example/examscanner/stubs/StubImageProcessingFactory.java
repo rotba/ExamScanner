@@ -7,12 +7,11 @@ import com.example.examscanner.MainActivity;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
-import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
-import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 public class StubImageProcessingFactory {
+    private static BitmapInstancesFactory bmFact;
     public static ImageProcessingFacade create(MainActivity mainActivity) {
-        BitmapInatancesFactory.setContext(mainActivity);
+        bmFact = new BitmapInstancesFactory(mainActivity);
         return new ImageProcessingFacade() {
             @Override
             public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
@@ -31,7 +30,7 @@ public class StubImageProcessingFactory {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                return BitmapInatancesFactory.getRandom();
+                return bmFact.getRandom();
             }
 
             @Override

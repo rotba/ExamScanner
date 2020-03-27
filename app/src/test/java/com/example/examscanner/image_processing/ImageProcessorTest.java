@@ -3,14 +3,8 @@ package com.example.examscanner.image_processing;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 
-import com.example.examscanner.stubs.BitmapInatancesFactory;
-
 import org.junit.Test;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Core;
-
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.junit.Assert.*;
 
 
 public class ImageProcessorTest {
