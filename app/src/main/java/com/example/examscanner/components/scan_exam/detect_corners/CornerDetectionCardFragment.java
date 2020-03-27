@@ -1,5 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
+import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,42 +20,61 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.examscanner.R;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class CornerDetectionCardFragment extends Fragment {
+    private static final String TAG = "ExamScanner.CornerDetectionCardFragment";
     private CornerDetectionViewModel cornerDetectionViewModel;
-    private ProgressBarHandler progressBarHandler;
+//    private ProgressBarHandler progressBarHandler;
     private int captureId;
+    private boolean inProgress = false;
+    private ProgressBar pb;
 
-    public CornerDetectionCardFragment(ProgressBarHandler progressBarHandler) {
-        super();
-        this.progressBarHandler = progressBarHandler;
+
+
+
+    @SuppressLint("LongLogTag")
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, String.format("frag of %d onResume", captureId));
     }
 
+    @SuppressLint("LongLogTag")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         captureId = getArguments().getInt(CornerDetectionCapturesAdapter.captureId());
-        CornerDetectionViewModelFactory factory =new CornerDetectionViewModelFactory();
-        cornerDetectionViewModel = new ViewModelProvider(getActivity(),factory).get(CornerDetectionViewModel.class);
+        CornerDetectionViewModelFactory factory = new CornerDetectionViewModelFactory();
+        cornerDetectionViewModel = new ViewModelProvider(getActivity(), factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.item_corner_detected_capture, container, false);
         ((ImageView) root.findViewById(R.id.imageView2_corner_detected_capture)).setImageBitmap(
                 cornerDetectionViewModel.getCornerDetectedCaptureById(captureId).getValue().getBitmap()
         );
-        ((ProgressBar)root.findViewById(R.id.progressBar2_scanning_answers)).setVisibility(View.INVISIBLE);
+        pb = ((ProgressBar) root.findViewById(R.id.progressBar2_scanning_answers));
+        pb.setVisibility(View.INVISIBLE);
         return root;
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        progressBarHandler.setContextView(view);
-        ImageView imageView = (ImageView)view.findViewById(R.id.imageView2_corner_detected_capture);
+        ImageView imageView = (ImageView) view.findViewById(R.id.imageView2_corner_detected_capture);
         Drawable drawable = imageView.getDrawable();
         Rect imageBounds = drawable.getBounds();
         ((ConstraintLayout) view.findViewById(R.id.constraintLayout_upper_left_container)).setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
         ((ConstraintLayout) view.findViewById(R.id.constraintLayout_upper_right_container)).setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
         ((ConstraintLayout) view.findViewById(R.id.constraintLayout_bottom_right_container)).setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
         ((ConstraintLayout) view.findViewById(R.id.constraintLayout_bottom_left_container)).setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
+    }
+
+    public void onProcessingBegun() {
+        inProgress = true;
+        pb.setVisibility(View.VISIBLE);
+    }
+
+    public void onProcessingFinished() {
+        inProgress = false;
+        pb.setVisibility(View.INVISIBLE);
     }
 
     private class CornerPointOnTouchListener implements View.OnTouchListener {
@@ -71,6 +91,7 @@ public class CornerDetectionCardFragment extends Fragment {
             this.absoluteBottom = absoluteBottom;
         }
 
+        @SuppressLint("LongLogTag")
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             switch (motionEvent.getAction()) {
@@ -81,7 +102,7 @@ public class CornerDetectionCardFragment extends Fragment {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     Log.d(TAG, "x: " + motionEvent.getRawX() + " y: " + view.getY());
-                    if(inBounaries(view.getX(), view.getY())){
+                    if (inBounaries(view.getX(), view.getY())) {
                         view.animate()
                                 .x(view.getX() + (motionEvent.getRawX() - dX))
                                 .y(view.getY() + (motionEvent.getRawY() - dY))

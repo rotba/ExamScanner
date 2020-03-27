@@ -16,15 +16,28 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static final String testJpg1FilePath = "test_jpg_1.jpg";
     private static final String testJpg2FilePath = "test_jpg_2.jpg";
     private static final String testJpg3FilePath = "test_jpg_3.jpg";
+    private static final String testJpg1MarkedFilePath = "test_jpg_1_marked.jpg";
+    private static final String testJpg2MarkedFilePath = "test_jpg_2_marked.jpg";
+    private static final String testJpg3MarkedFilePath = "test_jpg_3_marked.jpg";
     public static Bitmap getTestJpg1(){
         return getBitmapFromAssets(testJpg1FilePath);
     }
-
     public static Bitmap getTestJpg2() {
         return getBitmapFromAssets(testJpg2FilePath);
     }
     public static Bitmap getTestJpg3() {
         return getBitmapFromAssets(testJpg3FilePath);
+    }
+    public static Bitmap getTestJpg1Marked() {
+        return getBitmapFromAssets(testJpg1MarkedFilePath);
+    }
+
+    public static Bitmap getTestJpg2Marked() {
+        return getBitmapFromAssets(testJpg2MarkedFilePath);
+    }
+
+    public static Bitmap getTestJpg3Marked() {
+        return getBitmapFromAssets(testJpg3MarkedFilePath);
     }
 
     @Nullable
@@ -42,6 +55,5 @@ public class BitmapsInstancesFactoryAndroidTest {
 
         return bitmap;
     }
-
 }
 

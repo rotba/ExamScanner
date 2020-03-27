@@ -46,9 +46,6 @@ public class CornerDetectionFragment extends Fragment {
                 );
         cornerDetectionViewModel = new ViewModelProvider(this, factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_corner_detection, container, false);
-        ((TextView) root.findViewById(R.id.textView_cd_current_position)).setText(
-                "1/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
-        );
         return inflater.inflate(R.layout.fragment_corner_detection, container, false);
     }
 
@@ -56,16 +53,18 @@ public class CornerDetectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewPager2 viewPager = (ViewPager2) view.findViewById(R.id.viewPager2_corner_detected_captures);
-        cornerDetectionCapturesAdapter = new CornerDetectionCapturesAdapter(getActivity(), cornerDetectionViewModel.getPreProcessedCornerDetectedCaptures(), viewPager);
+        cornerDetectionCapturesAdapter =
+                new CornerDetectionCapturesAdapter(
+                        getActivity().getSupportFragmentManager(),
+                        getActivity().getLifecycle(),
+                        cornerDetectionViewModel.getPreProcessedCornerDetectedCaptures(), viewPager);
         viewPager.setAdapter(cornerDetectionCapturesAdapter);
-        ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
-                "1/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
-        );
+
         cornerDetectionCapturesAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
-                        integer + "/" + cornerDetectionCapturesAdapter.getmItemCount().getValue()
+                        (integer+1) + "/" + cornerDetectionCapturesAdapter.getmItemCount().getValue()
                 );
             }
         });
@@ -73,13 +72,11 @@ public class CornerDetectionFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
-                        cornerDetectionCapturesAdapter.getPosition().getValue() + "/" + integer
+                        (cornerDetectionCapturesAdapter.getPosition().getValue()+1) + "/" + integer
                 );
             }
         });
-        ((TextView) view.findViewById(R.id.textView_cd_processing_progress)).setText(
-                "0/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
-        );
+
         cornerDetectionViewModel.getNumberOfAnswersScannedCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
@@ -98,9 +95,9 @@ public class CornerDetectionFragment extends Fragment {
         ((Button) view.findViewById(R.id.button_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue() - 1;
-                int cdcId = cornerDetectionCapturesAdapter.getCDCaptureInPosition(adapterBasedOPosition);
-                cornerDetectionCapturesAdapter.notifiProcessBegun(adapterBasedOPosition);
+                int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue();
+                int cdcId = cornerDetectionCapturesAdapter.getCDCaptureIdInPosition(adapterBasedOPosition);
+                cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 CornerDetectedCapture cdc = cornerDetectionViewModel.getCornerDetectedCaptureById(cdcId).getValue();
                 processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc,adapterBasedOPosition));
             }
@@ -121,14 +118,13 @@ public class CornerDetectionFragment extends Fragment {
                     @Override
                     public void onComplete() {
                         cornerDetectionViewModel.postProcessTransformAndScanAnswers(cdc.getId());
-                        cornerDetectionCapturesAdapter.handleProcessFinish(adapterBasedOPosition);
+                        cornerDetectionCapturesAdapter.handleProcessFinish(cdc.getId());
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.d(TAG, "generateCaptureScanningCompletable");
                         e.printStackTrace();
-                        cornerDetectionCapturesAdapter.notifiProcessFinished(adapterBasedOPosition);
                     }
                 });
     }

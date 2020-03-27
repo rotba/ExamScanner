@@ -6,4 +6,5 @@ interface ProgressBarHandler {
     public void onProcessingBegun();
     public void onProcessingFinished();
     public void setContextView(View view);
+    public boolean isInProgress();
 }

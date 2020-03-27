@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
-    private static boolean stubsMode = false;
+    private static boolean stubsMode = true;
 //    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 //        @Override
 //        public void onManagerConnected(int status) {

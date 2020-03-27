@@ -3,6 +3,8 @@ package com.example.examscanner;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 
+import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
+import com.example.examscanner.components.scan_exam.reslove_answers.ScannedCapturesInstancesFactory;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
@@ -50,7 +52,7 @@ public class ImageProcessorsGenerator {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                return bitmap;
+                return BitmapsInstancesFactoryAndroidTest.getTestJpg1();
             }
 
             @Override
@@ -60,7 +62,7 @@ public class ImageProcessorsGenerator {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                consumer.consume(0,null,null,null,null,null,null);
+                ScannedCapturesInstancesFactory.instance1(consumer);
             }
 
             @Override
@@ -70,7 +72,7 @@ public class ImageProcessorsGenerator {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                consumer.consume(0,null,null,null,null,null,null);
+                ScannedCapturesInstancesFactory.instance1(consumer);
             }
         };
     }
