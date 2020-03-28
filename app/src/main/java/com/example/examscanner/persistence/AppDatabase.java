@@ -14,7 +14,6 @@ import com.example.examscanner.persistence.entities.Exam;
 import com.example.examscanner.persistence.entities.ExamineeAnswer;
 import com.example.examscanner.persistence.entities.ExamineeSolution;
 import com.example.examscanner.persistence.entities.Question;
-import com.example.examscanner.persistence.entities.QuestionExamineeSolutionCrossRes;
 import com.example.examscanner.persistence.entities.SemiScannedCapture;
 import com.example.examscanner.persistence.entities.Session;
 import com.example.examscanner.persistence.entities.Version;
@@ -27,8 +26,7 @@ import com.example.examscanner.persistence.entities.Version;
                 ExamineeSolution.class,
                 ExamineeAnswer.class,
                 Session.class,
-                SemiScannedCapture.class,
-                QuestionExamineeSolutionCrossRes.class
+                SemiScannedCapture.class
         },
         version = 1
 )
