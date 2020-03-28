@@ -15,7 +15,10 @@ public interface SessionDao {
     List<Session> getAll();
 
     @Insert
-    void insertAll(Session... sessions);
+    long[] insertAll(Session... sessions);
+
+    @Insert
+    long insert(Session session);
 
     @Delete
     void delete(Session session);

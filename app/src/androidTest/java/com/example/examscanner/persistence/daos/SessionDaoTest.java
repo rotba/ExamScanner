@@ -18,34 +18,24 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class SessionDaoTest {
+
+public class SessionDaoTest extends DaoAbstractTest{
+
+    private static final String TAG = "SessionDaoTest";
 
     private SessionDao sessionDao;
-    private AppDatabase db;
 
     @Before
+    @Override
     public void setUp() throws Exception {
-        Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
+        super.setUp();
         sessionDao = db.getSessionDao();
-    }
-    @After
-    public void closeDb() throws IOException {
-        db.close();
     }
 
     @Test
     public void insertAll() {
-        sessionDao.insertAll(new Session(0),new Session(1));
+        sessionDao.insertAll(new Session(TAG),new Session(TAG));
         List<Session> allSessions =sessionDao.getAll();
         Assert.assertTrue(allSessions.size()==2);
-        boolean _0IsIn = false;
-        boolean _1IsIn = false;
-        for (Session s:allSessions) {
-            _0IsIn|=s.getId()==0;
-            _1IsIn|=s.getId()==1;
-        }
-        Assert.assertTrue(_0IsIn);
-        Assert.assertTrue(_1IsIn);
     }
 }
