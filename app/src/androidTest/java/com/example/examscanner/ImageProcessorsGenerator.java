@@ -76,4 +76,27 @@ public class ImageProcessorsGenerator {
             }
         };
     }
+    public static ImageProcessingFacade quickIP(){
+        return new ImageProcessingFacade() {
+            @Override
+            public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
+                consumer.consume(null,null,null,null);
+            }
+
+            @Override
+            public Bitmap transformToRectangle(Bitmap bitmap, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
+                return BitmapsInstancesFactoryAndroidTest.getRandom();
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
+                ScannedCapturesInstancesFactory.instance1(consumer);
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
+                ScannedCapturesInstancesFactory.instance1(consumer);
+            }
+        };
+    }
 }

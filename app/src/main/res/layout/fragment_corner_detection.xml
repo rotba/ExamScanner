@@ -44,7 +44,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button_approve_and_scan_answers"
+            android:id="@+id/button_cd_approve_and_scan_answers"
             android:layout_width="78dp"
             android:layout_height="74dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -61,7 +61,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/button_approve_and_scan_answers"
+            app:layout_constraintStart_toEndOf="@+id/button_cd_approve_and_scan_answers"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.489" />
 
@@ -72,7 +72,7 @@
             android:background="@drawable/background_border"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_approve_and_scan_answers"
+            app:layout_constraintEnd_toStartOf="@+id/button_cd_approve_and_scan_answers"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

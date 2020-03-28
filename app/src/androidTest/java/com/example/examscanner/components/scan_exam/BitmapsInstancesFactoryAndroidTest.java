@@ -55,5 +55,14 @@ public class BitmapsInstancesFactoryAndroidTest {
 
         return bitmap;
     }
+
+    private static int c = 0;
+    public static Bitmap getRandom() {
+        int curr_c=c++;
+        if(curr_c%3==0)return getTestJpg1Marked();
+        if(curr_c%3==1)return getTestJpg2Marked();
+        if(curr_c%3==2)return getTestJpg3Marked();
+        return null;
+    }
 }
 

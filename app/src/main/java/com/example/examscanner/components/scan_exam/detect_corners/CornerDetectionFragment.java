@@ -1,5 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,8 +25,10 @@ import com.example.examscanner.repositories.corner_detected_capture.CornerDetect
 import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -92,7 +95,7 @@ public class CornerDetectionFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action);
             }
         });
-        ((Button) view.findViewById(R.id.button_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
+        ((Button) view.findViewById(R.id.button_cd_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue();
@@ -100,6 +103,7 @@ public class CornerDetectionFragment extends Fragment {
                 cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 CornerDetectedCapture cdc = cornerDetectionViewModel.getCornerDetectedCaptureById(cdcId).getValue();
                 processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc,adapterBasedOPosition));
+                waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
             }
         });
 
@@ -125,6 +129,20 @@ public class CornerDetectionFragment extends Fragment {
                     public void onError(Throwable e) {
                         Log.d(TAG, "generateCaptureScanningCompletable");
                         e.printStackTrace();
+                    }
+                });
+    }
+    @SuppressLint("CheckResult")
+    private void waitABitAndSwipeLeft(ViewPager2 viewPager, CornerDetectionCapturesAdapter adapter) {
+        Observable.fromCallable(() -> {
+                    Thread.sleep(200);
+                    return "done";
+                }
+        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        viewPager.setCurrentItem(adapter.getPosition().getValue()+1);
                     }
                 });
     }

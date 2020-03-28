@@ -68,9 +68,10 @@ public class BitmapInstancesFactory {
 
     private static int c = 0;
     public Bitmap getRandom() {
-        if(c++%3==0)return getTestJpg1Marked();
-        if(c++%3==1)return getTestJpg2Marked();
-        if(c++%3==2)return getTestJpg3Marked();
+        int curr_c=c++;
+        if(curr_c%3==0)return getTestJpg1Marked();
+        if(curr_c%3==1)return getTestJpg2Marked();
+        if(curr_c%3==2)return getTestJpg3Marked();
         return null;
     }
 }

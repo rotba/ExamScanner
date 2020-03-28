@@ -83,7 +83,8 @@ public class CornerDetectionViewModel extends ViewModel {
     public List<MutableLiveData<CornerDetectedCapture>> getPreProcessedCornerDetectedCaptures() {
         List<MutableLiveData<CornerDetectedCapture>> ans = new ArrayList<>();
         for (MutableLiveData<CornerDetectedCapture> cdc:cornerDetectedCaptures) {
-            if(!thisSessionProcessedCaptures.contains(cdc.getValue().getId())) ans.add(cdc);
+            if(!thisSessionProcessedCaptures.contains(cdc.getValue().getId()))
+                ans.add(cdc);
         }
         return ans;
     }

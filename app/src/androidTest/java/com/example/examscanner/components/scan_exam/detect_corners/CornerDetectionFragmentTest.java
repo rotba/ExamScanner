@@ -115,8 +115,8 @@ public class CornerDetectionFragmentTest {
     }
 
     private void resolveAnswersAndSwipeLeft() {
-        onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
-        onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+//        onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
         sleepSwipingTime();
     }
 
@@ -143,16 +143,29 @@ public class CornerDetectionFragmentTest {
         FragmentScenario<CornerDetectionFragment> scenraio =  FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
         loadOpenCV(scenraio);
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
-        onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         sleepSwipingTime();
         sleepSwipingTime();
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
-        onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeRight());
         sleepSwipingTime();
         sleepSwipingTime();
         sleepSwipingTime();
         onView(withId(R.id.progressBar2_scanning_answers)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testAutoLeftSwipeOnProcess(){
+        setUp3MarkedCaptures();
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(slowIP());
+        Bundle b = new Bundle();
+        b.putInt("examId", -1);
+        FragmentScenario<CornerDetectionFragment> scenraio =  FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
+        loadOpenCV(scenraio);
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        sleepSwipingTime();
+        onView(withId(R.id.textView_cd_current_position)).check(matches(withText("2/3")));
     }
 
     @Test
@@ -199,7 +212,7 @@ public class CornerDetectionFragmentTest {
         FragmentScenario<CornerDetectionFragment> s = FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
         loadOpenCV(s);
         onView(withId(R.id.textView_cd_processing_progress)).check(matches(withText("0/2")));
-        onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
         onView(withId(R.id.textView_cd_processing_progress)).check(matches(withText("1/2")));
@@ -218,7 +231,8 @@ public class CornerDetectionFragmentTest {
         Bundle b = new Bundle();
         b.putInt("examId", -1);
         FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
-        onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeRight());
         onView(withId(R.id.progressBar2_scanning_answers)).check(matches(isDisplayed()));
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
@@ -248,7 +262,7 @@ public class CornerDetectionFragmentTest {
         b.putInt("examId", -1);
         FragmentScenario<CornerDetectionFragment> s =  FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
         loadOpenCV(s);
-        onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));
@@ -286,7 +300,7 @@ public class CornerDetectionFragmentTest {
         b.putInt("examId", -1);
         FragmentScenario<CornerDetectionFragment> scenraio =  FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
         loadOpenCV(scenraio);
-        onView(withId(R.id.button_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         sleepRectangleTransformationTime();
         sleepScanAnswersTime();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/2")));

@@ -108,8 +108,6 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
 
 
 
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView answerFrameImageView;
 

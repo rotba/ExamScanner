@@ -47,11 +47,16 @@ public class CornerDetectionCardFragment extends Fragment {
         CornerDetectionViewModelFactory factory = new CornerDetectionViewModelFactory();
         cornerDetectionViewModel = new ViewModelProvider(getActivity(), factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.item_corner_detected_capture, container, false);
+        Log.d(TAG,String.format("Frag of cap:%d", captureId));
         ((ImageView) root.findViewById(R.id.imageView2_corner_detected_capture)).setImageBitmap(
                 cornerDetectionViewModel.getCornerDetectedCaptureById(captureId).getValue().getBitmap()
         );
         pb = ((ProgressBar) root.findViewById(R.id.progressBar2_scanning_answers));
-        pb.setVisibility(View.INVISIBLE);
+        if(inProgress){
+            pb.setVisibility(View.VISIBLE);
+        }else{
+            pb.setVisibility(View.INVISIBLE);
+        }
         return root;
     }
 
@@ -69,11 +74,13 @@ public class CornerDetectionCardFragment extends Fragment {
 
     public void onProcessingBegun() {
         inProgress = true;
+        if(pb==null)return;
         pb.setVisibility(View.VISIBLE);
     }
 
     public void onProcessingFinished() {
         inProgress = false;
+        if(pb==null)return;
         pb.setVisibility(View.INVISIBLE);
     }
 
