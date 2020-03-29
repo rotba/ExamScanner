@@ -66,6 +66,9 @@ dependencies {
     })
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    // volley
+    implementation 'com.android.volley:volley:1.1.0'
+
     // androidTest
     androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
     androidTestImplementation 'androidx.test:core-ktx:' + rootProject.coreVersion
