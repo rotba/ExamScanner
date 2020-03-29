@@ -1,11 +1,12 @@
 package com.example.examscanner.communication;
 
+import android.graphics.Bitmap;
+
+import com.example.examscanner.communication.entities.SemiScannedCaptureEntityInterface;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Collection;
-import java.util.List;
 
 public class FacadeImplProxy extends FacadeImpl {
     private RealFacadeImple realImpl = RealFacadeImple.getInstance();
@@ -49,6 +50,23 @@ public class FacadeImplProxy extends FacadeImpl {
 
     @Override
     public JSONObject getGrader(int id) {
+        return null;
+    }
+
+    @Override
+    public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, long versionId, Bitmap bm) {
+        return realImpl.createSemiScannedCapture(leftMostX, upperMostY, rightMostX, rightMostY,  sessionId,  versionId, bm);
+    }
+
+
+
+    @Override
+    public long getNewSession(String desctiprion) {
+        return 0;
+    }
+
+    @Override
+    public SemiScannedCaptureEntityInterface getSemiScannedCapture(long id) {
         return null;
     }
 

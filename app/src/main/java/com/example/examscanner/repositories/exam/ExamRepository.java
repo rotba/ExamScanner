@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.examscanner.communication.Facade;
+import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 
 
 public class ExamRepository implements Repository<Exam> {
-    private Facade comFacade = new CommunicationFacadeFactory().create();
+    private CommunicationFacade comFacade = new CommunicationFacadeFactory().create();
     private Converter<JSONObject, Exam> converter = new ExamConverter();
     private MapHandler mapper = new MapHandler(converter);
     private FilterHandler filterrer = new FilterHandler();

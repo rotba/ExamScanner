@@ -1,6 +1,6 @@
 package com.example.examscanner.persistence.files_management;
 
-public class StringToBitmapFactory {
+public class FilesManagerFactory {
     public static FilesManager create(){
         return new StubFilesManager();
     }

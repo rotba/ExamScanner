@@ -27,7 +27,7 @@ public class GalleryFragment extends Fragment {
                 ViewModelProviders.of(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(this, new Observer<String>() {
+        galleryViewModel.getText().observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
@@ -39,7 +39,8 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 GalleryFragmentDirections.ActionNavGalleryToCaptureFragment2 action = GalleryFragmentDirections.actionNavGalleryToCaptureFragment2();
-                action.setExamId(-1);
+                action.setSessionId(-1);
+                action.setVersionId(-1);
                 Navigation.findNavController(view).navigate(action);
 //                startActivity(new Intent(getActivity(), ScanExamActivity.class));
             }

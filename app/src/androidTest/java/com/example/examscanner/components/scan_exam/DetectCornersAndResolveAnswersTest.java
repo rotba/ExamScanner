@@ -32,6 +32,7 @@ import static com.example.examscanner.ImageProcessorsGenerator.slowIP;
 public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     private Repository<CornerDetectedCapture> repo;
     private ImageProcessingFacade imageProcessor;
+    private long session;
 
     @Before
     @Override
@@ -44,19 +45,19 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg1(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                repo.create(new CornerDetectedCapture(repo.genId(), BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight, bottomLeft, bottomRight));
+                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight, bottomLeft, bottomRight,null,session));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg2(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                repo.create(new CornerDetectedCapture(repo.genId(), BitmapsInstancesFactoryAndroidTest.getTestJpg2Marked(), upperLeft, upperRight, bottomLeft, bottomRight));
+                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg2Marked(), upperLeft, upperRight, bottomLeft, bottomRight,null,session));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg3(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                repo.create(new CornerDetectedCapture(repo.genId(), BitmapsInstancesFactoryAndroidTest.getTestJpg3Marked(), upperLeft, upperRight, bottomLeft, bottomRight));
+                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg3Marked(), upperLeft, upperRight, bottomLeft, bottomRight,null,session));
             }
         });
         Utils.navFromHomeToDetecteCorners();

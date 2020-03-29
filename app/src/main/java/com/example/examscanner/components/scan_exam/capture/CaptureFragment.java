@@ -1,7 +1,6 @@
 package com.example.examscanner.components.scan_exam.capture;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,7 +24,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
-import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -57,7 +55,8 @@ public class CaptureFragment extends Fragment  {
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
         CaptureViewModelFactory factory = new CaptureViewModelFactory(
                 getActivity(),
-                CaptureFragmentArgs.fromBundle(getArguments()).getExamId()
+                CaptureFragmentArgs.fromBundle(getArguments()).getVersionId(),
+                CaptureFragmentArgs.fromBundle(getArguments()).getSessionId()
         );
         captureViewModel =ViewModelProviders.of(this,factory).get(CaptureViewModel.class);
         cameraManager = new CameraManager(
@@ -114,7 +113,7 @@ public class CaptureFragment extends Fragment  {
             public void onClick(View view) {
                 CaptureFragmentDirections.ActionCaptureFragmentToCornerDetectionFragment action =
                         CaptureFragmentDirections.actionCaptureFragmentToCornerDetectionFragment();
-                action.setExamId(captureViewModel.getExamId());
+                action.setExamId((int)captureViewModel.getVersionId());
                 Navigation.findNavController(view).navigate(action);
             }
         });

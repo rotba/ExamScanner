@@ -4,7 +4,14 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.examscanner.communication.CommunicationFacade;
+import com.example.examscanner.communication.CommunicationFacadeFactory;
+import com.example.examscanner.communication.entities.SemiScannedCaptureEntityInterface;
+import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.version.VersionRepoFactory;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +21,26 @@ public class CornerDetectedCaptureRepository implements Repository<CornerDetecte
     private int currAvailableId;
     private static CornerDetectedCaptureRepository instance;
     private List<CornerDetectedCapture> data = new ArrayList<>();
-    public static CornerDetectedCaptureRepository getInstance(){
-        if (instance==null){
-            instance = new CornerDetectedCaptureRepository();
+    private CommunicationFacade comFacade;
+    private Converter<SemiScannedCaptureEntityInterface, CornerDetectedCapture> converter;
+
+    public static CornerDetectedCaptureRepository getInstance() {
+        if (instance == null) {
+            instance = new CornerDetectedCaptureRepository(
+                    new CommunicationFacadeFactory().create(),
+                    new CDCConverter(new VersionRepoFactory().create())
+            );
             return instance;
-        }else{
+        } else {
             return instance;
         }
     }
+
+    private CornerDetectedCaptureRepository(CommunicationFacade comFacade, Converter<SemiScannedCaptureEntityInterface, CornerDetectedCapture> converter) {
+        this.comFacade = comFacade;
+        this.converter = converter;
+    }
+
     @Override
     public int getId() {
         return 0;
@@ -29,6 +48,12 @@ public class CornerDetectedCaptureRepository implements Repository<CornerDetecte
 
     @Override
     public CornerDetectedCapture get(int id) {
+        Long lid = new Long(id);
+        try {
+            return converter.convert(comFacade.getSemiScannedCapture(lid));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -36,14 +61,24 @@ public class CornerDetectedCaptureRepository implements Repository<CornerDetecte
     @Override
     public List<CornerDetectedCapture> get(Predicate<CornerDetectedCapture> criteria) {
         List<CornerDetectedCapture> ans = new ArrayList<>();
-        for (CornerDetectedCapture cdc: data) {
-            if(criteria.test(cdc)) ans.add(cdc);
+        for (CornerDetectedCapture cdc : data) {
+            if (criteria.test(cdc)) ans.add(cdc);
         }
         return ans;
     }
 
     @Override
     public void create(CornerDetectedCapture cornerDetectedCapture) {
+        long id = comFacade.createSemiScannedCapture(
+                cornerDetectedCapture.getLeftMostX(),
+                cornerDetectedCapture.getUpperMostY(),
+                cornerDetectedCapture.getRightMostX(),
+                cornerDetectedCapture.getBottomMostY(),
+                cornerDetectedCapture.getSession(),
+                cornerDetectedCapture.getVersionId(),
+                cornerDetectedCapture.getBitmap()
+        );
+        cornerDetectedCapture.setId(id);
         data.add(cornerDetectedCapture);
     }
 

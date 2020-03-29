@@ -7,15 +7,18 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
+import com.example.examscanner.repositories.version.VersionRepoFactory;
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
-    private int examID;
+    private long versionId;
+    private long sessionId;
 
-    public CaptureViewModelFactory(FragmentActivity activity, int examID) {
+    public CaptureViewModelFactory(FragmentActivity activity, long versionId, long sessionId) {
         this.activity=activity;
-        this.examID = examID;
+        this.versionId = versionId;
+        this.sessionId = sessionId;
     }
 
     @NonNull
@@ -23,8 +26,10 @@ public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T) new CaptureViewModel(
                 new CornerDetectedCaptureRepositoryFacrory().create(),
+                new VersionRepoFactory().create(),
                 new ImageProcessingFactory(new BitmapInstancesFactory(activity)).create(),
-                examID
+                versionId,
+                sessionId
         );
     }
 }

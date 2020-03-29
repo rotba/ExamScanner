@@ -2,21 +2,16 @@ package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.examscanner.R;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 
 import java.util.ArrayList;
@@ -39,7 +34,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         for (MutableLiveData<CornerDetectedCapture> mCdc : cornerDetectedCaptures) {
             CornerDetectionCardFragment f = new CornerDetectionCardFragment();
             Bundle b = new Bundle();
-            b.putInt(captureId(), mCdc.getValue().getId());
+            b.putLong(captureId(), mCdc.getValue().getId());
             f.setArguments(b);
             cards.add(
                     new CornerDetectionCardData(
@@ -68,7 +63,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
     }
 
 
-    public void handleProcessFinish(int cdcId) {
+    public void handleProcessFinish(long cdcId) {
         CornerDetectionCardData card = getCardByCDCid(cdcId);
         card.getCdcFragCard().onProcessingFinished();
         int removingPosition = cards.indexOf(card);
@@ -92,7 +87,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         return ans;
     }
 
-    private CornerDetectionCardData getCardByCDCid(int cdcId) {
+    private CornerDetectionCardData getCardByCDCid(long cdcId) {
         for (CornerDetectionCardData card:cards) {
             if(card.getId()==cdcId)
                 return card;
@@ -118,7 +113,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         return "captureId";
     }
 
-    public int getCDCaptureIdInPosition(int postition) {
+    public long getCDCaptureIdInPosition(int postition) {
         return cards.get(postition).cdcId;
     }
 
@@ -130,14 +125,14 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
     private class CornerDetectionCardData {
         private CornerDetectionCardFragment cdcFragCard;
-        private int cdcId;
+        private long cdcId;
 
-        public CornerDetectionCardData(int cdcId, CornerDetectionCardFragment cdcFragCard) {
+        public CornerDetectionCardData(long cdcId, CornerDetectionCardFragment cdcFragCard) {
             this.cdcId = cdcId;
             this.cdcFragCard = cdcFragCard;
         }
 
-        public int getId() {
+        public long getId() {
             return cdcId;
         }
 

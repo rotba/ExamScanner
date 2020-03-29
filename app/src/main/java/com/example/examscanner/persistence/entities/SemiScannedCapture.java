@@ -1,14 +1,8 @@
 package com.example.examscanner.persistence.entities;
 
-import android.graphics.Bitmap;
-import android.graphics.PointF;
-
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-
-import static androidx.room.ForeignKey.CASCADE;
 
 @Entity
 public class SemiScannedCapture {
@@ -19,7 +13,7 @@ public class SemiScannedCapture {
     private int upperMostY;
     private int rightMostX;
     private int bottomMostY;
-    private int bitmapId;
+    private long bitmapId;
     public static final String fkVersionId = "versionId";
     @ForeignKey(entity = Version.class, parentColumns = {Version.pkName}, childColumns = {"versionId"})
     private long versionId;
@@ -27,7 +21,7 @@ public class SemiScannedCapture {
     @ForeignKey(entity = Session.class, parentColumns = {Session.pkName}, childColumns = {"sessionId"})
     private long sessionId;
 
-    public SemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int bottomMostY, int bitmapId, long versionId, long sessionId) {
+    public SemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int bottomMostY, long bitmapId, long versionId, long sessionId) {
         this.leftMostX = leftMostX;
         this.upperMostY = upperMostY;
         this.rightMostX = rightMostX;
@@ -77,11 +71,11 @@ public class SemiScannedCapture {
         this.bottomMostY = bottomMostY;
     }
 
-    public int getBitmapId() {
+    public long getBitmapId() {
         return bitmapId;
     }
 
-    public void setBitmapId(int bitmapId) {
+    public void setBitmapId(long bitmapId) {
         this.bitmapId = bitmapId;
     }
 

@@ -10,7 +10,6 @@ public class Version {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-
     public static final String fkExam = "examId";
     private long examId;
     private int verNum;

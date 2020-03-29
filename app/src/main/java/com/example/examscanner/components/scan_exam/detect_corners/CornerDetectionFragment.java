@@ -45,7 +45,7 @@ public class CornerDetectionFragment extends Fragment {
         CornerDetectionViewModelFactory factory =
                 new CornerDetectionViewModelFactory(
                         getActivity(),
-                        CaptureFragmentArgs.fromBundle(getArguments()).getExamId()
+                        CornerDetectionFragmentArgs.fromBundle(getArguments()).getExamId()
                 );
         cornerDetectionViewModel = new ViewModelProvider(this, factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_corner_detection, container, false);
@@ -99,7 +99,7 @@ public class CornerDetectionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue();
-                int cdcId = cornerDetectionCapturesAdapter.getCDCaptureIdInPosition(adapterBasedOPosition);
+                long cdcId = cornerDetectionCapturesAdapter.getCDCaptureIdInPosition(adapterBasedOPosition);
                 cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 CornerDetectedCapture cdc = cornerDetectionViewModel.getCornerDetectedCaptureById(cdcId).getValue();
                 processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc,adapterBasedOPosition));
