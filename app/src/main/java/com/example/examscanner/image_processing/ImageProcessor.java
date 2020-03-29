@@ -275,7 +275,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
 
 
-    public Map<Point,Integer> findQuestions(Mat img_exam, Mat img_template) {
+    private Map<Point,Integer> findQuestions(Mat img_exam, Mat img_template) {
         int result_cols = img_exam.cols() - img_template.cols() + 1;
         int result_rows = img_exam.rows() - img_template.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1); //CV_32FC1 means 32 bit floating point signed depth in one channel
@@ -430,7 +430,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     // Detect corners in the given image
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<Point> cornerDetection(Mat inputImg){
+    private List<Point> cornerDetection(Mat inputImg){
 
         MatOfKeyPoint pointsMat = new MatOfKeyPoint();
         int threshold = 20;
