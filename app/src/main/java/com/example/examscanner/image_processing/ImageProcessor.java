@@ -21,11 +21,14 @@ import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.features2d.FastFeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,7 +39,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+
 public class ImageProcessor implements ImageProcessingFacade {
+
 
     // given an image of an exam try to detect the 4 corners of the exam
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -48,10 +54,11 @@ public class ImageProcessor implements ImageProcessingFacade {
         List<Point> points = cornerDetection(mat);
         // Then, supposing a rectangle exists, find its 4 corners coordinates
         List<Point> filtered = filterPoints(points);
-        Point upperLeft = getUpperLeft(filtered);
-        Point upperRight = getUpperRight(filtered);
-        Point bottomLeft = getBottomLeft(filtered);
-        Point bottomRight = getBottomRight(filtered);
+        List<Point> clockwiseOrderedPoints = orderPoints(filtered);
+        Point upperLeft = clockwiseOrderedPoints.get(0);
+        Point upperRight = clockwiseOrderedPoints.get(1);
+        Point bottomRight = clockwiseOrderedPoints.get(2);
+        Point bottomLeft = clockwiseOrderedPoints.get(3);
         consumer.consume(
                 new PointF((float)upperLeft.x, (float) upperLeft.y),
                 new PointF((float)upperRight.x,(float)upperRight.y),
@@ -60,14 +67,58 @@ public class ImageProcessor implements ImageProcessingFacade {
         );
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private List<Point> orderPoints(List<Point> filtered) {
+        List<Point> ordered = new ArrayList<>();
+        double maxPointSum = Collections.max(filtered.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
+        double minPointSum = Collections.min(filtered.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
+        Point bottomRight = filtered.stream().filter(point -> point.x + point.y == maxPointSum).collect(Collectors.toList()).get(0);
+        Point topLeft = filtered.stream().filter(point -> point.x + point.y == minPointSum).collect(Collectors.toList()).get(0);
+        ordered.add(0, topLeft);
+        ordered.add(2, bottomRight);
+        double maxPointDiff = Collections.max(filtered.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
+        double minPointDiff = Collections.min(filtered.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
+        Point bottomLeft = filtered.stream().filter(point -> point.x + point.y == maxPointDiff).collect(Collectors.toList()).get(0);
+        Point topRight = filtered.stream().filter(point -> point.x + point.y == minPointDiff).collect(Collectors.toList()).get(0);
+        ordered.add(1, topRight);
+        ordered.add(3, bottomLeft);
+        return ordered;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Bitmap transformToRectangle(Bitmap bitmap, android.graphics.Point upperLeft, android.graphics.Point upperRight, android.graphics.Point bottomRight, android.graphics.Point bottomLeft) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
+
+        Mat inputMat = new Mat();
+        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp32, inputMat);
+
+        double widthCandidateA = Math.sqrt(Math.pow((bottomRight.x - bottomLeft.x), 2) + Math.pow((bottomRight.y - bottomLeft.y), 2));
+        double widthCandidateB = Math.sqrt(Math.pow((upperRight.x - upperLeft.x), 2) + Math.pow((upperRight.y - upperLeft.y), 2));
+        double newWidth = Math.max(widthCandidateA, widthCandidateB);
+
+        double heightCandidateA = Math.sqrt(Math.pow((upperRight.x - bottomRight.x), 2) + Math.pow((upperRight.y - bottomRight.y), 2));
+        double heightCandidateB = Math.sqrt(Math.pow((upperLeft.x - bottomLeft.x), 2) + Math.pow((upperLeft.y - bottomLeft.y), 2));
+        double newHeight = Math.max(heightCandidateA, heightCandidateB);
+
+
+        // compute the perspective transform matrix and then apply it
+//         dst = [(0,0), (newWidth-1,0), (newWidth-1, newHeight-1), (0, newHeight-1)]
+//         M = cv2.getPerspectiveTransform(rect, dst)
+//         warped = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
+
+        Mat src = new Mat(4,1,CvType.CV_32FC2);
+        src.put((int)upperLeft.y,(int)upperLeft.x, (int)upperRight.y,(int)upperRight.x, (int)bottomLeft.y,(int)bottomLeft.x, (int)bottomRight.y,(int)bottomRight.x);
+        Mat dst = new Mat(4,1,CvType.CV_32FC2);
+        dst.put(0,0, 0, inputMat.width(), inputMat.height(), inputMat.width(), inputMat.height(),0);
+
+        Mat perspectiveTransform = Imgproc.getPerspectiveTransform(src, dst);
+        Mat transformedMat = inputMat.clone();
+        Imgproc.warpPerspective(inputMat, transformedMat, perspectiveTransform, new Size(inputMat.width(), inputMat.height()));
+
+        Bitmap transformedBitmap = Bitmap.createBitmap(transformedMat.cols(), transformedMat.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(transformedMat, transformedBitmap);
+        return transformedBitmap;
     }
 
     private Point getBottomRight(List<Point> points) {
