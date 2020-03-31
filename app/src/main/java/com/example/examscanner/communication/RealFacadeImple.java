@@ -38,7 +38,7 @@ public class RealFacadeImple extends FacadeImpl {
     }
 
     @Override
-    public JSONObject getExam(int id) {
+    public JSONObject getExam(long id) {
         return null;
     }
 

@@ -42,7 +42,7 @@ public class ExamRepository implements Repository<Exam> {
     }
 
     @Override
-    public Exam get(int id) {
+    public Exam get(long id) {
         try {
             return converter.convert(
                     comFacade.getExam(id)

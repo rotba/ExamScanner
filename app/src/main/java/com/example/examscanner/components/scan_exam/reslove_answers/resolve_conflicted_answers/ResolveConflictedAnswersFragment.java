@@ -4,14 +4,11 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -22,7 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
-import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModelFactory;
+import com.example.examscanner.components.scan_exam.reslove_answers.RAViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +37,7 @@ public class ResolveConflictedAnswersFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         scanId = ResolveConflictedAnswersFragmentArgs.fromBundle(getArguments()).getScanId();
-        ResolveAnswersViewModelFactory factory = new ResolveAnswersViewModelFactory(getActivity());
+        RAViewModelFactory factory = new RAViewModelFactory(getActivity());
         View root = inflater.inflate(R.layout.fragment_resolve_one_scane, container, false);
         resolveAnswersViewModel = new ViewModelProvider(getActivity(), factory).get(ResolveAnswersViewModel.class);
         return root;

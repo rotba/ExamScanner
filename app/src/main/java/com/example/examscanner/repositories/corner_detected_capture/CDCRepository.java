@@ -17,16 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CornerDetectedCaptureRepository implements Repository<CornerDetectedCapture> {
+public class CDCRepository implements Repository<CornerDetectedCapture> {
     private int currAvailableId;
-    private static CornerDetectedCaptureRepository instance;
+    private static CDCRepository instance;
     private List<CornerDetectedCapture> data = new ArrayList<>();
     private CommunicationFacade comFacade;
     private Converter<SemiScannedCaptureEntityInterface, CornerDetectedCapture> converter;
 
-    public static CornerDetectedCaptureRepository getInstance() {
+    public static CDCRepository getInstance() {
         if (instance == null) {
-            instance = new CornerDetectedCaptureRepository(
+            instance = new CDCRepository(
                     new CommunicationFacadeFactory().create(),
                     new CDCConverter(new VersionRepoFactory().create())
             );
@@ -36,7 +36,7 @@ public class CornerDetectedCaptureRepository implements Repository<CornerDetecte
         }
     }
 
-    private CornerDetectedCaptureRepository(CommunicationFacade comFacade, Converter<SemiScannedCaptureEntityInterface, CornerDetectedCapture> converter) {
+    private CDCRepository(CommunicationFacade comFacade, Converter<SemiScannedCaptureEntityInterface, CornerDetectedCapture> converter) {
         this.comFacade = comFacade;
         this.converter = converter;
     }
@@ -47,7 +47,7 @@ public class CornerDetectedCaptureRepository implements Repository<CornerDetecte
     }
 
     @Override
-    public CornerDetectedCapture get(int id) {
+    public CornerDetectedCapture get(long id) {
         Long lid = new Long(id);
         try {
             return converter.convert(comFacade.getSemiScannedCapture(lid));

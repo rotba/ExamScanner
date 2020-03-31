@@ -4,12 +4,12 @@ import java.util.List;
 
 public abstract class Answer {
 
-    private final int id;
+    private final int ansNum;
 
     public Answer(int id) {
-        this.id = id;
+        this.ansNum = id;
     }
-    public int getId(){return id;}
+    public int getAnsNum(){return ansNum;}
     public boolean isChecked(){
         return false;
     }

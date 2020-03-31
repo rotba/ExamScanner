@@ -7,7 +7,7 @@ import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
+import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static com.example.examscanner.ImageProcessorsGenerator.quickIP;
 import static com.example.examscanner.Utils.sleepCameraPreviewSetupTime;
 import static com.example.examscanner.Utils.sleepMovingFromCaptureToDetectCorners;
@@ -36,7 +35,7 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
     @Override
     public void setUp() {
         super.setUp();
-        CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
+        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
     }
 
     @Test

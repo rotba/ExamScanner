@@ -40,11 +40,11 @@ public class CornerDetectionViewModel extends ViewModel {
         thisSessionProcessedCaptures = new ArrayList<Long>();
     }
 
-    public LiveData<Integer> getNumberOfCornerDetectedCaptures() {
+    public LiveData<Integer> getNumberOfCDCaptures() {
         return mNumberOfCornerDetectedCaptures;
     }
 
-    public LiveData<Integer> getNumberOfAnswersScannedCaptures() {
+    public LiveData<Integer> getNumberOfScannedCaptures() {
         return mNumberOfAnswersScannedCaptures;
     }
 
@@ -78,7 +78,7 @@ public class CornerDetectionViewModel extends ViewModel {
         mNumberOfAnswersScannedCaptures.setValue(scRepo.get(sc -> true).size());
     }
 
-    public List<MutableLiveData<CornerDetectedCapture>> getPreProcessedCornerDetectedCaptures() {
+    public List<MutableLiveData<CornerDetectedCapture>> getPreProcessedCDCs() {
         List<MutableLiveData<CornerDetectedCapture>> ans = new ArrayList<>();
         for (MutableLiveData<CornerDetectedCapture> cdc:cornerDetectedCaptures) {
             if(!thisSessionProcessedCaptures.contains(cdc.getValue().getId()))
@@ -87,7 +87,7 @@ public class CornerDetectionViewModel extends ViewModel {
         return ans;
     }
 
-    public MutableLiveData<CornerDetectedCapture> getCornerDetectedCaptureById(long captureId) {
+    public MutableLiveData<CornerDetectedCapture> getCDCById(long captureId) {
         for (MutableLiveData<CornerDetectedCapture> cdc :cornerDetectedCaptures) {
             if(cdc.getValue().getId()==captureId) return cdc;
         }

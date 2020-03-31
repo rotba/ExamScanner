@@ -77,7 +77,7 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         cas.sort(new Comparator<ConflictedAnswer>() {
             @Override
             public int compare(ConflictedAnswer c1, ConflictedAnswer c2) {
-                return Integer.valueOf(c1.getId()).compareTo(c2.getId());
+                return Integer.valueOf(c1.getAnsNum()).compareTo(c2.getAnsNum());
             }
         });
         return cas.get(position);

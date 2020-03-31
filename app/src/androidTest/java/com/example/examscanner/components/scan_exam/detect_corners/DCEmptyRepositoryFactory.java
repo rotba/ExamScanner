@@ -18,7 +18,7 @@ public class DCEmptyRepositoryFactory {
             }
 
             @Override
-            public CornerDetectedCapture get(int id) {
+            public CornerDetectedCapture get(long id) {
                 return null;
             }
 

@@ -26,7 +26,7 @@ public class GraderRepository implements Repository<Grader> {
     }
 
     @Override
-    public Grader get(int id) {
+    public Grader get(long id) {
         //TODO - implement comFacade get Grader
         return new ExamManager(id);
     }

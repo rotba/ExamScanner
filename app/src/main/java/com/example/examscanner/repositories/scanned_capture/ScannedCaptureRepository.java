@@ -27,7 +27,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
     }
 
     @Override
-    public ScannedCapture get(int id) {
+    public ScannedCapture get(long id) {
         return null;
     }
 

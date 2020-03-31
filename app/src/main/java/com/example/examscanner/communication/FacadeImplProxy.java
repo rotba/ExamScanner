@@ -8,10 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FacadeImplProxy extends FacadeImpl {
+import java.util.List;
+
+public class FacadeImplProxy implements CommunicationFacade {
     private RealFacadeImple realImpl = RealFacadeImple.getInstance();
     @Override
-    public JSONObject getExam(int id) {
+    public JSONObject getExam(long id) {
         if (useReal()){
             return realImpl.getExam(id);
         }
@@ -67,6 +69,31 @@ public class FacadeImplProxy extends FacadeImpl {
 
     @Override
     public SemiScannedCaptureEntityInterface getSemiScannedCapture(long id) {
+        return null;
+    }
+
+    @Override
+    public List<SemiScannedCaptureEntityInterface> getSemiScannedCaptureBySession(long sId) {
+        return null;
+    }
+
+    @Override
+    public List<ExamineeSolutionsEntityInterface> getExamineeSolutionsBySession(long sId) {
+        return null;
+    }
+
+    @Override
+    public void uploadExamineesSolutions(long[] ids) {
+
+    }
+
+    @Override
+    public ExamEntityInterface getExamBySession(long sId) {
+        return null;
+    }
+
+    @Override
+    public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         return null;
     }
 

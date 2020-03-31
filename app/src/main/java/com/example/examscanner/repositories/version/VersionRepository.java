@@ -27,7 +27,7 @@ public class VersionRepository implements Repository<Version> {
     }
 
     @Override
-    public Version get(int id) {
+    public Version get(long id) {
         return null;
     }
 

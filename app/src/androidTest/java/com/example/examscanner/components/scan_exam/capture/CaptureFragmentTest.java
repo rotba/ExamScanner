@@ -11,7 +11,7 @@ import androidx.test.uiautomator.UiDevice;
 
 import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
+import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,7 +39,7 @@ public class CaptureFragmentTest{
     public void setUp() {
 //        super.setUp();
 //        navFromHomeToCapture();
-        CornerDetectedCaptureRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
+        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
         Bundle b = new Bundle();
         b.putInt("examId", -1);
         scenario =

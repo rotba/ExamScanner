@@ -19,7 +19,6 @@ import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.capture.CaptureFragmentArgs;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,8 +41,8 @@ public class CornerDetectionFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        CornerDetectionViewModelFactory factory =
-                new CornerDetectionViewModelFactory(
+        CDViewModelFactory factory =
+                new CDViewModelFactory(
                         getActivity(),
                         CornerDetectionFragmentArgs.fromBundle(getArguments()).getExamId()
                 );
@@ -60,7 +59,7 @@ public class CornerDetectionFragment extends Fragment {
                 new CornerDetectionCapturesAdapter(
                         getActivity().getSupportFragmentManager(),
                         getActivity().getLifecycle(),
-                        cornerDetectionViewModel.getPreProcessedCornerDetectedCaptures(), viewPager);
+                        cornerDetectionViewModel.getPreProcessedCDCs(), viewPager);
         viewPager.setAdapter(cornerDetectionCapturesAdapter);
 
         cornerDetectionCapturesAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
@@ -80,11 +79,11 @@ public class CornerDetectionFragment extends Fragment {
             }
         });
 
-        cornerDetectionViewModel.getNumberOfAnswersScannedCaptures().observe(getActivity(), new Observer<Integer>() {
+        cornerDetectionViewModel.getNumberOfScannedCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 ((TextView) view.findViewById(R.id.textView_cd_processing_progress)).setText(
-                        integer + "/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
+                        integer + "/" + cornerDetectionViewModel.getNumberOfCDCaptures().getValue()
                 );
             }
         });
@@ -101,7 +100,7 @@ public class CornerDetectionFragment extends Fragment {
                 int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue();
                 long cdcId = cornerDetectionCapturesAdapter.getCDCaptureIdInPosition(adapterBasedOPosition);
                 cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
-                CornerDetectedCapture cdc = cornerDetectionViewModel.getCornerDetectedCaptureById(cdcId).getValue();
+                CornerDetectedCapture cdc = cornerDetectionViewModel.getCDCById(cdcId).getValue();
                 processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc,adapterBasedOPosition));
                 waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
             }

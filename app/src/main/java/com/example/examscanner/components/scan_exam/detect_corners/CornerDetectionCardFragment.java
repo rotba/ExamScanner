@@ -44,12 +44,12 @@ public class CornerDetectionCardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         captureId = getArguments().getInt(CornerDetectionCapturesAdapter.captureId());
-        CornerDetectionViewModelFactory factory = new CornerDetectionViewModelFactory();
+        CDViewModelFactory factory = new CDViewModelFactory();
         cornerDetectionViewModel = new ViewModelProvider(getActivity(), factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.item_corner_detected_capture, container, false);
         Log.d(TAG,String.format("Frag of cap:%d", captureId));
         ((ImageView) root.findViewById(R.id.imageView2_corner_detected_capture)).setImageBitmap(
-                cornerDetectionViewModel.getCornerDetectedCaptureById(captureId).getValue().getBitmap()
+                cornerDetectionViewModel.getCDCById(captureId).getValue().getBitmap()
         );
         pb = ((ProgressBar) root.findViewById(R.id.progressBar2_scanning_answers));
         if(inProgress){
