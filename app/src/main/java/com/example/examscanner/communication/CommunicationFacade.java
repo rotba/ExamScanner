@@ -2,7 +2,10 @@ package com.example.examscanner.communication;
 
 import android.graphics.Bitmap;
 
-import com.example.examscanner.communication.entities.SemiScannedCaptureEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

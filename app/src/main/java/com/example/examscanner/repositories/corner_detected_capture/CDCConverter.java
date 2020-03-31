@@ -1,6 +1,6 @@
 package com.example.examscanner.repositories.corner_detected_capture;
 
-import com.example.examscanner.communication.entities.SemiScannedCaptureEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.version.Version;

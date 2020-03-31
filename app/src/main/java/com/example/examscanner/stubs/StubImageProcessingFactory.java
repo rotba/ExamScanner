@@ -44,6 +44,11 @@ public class StubImageProcessingFactory {
             }
 
             @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+                
+            }
+
+            @Override
             public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
                 try {
                     Thread.sleep(3000);

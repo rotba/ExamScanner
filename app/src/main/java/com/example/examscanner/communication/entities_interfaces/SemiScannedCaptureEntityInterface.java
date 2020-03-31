@@ -1,4 +1,4 @@
-package com.example.examscanner.communication.entities;
+package com.example.examscanner.communication.entities_interfaces;
 
 import android.graphics.Bitmap;
 

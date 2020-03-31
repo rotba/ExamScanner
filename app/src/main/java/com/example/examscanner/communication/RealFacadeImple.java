@@ -4,7 +4,10 @@ import android.graphics.Bitmap;
 
 import androidx.room.Room;
 
-import com.example.examscanner.communication.entities.SemiScannedCaptureEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.persistence.AppDatabase;
 import com.example.examscanner.persistence.entities.SemiScannedCapture;
 import com.example.examscanner.persistence.files_management.FilesManager;
@@ -13,9 +16,11 @@ import com.example.examscanner.persistence.files_management.FilesManagerFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
-public class RealFacadeImple extends FacadeImpl {
+public class RealFacadeImple implements CommunicationFacade {
     private static RealFacadeImple instance;
     private AppDatabase db;
     private FilesManager fm;
@@ -122,5 +127,30 @@ public class RealFacadeImple extends FacadeImpl {
                 return ssc.getId();
             }
         };
+    }
+
+    @Override
+    public List<SemiScannedCaptureEntityInterface> getSemiScannedCaptureBySession(long sId) {
+        return null;
+    }
+
+    @Override
+    public List<ExamineeSolutionsEntityInterface> getExamineeSolutionsBySession(long sId) {
+        return null;
+    }
+
+    @Override
+    public void uploadExamineesSolutions(long[] ids) {
+
+    }
+
+    @Override
+    public ExamEntityInterface getExamBySession(long sId) {
+        return null;
+    }
+
+    @Override
+    public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
+        return null;
     }
 }

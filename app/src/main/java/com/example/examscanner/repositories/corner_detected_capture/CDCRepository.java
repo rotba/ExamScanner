@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
-import com.example.examscanner.communication.entities.SemiScannedCaptureEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.version.VersionRepoFactory;

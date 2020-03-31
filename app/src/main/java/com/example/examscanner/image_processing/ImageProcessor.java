@@ -145,6 +145,12 @@ public class ImageProcessor implements ImageProcessingFacade {
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
 
     }
+
+    @Override
+    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+
+    }
+
     public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer){
         Mat exam = new Mat();
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
