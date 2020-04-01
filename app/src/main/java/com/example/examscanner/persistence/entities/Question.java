@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 public class Question {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private int questionNum;
     public static final String fkVer = "verId";
     @ForeignKey(entity = Version.class, parentColumns =Version.pkName , childColumns = "verId")
@@ -22,11 +22,11 @@ public class Question {
         this.correctAns = correctAns;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

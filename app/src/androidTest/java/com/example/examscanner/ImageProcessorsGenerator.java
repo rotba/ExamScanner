@@ -28,6 +28,11 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+
+            }
+
+            @Override
             public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
                 consumer.consume(0,null,null,null,null,null,null);
             }
@@ -66,6 +71,11 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+
+            }
+
+            @Override
             public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
                 try {
                     Thread.sleep(3000);
@@ -91,6 +101,11 @@ public class ImageProcessorsGenerator {
             @Override
             public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
                 ScannedCapturesInstancesFactory.instance1(consumer);
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+
             }
 
             @Override

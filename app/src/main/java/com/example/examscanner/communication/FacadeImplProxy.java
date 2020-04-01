@@ -1,9 +1,11 @@
 package com.example.examscanner.communication;
 
 import android.graphics.Bitmap;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
-import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 
@@ -11,14 +13,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 public class FacadeImplProxy implements CommunicationFacade {
     private RealFacadeImple realImpl = RealFacadeImple.getInstance();
     @Override
-    public JSONObject getExam(long id) {
+    public JSONObject getExamGoingToEarse(long id) {
         if (useReal()){
-            return realImpl.getExam(id);
+            return realImpl.getExamGoingToEarse(id);
         }
         else {
             try {
@@ -36,9 +36,9 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public JSONObject getVersion(int id) {
+    public JSONObject getVersionGoingToEarse(int id) {
         if (useReal()){
-            return realImpl.getExam(id);
+            return realImpl.getExamGoingToEarse(id);
         }
         else {
             String someAnwersString = "[1,2,3,2,1,3,4,5,3,3,3,3,1,1,1]";
@@ -54,8 +54,13 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public JSONObject getGrader(int id) {
+    public JSONObject getGraderGoingToEarse(int id) {
         return null;
+    }
+
+    @Override
+    public long createExam(String courseName, String url, String year, int term, int semester, long sessionId) {
+        return realImpl.createExam(courseName, url, year, term, semester, sessionId);
     }
 
     @Override
@@ -66,23 +71,38 @@ public class FacadeImplProxy implements CommunicationFacade {
 
 
     @Override
-    public long getNewSession(String desctiprion) {
-        return 0;
+    public long createNewSession(String desctiprion) {
+        return realImpl.createNewSession(desctiprion);
     }
 
     @Override
     public SemiScannedCaptureEntityInterface getSemiScannedCapture(long id) {
-        return null;
+        return realImpl.getSemiScannedCapture(id);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public long[] getSemiScannedCaptureBySession(long sId) {
+        return realImpl.getSemiScannedCaptureBySession(sId);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public long[] getExamineeSolutionsBySession(long sId) {
+        return realImpl.getExamineeSolutionsBySession(sId);
     }
 
     @Override
-    public List<SemiScannedCaptureEntityInterface> getSemiScannedCaptureBySession(long sId) {
-        return null;
+    public long addExamineeAnswer(long solutionId, long questionId, int ans, int leftX, int upY, int rightX, int botY) {
+        return realImpl.addExamineeAnswer(solutionId, questionId, ans, leftX,  upY,  rightX,  botY);
     }
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public List<ExamineeSolutionsEntityInterface> getExamineeSolutionsBySession(long sId) {
-        return null;
+    public long[] getExamineeAnswersIdsByExamineeSolutionId(long esId) {
+        return realImpl.getExamineeAnswersIdsByExamineeSolutionId(esId);
     }
 
     @Override
@@ -91,21 +111,47 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public ExamEntityInterface getExamBySession(long sId) {
-        return null;
+    public long getExamIdBySession(long sId) {
+        return realImpl.getExamIdBySession(sId);
+    }
+
+    @Override
+    public ExamEntityInterface getExamById(long id) {
+        return realImpl.getExamById(id);
     }
 
     @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
-        return null;
+        return realImpl.getVersionByExamIdAndNumber(eId, num);
+    }
+
+    @Override
+    public long createVersion(long examId, int versionNumber) {
+        return realImpl.createVersion(examId,versionNumber);
+    }
+
+    @Override
+    public long addQuestion(long vId, int qNum, int correctAnswer) {
+        return realImpl.addQuestion(vId,qNum,correctAnswer);
+    }
+
+    @Override
+    public long createExamineeSolution(long sId, Bitmap bm, long examineeId) {
+        return realImpl.createExamineeSolution(sId, bm, examineeId);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public long[] getQuestionsByVersionId(long vId) {
+        return realImpl.getQuestionsByVersionId(vId);
     }
 
     private boolean useReal(){return false;}
 
     @Override
-    public JSONArray getExams() {
+    public JSONArray getExamsGoingToEarse() {
         JSONArray ans =  new JSONArray();
-        ans.put(getExam(0));
+        ans.put(getExamGoingToEarse(0));
         return ans;
     }
 }

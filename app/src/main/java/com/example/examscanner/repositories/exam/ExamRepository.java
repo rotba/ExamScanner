@@ -45,7 +45,7 @@ public class ExamRepository implements Repository<Exam> {
     public Exam get(long id) {
         try {
             return converter.convert(
-                    comFacade.getExam(id)
+                    comFacade.getExamGoingToEarse(id)
             );
         }catch (JSONException e){
             Log.v(TAG, "Can't find exam with an id: " + id);
@@ -59,7 +59,7 @@ public class ExamRepository implements Repository<Exam> {
     public List<Exam> get(Predicate<Exam> criteria) {
         try {
             return filterrer.filter(
-                    mapper.map(comFacade.getExams()),
+                    mapper.map(comFacade.getExamsGoingToEarse()),
                     criteria
             );
         } catch (JSONException e) {

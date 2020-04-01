@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 public class SemiScannedCapture {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private int leftMostX;
     private int upperMostY;
     private int rightMostX;
@@ -31,11 +31,11 @@ public class SemiScannedCapture {
         this.sessionId = sessionId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

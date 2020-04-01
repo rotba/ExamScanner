@@ -7,13 +7,14 @@ import androidx.room.PrimaryKey;
 public class Session {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
+    private String description;
 
     public Session(String description) {
         this.description = description;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -25,9 +26,7 @@ public class Session {
         this.description = description;
     }
 
-    private String description;
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 }

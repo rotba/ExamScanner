@@ -4,29 +4,38 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import java.time.Year;
-
 @Entity
 public class Exam {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private String courseName;
     private int term;
     private String year;
+
+    private String url;
+
     private int semester;
     public static final String fkSid = "sessionId";
     @ForeignKey(entity = Session.class, parentColumns =Session.pkName , childColumns ="sessionId" )
     private long sessionId;
-
-    public Exam(String courseName, int term, String year, int semester, long sessionId) {
+    public Exam(String courseName, int term, String year, String url, int semester, long sessionId) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
+        this.url = url;
         this.semester = semester;
         this.sessionId = sessionId;
     }
-    public int getId() {
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    public long getId() {
         return id;
     }
 
@@ -71,7 +80,7 @@ public class Exam {
         this.semester = semester;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }

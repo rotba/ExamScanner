@@ -9,7 +9,7 @@ public class Version {
     public static final String pkName = "id";
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     public static final String fkExam = "examId";
     private long examId;
     private int verNum;
@@ -19,11 +19,11 @@ public class Version {
         this.examId = examId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

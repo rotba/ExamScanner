@@ -1,20 +1,21 @@
 package com.example.examscanner.persistence.entities;
 
 import androidx.room.Entity;
-import androidx.room.Ignore;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class ExamineeSolution {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private long examineeId;
-    private int scannedCaptureId;
+    private long scannedCaptureId;
     public static final String fkSession = "sessionId";
+    @ForeignKey(entity = Session.class, parentColumns = Session.pkName, childColumns = fkSession)
     private long sessionId;
 
-    public ExamineeSolution(long examineeId, int scannedCaptureId, long sessionId) {
+    public ExamineeSolution(long examineeId, long scannedCaptureId, long sessionId) {
         this.examineeId = examineeId;
         this.scannedCaptureId = scannedCaptureId;
         this.sessionId = sessionId;
@@ -28,7 +29,7 @@ public class ExamineeSolution {
         this.sessionId = sessionId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -40,15 +41,15 @@ public class ExamineeSolution {
         this.examineeId = examineeId;
     }
 
-    public int getScannedCaptureId() {
+    public long getScannedCaptureId() {
         return scannedCaptureId;
     }
 
-    public void setScannedCaptureId(int scannedCaptureId) {
+    public void setScannedCaptureId(long scannedCaptureId) {
         this.scannedCaptureId = scannedCaptureId;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }
