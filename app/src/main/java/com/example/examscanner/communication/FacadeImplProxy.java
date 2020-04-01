@@ -6,6 +6,8 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 
@@ -121,19 +123,31 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
+    public QuestionEntityInterface getQuestionByExamIdVerNumAndQNum(long examId, int verNum, int qNum) {
+        return realImpl.getQuestionByExamIdVerNumAndQNum(examId, verNum, qNum);
+    }
+
+    @Override
+    public ExamineeAnswerEntityInterface getExamineeAnswerByExamIdVerNumAndQNumAndExamineeId(long examId, int verNum, int qNum, long examineeId) {
+        return null;
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         return realImpl.getVersionByExamIdAndNumber(eId, num);
     }
 
     @Override
-    public long createVersion(long examId, int versionNumber) {
-        return realImpl.createVersion(examId,versionNumber);
+    public long addVersion(long examId, int versionNumber) {
+        return realImpl.addVersion(examId,versionNumber);
     }
 
+
     @Override
-    public long addQuestion(long vId, int qNum, int correctAnswer) {
-        return realImpl.addQuestion(vId,qNum,correctAnswer);
+    public long addQuestion(long vId, int qNum, int correctAnswer, int leftX, int upY, int rightX, int bottomY) {
+        return realImpl.addQuestion(vId, qNum, correctAnswer, leftX, upY, rightX, bottomY);
     }
+
 
     @Override
     public long createExamineeSolution(long sId, Bitmap bm, long examineeId) {

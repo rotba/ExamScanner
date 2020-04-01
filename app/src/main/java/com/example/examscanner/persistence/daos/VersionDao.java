@@ -9,6 +9,7 @@ import com.example.examscanner.persistence.entities.Version;
 import com.example.examscanner.persistence.entities.relations.VersionWithQuestions;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Dao
 public interface VersionDao {
@@ -16,9 +17,13 @@ public interface VersionDao {
     long insert(Version version);
 
     @Query("SELECT *  FROM version WHERE examId IS :eId AND verNum==:num LIMIT 1")
-    Version ByExamIdAndNumber(long eId, int num);
+    Version getByExamIdAndNumber(long eId, int num);
+
+    @Query("SELECT *  FROM version")
+    List<Version> getAll();
 
     @Transaction
     @Query("SELECT * FROM version WHERE id IS :id LIMIT 1")
     VersionWithQuestions getVersionWithQuestions(long id);
+
 }

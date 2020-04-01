@@ -2,9 +2,10 @@ package com.example.examscanner.persistence.entities;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(indices = {@Index(value = {"examineeId"},unique = true)})
 public class ExamineeSolution {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)

@@ -1,11 +1,14 @@
 package com.example.examscanner.communication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.persistence.AppDatabase;
@@ -49,17 +52,19 @@ public class CommunicationFacadeTest {
 
     private VersionContext setUpVersionContext() {
         ExamContext context = setUpExamContext();
-        return new VersionContext(oot.createVersion(context.eId, 1), context.sId);
+        final int versionNumber = 1;
+        return new VersionContext(oot.addVersion(context.eId, versionNumber), context.sId, context.eId, versionNumber);
     }
 
     private VersionContext setUpVersionNonEmptyContext() {
         ExamContext context = setUpExamContext();
-        VersionContext ans = new VersionContext(oot.createVersion(context.eId, 1), context.sId);
-        oot.addQuestion(ans.vId, 1, 1);
-        oot.addQuestion(ans.vId, 2, 4);
-        oot.addQuestion(ans.vId, 3, 5);
-        oot.addQuestion(ans.vId, 4, 1);
-        oot.addQuestion(ans.vId, 5, 2);
+        final int versionNumber = 1;
+        VersionContext ans = new VersionContext(oot.addVersion(context.eId, versionNumber), context.sId,context.eId,versionNumber);
+        oot.addQuestion(ans.vId, 1, 1,0,0,0,0);
+        oot.addQuestion(ans.vId, 2, 400,0,0,0,0);
+        oot.addQuestion(ans.vId, 3, 5,0,0,0,0);
+        oot.addQuestion(ans.vId, 4, 1,0,0,0,0);
+        oot.addQuestion(ans.vId, 5, 2,0,0,0,0);
         return ans;
     }
 
@@ -79,35 +84,18 @@ public class CommunicationFacadeTest {
     }
 
     @Test
-    public void testCreateAndGetExamDataIsCorrect() {
-        final String comp = "COMP";
-        final String url = "walla.co.il";
-        final String year = "2020";
-        final int term = 1;
-        final int semester = 1;
-        final int sessionId = -1;
-        long id = oot.createExam(comp, url, year, term, semester, sessionId);
-        ExamEntityInterface examEI = oot.getExamById(id);
-        assertEquals(examEI.getCourseName(), comp);
-        assertEquals(examEI.getUrl(), url);
-        assertEquals(examEI.getTerm(), term);
-        assertEquals(examEI.getSemester(), semester);
-        assertEquals(examEI.getSessionId(), sessionId);
-    }
-
-    @Test
     public void testAddVersionNotNull() {
         long examId = setUpExamContext().eId;
         final int versionNumber = 1;
-        long vId = oot.createVersion(examId, versionNumber);
+        long vId = oot.addVersion(examId, versionNumber);
         assertNotNull(oot.getVersionByExamIdAndNumber(examId, versionNumber));
     }
 
     @Test
     public void testAddVersionDataIsCorrect() {
         long examId = setUpExamContext().eId;
-        final int versionNumber = 1;
-        long vId = oot.createVersion(examId, versionNumber);
+        final int versionNumber = 6;
+        long vId = oot.addVersion(examId, versionNumber);
         VersionEntityInterface vEI = oot.getVersionByExamIdAndNumber(examId, versionNumber);
         assertEquals(vEI.getExamId(), examId);
         assertEquals(vEI.getNumber(), versionNumber);
@@ -197,15 +185,90 @@ public class CommunicationFacadeTest {
         }
         assertTrue(assertion);
     }
+    @Test
+    public void testSemiScannedCaptureEntityInterface() {
+        VersionContext versionContext = setUpVersionContext();
+        final Bitmap testJpg1Marked = BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked();
+        final int rightMostY = 1;
+        final int rightMostX = 2;
+        final int upperMostY = 3;
+        final int leftMostX = 4;
+        oot.createSemiScannedCapture(leftMostX, upperMostY, rightMostX, rightMostY,versionContext.sId,versionContext.vId, testJpg1Marked);
+        SemiScannedCaptureEntityInterface ei = oot.getSemiScannedCapture(
+                oot.getSemiScannedCaptureBySession(versionContext.sId)[0]
+        );
+        assertTrue(ei.getBitmap().sameAs(testJpg1Marked));
+        assertEquals(ei.getSessionId(),versionContext.sId);
+        assertEquals(ei.getLeftMostX(),leftMostX);
+        assertEquals(ei.getUpperMostY(),upperMostY);
+        assertEquals(ei.getRightMostX(),rightMostX);
+        assertEquals(ei.getBottomMosty(),rightMostY);
+    }
+
+    @Test
+    public void testVersionEntityInterface() {
+        ExamContext examContext = setUpExamContext();
+        final int versionNumber = 1;
+        oot.addVersion(examContext.eId, versionNumber);
+        VersionEntityInterface ei = oot.getVersionByExamIdAndNumber(examContext.eId,versionNumber);
+        assertEquals(ei.getNumber(),versionNumber);
+        assertEquals(ei.getExamId(),examContext.eId);
+        assertArrayEquals(ei.getQuestions(),new long[0]);
+    }
+    @Test
+    public void testExamEntityInterface() {
+        long sId = setUpSessionContext();
+        final String comp = "COMP";
+        final String url = "walla.co.il";
+        final String year = "2020";
+        final int term = 1;
+        final int semester = 1;
+        final int sessionId = -1;
+        long id = oot.createExam(comp, url, year, term, semester, sessionId);
+        ExamEntityInterface ei = oot.getExamById(id);
+        assertEquals(ei.getCourseName(), comp);
+        assertEquals(ei.getUrl(), url);
+        assertEquals(ei.getTerm(), term);
+        assertEquals(ei.getSemester(), semester);
+        assertEquals(ei.getSessionId(), sessionId);
+        assertArrayEquals(ei.getVersionsIds(), new long[0]);
+    }
+    @Test
+    public void testQuestionEntityInterface() {
+        VersionContext versionContext = setUpVersionContext();
+        final int qNum = 3;
+        final int correctAnswer = 4;
+        final int leftX = 1;
+        final int upY = 2;
+        final int rightX = 3;
+        final int bottomY = 4;
+        oot.addQuestion(versionContext.vId, qNum, correctAnswer, leftX, upY, rightX, bottomY);
+        QuestionEntityInterface ei = oot.getQuestionByExamIdVerNumAndQNum(versionContext.eId,versionContext.vNum,qNum);
+        assertEquals(ei.getLeftX(),leftX);
+        assertEquals(ei.getUpY(),upY);
+        assertEquals(ei.getBottomY(),bottomY);
+        assertEquals(ei.getRightX(),rightX);
+        assertEquals(ei.getCorrectAnswer(),correctAnswer);
+        assertEquals(ei.getVersionId(),versionContext.vId);
+    }
+    @Test
+    public void testExamineeAnswerEntityInterface() {
+
+    }
+
 
 
     private class VersionContext {
         long vId;
         long sId;
+        long eId;
+        int vNum;
 
-        public VersionContext(long vId, long sId) {
+        public VersionContext(long vId, long sId, long eId, int vNum) {
             this.vId = vId;
             this.sId = sId;
+            this.eId =eId;
+            this.vNum = vNum;
         }
 
     }

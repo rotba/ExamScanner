@@ -2,12 +2,13 @@ package com.example.examscanner.communication;
 
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.os.WorkSource;
 
 import androidx.annotation.RequiresApi;
 import androidx.room.Room;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.persistence.AppDatabase;
@@ -198,7 +199,7 @@ public class RealFacadeImple implements CommunicationFacade {
             @Override
             public long[] getVersionsIds() {
                 return db.getExamDao().getExamWithVersions(id).getVersions().stream()
-                        .mapToLong(Version::getExamId).toArray();
+                        .mapToLong(Version::getId).toArray();
             }
 
             @Override
@@ -234,8 +235,55 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
+    public QuestionEntityInterface getQuestionByExamIdVerNumAndQNum(long examId, int verNum, int qNum) {
+        long verId = db.getVersionDao().getByExamIdAndNumber(examId, verNum).getId();
+        Question theQuestion = db.getQuestionDao().getQuestionByVerIdAndQNum(verId,qNum);
+        return new QuestionEntityInterface() {
+            @Override
+            public long getId() {
+                return theQuestion.getId();
+            }
+
+            @Override
+            public long getVersionId() {
+                return theQuestion.getVerId();
+            }
+
+            @Override
+            public long getCorrectAnswer() {
+                return theQuestion.getCorrectAns();
+            }
+
+            @Override
+            public int getLeftX() {
+                return theQuestion.getLeftX();
+            }
+
+            @Override
+            public int getUpY() {
+                return theQuestion.getUpY();
+            }
+
+            @Override
+            public int getRightX() {
+                return theQuestion.getRightX();
+            }
+
+            @Override
+            public int getBottomY() {
+                return theQuestion.getBorromY();
+            }
+        };
+    }
+
+    @Override
+    public ExamineeAnswerEntityInterface getExamineeAnswerByExamIdVerNumAndQNumAndExamineeId(long examId, int verNum, int qNum, long examineeId) {
+        return null;
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
-        Version theVersion = db.getVersionDao().ByExamIdAndNumber(eId, num);
+        Version theVersion = db.getVersionDao().getByExamIdAndNumber(eId, num);
         return new VersionEntityInterface() {
             @Override
             public long getId() {
@@ -262,13 +310,13 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
-    public long createVersion(long examId, int versionNumber) {
+    public long addVersion(long examId, int versionNumber) {
         return db.getVersionDao().insert(new Version(versionNumber, examId));
     }
 
     @Override
-    public long addQuestion(long vId, int qNum, int correctAnswer) {
-        return db.getQuestionDao().insert(new Question(qNum,vId,correctAnswer));
+    public long addQuestion(long vId, int qNum, int correctAnswer, int leftX, int upY, int rightX, int bottomY) {
+        return db.getQuestionDao().insert(new Question(qNum,vId,correctAnswer,leftX, upY, rightX, bottomY));
     }
 
     @Override

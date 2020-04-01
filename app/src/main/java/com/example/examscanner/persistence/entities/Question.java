@@ -15,11 +15,51 @@ public class Question {
     @ForeignKey(entity = Version.class, parentColumns =Version.pkName , childColumns = "verId")
     private long verId;
     private int correctAns;
+    private int leftX;
+    private int upY;
+    private int rightX;
+    private int borromY;
 
-    public Question(int questionNum, long verId, int correctAns) {
+    public Question(int questionNum, long verId, int correctAns, int leftX, int upY, int rightX, int borromY) {
         this.questionNum = questionNum;
         this.verId = verId;
         this.correctAns = correctAns;
+        this.leftX = leftX;
+        this.upY = upY;
+        this.rightX = rightX;
+        this.borromY = borromY;
+    }
+
+    public int getLeftX() {
+        return leftX;
+    }
+
+    public void setLeftX(int leftX) {
+        this.leftX = leftX;
+    }
+
+    public int getUpY() {
+        return upY;
+    }
+
+    public void setUpY(int upY) {
+        this.upY = upY;
+    }
+
+    public int getRightX() {
+        return rightX;
+    }
+
+    public void setRightX(int rightX) {
+        this.rightX = rightX;
+    }
+
+    public int getBorromY() {
+        return borromY;
+    }
+
+    public void setBorromY(int borromY) {
+        this.borromY = borromY;
     }
 
     public long getId() {

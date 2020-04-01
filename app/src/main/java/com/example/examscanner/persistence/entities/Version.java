@@ -1,6 +1,7 @@
 package com.example.examscanner.persistence.entities;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -11,6 +12,7 @@ public class Version {
     @PrimaryKey(autoGenerate = true)
     private long id;
     public static final String fkExam = "examId";
+    @ForeignKey(entity = Exam.class, parentColumns =Exam.pkName , childColumns =fkExam )
     private long examId;
     private int verNum;
 
