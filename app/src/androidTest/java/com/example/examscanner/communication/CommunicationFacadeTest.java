@@ -29,14 +29,12 @@ public class CommunicationFacadeTest {
     public void setUp() throws Exception {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
+        db.clearAllTables();
         RealFacadeImple.setDBTestInstance(db);
         oot = new CommunicationFacadeFactory().create();
     }
 
-    @After
-    public void closeDb() throws IOException {
-        db.clearAllTables();
-    }
+
 
     private long setUpSessionContext() {
         return oot.createNewSession("TEST");
