@@ -57,7 +57,13 @@ public class HomeFragment extends Fragment {
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(homeViewModel.getExams().getValue());
         recyclerView.setAdapter(mAdapter);
-
+        ((FloatingActionButton)root.findViewById(R.id.floating_button_home_create_exam)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action = HomeFragmentDirections.actionNavHomeToCreateExamFragment();
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
         return root;
     }
 

@@ -13,10 +13,6 @@
         <action
             android:id="@+id/action_nav_home_to_createExamFragment"
             app:destination="@id/createExamFragment">
-            <argument
-                android:name="examId"
-                app:argType="integer"
-                android:defaultValue="-1"/>
         </action>
     </fragment>
 
@@ -38,12 +34,6 @@
                 android:defaultValue="-1L" />
         </action>
     </fragment>
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.examscanner.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
 
     <activity
         android:id="@+id/mainActivity2"

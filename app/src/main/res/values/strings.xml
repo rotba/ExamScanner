@@ -43,4 +43,23 @@
     <string name="answers_is_2">2</string>
     <string name="answers_is_3">3</string>
     <string name="answers_is_4">4</string>
+    <string name="course_name">Course name:</string>
+    <string name="term">Term:</string>
+    <string name="term_a">A</string>
+    <string name="term_b">B</string>
+    <string name="term_c">C</string>
+    <string name="semester">Semester:</string>
+    <string name="fall">Fall</string>
+    <string name="spring">Spring</string>
+    <string name="year">Year:</string>
+    <string name="version_add_version">Add version:</string>
+    <string name="choose_pdf">Choose pdf</string>
+    <string name="version_number">Version number:</string>
+    <string name="added">added</string>
+    <string name="add_grader">Add grader:</string>
+    <string name="add_grader_action">Add</string>
+    <string name="create_the_exam">Create</string>
+    <string name="year_2013">2013</string>
+    <string name="hint_calculus">Calculus</string>
+    <string name="hint_email">abs@cdef.com</string>
 </resources>

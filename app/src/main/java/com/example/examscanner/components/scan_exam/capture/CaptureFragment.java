@@ -26,10 +26,7 @@ import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerF
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraPermissionRequester;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
