@@ -1,4 +1,4 @@
-package com.example.examscanner.components.scan_exam.capture;
+package com.example.examscanner.components.scan_exam.capture.camera;
 
 import android.Manifest;
 import android.content.Context;

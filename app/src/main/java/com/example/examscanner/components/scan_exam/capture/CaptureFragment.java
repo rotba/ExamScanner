@@ -3,10 +3,6 @@ package com.example.examscanner.components.scan_exam.capture;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +20,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraPermissionRequester;
 
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableCompletableObserver;
-import io.reactivex.schedulers.Schedulers;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -44,14 +38,15 @@ public class CaptureFragment extends Fragment  {
     private CameraPermissionRequester permissionRequester;
     private CaptureViewModel captureViewModel;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
-    private Msg2BitmapMapper m2bmMapper;
+    private CameraOutputHander outputHander;
+//    private Msg2BitmapMapper m2bmMapper;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        m2bmMapper = new Msg2BitmapFactory(getActivity()).create();
+//        m2bmMapper = new Msg2BitmapFactory(getActivity()).create();
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
         CaptureViewModelFactory factory = new CaptureViewModelFactory(
                 getActivity(),
@@ -59,16 +54,17 @@ public class CaptureFragment extends Fragment  {
                 CaptureFragmentArgs.fromBundle(getArguments()).getSessionId()
         );
         captureViewModel =ViewModelProviders.of(this,factory).get(CaptureViewModel.class);
-        cameraManager = new CameraManager(
+        cameraManager = new CameraMangerFactory(
                 getActivity(),
                 root
-        );
+        ).create();
 
         permissionRequester = new CameraPermissionRequester(
                 ()-> cameraManager.setUp(),
                 getActivity()
         );
         permissionRequester.request();
+        outputHander= new CameraOutputHandlerImpl(captureViewModel,processRequestDisposableContainer);
         return root;
     }
 
@@ -79,35 +75,7 @@ public class CaptureFragment extends Fragment  {
         ConstraintLayout container = (ConstraintLayout)view;
 //        View v = View.inflate(requireContext(), R.layout.camera_ui_container, container);
         ((ImageButton)view.findViewById(R.id.capture_image_button))
-                .setOnClickListener(cameraManager.getClickLIstener(
-                        new Handler(Looper.getMainLooper()){
-                            @Override
-                            public void handleMessage(Message msg) {
-                                super.handleMessage(msg);
-                                captureViewModel.consumeCapture(new Capture(m2bmMapper.map(msg)));
-                                processRequestDisposableContainer.add(
-                                        Completable.fromCallable(()->{
-                                            captureViewModel.processCapture();
-                                            return "Done";
-                                        })
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribeWith(new DisposableCompletableObserver(){
-                                            @Override
-                                            public void onComplete() {
-                                                captureViewModel.postProcessCapture();
-                                            }
-
-                                            @Override
-                                            public void onError(Throwable e) {
-                                                Log.d(TAG, "captureViewModel.processCapture() with ");
-                                                e.printStackTrace();
-                                            }
-                                        })
-                                );
-                            }
-                        }
-                ));
+                .setOnClickListener(cameraManager.createCaptureClickListener(outputHander));
         ((Button)view.findViewById(R.id.button_move_to_detect_corners)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,4 +122,5 @@ public class CaptureFragment extends Fragment  {
         super.onPause();
         cameraManager.onPause();
     }
+
 }
