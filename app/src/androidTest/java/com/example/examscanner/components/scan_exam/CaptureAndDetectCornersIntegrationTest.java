@@ -1,15 +1,22 @@
 package com.example.examscanner.components.scan_exam;
 
 
+import android.view.View;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -35,6 +42,7 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
     @Override
     public void setUp() {
         super.setUp();
+        CameraMangerFactory.setStubInstance(new CameraManagerStub());
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
     }
 
@@ -108,6 +116,19 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         sleepSwipingTime();
         sleepSwipingTime();
+    }
+
+    @Test
+    public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHeNoRepoStub() {
+        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(null);
+        testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe();
+    }
+
+    @Test
+    public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHeNoRepoStubNoCamStub() {
+        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(null);
+        CameraMangerFactory.setStubInstance(null);
+        testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe();
     }
 
     private void navToCapture() {

@@ -1,14 +1,19 @@
 package com.example.examscanner.components.scan_exam.capture.camera;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.camera.camera2.Camera2Config;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.CameraXConfig;
@@ -34,6 +39,7 @@ import java.util.concurrent.Executor;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
+    private static String TAG = "CameraManagerImpl";
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private FragmentActivity activity;
     private ImageCapture imageCapture;
@@ -71,7 +77,6 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
                         .setTargetRotation(activity.getWindowManager().getDefaultDisplay().getRotation())
                         .build();
 
-
         CameraSelector cameraSelector =
                 new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         cameraProvider.bindToLifecycle(activity, cameraSelector, preview, imageCapture);
@@ -80,67 +85,69 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
     @Override
     public View.OnClickListener createCaptureClickListener(CameraOutputHander handler){
         return new View.OnClickListener() {
+            final ImageCapture.OutputFileOptions outputFileOptions =
+                    new ImageCapture.OutputFileOptions.Builder(new File(activity.getFilesDir(),"foo.jpg")).build();
             @Override
             public void onClick(View view) {
+//                imageCapture.takePicture(
+//                        executor,
+//                        new ImageCapture.OnImageCapturedCallback() {
+//                            @Override
+//                            public void onCaptureSuccess(@NonNull ImageProxy image) {
+//                                super.onCaptureSuccess(image);
+//                                ImageProxy.PlaneProxy[] planes = image.getPlanes();
+//                                ByteBuffer yBuffer = planes[0].getBuffer();
+//                                ByteBuffer uBuffer = planes[1].getBuffer();
+//                                ByteBuffer vBuffer = planes[2].getBuffer();
+//
+//                                int ySize = yBuffer.remaining();
+//                                int uSize = uBuffer.remaining();
+//                                int vSize = vBuffer.remaining();
+//                                byte[] nv21 = new byte[ySize + uSize + vSize];
+//                                yBuffer.get(nv21, 0, ySize);
+//                                vBuffer.get(nv21, ySize, vSize);
+//                                uBuffer.get(nv21, ySize + vSize, uSize);
+//
+//                                YuvImage yuvImage = new YuvImage(nv21, ImageFormat.NV21, image.getWidth(), image.getHeight(), null);
+//                                ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                                yuvImage.compressToJpeg(new Rect(0, 0, yuvImage.getWidth(), yuvImage.getHeight()), 75, out);
+//
+//                                byte[] imageBytes = out.toByteArray();
+//                                handler.handleBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+//                                image.close();
+//                            }
+//
+//                            @Override
+//                            public void onError(@NonNull ImageCaptureException exception) {
+//                                super.onError(exception);
+//                                Log.d(TAG, "imageCapture.takePicture()");
+//                                CameraManagerImpl.this.onDestroy();
+//                                exception.printStackTrace();
+//                            }
+//                        }
+//                );
                 imageCapture.takePicture(
+                        outputFileOptions,
                         executor,
-                        new ImageCapture.OnImageCapturedCallback() {
+                        new ImageCapture.OnImageSavedCallback(){
+                            @RequiresApi(api = Build.VERSION_CODES.P)
                             @Override
-                            public void onCaptureSuccess(@NonNull ImageProxy image) {
-                                super.onCaptureSuccess(image);
-                                ImageProxy.PlaneProxy[] planes = image.getPlanes();
-                                ByteBuffer yBuffer = planes[0].getBuffer();
-                                ByteBuffer uBuffer = planes[1].getBuffer();
-                                ByteBuffer vBuffer = planes[2].getBuffer();
-
-                                int ySize = yBuffer.remaining();
-                                int uSize = uBuffer.remaining();
-                                int vSize = vBuffer.remaining();
-                                byte[] nv21 = new byte[ySize + uSize + vSize];
-                                yBuffer.get(nv21, 0, ySize);
-                                vBuffer.get(nv21, ySize, vSize);
-                                uBuffer.get(nv21, ySize + vSize, uSize);
-
-                                YuvImage yuvImage = new YuvImage(nv21, ImageFormat.NV21, image.getWidth(), image.getHeight(), null);
-                                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                                yuvImage.compressToJpeg(new Rect(0, 0, yuvImage.getWidth(), yuvImage.getHeight()), 75, out);
-
-                                byte[] imageBytes = out.toByteArray();
-                                handler.handleBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                                image.close();
+                            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                                Log.d(TAG, "stop");
+                                Bitmap bMap = BitmapFactory.decodeFile(activity.getFilesDir()+"/foo.jpg");
+                                handler.handleBitmap(bMap);
                             }
 
+                            @SuppressLint("RestrictedApi")
                             @Override
                             public void onError(@NonNull ImageCaptureException exception) {
-                                super.onError(exception);
                                 Log.d(TAG, "imageCapture.takePicture()");
                                 CameraManagerImpl.this.onDestroy();
                                 exception.printStackTrace();
                             }
                         }
+
                 );
-//                imageCapture.takePicture(
-//                        finalOutputFileOptions,
-//                        executor,
-//                        new ImageCapture.OnImageSavedCallback(){
-//                            @RequiresApi(api = Build.VERSION_CODES.P)
-//                            @Override
-//                            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-//                                Message completeMessage =
-//                                        handler.obtainMessage(-1, outputFileResults);
-//                                completeMessage.sendToTarget();
-//                            }
-//
-//                            @SuppressLint("RestrictedApi")
-//                            @Override
-//                            public void onError(@NonNull ImageCaptureException exception) {
-//                                Log.d(TAG, "imageCapture.takePicture()");
-//                                CameraManager.this.onDestroy();
-//                                exception.printStackTrace();
-//                            }
-//                        }
-//
-//                );
             }
         };
     }

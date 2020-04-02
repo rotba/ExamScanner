@@ -32,10 +32,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         super(fragmentManager, lifecycle);
         cards = new ArrayList<>();
         for (MutableLiveData<CornerDetectedCapture> mCdc : cornerDetectedCaptures) {
-            CornerDetectionCardFragment f = new CornerDetectionCardFragment();
-            Bundle b = new Bundle();
-            b.putLong(captureId(), mCdc.getValue().getId());
-            f.setArguments(b);
+            CornerDetectionCardFragment f = new CornerDetectionCardFragment(mCdc.getValue().getId());
             cards.add(
                     new CornerDetectionCardData(
                             mCdc.getValue().getId(),

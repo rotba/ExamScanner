@@ -25,11 +25,13 @@ public class CornerDetectionCardFragment extends Fragment {
     private static final String TAG = "ExamScanner.CornerDetectionCardFragment";
     private CornerDetectionViewModel cornerDetectionViewModel;
 //    private ProgressBarHandler progressBarHandler;
-    private int captureId;
+    private long captureId;
     private boolean inProgress = false;
     private ProgressBar pb;
 
-
+    public CornerDetectionCardFragment(long id) {
+        this.captureId = id;
+    }
 
 
     @SuppressLint("LongLogTag")
@@ -43,7 +45,7 @@ public class CornerDetectionCardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        captureId = getArguments().getInt(CornerDetectionCapturesAdapter.captureId());
+//        captureId = getArguments().getInt(CornerDetectionCapturesAdapter.captureId());
         CDViewModelFactory factory = new CDViewModelFactory();
         cornerDetectionViewModel = new ViewModelProvider(getActivity(), factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.item_corner_detected_capture, container, false);
