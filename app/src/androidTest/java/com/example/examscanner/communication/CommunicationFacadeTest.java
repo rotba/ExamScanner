@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
@@ -16,11 +17,12 @@ import com.example.examscanner.persistence.AppDatabase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
 import static org.junit.Assert.*;
-
+@RunWith(AndroidJUnit4.class)
 public class CommunicationFacadeTest {
     CommunicationFacade oot;
     AppDatabase db;
@@ -29,12 +31,14 @@ public class CommunicationFacadeTest {
     public void setUp() throws Exception {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
-        db.clearAllTables();
         RealFacadeImple.setDBTestInstance(db);
         oot = new CommunicationFacadeFactory().create();
     }
 
-
+    @After
+    public void tearDown() throws Exception {
+        db.clearAllTables();
+    }
 
     private long setUpSessionContext() {
         return oot.createNewSession("TEST");

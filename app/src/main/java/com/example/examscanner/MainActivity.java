@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.examscanner.communication.ContextProvider;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.stubs.StubImageProcessingFactory;
 import com.google.android.material.navigation.NavigationView;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 //            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 //        }
         if(stubsMode) ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(StubImageProcessingFactory.create(this));
+        ContextProvider.set(this.getApplicationContext());
         State.getState().onInitialCreate(this);
     }
 

@@ -1,5 +1,6 @@
 package com.example.examscanner.communication;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 
@@ -36,7 +37,7 @@ public class RealFacadeImple implements CommunicationFacade {
     public static RealFacadeImple getInstance() {
         if (instance == null) {
             AppDatabase theDB = dbTestInstance==null?
-                    Room.databaseBuilder(getApplicationContext(),AppDatabase.class, "database-name").build():
+                    Room.databaseBuilder(ContextProvider.get(),AppDatabase.class, "database-name").build():
                     dbTestInstance;
             instance = new RealFacadeImple(
                     theDB,

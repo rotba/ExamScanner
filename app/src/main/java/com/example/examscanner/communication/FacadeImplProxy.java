@@ -16,7 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FacadeImplProxy implements CommunicationFacade {
-    private RealFacadeImple realImpl = RealFacadeImple.getInstance();
+    private RealFacadeImple realImpl  = RealFacadeImple.getInstance();
     @Override
     public JSONObject getExamGoingToEarse(long id) {
         if (useReal()){

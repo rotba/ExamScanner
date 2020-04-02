@@ -1,5 +1,7 @@
 package com.example.examscanner.communication;
 
+import android.content.Context;
+
 public class CommunicationFacadeFactory {
     private static boolean testMode = false;
 
