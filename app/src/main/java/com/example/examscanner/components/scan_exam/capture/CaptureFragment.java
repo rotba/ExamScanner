@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,7 +26,10 @@ import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerF
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraPermissionRequester;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -39,6 +43,7 @@ public class CaptureFragment extends Fragment  {
     private CaptureViewModel captureViewModel;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
     private CameraOutputHander outputHander;
+    private ProgressBar pb;
 //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -73,9 +78,15 @@ public class CaptureFragment extends Fragment  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ConstraintLayout container = (ConstraintLayout)view;
-//        View v = View.inflate(requireContext(), R.layout.camera_ui_container, container);
+        pb = (ProgressBar)view.findViewById(R.id.pb_cap);
+        pb.setVisibility(View.INVISIBLE);
         ((ImageButton)view.findViewById(R.id.capture_image_button))
-                .setOnClickListener(cameraManager.createCaptureClickListener(outputHander));
+                .setOnClickListener(
+                        new ProgressBarOnClickListenerDecorator(
+                                pb,
+                                cameraManager.createCaptureClickListener(outputHander)
+                        )
+                );
         ((Button)view.findViewById(R.id.button_move_to_detect_corners)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,4 +134,18 @@ public class CaptureFragment extends Fragment  {
         cameraManager.onPause();
     }
 
+    private class ProgressBarOnClickListenerDecorator implements View.OnClickListener{
+        private ProgressBar pb;
+        private View.OnClickListener complicatedCalculation;
+
+        public ProgressBarOnClickListenerDecorator(ProgressBar pb, View.OnClickListener complicatedCalculation) {
+            this.pb = pb;
+            this.complicatedCalculation = complicatedCalculation;
+        }
+
+        @Override
+        public void onClick(View v) {
+            complicatedCalculation.onClick(v);
+        }
+    }
 }
