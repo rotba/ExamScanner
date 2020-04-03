@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,78 +8,98 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout7"
-        android:layout_width="match_parent"
-        android:layout_height="165dp"
+        android:layout_width="411dp"
+        android:layout_height="130dp"
         android:background="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="-16dp">
-
-        <TextView
-            android:id="@+id/capture_processing_progress"
-            android:layout_width="@dimen/round_button_medium"
-            android:layout_height="@dimen/round_button_medium"
-            android:background="@android:color/darker_gray"
-            android:contentDescription="@string/switch_camera_button_alt"
-            android:padding="@dimen/spacing_small"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/capture_image_button"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
             android:id="@+id/capture_image_button"
-            android:layout_width="@dimen/round_button_large"
-            android:layout_height="@dimen/round_button_large"
+            android:layout_width="94dp"
+            android:layout_height="89dp"
             android:background="@drawable/ic_shutter"
             android:contentDescription="@string/capture_button_alt"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.512" />
 
-        <Button
-            android:id="@+id/button_move_to_detect_corners"
-            android:layout_width="56dp"
-            android:layout_height="83dp"
+        <FrameLayout
+            android:layout_width="82dp"
+            android:layout_height="92dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.669"
-            app:layout_constraintStart_toEndOf="@+id/capture_image_button"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.451" />
+            app:layout_constraintVertical_bias="0.4">
+
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="75dp"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/capture_processing_progress"
+                    android:layout_width="44dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:background="@drawable/badge_circle"
+                    android:contentDescription="@string/switch_camera_button_alt"
+                    android:gravity="center"
+                    android:padding="@dimen/spacing_small"
+                    android:scaleType="fitCenter"
+                    android:textColorHint="@color/icActive"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_move_to_detect_corners"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_next_step" />
+            </LinearLayout>
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="516dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.58"
-        tools:layout_editor_absoluteX="16dp">
+        app:layout_constraintVertical_bias="0.0">
+
         <ProgressBar
             android:id="@+id/pb_cap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <androidx.camera.view.PreviewView
                 android:id="@+id/preview_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
 
+            </androidx.camera.view.PreviewView>
         </FrameLayout>
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

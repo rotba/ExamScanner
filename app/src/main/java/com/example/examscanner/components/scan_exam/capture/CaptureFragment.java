@@ -34,7 +34,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * Activities that contain this fragment must implement the
  * create an instance of this fragment.
  */
-public class CaptureFragment extends Fragment  {
+public class CaptureFragment extends Fragment {
     private CameraManager cameraManager;
     private CameraPermissionRequester permissionRequester;
     private CaptureViewModel captureViewModel;
@@ -55,18 +55,18 @@ public class CaptureFragment extends Fragment  {
                 CaptureFragmentArgs.fromBundle(getArguments()).getVersionId(),
                 CaptureFragmentArgs.fromBundle(getArguments()).getSessionId()
         );
-        captureViewModel =ViewModelProviders.of(this,factory).get(CaptureViewModel.class);
+        captureViewModel = ViewModelProviders.of(this, factory).get(CaptureViewModel.class);
         cameraManager = new CameraMangerFactory(
                 getActivity(),
                 root
         ).create();
 
         permissionRequester = new CameraPermissionRequester(
-                ()-> cameraManager.setUp(),
+                () -> cameraManager.setUp(),
                 getActivity()
         );
         permissionRequester.request();
-        outputHander= new CameraOutputHandlerImpl(captureViewModel,processRequestDisposableContainer);
+        outputHander = new CameraOutputHandlerImpl(captureViewModel, processRequestDisposableContainer);
         return root;
     }
 
@@ -74,41 +74,41 @@ public class CaptureFragment extends Fragment  {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ConstraintLayout container = (ConstraintLayout)view;
-        pb = (ProgressBar)view.findViewById(R.id.pb_cap);
+        ConstraintLayout container = (ConstraintLayout) view;
+        pb = (ProgressBar) view.findViewById(R.id.pb_cap);
         pb.setVisibility(View.INVISIBLE);
-        ((ImageButton)view.findViewById(R.id.capture_image_button))
+        ((ImageButton) view.findViewById(R.id.capture_image_button))
                 .setOnClickListener(
                         new ProgressBarOnClickListenerDecorator(
                                 pb,
                                 cameraManager.createCaptureClickListener(outputHander)
                         )
                 );
-        ((Button)view.findViewById(R.id.button_move_to_detect_corners)).setOnClickListener(new View.OnClickListener() {
+        final Button nextStepButton = (Button) view.findViewById(R.id.button_move_to_detect_corners);
+        nextStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CaptureFragmentDirections.ActionCaptureFragmentToCornerDetectionFragment action =
                         CaptureFragmentDirections.actionCaptureFragmentToCornerDetectionFragment();
-                action.setExamId((int)captureViewModel.getVersionId());
+                action.setExamId((int) captureViewModel.getVersionId());
                 Navigation.findNavController(view).navigate(action);
             }
         });
         captureViewModel.getNumOfTotalCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer totalCaptures) {
-                ((TextView)view.findViewById(R.id.capture_processing_progress))
-                        .setText(
-                                captureViewModel.getNumOfProcessedCaptures().getValue()+"/"+totalCaptures
-                        );
+                final TextView viewById = (TextView) view.findViewById(R.id.capture_processing_progress);
+                viewById.setText(captureViewModel.getNumOfProcessedCaptures().getValue() + "/" + totalCaptures);
+                viewById.setVisibility(totalCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
+                nextStepButton.setVisibility(totalCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
             }
         });
         captureViewModel.getNumOfProcessedCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer processedCaptures) {
-                ((TextView)view.findViewById(R.id.capture_processing_progress))
-                        .setText(
-                                processedCaptures+"/"+captureViewModel.getNumOfTotalCaptures().getValue()
-                        );
+                int totalCaptures = captureViewModel.getNumOfTotalCaptures().getValue();
+                final TextView viewById = (TextView) view.findViewById(R.id.capture_processing_progress);
+                viewById.setText(processedCaptures + "/" + captureViewModel.getNumOfTotalCaptures().getValue());
             }
         });
     }
@@ -116,7 +116,7 @@ public class CaptureFragment extends Fragment  {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
-        permissionRequester.onRequestPermissionsResult(requestCode,permissions, grantResults);
+        permissionRequester.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class CaptureFragment extends Fragment  {
         cameraManager.onPause();
     }
 
-    private class ProgressBarOnClickListenerDecorator implements View.OnClickListener{
+    private class ProgressBarOnClickListenerDecorator implements View.OnClickListener {
         private ProgressBar pb;
         private View.OnClickListener complicatedCalculation;
 

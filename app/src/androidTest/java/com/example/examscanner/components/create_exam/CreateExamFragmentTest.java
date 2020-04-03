@@ -17,6 +17,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
 
 public class CreateExamFragmentTest  extends StateFullTest {
@@ -32,7 +33,23 @@ public class CreateExamFragmentTest  extends StateFullTest {
         final String comp = "COMP";
         final String year = "2020";
         final String verNum = "3";
+        final String term = "1";
         final String aGraderAdress = "rotba@post.bgu.ac.il";
+        testCreateOneExam(comp, year, verNum, term, aGraderAdress);
+    }
+    @Test
+    public void testOn2CreatedExamItAddsToTheHomeAdapter() {
+        testOnCreatedExamItAddsToTheHomeAdapter();
+        onView(withId(R.id.floating_button_home_create_exam)).perform(click());
+        final String comp = "SPL";
+        final String year = "2019";
+        final String verNum = "3";
+        final String term = "2";
+        final String aGraderAdress = "rotba@post.bgu.ac.il";
+        testCreateOneExam(comp, year, verNum, term, aGraderAdress);
+    }
+
+    private void testCreateOneExam(String comp, String year, String verNum, String term, String aGraderAdress) {
         onView(withId(R.id.editText_create_exam_course_name)).perform(replaceText(comp));
         onView(withId(R.id.radioButton_create_exam_term_b)).perform(click());
         onView(withId(R.id.radioButton_create_exam_semester_fall)).perform(click());
@@ -42,8 +59,8 @@ public class CreateExamFragmentTest  extends StateFullTest {
         onView(withId(R.id.editText_create_exam_grader_address)).perform(replaceText(aGraderAdress));
         onView(withId(R.id.button_create_exam_create)).perform(click());
         onView(withText(R.string.create_exam_dialog_ok)).perform(click());
-        onView(withText(comp)).check(matches(isDisplayed()));
-        onView(withText(verNum)).check(matches(isDisplayed()));
-        onView(withText(year)).check(matches(isDisplayed()));
+        onView(withText(containsString(comp))).check(matches(isDisplayed()));
+        onView(withText(containsString(year))).check(matches(isDisplayed()));
+        onView(withText(containsString(term))).check(matches(isDisplayed()));
     }
 }
