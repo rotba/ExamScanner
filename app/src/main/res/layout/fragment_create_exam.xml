@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:windowSoftInputMode="adjustPan">
+    android:layout_height="match_parent">
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -85,6 +85,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <RadioGroup
+        android:id="@+id/radioGroup_term"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -135,6 +136,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <RadioGroup
+        android:id="@+id/radioGroup_semester"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -215,10 +217,12 @@
         android:layout_height="52dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="1dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
         android:inputType="numberDecimal"
         android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_create_exam_upload_version_image"
         app:layout_constraintStart_toEndOf="@+id/textView_create_exam_version_num"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
@@ -285,14 +289,16 @@
         android:id="@+id/editText_create_exam_grader_address"
         android:layout_width="239dp"
         android:layout_height="42dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_create_exam_add_greader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/guideline9"
-        android:padding="8dp"/>
+        app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
     <Button
         android:id="@+id/button_create_exam_add_greader"
@@ -319,5 +325,15 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_create_exam"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

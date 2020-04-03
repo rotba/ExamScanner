@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class VersionConverter implements Converter<JSONObject, Version> {
     @Override
-    public Version convert(JSONObject jsonObject) throws JSONException {
+    public Version convert(JSONObject jsonObject) {
         return null;
     }
 }

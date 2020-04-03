@@ -1,6 +1,5 @@
 package com.example.examscanner.communication;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 
@@ -23,10 +22,9 @@ import com.example.examscanner.persistence.entities.Version;
 import com.example.examscanner.persistence.files_management.FilesManager;
 import com.example.examscanner.persistence.files_management.FilesManagerFactory;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import java.util.List;
 
 public class RealFacadeImple implements CommunicationFacade {
     private static RealFacadeImple instance;
@@ -57,25 +55,7 @@ public class RealFacadeImple implements CommunicationFacade {
         this.fm = fm;
     }
 
-    @Override
-    public JSONObject getExamGoingToEarse(long id) {
-        return null;
-    }
-
-    @Override
-    public JSONObject getVersionGoingToEarse(int id) {
-        return null;
-    }
-
-    @Override
-    public JSONArray getExamsGoingToEarse() {
-        return null;
-    }
-
-    @Override
-    public JSONObject getGraderGoingToEarse(int id) {
-        return null;
-    }
+    
 
     @Override
     public long createExam(String courseName, String url, String year, int term, int semester, long sessionId) {
@@ -190,49 +170,7 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public ExamEntityInterface getExamById(long id) {
         Exam theExam = db.getExamDao().getById(id);
-        return new ExamEntityInterface() {
-            @Override
-            public long getID() {
-                return theExam.getId();
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public long[] getVersionsIds() {
-                return db.getExamDao().getExamWithVersions(id).getVersions().stream()
-                        .mapToLong(Version::getId).toArray();
-            }
-
-            @Override
-            public String getCourseName() {
-                return theExam.getCourseName();
-            }
-
-            @Override
-            public String getUrl() {
-                return theExam.getUrl();
-            }
-
-            @Override
-            public String getYear() {
-                return theExam.getYear();
-            }
-
-            @Override
-            public int getTerm() {
-                return theExam.getTerm();
-            }
-
-            @Override
-            public long getSessionId() {
-                return theExam.getSessionId();
-            }
-
-            @Override
-            public int getSemester() {
-                return theExam.getSemester();
-            }
-        };
+        return examEntity2EntityInterface(theExam);
     }
 
     @Override
@@ -283,6 +221,23 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
+    public ExamEntityInterface[] getExams() {
+        List<Exam> examEntities = db.getExamDao().getAll();
+        ExamEntityInterface[] ans = new ExamEntityInterface[examEntities.size()];
+        for (int i = 0; i <ans.length ; i++) {
+            ans[i] = examEntity2EntityInterface(examEntities.get(i));
+        }
+        return ans;
+    }
+
+    @Override
+    public void updateExam(long id, String courseName, int semester, int term, long[] versions, long sessionId, String year) {
+        Exam e = new Exam(courseName,term,year,"THE_EMPTY_URL",semester,sessionId);
+        e.setId(id);
+        db.getExamDao().update(e);
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         Version theVersion = db.getVersionDao().getByExamIdAndNumber(eId, num);
         return new VersionEntityInterface() {
@@ -330,5 +285,53 @@ public class RealFacadeImple implements CommunicationFacade {
     public long[] getQuestionsByVersionId(long vId) {
         return db.getQuestionDao().getVersionWithQuestions(vId).getQuestions().
                 stream().mapToLong(Question::getId).toArray();
+    }
+
+    @NotNull
+    private ExamEntityInterface examEntity2EntityInterface(Exam theExam) {
+        long id = theExam.getId();
+        return new ExamEntityInterface() {
+            @Override
+            public long getID() {
+                return theExam.getId();
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public long[] getVersionsIds() {
+                return db.getExamDao().getExamWithVersions(id).getVersions().stream()
+                        .mapToLong(Version::getId).toArray();
+            }
+
+            @Override
+            public String getCourseName() {
+                return theExam.getCourseName();
+            }
+
+            @Override
+            public String getUrl() {
+                return theExam.getUrl();
+            }
+
+            @Override
+            public String getYear() {
+                return theExam.getYear();
+            }
+
+            @Override
+            public int getTerm() {
+                return theExam.getTerm();
+            }
+
+            @Override
+            public long getSessionId() {
+                return theExam.getSessionId();
+            }
+
+            @Override
+            public int getSemester() {
+                return theExam.getSemester();
+            }
+        };
     }
 }

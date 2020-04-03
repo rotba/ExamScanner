@@ -13,31 +13,23 @@ import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<List<Exam>> mExams;
-    private Repository<Exam> examRepository = new ExamRepositoryFactory().create();
+    private Repository<Exam> examRepository;
 
-    public LiveData<List<Exam>> getExams() {
-        return mExams;
+    public HomeViewModel(Repository<Exam> examRepository) {
+         this.examRepository = examRepository;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void init() {
-        if(mExams!=null){
-            return;
-        }else{
-            mExams = new MutableLiveData<>();
-            final int currentGraderId = State.getState().getGraderId();
-            mExams.setValue(examRepository.get(new Predicate<Exam>() {
-                @Override
-                public boolean test(Exam exam) {
-                    return exam.associatedWithGrader(currentGraderId);
-                }
-            }));
+    public List<LiveData<Exam>> getExams() {
+        List<LiveData<Exam>>  mExams = new ArrayList<>();
+        for (Exam e :examRepository.get(e->true)) {
+            mExams.add(new MutableLiveData<>(e));
         }
+        return mExams;
     }
 }

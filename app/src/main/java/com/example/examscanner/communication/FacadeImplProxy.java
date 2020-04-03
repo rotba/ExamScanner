@@ -11,54 +11,8 @@ import com.example.examscanner.communication.entities_interfaces.QuestionEntityI
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class FacadeImplProxy implements CommunicationFacade {
     private RealFacadeImple realImpl  = RealFacadeImple.getInstance();
-    @Override
-    public JSONObject getExamGoingToEarse(long id) {
-        if (useReal()){
-            return realImpl.getExamGoingToEarse(id);
-        }
-        else {
-            try {
-                return new JSONObject()
-                        .put("id", "0")
-                        .put("manager", "0")
-                        .put("graders", new JSONArray("[0]"))
-                        .put("course_name", "COMP")
-                        .put("moed", "A");
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-    }
-
-    @Override
-    public JSONObject getVersionGoingToEarse(int id) {
-        if (useReal()){
-            return realImpl.getExamGoingToEarse(id);
-        }
-        else {
-            String someAnwersString = "[1,2,3,2,1,3,4,5,3,3,3,3,1,1,1]";
-            try {
-                return new JSONObject()
-                        .put("exam_id", "0")
-                        .put("answers", new JSONArray(someAnwersString));
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-    }
-
-    @Override
-    public JSONObject getGraderGoingToEarse(int id) {
-        return null;
-    }
 
     @Override
     public long createExam(String courseName, String url, String year, int term, int semester, long sessionId) {
@@ -133,6 +87,16 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
+    public ExamEntityInterface[] getExams() {
+        return realImpl.getExams();
+    }
+
+    @Override
+    public void updateExam(long id, String courseName, int semester, int term, long[] versions, long sessionId, String year) {
+        realImpl.updateExam(id, courseName, semester, term, versions, sessionId, year);
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         return realImpl.getVersionByExamIdAndNumber(eId, num);
     }
@@ -162,10 +126,5 @@ public class FacadeImplProxy implements CommunicationFacade {
 
     private boolean useReal(){return false;}
 
-    @Override
-    public JSONArray getExamsGoingToEarse() {
-        JSONArray ans =  new JSONArray();
-        ans.put(getExamGoingToEarse(0));
-        return ans;
-    }
+
 }

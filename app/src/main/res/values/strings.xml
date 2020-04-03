@@ -62,4 +62,6 @@
     <string name="year_2013">2013</string>
     <string name="hint_calculus">Calculus</string>
     <string name="hint_email">abs@cdef.com</string>
+    <string name="create_exam_dialog_exam_created">Exam created!</string>
+    <string name="create_exam_dialog_ok">OK</string>
 </resources>

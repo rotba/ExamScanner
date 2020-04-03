@@ -8,14 +8,7 @@ import com.example.examscanner.communication.entities_interfaces.QuestionEntityI
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public interface CommunicationFacade {
-    public JSONObject getExamGoingToEarse(long id);
-    public JSONObject getVersionGoingToEarse(int id);
-    public JSONArray getExamsGoingToEarse();
-    public JSONObject getGraderGoingToEarse(int id);
     public long createExam(String courseName, String url, String year, int term, int semester, long sessionId);
     public long getExamIdBySession(long sId);
     public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, long versionId, Bitmap bm);
@@ -34,4 +27,6 @@ public interface CommunicationFacade {
     public ExamEntityInterface getExamById(long id);
     public QuestionEntityInterface getQuestionByExamIdVerNumAndQNum(long examId, int verNum, int qNum);
     public ExamineeAnswerEntityInterface getExamineeAnswerByExamIdVerNumAndQNumAndExamineeId(long examId, int verNum, int qNum, long examineeId);
+    public ExamEntityInterface[] getExams();
+    public void updateExam(long id, String courseName, int semester, int term, long[] versions, long sessionId, String year);
 }

@@ -49,12 +49,7 @@ public class CDCRepository implements Repository<CornerDetectedCapture> {
     @Override
     public CornerDetectedCapture get(long id) {
         Long lid = new Long(id);
-        try {
-            return converter.convert(comFacade.getSemiScannedCapture(lid));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return converter.convert(comFacade.getSemiScannedCapture(lid));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

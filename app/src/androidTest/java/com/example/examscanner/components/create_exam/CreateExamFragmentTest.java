@@ -38,10 +38,10 @@ public class CreateExamFragmentTest  extends StateFullTest {
         onView(withId(R.id.radioButton_create_exam_semester_fall)).perform(click());
         onView(withId(R.id.editText_create_exam_year)).perform(replaceText(year));
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText(verNum));
-        onView(withId(R.id.button_create_exam_upload_version_image)).perform(replaceText(verNum));
+        onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
         onView(withId(R.id.editText_create_exam_grader_address)).perform(replaceText(aGraderAdress));
         onView(withId(R.id.button_create_exam_create)).perform(click());
-        onView(withContentDescription("Navigate up")).perform(click());
+        onView(withText(R.string.create_exam_dialog_ok)).perform(click());
         onView(withText(comp)).check(matches(isDisplayed()));
         onView(withText(verNum)).check(matches(isDisplayed()));
         onView(withText(year)).check(matches(isDisplayed()));
