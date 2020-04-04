@@ -1,6 +1,8 @@
 package com.example.examscanner.components.scan_exam.capture;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -24,7 +28,6 @@ import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
-import com.example.examscanner.components.scan_exam.capture.camera.CameraPermissionRequester;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -36,11 +39,11 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 public class CaptureFragment extends Fragment {
     private CameraManager cameraManager;
-    private CameraPermissionRequester permissionRequester;
     private CaptureViewModel captureViewModel;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
     private CameraOutputHander outputHander;
     private ProgressBar pb;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
 //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -48,7 +51,6 @@ public class CaptureFragment extends Fragment {
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        m2bmMapper = new Msg2BitmapFactory(getActivity()).create();
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
         CaptureViewModelFactory factory = new CaptureViewModelFactory(
                 getActivity(),
@@ -60,13 +62,7 @@ public class CaptureFragment extends Fragment {
                 getActivity(),
                 root
         ).create();
-
-        permissionRequester = new CameraPermissionRequester(
-                () -> cameraManager.setUp(),
-                getActivity()
-        );
-        permissionRequester.request();
-        outputHander = new CameraOutputHandlerImpl(captureViewModel, processRequestDisposableContainer);
+        requestCamera();
         return root;
     }
 
@@ -74,6 +70,7 @@ public class CaptureFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        outputHander = new CameraOutputHandlerImpl(captureViewModel, processRequestDisposableContainer);
         ConstraintLayout container = (ConstraintLayout) view;
         pb = (ProgressBar) view.findViewById(R.id.pb_cap);
         pb.setVisibility(View.INVISIBLE);
@@ -113,10 +110,43 @@ public class CaptureFragment extends Fragment {
         });
     }
 
+    private void requestCamera() {
+        // Permission is not granted
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.CAMERA)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                requestPermissions(new String[]{Manifest.permission.CAMERA},
+                        MY_PERMISSIONS_REQUEST_CAMERA);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            cameraManager.setUp();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
-        permissionRequester.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_CAMERA && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            cameraManager.setUp();
+        }
+        int x = 1;
+        x+=1;
+        System.out.println(x);
     }
 
     @Override

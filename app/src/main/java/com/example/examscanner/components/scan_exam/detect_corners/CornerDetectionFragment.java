@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,58 +36,24 @@ public class CornerDetectionFragment extends Fragment {
     private static final String TAG = "ExamScanner";
     private CornerDetectionViewModel cornerDetectionViewModel;
     private CornerDetectionCapturesAdapter cornerDetectionCapturesAdapter;
+    private ViewPager2 viewPager;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        CDViewModelFactory factory =
-                new CDViewModelFactory(
-                        getActivity(),
-                        CornerDetectionFragmentArgs.fromBundle(getArguments()).getExamId()
-                );
-        cornerDetectionViewModel = new ViewModelProvider(this, factory).get(CornerDetectionViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_corner_detection, container, false);
         return inflater.inflate(R.layout.fragment_corner_detection, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ViewPager2 viewPager = (ViewPager2) view.findViewById(R.id.viewPager2_corner_detected_captures);
-        cornerDetectionCapturesAdapter =
-                new CornerDetectionCapturesAdapter(
-                        getActivity().getSupportFragmentManager(),
-                        getActivity().getLifecycle(),
-                        cornerDetectionViewModel.getPreProcessedCDCs(), viewPager);
-        viewPager.setAdapter(cornerDetectionCapturesAdapter);
-
-        cornerDetectionCapturesAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
-                        (integer+1) + "/" + cornerDetectionCapturesAdapter.getmItemCount().getValue()
-                );
-            }
-        });
-        cornerDetectionCapturesAdapter.getmItemCount().observe(getActivity(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
-                        (cornerDetectionCapturesAdapter.getPosition().getValue()+1) + "/" + integer
-                );
-            }
-        });
-
-        cornerDetectionViewModel.getNumberOfScannedCaptures().observe(getActivity(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                ((TextView) view.findViewById(R.id.textView_cd_processing_progress)).setText(
-                        integer + "/" + cornerDetectionViewModel.getNumberOfCDCaptures().getValue()
-                );
-            }
-        });
+        ((ProgressBar)view.findViewById(R.id.progressBar_detect_corners)).setVisibility(View.VISIBLE);
+        Completable.fromAction(this::createViewModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onViewModelCreated, this::onViewModelCreatedFail);
+        viewPager = (ViewPager2) view.findViewById(R.id.viewPager2_corner_detected_captures);
         ((Button) view.findViewById(R.id.button_cd_nav_to_resolve_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +73,55 @@ public class CornerDetectionFragment extends Fragment {
             }
         });
 
+    }
+
+    private void onViewModelCreated() {
+        cornerDetectionCapturesAdapter =
+                new CornerDetectionCapturesAdapter(
+                        getActivity().getSupportFragmentManager(),
+                        getActivity().getLifecycle(),
+                        cornerDetectionViewModel.getPreProcessedCDCs(), viewPager);
+        viewPager.setAdapter(cornerDetectionCapturesAdapter);
+
+        cornerDetectionCapturesAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                ((TextView) getActivity().findViewById(R.id.textView_cd_current_position)).setText(
+                        (integer+1) + "/" + cornerDetectionCapturesAdapter.getmItemCount().getValue()
+                );
+            }
+        });
+        cornerDetectionCapturesAdapter.getmItemCount().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                ((TextView) getActivity().findViewById(R.id.textView_cd_current_position)).setText(
+                        (cornerDetectionCapturesAdapter.getPosition().getValue()+1) + "/" + integer
+                );
+            }
+        });
+
+        cornerDetectionViewModel.getNumberOfScannedCaptures().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                ((TextView) getActivity().findViewById(R.id.textView_cd_processing_progress)).setText(
+                        integer + "/" + cornerDetectionViewModel.getNumberOfCDCaptures().getValue()
+                );
+            }
+        });
+        ((ProgressBar)getActivity().findViewById(R.id.progressBar_detect_corners)).setVisibility(View.INVISIBLE);
+    }
+
+    private void onViewModelCreatedFail(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
+    private void createViewModel() {
+        CDViewModelFactory factory =
+                new CDViewModelFactory(
+                        getActivity(),
+                        CornerDetectionFragmentArgs.fromBundle(getArguments()).getExamId()
+                );
+        cornerDetectionViewModel = new ViewModelProvider(this, factory).get(CornerDetectionViewModel.class);
     }
 
     @NotNull

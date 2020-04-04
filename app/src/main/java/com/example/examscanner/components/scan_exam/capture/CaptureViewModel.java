@@ -49,9 +49,7 @@ public class CaptureViewModel extends ViewModel {
 
     public void consumeCapture(Capture capture) {
         unProcessedCaptures.add(capture);
-        mNumOfTotalCaptures.setValue(
-                unProcessedCaptures.size() + mNumOfProcessedCaptures.getValue()
-        );
+        mNumOfTotalCaptures.setValue(mNumOfTotalCaptures.getValue()+1);
     }
 
     public void processCapture() {
