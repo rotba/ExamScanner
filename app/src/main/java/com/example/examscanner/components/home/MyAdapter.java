@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,10 +18,13 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<LiveData<Exam>> mExams;
+    private HomeFragment.OnItemClick onItemClick;
+
     private static final String TAG = "MyAdapter";
 
-    public MyAdapter(List<LiveData<Exam>> exams) {
+    public MyAdapter(List<LiveData<Exam>> exams, HomeFragment.OnItemClick onItemClick) {
         this.mExams = exams;
+        this.onItemClick = onItemClick;
     }
 
     @Override
@@ -34,7 +38,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: called");
-        holder.examName.setText(mExams.get(position).getValue().toString());
+        Exam  e = mExams.get(position).getValue();
+        holder.examName.setText(e.toString());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClick.onItemClick(e);
+            }
+        });
     }
 
     @Override
@@ -51,6 +62,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             examName = v.findViewById(R.id.exam_name);
             parentLayout = v;
         }
-
     }
+
+
 }

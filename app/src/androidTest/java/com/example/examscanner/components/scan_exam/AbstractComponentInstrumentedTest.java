@@ -12,25 +12,28 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class AbstractComponentInstrumentedTest {
     private AppDatabase db;
+    protected DBCallback dbCallback = (theDb -> {});
     @Before
     public void setUp(){
         CommunicationFacadeFactory.setTestMode();
         db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase.class).build();
+        dbCallback.call(db);
         RealFacadeImple.setDBTestInstance(db);
     }
 
     @After
     public void tearDown() throws Exception {
         db.clearAllTables();
+    }
+
+    protected interface DBCallback{
+        public void call(AppDatabase db);
     }
 }

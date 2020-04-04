@@ -32,7 +32,6 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
     @Override
     public void setUp() {
         super.setUp();
-
         login();
     }
 

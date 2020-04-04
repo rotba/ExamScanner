@@ -79,13 +79,23 @@ public class HomeFragment extends Fragment {
 
 
     public void onExamsRetrival(List<LiveData<Exam>> exams) {
-        mAdapter = new MyAdapter(exams);
+        mAdapter = new MyAdapter(exams, this::onItemClick);
         recyclerView.setAdapter(mAdapter);
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_home)).setVisibility(View.INVISIBLE);
+    }
+
+    public void onItemClick(Exam e){
+        HomeFragmentDirections.ActionNavHomeToCaptureFragment action =
+                HomeFragmentDirections.actionNavHomeToCaptureFragment();
+        action.setExamId(e.getId());
+        NavHostFragment.findNavController(this).navigate(action);
     }
 
     public HomeViewModel getHomeViewModel() {
         return homeViewModel;
     }
 
+    interface OnItemClick {
+        public void onItemClick(Exam e);
+    }
 }
