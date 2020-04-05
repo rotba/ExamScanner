@@ -6,6 +6,7 @@ import com.example.examscanner.repositories.grader.ExamManager;
 import com.example.examscanner.repositories.grader.Grader;
 import com.example.examscanner.repositories.version.Version;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Exam {
@@ -19,6 +20,18 @@ public class Exam {
     protected String year;
     private long sessionId;
     public Exam(ExamManager manager, List<Grader> graders, String courseName, int moed, int semester, long[] versions, long sessionId, String year) {
+        this.courseName = courseName;
+        this.term = moed;
+        this.semester = semester;
+        this.versions = versions;
+        this.manager=manager;
+        this.graders=graders;
+        this.sessionId = sessionId;
+        this.year = year;
+    }
+
+    public Exam(long id, ExamManager manager, List<Grader> graders, String courseName, int moed, int semester, long[] versions, long sessionId, String year) {
+        this.id = id;
         this.courseName = courseName;
         this.term = moed;
         this.semester = semester;

@@ -40,7 +40,6 @@ public class GalleryFragment extends Fragment {
             public void onClick(View view) {
                 GalleryFragmentDirections.ActionNavGalleryToCaptureFragment2 action = GalleryFragmentDirections.actionNavGalleryToCaptureFragment2();
                 action.setSessionId(-1);
-                action.setVersionId(-1);
                 Navigation.findNavController(view).navigate(action);
 //                startActivity(new Intent(getActivity(), ScanExamActivity.class));
             }

@@ -63,18 +63,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ((ProgressBar) view.findViewById(R.id.progressBar_home)).setVisibility(View.VISIBLE);//Always good to set some good feedback
-        HViewModelFactory factory = new HViewModelFactory(this.getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.exams_recycler_view);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        Observable.fromCallable(() -> {
-            homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
-            return homeViewModel.getExams();})
+        Observable.fromCallable(this::createViewModel)
                 .subscribeOn(Schedulers.io())//The DB access executes on a non-main-thread thread
                 .observeOn(AndroidSchedulers.mainThread())//Upon completion of the DB-involved execution, the continuation runs on the main thread
                 .subscribe(this::onExamsRetrival);
 
+    }
+
+    private List<LiveData<Exam>> createViewModel() {
+        HViewModelFactory factory = new HViewModelFactory(this.getActivity());
+        homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
+        return homeViewModel.getExams();
     }
 
 

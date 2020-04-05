@@ -21,7 +21,6 @@ public class CDCConverter implements Converter<SemiScannedCaptureEntityInterface
                 semiScannedCapture.getUpperMostY(),
                 semiScannedCapture.getRightMostX(),
                 semiScannedCapture.getBottomMosty(),
-                verRepo.get((int)semiScannedCapture.getVesrionId()),
                 semiScannedCapture.getSessionId()
         );
         ans.setId(semiScannedCapture.getId());

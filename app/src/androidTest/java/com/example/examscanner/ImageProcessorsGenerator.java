@@ -2,6 +2,7 @@ package com.example.examscanner;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.PointF;
 
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.reslove_answers.ScannedCapturesInstancesFactory;
@@ -14,7 +15,7 @@ public class ImageProcessorsGenerator {
         return new ImageProcessingFacade() {
             @Override
             public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
-                consumer.consume(null,null,null,null);
+                consumer.consume(new PointF(),null,null,new PointF());
             }
 
             @Override
@@ -47,7 +48,7 @@ public class ImageProcessorsGenerator {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                consumer.consume(null,null,null,null);
+                consumer.consume(new PointF(),null,null,new PointF());
             }
 
             @Override
@@ -90,7 +91,7 @@ public class ImageProcessorsGenerator {
         return new ImageProcessingFacade() {
             @Override
             public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
-                consumer.consume(null,null,null,null);
+                consumer.consume(new PointF(),null,null,new PointF());
             }
 
             @Override

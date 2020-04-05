@@ -31,14 +31,6 @@
         <action
             android:id="@+id/action_nav_gallery_to_captureFragment2"
             app:destination="@id/captureFragment">
-            <argument
-                android:name="versionId"
-                android:defaultValue="-1L"
-                app:argType="long" />
-            <argument
-                android:name="sessionId"
-                android:defaultValue="-1L"
-                app:argType="long" />
         </action>
     </fragment>
 
@@ -58,7 +50,7 @@
         android:label="Scan"
         tools:layout="@layout/fragment_capture_old">
         <argument
-            android:name="versionId"
+            android:name="examId"
             android:defaultValue="-1L"
             app:argType="long" />
         <argument
@@ -70,8 +62,8 @@
             app:destination="@id/cornerDetectionFragment">
             <argument
                 android:name="examId"
-                android:defaultValue="-1"
-                app:argType="integer" />
+                android:defaultValue="-1L"
+                app:argType="long" />
         </action>
     </fragment>
     <fragment
@@ -83,8 +75,8 @@
             app:destination="@id/fragment_resolve_answers" />
         <argument
             android:name="examId"
-            android:defaultValue="-1"
-            app:argType="integer" />
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/fragment_resolve_answers"

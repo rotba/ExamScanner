@@ -29,6 +29,7 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
     @Override
     public Exam convert(final ExamEntityInterface examEntityInterface) {
         return new Exam(
+                examEntityInterface.getID(),
                 null,
                 new ArrayList<>(),
                 examEntityInterface.getCourseName(),

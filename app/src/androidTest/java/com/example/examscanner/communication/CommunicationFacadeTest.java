@@ -119,14 +119,14 @@ public class CommunicationFacadeTest {
     @Test
     public void testCreateAndGetSemiScannedCaptureNotNull() {
         VersionContext context = setUpVersionContext();
-        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context.sId, context.vId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
+        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context.sId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         assertNotNull(oot.getSemiScannedCapture(sscId));
     }
 
     @Test
     public void testCreateAndGetBySessionSemiScannedCaptureNotNull() {
         VersionContext context = setUpVersionContext();
-        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context.sId, context.vId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
+        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context.sId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         boolean assertion = false;
         long[] sscs = oot.getSemiScannedCaptureBySession(context.sId);
         for (int i = 0; i < sscs.length; i++) {
@@ -139,7 +139,7 @@ public class CommunicationFacadeTest {
     public void testWeirdBug() {
         setUpVersionContext();
         VersionContext context2 = setUpVersionContext();
-        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context2.sId, context2.vId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
+        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context2.sId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         boolean assertion = false;
         long[] sscs = oot.getSemiScannedCaptureBySession(context2.sId);
         for (int i = 0; i < sscs.length; i++) {
@@ -195,7 +195,7 @@ public class CommunicationFacadeTest {
         final int rightMostX = 2;
         final int upperMostY = 3;
         final int leftMostX = 4;
-        oot.createSemiScannedCapture(leftMostX, upperMostY, rightMostX, rightMostY,versionContext.sId,versionContext.vId, testJpg1Marked);
+        oot.createSemiScannedCapture(leftMostX, upperMostY, rightMostX, rightMostY,versionContext.sId, testJpg1Marked);
         SemiScannedCaptureEntityInterface ei = oot.getSemiScannedCapture(
                 oot.getSemiScannedCaptureBySession(versionContext.sId)[0]
         );

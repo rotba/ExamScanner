@@ -46,5 +46,6 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
     @After
     public void tearDown() throws Exception {
         State.getState().logout();
+        super.tearDown();
     }
 }

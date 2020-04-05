@@ -24,7 +24,7 @@ public class SemiScannedCaptureDaoTest extends DaoAbstractTest {
     public void testConsistentSessionFK() {
         long sid = db.getSessionDao().insert(new Session(TAG));
         long sscid = db.getSemiScannedCaptureDao().insert(new SemiScannedCapture(
-                0, 0, 0, 0, 0, 0, sid
+                0, 0, 0, 0, 0, sid
         ));
         SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(sscid);
         assertTrue(ssc.getSessionId()==sid);
@@ -34,7 +34,7 @@ public class SemiScannedCaptureDaoTest extends DaoAbstractTest {
     public void testCannotInsertWithoutPropperSessionId() {
         try {
             long i = db.getSemiScannedCaptureDao().insert(new SemiScannedCapture(
-                    0, 0, 0, 0, 0, 0, 496351
+                    0, 0, 0, 0, 0, 496351
             ));
             fail();
         }catch (Exception e){}

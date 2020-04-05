@@ -17,7 +17,7 @@ public class CDViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
     private Exam exam;
 
-    public CDViewModelFactory(FragmentActivity activity, int examId) {
+    public CDViewModelFactory(FragmentActivity activity, long examId) {
         this.activity = activity;
         this.exam = new ExamRepositoryFactory().create().get(examId);
     }

@@ -63,7 +63,7 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
-    public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, long versionId, Bitmap bm) {
+    public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId,  Bitmap bm) {
         long bmId = fm.store(bm);
         return db.getSemiScannedCaptureDao().insert(
                 new SemiScannedCapture(
@@ -72,7 +72,6 @@ public class RealFacadeImple implements CommunicationFacade {
                         rightMostX,
                         rightMostY,
                         bmId,
-                        versionId,
                         sessionId
                 )
         );
@@ -107,10 +106,6 @@ public class RealFacadeImple implements CommunicationFacade {
                 return ssc.getBottomMostY();
             }
 
-            @Override
-            public long getVesrionId() {
-                return ssc.getVersionId();
-            }
 
             @Override
             public long getSessionId() {

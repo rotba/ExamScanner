@@ -45,19 +45,19 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg1(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight, bottomLeft, bottomRight,null,session));
+                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, bottomRight, session));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg2(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg2Marked(), upperLeft, upperRight, bottomLeft, bottomRight,null,session));
+                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg2Marked(), upperLeft, bottomRight, session));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg3(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg3Marked(), upperLeft, upperRight, bottomLeft, bottomRight,null,session));
+                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg3Marked(), upperLeft, bottomRight, session));
             }
         });
         Utils.navFromHomeToDetecteCorners();
@@ -93,7 +93,6 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     }
 
 
-
     @Test
     @Ignore
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition() {
@@ -110,13 +109,15 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     }
 
     @Test
-    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionSlowIP(){
+    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionSlowIP() {
         testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(slowIP());
     }
+
     @Test
-    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionRealIP(){
+    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionRealIP() {
         testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(null);
     }
+
     private void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(ImageProcessingFacade ip) {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(ip);
         Utils.sleepCDFragmentSetupTime();

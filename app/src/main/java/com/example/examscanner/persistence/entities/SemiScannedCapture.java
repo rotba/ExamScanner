@@ -14,20 +14,20 @@ public class SemiScannedCapture {
     private int rightMostX;
     private int bottomMostY;
     private long bitmapId;
-    public static final String fkVersionId = "versionId";
-    @ForeignKey(entity = Version.class, parentColumns = {Version.pkName}, childColumns = {"versionId"})
-    private long versionId;
+//    public static final String fkVersionId = "versionId";
+//    @ForeignKey(entity = Version.class, parentColumns = {Version.pkName}, childColumns = {"versionId"})
+//    private long versionId;
     public static final String fkSessionId = "sessionId";
     @ForeignKey(entity = Session.class, parentColumns = {Session.pkName}, childColumns = {"sessionId"})
     private long sessionId;
 
-    public SemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int bottomMostY, long bitmapId, long versionId, long sessionId) {
+    public SemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int bottomMostY, long bitmapId, long sessionId) {
         this.leftMostX = leftMostX;
         this.upperMostY = upperMostY;
         this.rightMostX = rightMostX;
         this.bottomMostY = bottomMostY;
         this.bitmapId = bitmapId;
-        this.versionId = versionId;
+//        this.versionId = versionId;
         this.sessionId = sessionId;
     }
 
@@ -79,13 +79,7 @@ public class SemiScannedCapture {
         this.bitmapId = bitmapId;
     }
 
-    public long getVersionId() {
-        return versionId;
-    }
 
-    public void setVersionId(long versionId) {
-        this.versionId = versionId;
-    }
 
     public long getSessionId() {
         return sessionId;

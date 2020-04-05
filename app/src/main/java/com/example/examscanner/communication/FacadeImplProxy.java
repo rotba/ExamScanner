@@ -20,8 +20,8 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, long versionId, Bitmap bm) {
-        return realImpl.createSemiScannedCapture(leftMostX, upperMostY, rightMostX, rightMostY,  sessionId,  versionId, bm);
+    public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, Bitmap bm) {
+        return realImpl.createSemiScannedCapture(leftMostX, upperMostY, rightMostX, rightMostY,  sessionId, bm);
     }
 
 

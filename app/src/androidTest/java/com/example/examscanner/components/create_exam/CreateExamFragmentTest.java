@@ -6,6 +6,7 @@ import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.StateFullTest;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,6 +28,8 @@ public class CreateExamFragmentTest  extends StateFullTest {
         super.setUp();
         onView(withId(R.id.floating_button_home_create_exam)).perform(click());
     }
+
+
 
     @Test
     public void testOnCreatedExamItAddsToTheHomeAdapter() {

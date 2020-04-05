@@ -70,7 +70,6 @@ public class CDCRepository implements Repository<CornerDetectedCapture> {
                 cornerDetectedCapture.getRightMostX(),
                 cornerDetectedCapture.getBottomMostY(),
                 cornerDetectedCapture.getSession(),
-                cornerDetectedCapture.getVersionId(),
                 cornerDetectedCapture.getBitmap()
         );
         cornerDetectedCapture.setId(id);

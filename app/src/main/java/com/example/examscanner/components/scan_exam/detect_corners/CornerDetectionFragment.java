@@ -34,6 +34,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CornerDetectionFragment extends Fragment {
     private static final String TAG = "ExamScanner";
+    private static final String MSG_PREF = "CornerDetectionFragment::";
     private CornerDetectionViewModel cornerDetectionViewModel;
     private CornerDetectionCapturesAdapter cornerDetectionCapturesAdapter;
     private ViewPager2 viewPager;
@@ -68,7 +69,7 @@ public class CornerDetectionFragment extends Fragment {
                 long cdcId = cornerDetectionCapturesAdapter.getCDCaptureIdInPosition(adapterBasedOPosition);
                 cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 CornerDetectedCapture cdc = cornerDetectionViewModel.getCDCById(cdcId).getValue();
-                processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc,adapterBasedOPosition));
+                processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc));
                 waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
             }
         });
@@ -112,6 +113,7 @@ public class CornerDetectionFragment extends Fragment {
     }
 
     private void onViewModelCreatedFail(Throwable throwable) {
+        Log.d(TAG, MSG_PREF);
         throwable.printStackTrace();
     }
 
@@ -125,7 +127,7 @@ public class CornerDetectionFragment extends Fragment {
     }
 
     @NotNull
-    private DisposableCompletableObserver generateCaptureScanningCompletable(CornerDetectedCapture cdc, int adapterBasedOPosition) {
+    private DisposableCompletableObserver generateCaptureScanningCompletable(CornerDetectedCapture cdc) {
         return Completable.fromCallable(() -> {
             cornerDetectionViewModel.transformToRectangle(cdc);
             cornerDetectionViewModel.scanAnswers(cdc);
