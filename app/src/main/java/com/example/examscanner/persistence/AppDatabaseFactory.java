@@ -3,6 +3,8 @@ package com.example.examscanner.persistence;
 import androidx.room.Room;
 
 
+import com.example.examscanner.communication.ContextProvider;
+
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 
@@ -19,7 +21,7 @@ public class AppDatabaseFactory {
     }
     private static AppDatabase getRealInstance(){
         if(instance==null){
-            instance = Room.databaseBuilder(getApplicationContext(),AppDatabase.class, "database-name").build();
+            instance = Room.databaseBuilder(ContextProvider.get(),AppDatabase.class, "database-name").build();
         }
         return instance;
     }

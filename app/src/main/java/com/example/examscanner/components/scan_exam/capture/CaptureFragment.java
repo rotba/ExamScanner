@@ -114,12 +114,7 @@ public class CaptureFragment extends Fragment {
         });
         outputHander = new CameraOutputHandlerImpl(captureViewModel, processRequestDisposableContainer);
         ((ImageButton) getActivity().findViewById(R.id.capture_image_button))
-                .setOnClickListener(
-                        new ProgressBarOnClickListenerDecorator(
-                                pb,
-                                cameraManager.createCaptureClickListener(outputHander)
-                        )
-                );
+                .setOnClickListener(cameraManager.createCaptureClickListener(outputHander));
         ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture)).setVisibility(View.INVISIBLE);
     }
 

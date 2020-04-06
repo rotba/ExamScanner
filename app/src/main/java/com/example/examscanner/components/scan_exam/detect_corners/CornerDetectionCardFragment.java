@@ -22,7 +22,7 @@ import com.example.examscanner.R;
 
 
 public class CornerDetectionCardFragment extends Fragment {
-    private static final String TAG = "ExamScanner.CornerDetectionCardFragment";
+    private static final String TAG = "ExamScanner";
     private CornerDetectionViewModel cornerDetectionViewModel;
 //    private ProgressBarHandler progressBarHandler;
     private long captureId;

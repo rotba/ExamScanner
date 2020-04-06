@@ -46,7 +46,6 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
             test_course_name = "TEST_course_name";
             long examCreationSessionId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
             long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId));
-            long sessionId =  db.getScanExamSessionDao().insert(new ScanExamSession(eId));
         };
         super.setUp();
         CameraMangerFactory.setStubInstance(new CameraManagerStub());

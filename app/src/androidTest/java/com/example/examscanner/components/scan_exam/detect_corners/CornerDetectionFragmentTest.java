@@ -9,6 +9,7 @@ import androidx.test.espresso.action.ViewActions;
 
 import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
+import com.example.examscanner.components.scan_exam.ExamEmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
@@ -16,6 +17,7 @@ import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
+import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 import org.junit.After;
@@ -49,6 +51,7 @@ public class CornerDetectionFragmentTest {
     public void setUp() {
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
+        ExamRepositoryFactory.setStubInstance(ExamEmptyRepositoryFactory.create());
         imageProcessor = nullIP();
         repo = new CDCRepositoryFacrory().create();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(slowIP());
@@ -174,7 +177,7 @@ public class CornerDetectionFragmentTest {
         DetectCornersConsumer consumer = new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                repo.create(new CornerDetectedCapture(null,upperLeft, bottomRight,sessionId));
+                repo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(),upperLeft, bottomRight,sessionId));
             }
         };
         imageProcessor.detectCorners(null, consumer);
@@ -298,7 +301,8 @@ public class CornerDetectionFragmentTest {
         });
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(ip);
         Bundle b = new Bundle();
-        b.putInt("examId", -1);
+        b.putLong("examId", -1);
+        b.putLong("sessioId", sessionId);
         FragmentScenario<CornerDetectionFragment> scenraio =  FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
         loadOpenCV(scenraio);
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
