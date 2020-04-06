@@ -18,7 +18,7 @@ public class SemiScannedCapture {
 //    @ForeignKey(entity = Version.class, parentColumns = {Version.pkName}, childColumns = {"versionId"})
 //    private long versionId;
     public static final String fkSessionId = "sessionId";
-    @ForeignKey(entity = Session.class, parentColumns = {Session.pkName}, childColumns = {"sessionId"})
+    @ForeignKey(entity = ScanExamSession.class, parentColumns = {ScanExamSession.pkName}, childColumns = {"sessionId"})
     private long sessionId;
 
     public SemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int bottomMostY, long bitmapId, long sessionId) {

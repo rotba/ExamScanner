@@ -10,9 +10,9 @@ import com.example.examscanner.communication.entities_interfaces.VersionEntityIn
 
 public interface CommunicationFacade {
     public long createExam(String courseName, String url, String year, int term, int semester, long sessionId);
-    public long getExamIdBySession(long sId);
+    public long getExamIdByScanExamSession(long sId);
     public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, Bitmap bm);
-    public long createNewSession(String desctiprion);
+    public long createNewScanExamSession(long examId);
     public long addExamineeAnswer(long solutionId, long questionId ,int ans, int leftX, int upY, int rightX, int botY);
     public long addVersion(long examId, int versionNumber);
     public long addQuestion(long vId, int qNum, int correctAnswer, int leftX, int upY, int rightX, int bottomY);
@@ -29,4 +29,5 @@ public interface CommunicationFacade {
     public ExamineeAnswerEntityInterface getExamineeAnswerByExamIdVerNumAndQNumAndExamineeId(long examId, int verNum, int qNum, long examineeId);
     public ExamEntityInterface[] getExams();
     public void updateExam(long id, String courseName, int semester, int term, long[] versions, long sessionId, String year);
+    public long createNewCreateExamSession();
 }

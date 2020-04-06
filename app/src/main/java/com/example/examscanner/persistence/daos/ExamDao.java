@@ -24,7 +24,7 @@ public interface ExamDao {
     @Query("SELECT * FROM exam WHERE id IS :id LIMIT 1")
     ExamWithVersions getExamWithVersions(long id);
 
-    @Query("SELECT * FROM exam WHERE sessionId IS :sId LIMIT 1")
+    @Query("SELECT * FROM exam WHERE examCreationSessionId IS :sId LIMIT 1")
     long getBySessionId(long sId);
 
     @Query("SELECT *  FROM exam")

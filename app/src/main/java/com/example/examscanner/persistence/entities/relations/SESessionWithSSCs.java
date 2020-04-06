@@ -3,32 +3,32 @@ package com.example.examscanner.persistence.entities.relations;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import com.example.examscanner.persistence.entities.ScanExamSession;
 import com.example.examscanner.persistence.entities.SemiScannedCapture;
-import com.example.examscanner.persistence.entities.Session;
 
 import java.util.List;
 
-public class SessionWithSSCs {
+public class SESessionWithSSCs {
     @Embedded
-    private Session session;
+    private ScanExamSession scanExamSession;
 
     @Relation(
-            parentColumn = Session.pkName,
+            parentColumn = ScanExamSession.pkName,
             entityColumn = SemiScannedCapture.fkSessionId
     )
     private List<SemiScannedCapture> sscs;
 
-    public SessionWithSSCs(Session session, List<SemiScannedCapture> sscs) {
-        this.session = session;
+    public SESessionWithSSCs(ScanExamSession scanExamSession, List<SemiScannedCapture> sscs) {
+        this.scanExamSession = scanExamSession;
         this.sscs = sscs;
     }
 
-    public Session getSession() {
-        return session;
+    public ScanExamSession getScanExamSession() {
+        return scanExamSession;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
+    public void setScanExamSession(ScanExamSession scanExamSession) {
+        this.scanExamSession = scanExamSession;
     }
 
     public List<SemiScannedCapture> getSscs() {

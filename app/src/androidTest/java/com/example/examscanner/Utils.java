@@ -14,7 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class Utils {
-    public static void navFromHomeToCapture() {
+    public static void navFromHomeToCaptureQuickAndDirty() {
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withText(R.string.gallery_button_alt)).perform(click());
         onView(withText(R.string.start_scan_exam)).perform(click());
@@ -40,7 +40,7 @@ public class Utils {
     }
 
     public static void navFromHomeToDetecteCorners() {
-        navFromHomeToCapture();
+        navFromHomeToCaptureQuickAndDirty();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
     }
     public static void navFromHomeToResolveAnswers() {

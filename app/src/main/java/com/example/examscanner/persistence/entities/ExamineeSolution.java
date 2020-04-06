@@ -13,7 +13,7 @@ public class ExamineeSolution {
     private long examineeId;
     private long scannedCaptureId;
     public static final String fkSession = "sessionId";
-    @ForeignKey(entity = Session.class, parentColumns = Session.pkName, childColumns = fkSession)
+    @ForeignKey(entity = ScanExamSession.class, parentColumns = ScanExamSession.pkName, childColumns = fkSession)
     private long sessionId;
 
     public ExamineeSolution(long examineeId, long scannedCaptureId, long sessionId) {

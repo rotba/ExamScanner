@@ -16,16 +16,16 @@ public class Exam {
     private String url;
 
     private int semester;
-    public static final String fkSid = "sessionId";
-    @ForeignKey(entity = Session.class, parentColumns =Session.pkName , childColumns ="sessionId" )
-    private long sessionId;
-    public Exam(String courseName, int term, String year, String url, int semester, long sessionId) {
+    public static final String fkSid = "examCreationSessionId";
+    @ForeignKey(entity = ExamCreationSession.class, parentColumns = ExamCreationSession.pkName , childColumns ="examCreationSessionId" )
+    private long examCreationSessionId;
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
         this.url = url;
         this.semester = semester;
-        this.sessionId = sessionId;
+        this.examCreationSessionId = examCreationSessionId;
     }
 
     public String getUrl() {
@@ -39,12 +39,12 @@ public class Exam {
         return id;
     }
 
-    public long getSessionId() {
-        return sessionId;
+    public long getExamCreationSessionId() {
+        return examCreationSessionId;
     }
 
-    public void setSessionId(long sessionId) {
-        this.sessionId = sessionId;
+    public void setExamCreationSessionId(long examCreationSessionId) {
+        this.examCreationSessionId = examCreationSessionId;
     }
 
 

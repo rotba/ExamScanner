@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
-import androidx.room.Room;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
@@ -14,11 +13,12 @@ import com.example.examscanner.communication.entities_interfaces.VersionEntityIn
 import com.example.examscanner.persistence.AppDatabase;
 import com.example.examscanner.persistence.AppDatabaseFactory;
 import com.example.examscanner.persistence.entities.Exam;
+import com.example.examscanner.persistence.entities.ExamCreationSession;
 import com.example.examscanner.persistence.entities.ExamineeAnswer;
 import com.example.examscanner.persistence.entities.ExamineeSolution;
 import com.example.examscanner.persistence.entities.Question;
 import com.example.examscanner.persistence.entities.SemiScannedCapture;
-import com.example.examscanner.persistence.entities.Session;
+import com.example.examscanner.persistence.entities.ScanExamSession;
 import com.example.examscanner.persistence.entities.Version;
 import com.example.examscanner.persistence.files_management.FilesManager;
 import com.example.examscanner.persistence.files_management.FilesManagerFactory;
@@ -82,8 +82,8 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
-    public long createNewSession(String desctiprion) {
-        return db.getSessionDao().insert(new Session(desctiprion));
+    public long createNewScanExamSession(long examId) {
+        return db.getScanExamSessionDao().insert(new ScanExamSession(examId));
     }
 
     @Override
@@ -162,8 +162,9 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
-    public long getExamIdBySession(long sId) {
-        return db.getExamDao().getBySessionId(sId);
+    public long getExamIdByScanExamSession(long scanExamSessionId) {
+        ScanExamSession s =  db.getScanExamSessionDao().getById(scanExamSessionId);
+        return s.getExamIdOfSession();
     }
 
     @Override
@@ -234,6 +235,11 @@ public class RealFacadeImple implements CommunicationFacade {
         Exam e = new Exam(courseName,term,year,"THE_EMPTY_URL",semester,sessionId);
         e.setId(id);
         db.getExamDao().update(e);
+    }
+
+    @Override
+    public long createNewCreateExamSession() {
+        return db.getExamCreationSessionDao().insert(new ExamCreationSession());
     }
 
     @Override
@@ -324,7 +330,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
             @Override
             public long getSessionId() {
-                return theExam.getSessionId();
+                return theExam.getExamCreationSessionId();
             }
 
             @Override

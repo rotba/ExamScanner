@@ -2,12 +2,12 @@ package com.example.examscanner.repositories.session;
 
 import com.example.examscanner.communication.CommunicationFacade;
 
-public class SessionsProvider {
+public class ScanExamSessionsProvider {
     CommunicationFacade comFacade;
-    SessionsProvider(CommunicationFacade comFacade){
+    ScanExamSessionsProvider(CommunicationFacade comFacade){
         this.comFacade = comFacade;
     }
-    public long provide(String description){
-        return comFacade.createNewSession(description);
+    public long provide(long exanId){
+        return comFacade.createNewScanExamSession(exanId);
     }
 }

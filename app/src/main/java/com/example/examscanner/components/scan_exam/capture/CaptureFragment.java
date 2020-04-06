@@ -126,7 +126,8 @@ public class CaptureFragment extends Fragment {
     private void createViewModel() {
         CaptureViewModelFactory factory = new CaptureViewModelFactory(
                 getActivity(),
-                CaptureFragmentArgs.fromBundle(getArguments()).getSessionId()
+                CaptureFragmentArgs.fromBundle(getArguments()).getSessionId(),
+                CaptureFragmentArgs.fromBundle(getArguments()).getExamId()
         );
         captureViewModel = ViewModelProviders.of(this, factory).get(CaptureViewModel.class);
     }

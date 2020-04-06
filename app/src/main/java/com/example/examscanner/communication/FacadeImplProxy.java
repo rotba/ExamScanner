@@ -29,8 +29,8 @@ public class FacadeImplProxy implements CommunicationFacade {
 
 
     @Override
-    public long createNewSession(String desctiprion) {
-        return realImpl.createNewSession(desctiprion);
+    public long createNewScanExamSession(long examId) {
+        return realImpl.createNewScanExamSession(examId);
     }
 
     @Override
@@ -69,8 +69,8 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public long getExamIdBySession(long sId) {
-        return realImpl.getExamIdBySession(sId);
+    public long getExamIdByScanExamSession(long sId) {
+        return realImpl.getExamIdByScanExamSession(sId);
     }
 
     @Override
@@ -96,6 +96,11 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public void updateExam(long id, String courseName, int semester, int term, long[] versions, long sessionId, String year) {
         realImpl.updateExam(id, courseName, semester, term, versions, sessionId, year);
+    }
+
+    @Override
+    public long createNewCreateExamSession() {
+        return realImpl.createNewCreateExamSession();
     }
 
     @Override

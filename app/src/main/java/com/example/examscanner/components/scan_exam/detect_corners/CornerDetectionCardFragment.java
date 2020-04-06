@@ -53,6 +53,7 @@ public class CornerDetectionCardFragment extends Fragment {
         ((ImageView) root.findViewById(R.id.imageView2_corner_detected_capture)).setImageBitmap(
                 cornerDetectionViewModel.getCDCById(captureId).getValue().getBitmap()
         );
+
         pb = ((ProgressBar) root.findViewById(R.id.progressBar2_scanning_answers));
         if(inProgress){
             pb.setVisibility(View.VISIBLE);

@@ -91,6 +91,6 @@ public class CornerDetectionViewModel extends ViewModel {
         for (MutableLiveData<CornerDetectedCapture> cdc :cornerDetectedCaptures) {
             if(cdc.getValue().getId()==captureId) return cdc;
         }
-        return null;
+        throw new CornerDetectionUseCaseException(String.format("Can't find CDC with id: %d", captureId));
     }
 }

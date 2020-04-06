@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
-import com.example.examscanner.repositories.session.SessionProviderFactory;
+import com.example.examscanner.repositories.session.CreateExamSessionProviderFactory;
+import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
 import com.example.examscanner.repositories.version.VersionRepoFactory;
 
 public class CEModelViewFactory implements ViewModelProvider.Factory {
@@ -22,7 +23,7 @@ public class CEModelViewFactory implements ViewModelProvider.Factory {
         return (T)new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
                 new VersionRepoFactory().create(),
-                new SessionProviderFactory().create().provide("Create Exam")
+                new CreateExamSessionProviderFactory().create().provide()
         );
     }
 }
