@@ -23,10 +23,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
     private static final String TAG = "StateFullTest";
-    @Rule
-    public ActivityScenarioRule<MainActivity> mainActivityScenarioRule =
-            new ActivityScenarioRule<MainActivity>(MainActivity.class);
-
 
     @Before
     @Override
@@ -45,7 +41,7 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
 
     @After
     public void tearDown() throws Exception {
-        State.getState().logout();
         super.tearDown();
+        State.getState().logout();
     }
 }

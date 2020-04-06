@@ -36,6 +36,6 @@ public class HomeFragmentTest extends StateFullTest {
     @Test
     public void onItemClick() {
         onView(withText(containsString(comp))).perform(click());
-        onView(withId(R.layout.fragment_capture)).check(matches(isDisplayed()));
+        onView(withId(R.id.for_testing_fragment_capture_root)).check(matches(isDisplayed()));
     }
 }

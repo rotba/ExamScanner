@@ -2,19 +2,20 @@ package com.example.examscanner.communication;
 
 import android.content.Context;
 
+import com.example.examscanner.persistence.AppDatabase;
+
 public class CommunicationFacadeFactory {
-    private static boolean testMode = false;
+
+
+//    public static void tearDownTestMode() {
+//    }
 
     public CommunicationFacade create() {
-        if(testMode){
-            return new FacadeImplProxy();
-        }else{
-            return new FacadeImplProxy();
-        }
+        return new FacadeImplProxy();
 
     }
 
-    public static void setTestMode() {
-        testMode = true;
-    }
+//    public static void setUpTestMode(AppDatabase db) {
+//        RealFacadeImple.setTestInstance(db);
+//    }
 }

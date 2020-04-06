@@ -12,6 +12,7 @@ import com.example.examscanner.communication.entities_interfaces.QuestionEntityI
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.persistence.AppDatabase;
+import com.example.examscanner.persistence.AppDatabaseFactory;
 import com.example.examscanner.persistence.entities.Exam;
 import com.example.examscanner.persistence.entities.ExamineeAnswer;
 import com.example.examscanner.persistence.entities.ExamineeSolution;
@@ -30,15 +31,11 @@ public class RealFacadeImple implements CommunicationFacade {
     private static RealFacadeImple instance;
     private AppDatabase db;
     private FilesManager fm;
-    private static AppDatabase dbTestInstance;
 
-    public static RealFacadeImple getInstance() {
+    public static synchronized RealFacadeImple getInstance() {
         if (instance == null) {
-            AppDatabase theDB = dbTestInstance==null?
-                    Room.databaseBuilder(ContextProvider.get(),AppDatabase.class, "database-name").build():
-                    dbTestInstance;
             instance = new RealFacadeImple(
-                    theDB,
+                    AppDatabaseFactory.getInstance(),
                     FilesManagerFactory.create()
             );
             return instance;
@@ -46,9 +43,16 @@ public class RealFacadeImple implements CommunicationFacade {
             return instance;
         }
     }
-    public static void setDBTestInstance(AppDatabase theDBTestInstance){
-        dbTestInstance = theDBTestInstance;
-    }
+//    static void setTestInstance(AppDatabase theDBTestInstance){
+//        theDBTestInstance.clearAllTables();
+//        testInstance = new RealFacadeImple(
+//                theDBTestInstance,
+//                FilesManagerFactory.create()
+//        );
+//    }
+//    static void tearDownTestInstance(){
+//        testInstance = null;
+//    }
 
     private RealFacadeImple(AppDatabase db, FilesManager fm) {
         this.db = db;

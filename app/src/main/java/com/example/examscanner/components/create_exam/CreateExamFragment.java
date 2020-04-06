@@ -35,8 +35,8 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class CreateExamFragment extends Fragment {
-    private static String ExamScannerTAG = "TAG_ExamScanner::";
-    private static String TAG = "CreateExamFragment";
+    private static String MSG_PREF = "CreateExamFragment::";
+    private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
 
     @Nullable
@@ -54,8 +54,13 @@ public class CreateExamFragment extends Fragment {
         Completable.fromAction(this::createModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onModelCreated, error -> error.printStackTrace());
+                .subscribe(this::onModelCreated, this::onModelCreatedError);
         ((Button) view.findViewById(R.id.button_create_exam_create)).setOnClickListener(new CreateClickListener());
+    }
+
+    private void onModelCreatedError(Throwable throwable) {
+        Log.d(TAG, MSG_PREF+"onModelCreatedError");
+        throwable.printStackTrace();
     }
 
 
@@ -90,7 +95,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onError(Throwable throwable) {
-        Log.d(TAG, String.format("%s Error commiting to exam creation", ExamScannerTAG));
+        Log.d(TAG, MSG_PREF+"onError");
         throwable.printStackTrace();
     }
 

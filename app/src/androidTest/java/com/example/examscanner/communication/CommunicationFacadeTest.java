@@ -13,13 +13,13 @@ import com.example.examscanner.communication.entities_interfaces.SemiScannedCapt
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.persistence.AppDatabase;
+import com.example.examscanner.persistence.AppDatabaseFactory;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
@@ -29,15 +29,14 @@ public class CommunicationFacadeTest {
 
     @Before
     public void setUp() throws Exception {
-        Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
-        RealFacadeImple.setDBTestInstance(db);
+        AppDatabaseFactory.setTestMode();
+        db = AppDatabaseFactory.getInstance();
         oot = new CommunicationFacadeFactory().create();
     }
 
     @After
     public void tearDown() throws Exception {
-        db.clearAllTables();
+        AppDatabaseFactory.tearDownDb();
     }
 
     private long setUpSessionContext() {
@@ -253,10 +252,7 @@ public class CommunicationFacadeTest {
         assertEquals(ei.getCorrectAnswer(),correctAnswer);
         assertEquals(ei.getVersionId(),versionContext.vId);
     }
-    @Test
-    public void testExamineeAnswerEntityInterface() {
 
-    }
 
 
 

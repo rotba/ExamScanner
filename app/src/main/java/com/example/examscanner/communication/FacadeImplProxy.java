@@ -14,6 +14,8 @@ import com.example.examscanner.communication.entities_interfaces.VersionEntityIn
 public class FacadeImplProxy implements CommunicationFacade {
     private RealFacadeImple realImpl  = RealFacadeImple.getInstance();
 
+
+
     @Override
     public long createExam(String courseName, String url, String year, int term, int semester, long sessionId) {
         return realImpl.createExam(courseName, url, year, term, semester, sessionId);
