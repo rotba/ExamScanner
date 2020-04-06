@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 
@@ -101,6 +102,11 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public long createNewCreateExamSession() {
         return realImpl.createNewCreateExamSession();
+    }
+
+    @Override
+    public ScanExamSessionEntityInterface[] getScanExamSessions() {
+        return realImpl.getScanExamSessions();
     }
 
     @Override

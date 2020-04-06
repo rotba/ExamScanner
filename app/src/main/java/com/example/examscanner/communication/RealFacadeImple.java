@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.persistence.AppDatabase;
@@ -240,6 +241,28 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public long createNewCreateExamSession() {
         return db.getExamCreationSessionDao().insert(new ExamCreationSession());
+    }
+
+    @Override
+    public ScanExamSessionEntityInterface[] getScanExamSessions() {
+        List<ScanExamSession> entities  = db.getScanExamSessionDao().getAll();
+        ScanExamSessionEntityInterface[] entitiesInterfaces = new ScanExamSessionEntityInterface[entities.size()];
+        for (int i = 0; i <entities.size() ; i++) {
+            int finalI = i;
+            entitiesInterfaces[i] = new ScanExamSessionEntityInterface() {
+
+                @Override
+                public long getId() {
+                    return entities.get(finalI).getId();
+                }
+
+                @Override
+                public long getExamId() {
+                    return entities.get(finalI).getExamIdOfSession();
+                }
+            };
+        }
+        return entitiesInterfaces;
     }
 
     @Override

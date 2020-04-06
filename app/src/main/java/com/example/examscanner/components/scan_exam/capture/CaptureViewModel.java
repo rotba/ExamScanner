@@ -27,10 +27,10 @@ public class CaptureViewModel extends ViewModel {
 
     public CaptureViewModel(Repository<CornerDetectedCapture> cdcRepo, ImageProcessingFacade imageProcessor, long sessionId) {
         unProcessedCaptures = new LinkedList<>();
-        mNumOfTotalCaptures = new MutableLiveData<>(unProcessedCaptures.size());
         this.cdcRepo = cdcRepo;
         this.imageProcessor = imageProcessor;
-        mNumOfProcessedCaptures = new MutableLiveData<>(cdcRepo.get(cornerDetectedCapture -> true).size());
+        mNumOfProcessedCaptures = new MutableLiveData<>(cdcRepo.get(cornerDetectedCapture -> cornerDetectedCapture.getSession()==sessionId).size());
+        mNumOfTotalCaptures = new MutableLiveData<>(mNumOfProcessedCaptures.getValue());
         this.sessionId = sessionId;
 
     }
@@ -68,6 +68,6 @@ public class CaptureViewModel extends ViewModel {
     }
 
     public void postProcessCapture() {
-        mNumOfProcessedCaptures.setValue(cdcRepo.get(cornerDetectedCapture -> true).size());
+        mNumOfProcessedCaptures.setValue(cdcRepo.get(cornerDetectedCapture -> cornerDetectedCapture.getSession()==sessionId).size());
     }
 }

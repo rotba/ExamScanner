@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 
@@ -30,4 +31,5 @@ public interface CommunicationFacade {
     public ExamEntityInterface[] getExams();
     public void updateExam(long id, String courseName, int semester, int term, long[] versions, long sessionId, String year);
     public long createNewCreateExamSession();
+    public ScanExamSessionEntityInterface[] getScanExamSessions();
 }

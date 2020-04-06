@@ -23,7 +23,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class AbstractComponentInstrumentedTest {
-    private AppDatabase db;
+    protected AppDatabase db;
     protected DBCallback dbCallback = (theDb -> {
     });
 

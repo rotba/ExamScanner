@@ -11,7 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.examscanner.Utils.navFromHomeToCaptureQuickAndDirty;
 
-@Ignore
+@Ignore("Empty")
 public class CaptureFragmentStatefull extends StateFullTest {
     @Override
     @Before

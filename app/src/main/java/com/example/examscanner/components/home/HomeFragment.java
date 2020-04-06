@@ -1,23 +1,21 @@
 package com.example.examscanner.components.home;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -30,12 +28,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
@@ -68,8 +62,8 @@ public class HomeFragment extends Fragment {
         layoutManager = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
         Observable.fromCallable(this::createViewModel)
-                .subscribeOn(Schedulers.io())//The DB access executes on a non-main-thread thread
-                .observeOn(AndroidSchedulers.mainThread())//Upon completion of the DB-involved execution, the continuation runs on the main thread
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onExamsRetrival);
 
     }
@@ -88,9 +82,42 @@ public class HomeFragment extends Fragment {
     }
 
     public void onItemClick(Exam e){
+        Observable.fromCallable(()-> getLastSession(e.getId()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(sessionId->onExamSessionRetrieved(sessionId,e.getId()));
+    }
+
+    private long getLastSession(long examId) {
+        return homeViewModel.getLastSession(examId);
+    }
+
+    private void onExamSessionRetrieved(long sessionId, long examId) {
+        if(sessionId<0){
+            navigateToCapture(examId, -1);
+        }else{
+            askIfResumeSession(examId,sessionId);
+        }
+    }
+
+    private void askIfResumeSession(long examId, long sessionId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.home_would_you_like_to_resume)
+                .setPositiveButton(R.string.home_dialog_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        navigateToCapture(examId, sessionId);
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void navigateToCapture(long eId, long sessioId) {
         HomeFragmentDirections.ActionNavHomeToCaptureFragment action =
                 HomeFragmentDirections.actionNavHomeToCaptureFragment();
-        action.setExamId(e.getId());
+        action.setExamId(eId);
+        action.setSessionId(sessioId);
         NavHostFragment.findNavController(this).navigate(action);
     }
 

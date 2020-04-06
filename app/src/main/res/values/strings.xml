@@ -64,4 +64,6 @@
     <string name="hint_email">abs@cdef.com</string>
     <string name="create_exam_dialog_exam_created">Exam created!</string>
     <string name="create_exam_dialog_ok">OK</string>
+    <string name="home_would_you_like_to_resume">Would you like resume your last session?</string>
+    <string name="home_dialog_yes">Yes</string>
 </resources>

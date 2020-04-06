@@ -39,12 +39,12 @@ public class Utils {
         };
     }
 
-    public static void navFromHomeToDetecteCorners() {
+    public static void navFromHomeToDetecteCornersQuickAndDirty() {
         navFromHomeToCaptureQuickAndDirty();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
     }
     public static void navFromHomeToResolveAnswers() {
-        navFromHomeToDetecteCorners();
+        navFromHomeToDetecteCornersQuickAndDirty();
         onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
     }
 
