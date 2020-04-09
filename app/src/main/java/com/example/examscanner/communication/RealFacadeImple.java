@@ -213,6 +213,11 @@ public class RealFacadeImple implements CommunicationFacade {
             public int getBottomY() {
                 return theQuestion.getBorromY();
             }
+
+            @Override
+            public int getNum() {
+                return theQuestion.getQuestionNum();
+            }
         };
     }
 
@@ -263,6 +268,43 @@ public class RealFacadeImple implements CommunicationFacade {
             };
         }
         return entitiesInterfaces;
+    }
+
+    @Override
+    public long createQuestion(long versionId, int num, int ans, int left, int up, int right, int bottom) {
+        return db.getQuestionDao().insert(new Question(num,versionId,ans,left,up,right,bottom));
+    }
+
+    @Override
+    public long createVersion(long examId, int num) {
+        return db.getVersionDao().insert(new Version(num,examId));
+    }
+
+    @Override
+    public VersionEntityInterface getVersionById(long vId) {
+        Version theVersion =db.getVersionDao().getById(vId);
+        return new VersionEntityInterface() {
+            @Override
+            public long getId() {
+                return theVersion.getId();
+            }
+
+            @Override
+            public long getExamId() {
+                return theVersion.getExamId();
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public long[] getQuestions() {
+                return db.getQuestionDao().getVersionWithQuestions(vId).getQuestions().stream().mapToLong(Question::getId).toArray();
+            }
+
+            @Override
+            public int getNumber() {
+                return theVersion.getVerNum();
+            }
+        };
     }
 
     @Override

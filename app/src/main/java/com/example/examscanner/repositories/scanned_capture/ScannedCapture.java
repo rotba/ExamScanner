@@ -119,6 +119,19 @@ public class ScannedCapture {
         throw new NoAnswerWithTheGivenNum();
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public List<ResolvedAnswer> getResolvedAnswers() {
+        List<ResolvedAnswer> ans = new ArrayList<>();
+        for (Answer a:answers) {
+            if(a.isResolved())
+                ans.add((ResolvedAnswer)a);
+        }
+        return ans;
+    }
+
 
     private class NoSuchAnswerException extends Exception{
         public NoSuchAnswerException(String message) {

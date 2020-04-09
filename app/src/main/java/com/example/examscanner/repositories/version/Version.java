@@ -1,17 +1,22 @@
 package com.example.examscanner.repositories.version;
 
-import com.example.examscanner.repositories.exam.Exam;
-
 public class Version {
     private long eId;
-    private int[] answers;
+    private long[] answers;
     private long id;
     private int num;
 
-    public Version(int num,long eId, int[] answers) {
+    public Version(int num, long eId, long[] answers) {
         this.eId = eId;
         this.answers = answers;
         this.num = num;
+    }
+
+    public Version(long id, int number, long examId, long[] questions) {
+        this.id=id;
+        this.eId = examId;
+        this.answers = questions;
+        this.num = number;
     }
 
     public int getNum() {
@@ -32,5 +37,9 @@ public class Version {
 
     public long getExamId() {
         return eId;
+    }
+
+    public long[] getQuestions() {
+        return answers;
     }
 }

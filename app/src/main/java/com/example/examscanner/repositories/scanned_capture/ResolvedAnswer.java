@@ -7,6 +7,15 @@ import java.util.List;
 public class ResolvedAnswer extends Answer{
     private final PointF upperLeft;
     private final PointF bottomRight;
+
+    public PointF getUpperLeft() {
+        return upperLeft;
+    }
+
+    public PointF getBottomRight() {
+        return bottomRight;
+    }
+
     private final int selection;
 
     public ResolvedAnswer(int id, PointF upperLeft, PointF bottomRight, int selection) {
@@ -22,5 +31,7 @@ public class ResolvedAnswer extends Answer{
     }
 
 
-
+    public int getSelection() {
+        return selection;
+    }
 }

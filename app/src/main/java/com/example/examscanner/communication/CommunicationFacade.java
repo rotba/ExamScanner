@@ -32,4 +32,9 @@ public interface CommunicationFacade {
     public void updateExam(long id, String courseName, int semester, int term, long[] versions, long sessionId, String year);
     public long createNewCreateExamSession();
     public ScanExamSessionEntityInterface[] getScanExamSessions();
+    public  long createQuestion(long versionId, int num, int ans, int left, int up, int right, int bottom);
+
+    public long createVersion(long examId, int num);
+
+    public VersionEntityInterface getVersionById(long vId);
 }

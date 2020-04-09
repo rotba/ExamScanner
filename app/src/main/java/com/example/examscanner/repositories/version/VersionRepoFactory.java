@@ -3,7 +3,7 @@ package com.example.examscanner.repositories.version;
 import com.example.examscanner.repositories.Repository;
 
 public class VersionRepoFactory {
-    private static boolean realInstanceNotReady = true;
+    private static boolean realInstanceNotReady = false;
     private static Repository<Version> stubInstance = null;
 
     public Repository<Version> create(){
