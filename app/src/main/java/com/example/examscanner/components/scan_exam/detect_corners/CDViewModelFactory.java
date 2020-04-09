@@ -11,6 +11,7 @@ import com.example.examscanner.repositories.corner_detected_capture.CDCRepositor
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
+import com.example.examscanner.repositories.version.VersionRepoFactory;
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 public class CDViewModelFactory implements ViewModelProvider.Factory {
@@ -30,6 +31,7 @@ public class CDViewModelFactory implements ViewModelProvider.Factory {
                 new ImageProcessingFactory(new BitmapInstancesFactory(activity)).create(),
                 new CDCRepositoryFacrory().create(),
                 new ScannedCaptureRepositoryFactory().create(),
+                new VersionRepoFactory().create(),
                 exam
         );
     }

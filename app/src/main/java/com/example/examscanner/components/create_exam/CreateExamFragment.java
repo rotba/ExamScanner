@@ -2,6 +2,10 @@ package com.example.examscanner.components.create_exam;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -14,35 +18,48 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetter;
+import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetterFactory;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
 public class CreateExamFragment extends Fragment {
+    private static final int PICKFILE_REQUEST_CODE = 0;
     private static String MSG_PREF = "CreateExamFragment::";
     private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
+    private VersionImageGetter versionImageGetter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_create_exam, container, false);
+        versionImageGetter = new VersionImageGetterFactory().create();
         return root;
     }
 
@@ -56,10 +73,56 @@ public class CreateExamFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onModelCreated, this::onModelCreatedError);
         ((Button) view.findViewById(R.id.button_create_exam_create)).setOnClickListener(new CreateClickListener());
+        ((Button) view.findViewById(R.id.button_create_exam_upload_version_image)).setOnClickListener(this::onChooseVersionPdfClick);
+    }
+
+    public void onChooseVersionPdfClick(View v) {
+//        Intent intent = new Intent(Intent. ACTION_OPEN_DOCUMENT );
+//        intent.setType("image/jpeg");
+//        startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+        versionImageGetter.get(getActivity());
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == PICKFILE_REQUEST_CODE) {
+            //create pdf document object from bytes
+            ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
+            Bitmap bitmap = versionImageGetter.accessBitmap(data, getActivity());
+            Observable.fromCallable(() -> {
+                viewModel.addVersion(bitmap);
+                return bitmap;
+            })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::onVersionAdded, this::onVersionAddedFailed);
+//            Uri uri = null;
+//            if (data != null) {
+//                uri = data.getData();
+//                try {
+//                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+//                    ((ImageView)getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageBitmap(bitmap);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+        }
+    }
+
+    private void onVersionAddedFailed(Throwable throwable) {
+        Log.d(TAG, MSG_PREF);
+        throwable.printStackTrace();
+        ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
+    }
+
+    private void onVersionAdded(Bitmap bitmap) {
+        ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageBitmap(bitmap);
+        ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
     }
 
     private void onModelCreatedError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF+"onModelCreatedError");
+        Log.d(TAG, MSG_PREF + "onModelCreatedError");
         throwable.printStackTrace();
     }
 
@@ -95,7 +158,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF+"onError");
+        Log.d(TAG, MSG_PREF + "onError");
         throwable.printStackTrace();
     }
 

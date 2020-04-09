@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam;
 
 import android.graphics.PointF;
+import android.view.View;
 
 import com.example.examscanner.R;
 import com.example.examscanner.Utils;
@@ -12,24 +13,39 @@ import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.entities.Exam;
 import com.example.examscanner.persistence.entities.ExamCreationSession;
 import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.VersionRepoStubFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
+import com.example.examscanner.repositories.version.Version;
+import com.example.examscanner.repositories.version.VersionRepoFactory;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static com.example.examscanner.ImageProcessorsGenerator.slowIP;
+import static kotlinx.coroutines.flow.FlowKt.withIndex;
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsString;
 
 
@@ -39,6 +55,8 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     private long scanExamSession;
     private String theTestExamCourseName = "TEST_courseName";
     private long examId;
+    private int dinaBarzilayVersionNumber = 496351;
+    private int theDevilVersionNumber = 666;
 
     @Before
     @Override
@@ -49,6 +67,10 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         };
         super.setUp();
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
+        VersionRepoFactory.setStub(VersionRepoStubFactory.createStubThatReturns(new ArrayList<Version>(){{
+            add(new Version(dinaBarzilayVersionNumber,0,null));
+            add(new Version(theDevilVersionNumber,0,null));
+        }}));
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
         imageProcessor = nullIP();
         repo = new CDCRepositoryFacrory().create();
@@ -85,8 +107,12 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragments() {
         Utils.sleepCDFragmentSetupTime();
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(swipeLeft());
         Utils.sleepSwipingTime();
+        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         Utils.sleepScanAnswersTime();
         Utils.sleepScanAnswersTime();
@@ -97,9 +123,13 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     @Test
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionProgress() {
         Utils.sleepCDFragmentSetupTime();
+        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(swipeLeft());
         Utils.sleepSwipingTime();
+        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         Utils.sleepSwipingTime();
         Utils.sleepScanAnswersTime();
@@ -115,8 +145,12 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     @Ignore
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition() {
         Utils.sleepCDFragmentSetupTime();
+        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(swipeLeft());
+        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withContentDescription("Navigate up")).perform(click());
@@ -139,15 +173,36 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     private void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(ImageProcessingFacade ip) {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(ip);
         Utils.sleepCDFragmentSetupTime();
+        onView(withText(R.string.detect_corners_the_empty_version_choice)).perform(click());
+        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
-        onView(withId(R.id.viewPager2_corner_detected_captures)).perform(swipeLeft());
+        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+        onView(withText(Integer.toString(theDevilVersionNumber))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        Utils.sleepScanAnswersTime();
         onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withContentDescription("Navigate up")).perform(click());
         Utils.sleepScanAnswersTime();
-        Utils.sleepScanAnswersTime();
-        Utils.sleepScanAnswersTime();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));
+    }
+    static Matcher<View> withTag(final Object tag) {
+        return new TypeSafeMatcher<View>() {
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("has tag equals to: " + tag);
+            }
+
+            @Override
+            protected boolean matchesSafely(final View view) {
+                Object viewTag = view.getTag();
+                if (viewTag == null) {
+                    return tag == null;
+                }
+
+                return viewTag.equals(tag);
+            }
+        };
     }
 
 }

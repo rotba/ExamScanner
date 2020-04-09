@@ -132,6 +132,7 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
     }
 
     @Test
+    @Ignore("Relies on camera")
     public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHeNoRepoStubNoCamStub() {
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(null);
         CameraMangerFactory.setStubInstance(null);

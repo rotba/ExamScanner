@@ -99,10 +99,11 @@ public class CaptureFragment extends Fragment {
             @Override
             public void onChanged(Integer totalCaptures) {
                 final TextView viewById = (TextView) getActivity().findViewById(R.id.capture_processing_progress);
-                viewById.setText(captureViewModel.getNumOfProcessedCaptures().getValue() + "/" + totalCaptures);
+                final Integer processedCaptures = captureViewModel.getNumOfProcessedCaptures().getValue();
+                viewById.setText(processedCaptures + "/" + totalCaptures);
                 viewById.setVisibility(totalCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
                 ((Button) getActivity().findViewById(R.id.button_move_to_detect_corners))
-                        .setVisibility(totalCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
+                        .setVisibility(totalCaptures > 0 && processedCaptures>0 ? View.VISIBLE : View.INVISIBLE);
             }
         });
         captureViewModel.getNumOfProcessedCaptures().observe(getActivity(), new Observer<Integer>() {
@@ -110,6 +111,8 @@ public class CaptureFragment extends Fragment {
             public void onChanged(Integer processedCaptures) {
                 final TextView viewById = (TextView) getActivity().findViewById(R.id.capture_processing_progress);
                 viewById.setText(processedCaptures + "/" + captureViewModel.getNumOfTotalCaptures().getValue());
+                ((Button) getActivity().findViewById(R.id.button_move_to_detect_corners))
+                        .setVisibility(processedCaptures>0 ? View.VISIBLE : View.INVISIBLE);
             }
         });
         outputHander = new CameraOutputHandlerImpl(captureViewModel, processRequestDisposableContainer);

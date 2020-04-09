@@ -37,11 +37,7 @@ public class VersionRepository implements Repository<Version> {
 
     @Override
     public Version get(long id) {
-        return new Version(
-                null,
-                null,
-                id
-        );
+        return null;
     }
 
     @Override

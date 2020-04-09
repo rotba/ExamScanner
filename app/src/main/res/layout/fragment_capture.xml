@@ -60,8 +60,8 @@
                 android:gravity="center"
                 android:padding="@dimen/spacing_small"
                 android:scaleType="fitCenter"
-                android:textColor="@android:color/white"
                 android:textColorHint="@color/icActive"
+                android:textColor="@android:color/white"
                 android:textStyle="bold" />
 
         </FrameLayout>

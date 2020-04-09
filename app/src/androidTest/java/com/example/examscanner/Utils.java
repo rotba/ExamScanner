@@ -1,11 +1,19 @@
 package com.example.examscanner;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.testing.FragmentScenario;
+
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -14,6 +22,56 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class Utils {
+
+    private static final String TAG = "UTILS";
+
+    public static void loadOpenCV(FragmentScenario scenraio) {
+        final BaseLoaderCallback[] mLoaderCallback = new BaseLoaderCallback[1];
+        scenraio.onFragment(fragment -> {
+            mLoaderCallback[0] = new BaseLoaderCallback(fragment.getActivity()) {
+                @Override
+                public void onManagerConnected(int status) {
+                    switch (status) {
+                        case LoaderCallbackInterface.SUCCESS: {
+                            Log.i("MainActivity", "OpenCV loaded successfully");
+                        }
+                        break;
+                        default: {
+                            super.onManagerConnected(status);
+                        }
+                        break;
+                    }
+                }
+            };
+        });
+
+        scenraio.onFragment(fragment -> {
+            if (!OpenCVLoader.initDebug()) {
+                Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+                OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_4_0, fragment.getActivity(), mLoaderCallback[0]);
+            } else {
+                Log.d(TAG, "OpenCV library found inside package. Using it!");
+                mLoaderCallback[0].onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            }
+        });
+    }
+    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
+        return new TypeSafeMatcher<View>() {
+            int currentIndex = 0;
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with index: ");
+                description.appendValue(index);
+                matcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return matcher.matches(view) && currentIndex++ == index;
+            }
+        };
+    }
     public static void navFromHomeToCaptureQuickAndDirty() {
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withText(R.string.gallery_button_alt)).perform(click());

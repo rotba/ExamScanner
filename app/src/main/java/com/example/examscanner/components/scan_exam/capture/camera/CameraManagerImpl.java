@@ -98,7 +98,6 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
                             @RequiresApi(api = Build.VERSION_CODES.P)
                             @Override
                             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                                Log.d(TAG, "stop");
                                 Matrix matrix = new Matrix();
                                 matrix.postRotate(90f);
                                 Bitmap source = BitmapFactory.decodeFile(activity.getFilesDir()+"/foo.jpg");

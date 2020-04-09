@@ -14,6 +14,7 @@ public class CornerDetectedCapture {
     private int upperMostY;
     private int rightMostX;
     private int bottomMosty;
+    private Long versionId;
 
 
     public CornerDetectedCapture(Bitmap bitmap, int leftMostX, int upperMostY, int rightMostX, int bottomMosty,long sessionId) {
@@ -21,7 +22,7 @@ public class CornerDetectedCapture {
         this.upperMostY = upperMostY;
         this.rightMostX = rightMostX;
         this.bottomMosty = bottomMosty;
-        this.bm = bm;
+        this.bm = bitmap;
         this.sessionId=sessionId;
     }
 
@@ -32,8 +33,12 @@ public class CornerDetectedCapture {
         this.upperMostY = (int)upperLeft.y*bmHeight;
         this.rightMostX = (int)bottomRight.x*bmWidth;
         this.bottomMosty = (int)bottomRight.y*bmHeight;
-        this.bm = bm;
+        this.bm = bitmap;
         this.sessionId=sessionId;
+    }
+
+    public CornerDetectedCapture() {
+
     }
 
     public void setId(long id) {
@@ -88,4 +93,11 @@ public class CornerDetectedCapture {
         return sessionId;
     }
 
+    public void setVersionId(long id) {
+        versionId = id;
+    }
+
+    public boolean hasVersion() {
+        return versionId!=null;
+    }
 }

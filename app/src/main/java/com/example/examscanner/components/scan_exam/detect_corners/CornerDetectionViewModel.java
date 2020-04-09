@@ -1,5 +1,8 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,6 +13,7 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
+import com.example.examscanner.repositories.version.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +24,18 @@ public class CornerDetectionViewModel extends ViewModel {
     private MutableLiveData<Integer> mNumberOfCornerDetectedCaptures;
     private MutableLiveData<Integer> mNumberOfAnswersScannedCaptures;
     private ImageProcessingFacade imageProcessor;
+    private Repository<Version> verRepo;
     private Repository<CornerDetectedCapture> cdcRepo;
     private Repository<ScannedCapture> scRepo;
     private List<Long> thisSessionProcessedCaptures;
     private Exam exam;
 
 
-    public CornerDetectionViewModel(ImageProcessingFacade imageProcessor, Repository<CornerDetectedCapture> cdcRepo, Repository<ScannedCapture> scRepo, Exam exam) {
+    public CornerDetectionViewModel(ImageProcessingFacade imageProcessor, Repository<CornerDetectedCapture> cdcRepo, Repository<ScannedCapture> scRepo, Repository<Version> verRepo , Exam exam) {
         this.cdcRepo = cdcRepo;
         this.scRepo = scRepo;
         this.imageProcessor = imageProcessor;
+        this.verRepo = verRepo;
         cornerDetectedCaptures = new ArrayList<>();
         for (CornerDetectedCapture cdc : this.cdcRepo.get(c -> true)) {
             cornerDetectedCaptures.add(new MutableLiveData<CornerDetectedCapture>(cdc));
@@ -47,8 +53,6 @@ public class CornerDetectionViewModel extends ViewModel {
     public LiveData<Integer> getNumberOfScannedCaptures() {
         return mNumberOfAnswersScannedCaptures;
     }
-
-
 
     public void transformToRectangle(CornerDetectedCapture cdc) {
         cdc.setBitmap(
@@ -92,5 +96,20 @@ public class CornerDetectionViewModel extends ViewModel {
             if(cdc.getValue().getId()==captureId) return cdc;
         }
         throw new CornerDetectionUseCaseException(String.format("Can't find CDC with id: %d", captureId));
+    }
+
+    public void setVersion(long captureId, int verNum){
+        CornerDetectedCapture cdc = getCDCById(captureId).getValue();
+        cdc.setVersionId(verRepo.get(v->v.getExamId()==exam.getId() && v.getNum()==verNum).get(0).getId());
+        getCDCById(captureId).setValue(cdc);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int[] getVersionNumbers() {
+        return verRepo.get(v->v.getExamId()==exam.getId()).stream().mapToInt(Version::getNum).toArray();
+    }
+
+    public List<MutableLiveData<CornerDetectedCapture>>getCDCs() {
+        return cornerDetectedCaptures;
     }
 }

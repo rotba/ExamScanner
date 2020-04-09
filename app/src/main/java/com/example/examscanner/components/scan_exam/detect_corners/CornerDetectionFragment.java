@@ -1,6 +1,8 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
@@ -32,6 +36,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.view.View.VISIBLE;
+
 public class CornerDetectionFragment extends Fragment {
     private static final String TAG = "ExamScanner";
     private static final String MSG_PREF = "CornerDetectionFragment::";
@@ -49,7 +55,7 @@ public class CornerDetectionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((ProgressBar)view.findViewById(R.id.progressBar_detect_corners)).setVisibility(View.VISIBLE);
+        ((ProgressBar)view.findViewById(R.id.progressBar_detect_corners)).setVisibility(VISIBLE);
         Completable.fromAction(this::createViewModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,18 +68,34 @@ public class CornerDetectionFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action);
             }
         });
-        ((Button) view.findViewById(R.id.button_cd_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
+        final Button approveAndScannButton = (Button) view.findViewById(R.id.button_cd_approve_and_scan_answers);
+        approveAndScannButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue();
                 long cdcId = cornerDetectionCapturesAdapter.getCDCaptureIdInPosition(adapterBasedOPosition);
-                cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 CornerDetectedCapture cdc = cornerDetectionViewModel.getCDCById(cdcId).getValue();
+                if (!cdc.hasVersion()){
+                    askToChooseVersion();
+                    return;
+                }
+                cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc));
                 waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
             }
         });
+    }
 
+    private void askToChooseVersion() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.detect_corners_please_choose_version)
+                .setPositiveButton(R.string.detect_corners_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void onViewModelCreated() {
@@ -104,12 +126,31 @@ public class CornerDetectionFragment extends Fragment {
         cornerDetectionViewModel.getNumberOfScannedCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                ((TextView) getActivity().findViewById(R.id.textView_cd_processing_progress)).setText(
-                        integer + "/" + cornerDetectionViewModel.getNumberOfCDCaptures().getValue()
+                final TextView processProgress = (TextView) getActivity().findViewById(R.id.textView_cd_processing_progress);
+                final Integer inScanning = cornerDetectionViewModel.getNumberOfCDCaptures().getValue();
+                processProgress.setText(
+                        integer + "/" + inScanning
                 );
+                processProgress.setVisibility(inScanning > 0 ? VISIBLE : View.INVISIBLE);
+                ((Button) getActivity().findViewById(R.id.button_cd_nav_to_resolve_answers))
+                        .setVisibility(inScanning > 0 && integer>0 ? VISIBLE : View.INVISIBLE);
             }
         });
+//        for (MutableLiveData<CornerDetectedCapture> cdc:cornerDetectionViewModel.getCDCs()) {
+//            cdc.observe(getActivity(), new Observer<CornerDetectedCapture>() {
+//                @Override
+//                public void onChanged(CornerDetectedCapture cdc) {
+//                    ((Button) getActivity().findViewById(R.id.button_cd_approve_and_scan_answers))
+//                            .setEnabled(currentCardIsReadyForProcessing(cdc));
+//                }
+//            });
+//        }
         ((ProgressBar)getActivity().findViewById(R.id.progressBar_detect_corners)).setVisibility(View.INVISIBLE);
+
+    }
+
+    private boolean currentCardIsReadyForProcessing(CornerDetectedCapture cdc) {
+        return cdc.hasVersion() && cornerDetectionCapturesAdapter.getItemId(cornerDetectionCapturesAdapter.getPosition().getValue()) ==cdc.getId();
     }
 
     private void onViewModelCreatedFail(Throwable throwable) {
