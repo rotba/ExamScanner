@@ -68,18 +68,18 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private List<Point> orderPoints(List<Point> filtered) {
+    private List<Point> orderPoints(List<Point> points) {
         List<Point> ordered = new ArrayList<>();
-        double maxPointSum = Collections.max(filtered.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
-        double minPointSum = Collections.min(filtered.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
-        Point bottomRight = filtered.stream().filter(point -> point.x + point.y == maxPointSum).collect(Collectors.toList()).get(0);
-        Point topLeft = filtered.stream().filter(point -> point.x + point.y == minPointSum).collect(Collectors.toList()).get(0);
+        double maxPointSum = Collections.max(points.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
+        double minPointSum = Collections.min(points.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
+        Point bottomRight = points.stream().filter(point -> point.x + point.y == maxPointSum).collect(Collectors.toList()).get(0);
+        Point topLeft = points.stream().filter(point -> point.x + point.y == minPointSum).collect(Collectors.toList()).get(0);
         ordered.add(0, topLeft);
         ordered.add(2, bottomRight);
-        double maxPointDiff = Collections.max(filtered.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
-        double minPointDiff = Collections.min(filtered.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
-        Point bottomLeft = filtered.stream().filter(point -> point.x + point.y == maxPointDiff).collect(Collectors.toList()).get(0);
-        Point topRight = filtered.stream().filter(point -> point.x + point.y == minPointDiff).collect(Collectors.toList()).get(0);
+        double maxPointDiff = Collections.max(points.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
+        double minPointDiff = Collections.min(points.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
+        Point bottomLeft = points.stream().filter(point -> point.x + point.y == maxPointDiff).collect(Collectors.toList()).get(0);
+        Point topRight = points.stream().filter(point -> point.x + point.y == minPointDiff).collect(Collectors.toList()).get(0);
         ordered.add(1, topRight);
         ordered.add(3, bottomLeft);
         return ordered;
@@ -179,6 +179,29 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void scanAnswers(Bitmap bitmap, int[] leftMostXs, int[] upperMostYs, ScanAnswersConsumer consumer){
+
+        Mat exam = new Mat();
+        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp32, exam);
+//        Mat img_template = Imgcodecs.imread("template.png");
+
+        Bitmap bm = BitmapInatancesFactory.getTestTemplate1();
+        Mat img_template = new Mat();
+        Utils.bitmapToMat(bm, img_template);
+        int amountOfQuestions = leftMostXs.length;
+        int answersIds[] = new int[amountOfQuestions];
+        float lefts[] = new float[amountOfQuestions];
+        float tops[] = new float[amountOfQuestions];
+        float rights[] = new float[amountOfQuestions];
+        float bottoms[] = new float[amountOfQuestions];
+        int selections[] = new int[amountOfQuestions];
+        Map<Point, Integer> answersMap = findQuestions(exam, img_template, leftMostXs, upperMostYs);
+        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, img_template.cols(), img_template. rows(), exam.cols(), exam.rows());
+        consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
+    }
+
 
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer){
 
@@ -221,8 +244,63 @@ public class ImageProcessor implements ImageProcessingFacade {
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int[] leftMostXs, int[] upperMostYs) {
+
+        int numOfQuestions = leftMostXs.length;
+        int unIdentifiedThreshold = (int) Math.ceil(numOfQuestions*0.2);
+        Map<Point,Integer> answersMap = new HashMap<>();
+        for(int i=0; i<numOfQuestions; i++){
+            Point matchLoc = new Point(leftMostXs[i], upperMostYs[i]);
+            Rect rect = new Rect((int)matchLoc.x, (int)matchLoc.y, img_template.cols(), img_template.rows());
+            Mat currAns = img_exam.submat(rect);
+            List<Mat> imgChunks = splitImage2(currAns,5);
+            int correctAns = markedAnswer2(imgChunks);
+            answersMap.put(matchLoc, correctAns);
+        }
+
+        List<Integer> unidentified = answersMap.values().stream().filter(x -> x == -1).collect(Collectors.toList());
+        if(unidentified.size() > unIdentifiedThreshold){
+            answersMap = findQuestions(img_exam, img_template, numOfQuestions);
+        }
+
+        return answersMap;
+    }
+
+    private int markedAnswer2(List<Mat> imgChunks) {
+        int maxBlack = 0;
+        int maxImg = 0;
+        for(int i = 0; i < imgChunks.size(); i++){
+            Mat currMat = imgChunks.get(i);
+            //CONVERT IMAGE TO B&W AND DETERMINE IF IT HAS MORE BLACK OR WHITE
+            Imgproc.cvtColor(currMat, currMat, Imgproc.COLOR_BGR2GRAY);
+            int non_black_pixels = Core.countNonZero(currMat);
+            int black_pixels = currMat.rows() * currMat.cols() - non_black_pixels;
+            if(maxBlack < black_pixels){
+                maxBlack = black_pixels;
+                maxImg = i+1;
+            }
+        }
+
+        return maxImg;
+    }
+
+    private List<Mat> splitImage2(Mat mat, int chunkNumbers) {
+
+        List<Mat> chunkedImages = new ArrayList<Mat>(chunkNumbers);
+        int sizeOfPart = mat.cols()/chunkNumbers;
+        for(int i = 0; i < chunkNumbers; i++){
+            Rect rect = new Rect((int)i*sizeOfPart, 0, sizeOfPart, mat.rows());
+            Mat ith_ans = mat.submat(rect);
+            chunkedImages.add(ith_ans);
+        }
+        return chunkedImages;
+    }
+
     public Map<Point,Integer> findQuestions(Mat img_exam, Mat img_template, int numOfQuestions)
  {
+
         int result_cols = img_exam.cols() - img_template.cols() + 1;
         int result_rows = img_exam.rows() - img_template.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1); //CV_32FC1 means 32 bit floating point signed depth in one channel
