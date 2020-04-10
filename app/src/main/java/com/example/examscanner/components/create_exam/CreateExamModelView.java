@@ -31,7 +31,7 @@ public class CreateExamModelView extends ViewModel {
     private Repository<Exam> eRepo;
     private Repository<Version> vRepo;
     private Bitmap currentVersionBitmap;
-    private int currentVersionNumber;
+    private Integer currentVersionNumber;
 
 
     public CreateExamModelView(Repository<Exam> eRepo, Repository<Version> vRepo, Repository<Question>  qRepo, ImageProcessingFacade imageProcessor, long sessionId) {
@@ -100,11 +100,19 @@ public class CreateExamModelView extends ViewModel {
         return examCreated;
     }
 
-    public void holdVersionNumber(int verNum) {
+    public void holdVersionNumber(Integer verNum) {
         this.currentVersionNumber = verNum;
     }
 
     public void incNumOfVersions() {
         addedVersions.setValue(addedVersions.getValue()+1);
+    }
+
+    public Bitmap getCurrentVersionBitmap() {
+        return currentVersionBitmap;
+    }
+
+    public Integer getCurrentVersionNumber() {
+        return currentVersionNumber;
     }
 }

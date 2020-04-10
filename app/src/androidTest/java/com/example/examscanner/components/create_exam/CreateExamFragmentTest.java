@@ -3,7 +3,6 @@ package com.example.examscanner.components.create_exam;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.testing.FragmentScenario;
@@ -17,18 +16,15 @@ import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndro
 
 import org.junit.Test;
 
-import io.reactivex.Completable;
-import io.reactivex.schedulers.Schedulers;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.examscanner.Utils.loadOpenCV;
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.core.IsNot.not;
 
 public class CreateExamFragmentTest extends AbstractComponentInstrumentedTest {
 
@@ -39,7 +35,7 @@ public class CreateExamFragmentTest extends AbstractComponentInstrumentedTest {
         super.setUp();
         VersionImageGetterFactory.setStubInstance(new VersionImageGetter() {
             @Override
-            public void get(FragmentActivity activity) {}
+            public void get(Fragment fragment, int pickfileRequestCode) {}
 
             @Override
             public Bitmap accessBitmap(Intent data, FragmentActivity activity) {
@@ -53,10 +49,16 @@ public class CreateExamFragmentTest extends AbstractComponentInstrumentedTest {
 
     @Test
     public void testAddVersion() {
+        onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("0")));
+        onView(withId(R.id.button_create_exam_add_version)).check(matches(not(isEnabled())));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
         scenraio.onFragment(f ->
                 f.onActivityResult(0,0,null)
         );
+        onView(withId(R.id.button_create_exam_add_version)).check(matches(not(isEnabled())));
+        onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText("20"));
+        onView(withId(R.id.button_create_exam_add_version)).perform(click());
+        Utils.sleepScanAnswersTime();
         onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("1")));
     }
 }

@@ -30,22 +30,15 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static com.example.examscanner.ImageProcessorsGenerator.slowIP;
-import static kotlinx.coroutines.flow.FlowKt.withIndex;
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsString;
 
 
@@ -105,32 +98,28 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
 
     @Test
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragments() {
+        selectVersionAndScanAnswers();
         Utils.sleepCDFragmentSetupTime();
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
-        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
-        onView(withId(R.id.viewPager2_corner_detected_captures)).perform(swipeLeft());
-        Utils.sleepSwipingTime();
-        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        selectVersionAndScanAnswers();
         Utils.sleepScanAnswersTime();
         Utils.sleepScanAnswersTime();
         onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withId(R.id.textView_ra_progress_feedback)).check(matches(withText("1/2")));
     }
 
+    private void selectVersionAndScanAnswers() {
+        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
+        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+    }
+
     @Test
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionProgress() {
         Utils.sleepCDFragmentSetupTime();
-        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        selectVersionAndScanAnswers();
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(swipeLeft());
         Utils.sleepSwipingTime();
-        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        selectVersionAndScanAnswers();
         Utils.sleepSwipingTime();
         Utils.sleepScanAnswersTime();
         Utils.sleepScanAnswersTime();
@@ -145,13 +134,9 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     @Ignore
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition() {
         Utils.sleepCDFragmentSetupTime();
-        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        selectVersionAndScanAnswers();
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(swipeLeft());
-        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        selectVersionAndScanAnswers();
         onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withContentDescription("Navigate up")).perform(click());
         Utils.sleepScanAnswersTime();

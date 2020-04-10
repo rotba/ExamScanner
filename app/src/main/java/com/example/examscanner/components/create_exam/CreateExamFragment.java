@@ -20,6 +20,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +51,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class CreateExamFragment extends Fragment {
-    private static final int PICKFILE_REQUEST_CODE = 0;
+    public static final int PICKFILE_REQUEST_CODE = 0;
     private static String MSG_PREF = "CreateExamFragment::";
     private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
@@ -68,22 +70,39 @@ public class CreateExamFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ProgressBar pb = ((ProgressBar) view.findViewById(R.id.progressBar_create_exam));
         pb.setVisibility(View.VISIBLE);
+        ((Button)getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(false);
         Completable.fromAction(this::createModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onModelCreated, this::onModelCreatedError);
         ((Button) view.findViewById(R.id.button_create_exam_create)).setOnClickListener(new CreateClickListener());
         ((Button) view.findViewById(R.id.button_create_exam_upload_version_image)).setOnClickListener(this::onChooseVersionPdfClick);
+        ((EditText)view.findViewById(R.id.editText_create_exam_version_number)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.holdVersionNumber(Integer.valueOf(s.toString()));
+                refreshAddVersionButton();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        ((Button)view.findViewById(R.id.button_create_exam_add_version)).setOnClickListener(this::onAddVersion);
+    }
+
+    private void refreshAddVersionButton() {
+        ((Button)getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(
+                viewModel.getCurrentVersionNumber()!=null&&viewModel.getCurrentVersionBitmap()!=null
+        );
     }
 
     public void onChooseVersionPdfClick(View v) {
-        versionImageGetter.get(getActivity());
+        versionImageGetter.get(this, PICKFILE_REQUEST_CODE);
     }
 
-    public void onAddVersion(){
+    public void onAddVersion(View v){
         ((ProgressBar)getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
-        int verNum = new Integer(((TextView)getActivity().findViewById(R.id.textView_create_exam_version_num)).getText().toString());
-        viewModel.holdVersionNumber(verNum);
         Completable.fromAction(() -> viewModel.addVersion())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -99,7 +118,8 @@ public class CreateExamFragment extends Fragment {
             Bitmap bitmap = versionImageGetter.accessBitmap(data, getActivity());
             viewModel.holdVersionBitmap(bitmap);
             ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageBitmap(bitmap);
-
+            ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
+            refreshAddVersionButton();
         }
     }
 
@@ -112,6 +132,10 @@ public class CreateExamFragment extends Fragment {
     private void onVersionAdded() {
         ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).clearAnimation();
         ((TextView) getActivity().findViewById(R.id.textView_create_exam_version_num)).clearComposingText();
+        viewModel.holdVersionNumber(null);
+        viewModel.holdVersionBitmap(null);
+        ((ImageView)getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageResource(0);
+        refreshAddVersionButton();
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
         viewModel.incNumOfVersions();
     }

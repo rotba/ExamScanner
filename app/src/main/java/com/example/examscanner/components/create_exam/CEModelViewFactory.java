@@ -14,6 +14,8 @@ import com.example.examscanner.repositories.session.ScanExamSessionProviderFacto
 import com.example.examscanner.repositories.version.VersionRepoFactory;
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+
 public class CEModelViewFactory implements ViewModelProvider.Factory {
     private FragmentActivity activity;
 
@@ -28,7 +30,7 @@ public class CEModelViewFactory implements ViewModelProvider.Factory {
                 new ExamRepositoryFactory().create(),
                 new VersionRepoFactory().create(),
                 new QuestionRepositoryFactory().create(),
-                new ImageProcessingFactory(new BitmapInstancesFactory(ApplicationProvider.getApplicationContext())).create(),
+                new ImageProcessingFactory(new BitmapInstancesFactory(activity.getApplicationContext())).create(),
                 new CreateExamSessionProviderFactory().create().provide()
         );
     }
