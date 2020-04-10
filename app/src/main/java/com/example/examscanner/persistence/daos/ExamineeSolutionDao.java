@@ -7,7 +7,7 @@ import androidx.room.Transaction;
 
 import com.example.examscanner.persistence.entities.ExamineeSolution;
 import com.example.examscanner.persistence.entities.relations.ExamineeSolutionWithExamineeAnswers;
-import com.example.examscanner.persistence.entities.relations.SessionWithExamineeSolutions;
+import com.example.examscanner.persistence.entities.relations.SESessionWithExamineeSolutions;
 
 import java.util.List;
 
@@ -24,6 +24,6 @@ public interface ExamineeSolutionDao {
     List<ExamineeSolutionWithExamineeAnswers> getExamineeSolutionWithExamineeAnswers();
 
     @Transaction
-    @Query("SELECT *  FROM session WHERE id IS :sId LIMIT 1")
-    SessionWithExamineeSolutions getSessionWithExamineeSolutions(long sId);
+    @Query("SELECT *  FROM ScanExamSession WHERE id IS :sId LIMIT 1")
+    SESessionWithExamineeSolutions getSessionWithExamineeSolutions(long sId);
 }

@@ -9,14 +9,17 @@
         android:id="@+id/nav_home"
         android:name="com.example.examscanner.components.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_createExamFragment"
-            app:destination="@id/createExamFragment">
+            app:destination="@id/createExamFragment"></action>
+        <action
+            android:id="@+id/action_nav_home_to_captureFragment"
+            app:destination="@id/captureFragment">
             <argument
                 android:name="examId"
-                app:argType="integer"
-                android:defaultValue="-1"/>
+                android:defaultValue="-1L"
+                app:argType="long" />
         </action>
     </fragment>
 
@@ -24,26 +27,12 @@
         android:id="@+id/nav_gallery"
         android:name="com.example.examscanner.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" >
+        tools:layout="@layout/fragment_gallery">
         <action
             android:id="@+id/action_nav_gallery_to_captureFragment2"
-            app:destination="@id/captureFragment" >
-            <argument
-                android:name="versionId"
-                app:argType="long"
-                android:defaultValue="-1L" />
-            <argument
-                android:name="sessionId"
-                app:argType="long"
-                android:defaultValue="-1L" />
+            app:destination="@id/captureFragment">
         </action>
     </fragment>
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.examscanner.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
 
     <activity
         android:id="@+id/mainActivity2"
@@ -59,48 +48,48 @@
         android:id="@+id/captureFragment"
         android:name="com.example.examscanner.components.scan_exam.capture.CaptureFragment"
         android:label="Scan"
-        tools:layout="@layout/fragment_capture_old" >
+        tools:layout="@layout/fragment_capture_old">
         <argument
-            android:name="versionId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:name="examId"
+            android:defaultValue="-1L"
+            app:argType="long" />
         <argument
             android:name="sessionId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_captureFragment_to_cornerDetectionFragment"
-            app:destination="@id/cornerDetectionFragment" >
+            app:destination="@id/cornerDetectionFragment">
             <argument
                 android:name="examId"
-                app:argType="integer"
-                android:defaultValue="-1" />
+                android:defaultValue="-1L"
+                app:argType="long" />
         </action>
     </fragment>
     <fragment
         android:id="@+id/cornerDetectionFragment"
         android:name="com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment"
-        android:label="CornerDetectionFragment" >
+        android:label="CornerDetectionFragment">
         <action
             android:id="@+id/action_cornerDetectionFragment_to_fragment_resolve_answers"
             app:destination="@id/fragment_resolve_answers" />
         <argument
             android:name="examId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/fragment_resolve_answers"
         android:name="com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersFragment"
         android:label="fragment_resolve_answers2"
-        tools:layout="@layout/fragment_resolve_answers2" >
+        tools:layout="@layout/fragment_resolve_answers2">
         <action
             android:id="@+id/action_fragment_resolve_answers_to_resolveConflictedAnswersFragment"
-            app:destination="@id/resolveConflictedAnswersFragment" >
+            app:destination="@id/resolveConflictedAnswersFragment">
             <argument
                 android:name="scanId"
-                app:argType="integer"
-                android:defaultValue="-1" />
+                android:defaultValue="-1"
+                app:argType="integer" />
         </action>
     </fragment>
     <fragment
@@ -109,7 +98,7 @@
         android:label="Resolve Conflicted Answers">
         <argument
             android:name="scanId"
-            app:argType="integer"
-            android:defaultValue="-1"/>
+            android:defaultValue="-1"
+            app:argType="integer" />
     </fragment>
 </navigation>

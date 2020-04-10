@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.Environment;
 
 import androidx.core.content.ContextCompat;
@@ -42,6 +43,6 @@ public class NullImageProcessingProvider implements ImageProcessingFacade {
 
     @Override
     public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
-        consumer.consume(null,null,null,null);
+        consumer.consume(new PointF(),null,null,new PointF());
     }
 }

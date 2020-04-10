@@ -8,4 +8,5 @@ public interface QuestionEntityInterface {
     public int getUpY();
     public int getRightX();
     public int getBottomY();
+    public int getNum();
 }

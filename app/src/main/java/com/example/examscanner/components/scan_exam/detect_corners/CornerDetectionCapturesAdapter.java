@@ -45,7 +45,6 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         this.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                Log.d(TAG,String.format("position:%d",position));
                 CornerDetectionCapturesAdapter.this.mPosition.setValue(position);
             }
         });

@@ -22,7 +22,7 @@ public class ScannedCapture {
         this.answers = new ArrayList<>();
         for (int i = 0; i <numOfAnswersDetected ; i++) {
             if(selections[i] >0){
-                answers.add(new CheckedAnswer(answersIds[i], new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i]), selections[i]));
+                answers.add(new ResolvedAnswer(answersIds[i], new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i]), selections[i]));
             }else{
                 answers.add(new ConflictedAnswer(answersIds[i] , new PointF(lefts[i],tops[i]), new PointF(rights[i],bottoms[i])));
             }
@@ -71,7 +71,7 @@ public class ScannedCapture {
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     public int getCheckedAmount() {
-        return amountOf(a -> a.isChecked());
+        return amountOf(a -> a.isResolved());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -108,6 +108,28 @@ public class ScannedCapture {
 
     private void setAnswers(List<Answer> newAnswers) {
         answers=newAnswers;
+    }
+
+    public Answer getAnswerByNum(int i) {
+        for (Answer a:answers) {
+            if(a.getAnsNum()==i){
+                return a;
+            }
+        }
+        throw new NoAnswerWithTheGivenNum();
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public List<ResolvedAnswer> getResolvedAnswers() {
+        List<ResolvedAnswer> ans = new ArrayList<>();
+        for (Answer a:answers) {
+            if(a.isResolved())
+                ans.add((ResolvedAnswer)a);
+        }
+        return ans;
     }
 
 

@@ -10,7 +10,7 @@ public abstract class Answer {
         this.ansNum = id;
     }
     public int getAnsNum(){return ansNum;}
-    public boolean isChecked(){
+    public boolean isResolved(){
         return false;
     }
     public boolean isConflicted(){

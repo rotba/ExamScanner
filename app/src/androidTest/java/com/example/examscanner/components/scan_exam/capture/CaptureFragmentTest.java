@@ -3,7 +3,6 @@ package com.example.examscanner.components.scan_exam.capture;
 
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.view.View;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.espresso.NoMatchingViewException;
@@ -11,11 +10,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
-import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
-import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 
 import org.junit.Before;
@@ -29,6 +26,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static com.example.examscanner.Utils.sleepCameraPreviewSetupTime;
 import static com.example.examscanner.Utils.sleepSingleCaptureProcessingTime;
 import static com.example.examscanner.Utils.sleepSingleCaptureTakingTime;
@@ -42,29 +40,9 @@ public class CaptureFragmentTest{
 
     @Before
     public void setUp() {
-//        super.setUp();
-//        navFromHomeToCapture();
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
-//        CameraMangerFactory.setStubInstance(new CameraManager() {
-//            @Override
-//            public void setUp() {}
-//
-//            @Override
-//            public View.OnClickListener createCaptureClickListener(CameraOutputHander handler) {
-//                return new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        handler.handleBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
-//                    }
-//                };
-//            }
-//
-//            @Override
-//            public void onPause() {}
-//
-//            @Override
-//            public void onDestroy() {}
-//        });
+        CameraMangerFactory.setStubInstance(new CameraManagerStub());
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(nullIP());
         Bundle b = new Bundle();
         b.putInt("examId", -1);
         scenario =
@@ -72,19 +50,7 @@ public class CaptureFragmentTest{
         sleepCameraPreviewSetupTime();
     }
 
-//    @After
-//    public void tearDown(){
-////        device = UiDevice.getInstance(getInstrumentation());
-//        try {
-//            device.setOrientationNatural();
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    @Test
-    public void testTheNumberOfUnprocessedCapturesUpdates() {
-        assertUserSeeProgress(0,0);
+    private void theNumberOfUnprocessedCapturesUpdates() {
         onView(withId(R.id.capture_image_button)).perform(click());
         sleepSingleCaptureTakingTime();
         try {
@@ -95,16 +61,40 @@ public class CaptureFragmentTest{
     }
 
     @Test
+    public void testTheNumberOfUnprocessedCapturesUpdates() {
+        theNumberOfUnprocessedCapturesUpdates();
+    }
+    @Test
+    public void testTheNumberOfUnprocessedCapturesUpdatesRealCamera() {
+        CameraMangerFactory.setStubInstance(null);
+        theNumberOfUnprocessedCapturesUpdates();
+    }
+
+    @Test
+    public void testTheNumberOfUnprocessedCapturesUpdatesRealIP() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
+        theNumberOfUnprocessedCapturesUpdates();
+    }
+
+    @Test
     public void testTheNumberOfProcessedAndUnprocessedCapturesUpdates() {
-        assertUserSeeProgress(0,0);
         sleepCameraPreviewSetupTime();
         onView(withId(R.id.capture_image_button)).perform(click());
         sleepSingleCaptureProcessingTime();
         assertUserSeeProgress(1,1);
     }
 
-    @Test//TODO - fix
-    @Ignore
+    @Test
+    public void testTheNumberOfProcessedAndUnprocessedCapturesUpdatesRealCamera() {
+        CameraMangerFactory.setStubInstance(null);
+        sleepCameraPreviewSetupTime();
+        onView(withId(R.id.capture_image_button)).perform(click());
+        sleepSingleCaptureProcessingTime();
+        assertUserSeeProgress(1,1);
+    }
+
+    @Test
+    @Ignore("TODO - fix")
     public void testDataSurvivesRotation() {
         device = UiDevice.getInstance(getInstrumentation());
         sleepCameraPreviewSetupTime();
@@ -122,16 +112,6 @@ public class CaptureFragmentTest{
         }
         assertUserSeeProgress(1, 1);
     }
-
-
-
-
-
-//    private void navToCapture() {
-//        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
-//        onView(withText(R.string.gallery_button_alt)).perform(click());
-//        onView(withText(R.string.start_scan_exam)).perform(click());
-//    }
 
 
 }

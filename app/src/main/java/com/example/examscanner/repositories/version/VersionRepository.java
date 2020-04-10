@@ -1,5 +1,8 @@
 package com.example.examscanner.repositories.version;
 
+import com.example.examscanner.communication.CommunicationFacade;
+import com.example.examscanner.communication.CommunicationFacadeFactory;
+import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
@@ -12,22 +15,22 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class VersionRepository implements Repository<Version> {
-    private Converter<JSONObject, Version> converter  = new VersionConverter();
-    private Repository<Exam> examRepository;
+    private CommunicationFacade comFacade;
+    private Converter<VersionEntityInterface, Version> converter;
 
     private static VersionRepository instance;
     public static VersionRepository getInstance(){
         if (instance==null){
-//            instance = new VersionRepository(new ExamRepositoryFactory().create());
-            instance = new VersionRepository(null);
+            instance = new VersionRepository(new CommunicationFacadeFactory().create(), new VersionConverter());
             return instance;
         }else{
             return instance;
         }
     }
 
-    public VersionRepository(Repository<Exam> examRepository) {
-        this.examRepository = examRepository;
+    public VersionRepository(CommunicationFacade comFacade, Converter<VersionEntityInterface, Version> converter) {
+        this.comFacade = comFacade;
+        this.converter = converter;
     }
 
     @Override
@@ -37,11 +40,7 @@ public class VersionRepository implements Repository<Version> {
 
     @Override
     public Version get(long id) {
-        return new Version(
-                null,
-                null,
-                id
-        );
+        return converter.convert(comFacade.getVersionById(id));
     }
 
     @Override
@@ -51,7 +50,8 @@ public class VersionRepository implements Repository<Version> {
 
     @Override
     public void create(Version version) {
-
+        long verId = comFacade.createVersion(version.getExamId(), version.getNum());
+        version.setId(verId);
     }
 
     @Override

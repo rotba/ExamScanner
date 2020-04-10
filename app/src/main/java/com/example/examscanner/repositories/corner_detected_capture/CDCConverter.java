@@ -14,14 +14,13 @@ public class CDCConverter implements Converter<SemiScannedCaptureEntityInterface
     }
 
     @Override
-    public CornerDetectedCapture convert(SemiScannedCaptureEntityInterface semiScannedCapture) throws JSONException {
+    public CornerDetectedCapture convert(SemiScannedCaptureEntityInterface semiScannedCapture) {
         CornerDetectedCapture ans = new CornerDetectedCapture(
                 semiScannedCapture.getBitmap(),
                 semiScannedCapture.getLeftMostX(),
                 semiScannedCapture.getUpperMostY(),
                 semiScannedCapture.getRightMostX(),
                 semiScannedCapture.getBottomMosty(),
-                verRepo.get((int)semiScannedCapture.getVesrionId()),
                 semiScannedCapture.getSessionId()
         );
         ans.setId(semiScannedCapture.getId());

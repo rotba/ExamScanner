@@ -13,7 +13,7 @@ import org.robolectric.annotation.Config;
 public abstract class AbstractTestSuite {
     @Before
     public void setUp(){
-        CommunicationFacadeFactory.setTestMode();
+//        CommunicationFacadeFactory.setTestMode();
     }
     public int getCurrentGraderId(){
         return State.getState().getGraderId();
