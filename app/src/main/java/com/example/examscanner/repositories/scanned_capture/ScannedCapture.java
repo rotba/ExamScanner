@@ -56,7 +56,7 @@ public class ScannedCapture {
     }
     private Answer getNaturalBasedAnswer(int id) throws NoSuchAnswerException {
         for (Answer a:answers) {
-            if (a.getId()==id) return a;
+            if (a.getAnsNum()==id) return a;
         }
         throw new NoSuchAnswerException("Asked for: "+ id+" but there are only "+answers.size()+" answers");
     }
@@ -94,7 +94,7 @@ public class ScannedCapture {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void resolve(ConflictedAnswer ca, ResolvedConflictedAnswer resolve) {
-        answers.removeIf((answer -> answer.getId()==ca.getId()));
+        answers.removeIf((answer -> answer.getAnsNum()==ca.getAnsNum()));
         answers.add(resolve);
     }
 

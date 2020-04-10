@@ -4,20 +4,15 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
-import com.example.examscanner.stubs.BitmapInatancesFactory;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencv.android.OpenCVLoader;
 
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.junit.Assert.*;
-
-
+@Ignore("No tests")
 public class ImageProcessorTest {
 
-
+//
     private ImageProcessingFacade imgProcessor = new ImageProcessingFactory().create();
 
     @Before

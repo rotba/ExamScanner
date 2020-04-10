@@ -18,6 +18,5 @@ public class CaptureFragmentStatefull extends StateFullTest {
     public void setUp() {
         super.setUp();
         navFromHomeToCapture();
-
     }
 }

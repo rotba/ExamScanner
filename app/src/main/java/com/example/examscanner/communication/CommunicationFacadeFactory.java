@@ -1,13 +1,15 @@
 package com.example.examscanner.communication;
 
+import android.content.Context;
+
 public class CommunicationFacadeFactory {
     private static boolean testMode = false;
 
-    public Facade create() {
+    public CommunicationFacade create() {
         if(testMode){
-            return FacadeImpl.getInstance();
+            return new FacadeImplProxy();
         }else{
-            return FacadeImpl.getInstance();
+            return new FacadeImplProxy();
         }
 
     }

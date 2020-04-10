@@ -1,7 +1,5 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
-import android.graphics.Bitmap;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -24,7 +22,7 @@ public class CornerDetectionViewModel extends ViewModel {
     private ImageProcessingFacade imageProcessor;
     private Repository<CornerDetectedCapture> cdcRepo;
     private Repository<ScannedCapture> scRepo;
-    private List<Integer> thisSessionProcessedCaptures;
+    private List<Long> thisSessionProcessedCaptures;
     private Exam exam;
 
 
@@ -39,14 +37,14 @@ public class CornerDetectionViewModel extends ViewModel {
         mNumberOfCornerDetectedCaptures = new MutableLiveData<>(this.cornerDetectedCaptures.size());
         mNumberOfAnswersScannedCaptures = new MutableLiveData<>(0);
         this.exam = exam;
-        thisSessionProcessedCaptures = new ArrayList<>();
+        thisSessionProcessedCaptures = new ArrayList<Long>();
     }
 
-    public LiveData<Integer> getNumberOfCornerDetectedCaptures() {
+    public LiveData<Integer> getNumberOfCDCaptures() {
         return mNumberOfCornerDetectedCaptures;
     }
 
-    public LiveData<Integer> getNumberOfAnswersScannedCaptures() {
+    public LiveData<Integer> getNumberOfScannedCaptures() {
         return mNumberOfAnswersScannedCaptures;
     }
 
@@ -75,20 +73,21 @@ public class CornerDetectionViewModel extends ViewModel {
     }
 
 
-    public void postProcessTransformAndScanAnswers(int captureId) {
+    public void postProcessTransformAndScanAnswers(long captureId) {
         thisSessionProcessedCaptures.add(captureId);
         mNumberOfAnswersScannedCaptures.setValue(scRepo.get(sc -> true).size());
     }
 
-    public List<MutableLiveData<CornerDetectedCapture>> getPreProcessedCornerDetectedCaptures() {
+    public List<MutableLiveData<CornerDetectedCapture>> getPreProcessedCDCs() {
         List<MutableLiveData<CornerDetectedCapture>> ans = new ArrayList<>();
         for (MutableLiveData<CornerDetectedCapture> cdc:cornerDetectedCaptures) {
-            if(!thisSessionProcessedCaptures.contains(cdc.getValue().getId())) ans.add(cdc);
+            if(!thisSessionProcessedCaptures.contains(cdc.getValue().getId()))
+                ans.add(cdc);
         }
         return ans;
     }
 
-    public MutableLiveData<CornerDetectedCapture> getCornerDetectedCaptureById(int captureId) {
+    public MutableLiveData<CornerDetectedCapture> getCDCById(long captureId) {
         for (MutableLiveData<CornerDetectedCapture> cdc :cornerDetectedCaptures) {
             if(cdc.getValue().getId()==captureId) return cdc;
         }

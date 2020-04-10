@@ -11,14 +11,14 @@ public class DCEmptyRepositoryFactory {
     public static Repository<CornerDetectedCapture> create(){
         return new Repository<CornerDetectedCapture>() {
             private List<CornerDetectedCapture> data = new ArrayList<>();
-            private int currAvialbleId = 0;
+            private long currAvialbleId = 0;
             @Override
             public int getId() {
                 return 0;
             }
 
             @Override
-            public CornerDetectedCapture get(int id) {
+            public CornerDetectedCapture get(long id) {
                 return null;
             }
 
@@ -33,6 +33,7 @@ public class DCEmptyRepositoryFactory {
 
             @Override
             public void create(CornerDetectedCapture cornerDetectedCapture) {
+                cornerDetectedCapture.setId(currAvialbleId++);
                 data.add(cornerDetectedCapture);
             }
 
@@ -47,7 +48,7 @@ public class DCEmptyRepositoryFactory {
 
             @Override
             public int genId() {
-                return currAvialbleId++;
+                return -1;
             }
         };
     }

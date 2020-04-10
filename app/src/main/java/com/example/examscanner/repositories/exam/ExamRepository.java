@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.examscanner.communication.Facade;
+import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 
 
 public class ExamRepository implements Repository<Exam> {
-    private Facade comFacade = new CommunicationFacadeFactory().create();
+    private CommunicationFacade comFacade = new CommunicationFacadeFactory().create();
     private Converter<JSONObject, Exam> converter = new ExamConverter();
     private MapHandler mapper = new MapHandler(converter);
     private FilterHandler filterrer = new FilterHandler();
@@ -42,10 +42,10 @@ public class ExamRepository implements Repository<Exam> {
     }
 
     @Override
-    public Exam get(int id) {
+    public Exam get(long id) {
         try {
             return converter.convert(
-                    comFacade.getExam(id)
+                    comFacade.getExamGoingToEarse(id)
             );
         }catch (JSONException e){
             Log.v(TAG, "Can't find exam with an id: " + id);
@@ -59,7 +59,7 @@ public class ExamRepository implements Repository<Exam> {
     public List<Exam> get(Predicate<Exam> criteria) {
         try {
             return filterrer.filter(
-                    mapper.map(comFacade.getExams()),
+                    mapper.map(comFacade.getExamsGoingToEarse()),
                     criteria
             );
         } catch (JSONException e) {

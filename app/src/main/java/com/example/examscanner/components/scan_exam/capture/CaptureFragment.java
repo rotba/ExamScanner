@@ -1,44 +1,35 @@
 package com.example.examscanner.components.scan_exam.capture;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.camera.core.ImageCapture;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment;
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentArgs;
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentDirections;
-import com.example.examscanner.stubs.BitmapInatancesFactory;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
+import com.example.examscanner.components.scan_exam.capture.camera.CameraPermissionRequester;
 
-import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -51,28 +42,34 @@ public class CaptureFragment extends Fragment  {
     private CameraPermissionRequester permissionRequester;
     private CaptureViewModel captureViewModel;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
+    private CameraOutputHander outputHander;
+    private ProgressBar pb;
+//    private Msg2BitmapMapper m2bmMapper;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+//        m2bmMapper = new Msg2BitmapFactory(getActivity()).create();
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
         CaptureViewModelFactory factory = new CaptureViewModelFactory(
                 getActivity(),
-                CaptureFragmentArgs.fromBundle(getArguments()).getExamId()
+                CaptureFragmentArgs.fromBundle(getArguments()).getVersionId(),
+                CaptureFragmentArgs.fromBundle(getArguments()).getSessionId()
         );
         captureViewModel =ViewModelProviders.of(this,factory).get(CaptureViewModel.class);
-        cameraManager = new CameraManager(
+        cameraManager = new CameraMangerFactory(
                 getActivity(),
                 root
-        );
+        ).create();
 
         permissionRequester = new CameraPermissionRequester(
                 ()-> cameraManager.setUp(),
                 getActivity()
         );
         permissionRequester.request();
+        outputHander= new CameraOutputHandlerImpl(captureViewModel,processRequestDisposableContainer);
         return root;
     }
 
@@ -81,45 +78,21 @@ public class CaptureFragment extends Fragment  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ConstraintLayout container = (ConstraintLayout)view;
-//        View v = View.inflate(requireContext(), R.layout.camera_ui_container, container);
+        pb = (ProgressBar)view.findViewById(R.id.pb_cap);
+        pb.setVisibility(View.INVISIBLE);
         ((ImageButton)view.findViewById(R.id.capture_image_button))
-                .setOnClickListener(cameraManager.getClickLIstener(
-                        new Handler(Looper.getMainLooper()){
-                            @Override
-                            public void handleMessage(Message msg) {
-                                super.handleMessage(msg);
-                                BitmapInatancesFactory.setContext(getContext());
-                                Bitmap bm = BitmapInatancesFactory.getTestJpg1();//TODO extract real image
-                                captureViewModel.consumeCapture(new Capture(bm));
-                                processRequestDisposableContainer.add(
-                                        Completable.fromCallable(()->{
-                                            captureViewModel.processCapture();
-                                            return "Done";
-                                        })
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribeWith(new DisposableCompletableObserver(){
-                                            @Override
-                                            public void onComplete() {
-                                                captureViewModel.postProcessCapture();
-                                            }
-
-                                            @Override
-                                            public void onError(Throwable e) {
-                                                Log.d(TAG, "captureViewModel.processCapture() with ");
-                                                e.printStackTrace();
-                                            }
-                                        })
-                                );
-                            }
-                        }
-                ));
+                .setOnClickListener(
+                        new ProgressBarOnClickListenerDecorator(
+                                pb,
+                                cameraManager.createCaptureClickListener(outputHander)
+                        )
+                );
         ((Button)view.findViewById(R.id.button_move_to_detect_corners)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CaptureFragmentDirections.ActionCaptureFragmentToCornerDetectionFragment action =
                         CaptureFragmentDirections.actionCaptureFragmentToCornerDetectionFragment();
-                action.setExamId(captureViewModel.getExamId());
+                action.setExamId((int)captureViewModel.getVersionId());
                 Navigation.findNavController(view).navigate(action);
             }
         });
@@ -159,5 +132,20 @@ public class CaptureFragment extends Fragment  {
     public void onPause() {
         super.onPause();
         cameraManager.onPause();
+    }
+
+    private class ProgressBarOnClickListenerDecorator implements View.OnClickListener{
+        private ProgressBar pb;
+        private View.OnClickListener complicatedCalculation;
+
+        public ProgressBarOnClickListenerDecorator(ProgressBar pb, View.OnClickListener complicatedCalculation) {
+            this.pb = pb;
+            this.complicatedCalculation = complicatedCalculation;
+        }
+
+        @Override
+        public void onClick(View v) {
+            complicatedCalculation.onClick(v);
+        }
     }
 }

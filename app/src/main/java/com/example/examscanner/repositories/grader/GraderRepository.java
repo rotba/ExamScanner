@@ -1,14 +1,14 @@
 package com.example.examscanner.repositories.grader;
 
 import com.example.examscanner.communication.CommunicationFacadeFactory;
-import com.example.examscanner.communication.Facade;
+import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.repositories.Repository;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 public class GraderRepository implements Repository<Grader> {
-    private Facade comFacade = new CommunicationFacadeFactory().create();
+    private CommunicationFacade comFacade = new CommunicationFacadeFactory().create();
     private static GraderRepository instance;
     private static final String TAG = "GraderRepository";
 
@@ -26,9 +26,9 @@ public class GraderRepository implements Repository<Grader> {
     }
 
     @Override
-    public Grader get(int id) {
+    public Grader get(long id) {
         //TODO - implement comFacade get Grader
-        return new ExamManager(id);
+        return new ExamManager((int) id);
     }
 
     @Override

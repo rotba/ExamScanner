@@ -13,6 +13,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.examscanner.communication.ContextProvider;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.stubs.StubImageProcessingFactory;
 import com.google.android.material.navigation.NavigationView;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
-    private static boolean stubsMode = false;
+    private static boolean stubsMode = true;
 //    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 //        @Override
 //        public void onManagerConnected(int status) {
@@ -51,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
 //            Log.d(TAG, "OpenCV library found inside package. Using it!");
 //            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 //        }
-//        if(stubsMode) ImageProcessingFactory.ONLYFORSTUBBINGsetTestInstance(StubImageProcessingFactory.create(this));
+        if(stubsMode) ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(StubImageProcessingFactory.create(this));
+        ContextProvider.set(this.getApplicationContext());
         State.getState().onInitialCreate(this);
     }
 

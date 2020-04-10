@@ -1,5 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,18 +19,20 @@ import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.capture.CaptureFragmentArgs;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 
 import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class CornerDetectionFragment extends Fragment {
+    private static final String TAG = "ExamScanner";
     private CornerDetectionViewModel cornerDetectionViewModel;
     private CornerDetectionCapturesAdapter cornerDetectionCapturesAdapter;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
@@ -38,16 +41,13 @@ public class CornerDetectionFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        CornerDetectionViewModelFactory factory =
-                new CornerDetectionViewModelFactory(
+        CDViewModelFactory factory =
+                new CDViewModelFactory(
                         getActivity(),
-                        CaptureFragmentArgs.fromBundle(getArguments()).getExamId()
+                        CornerDetectionFragmentArgs.fromBundle(getArguments()).getExamId()
                 );
         cornerDetectionViewModel = new ViewModelProvider(this, factory).get(CornerDetectionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_corner_detection, container, false);
-        ((TextView) root.findViewById(R.id.textView_cd_current_position)).setText(
-                "1/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
-        );
         return inflater.inflate(R.layout.fragment_corner_detection, container, false);
     }
 
@@ -55,16 +55,18 @@ public class CornerDetectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewPager2 viewPager = (ViewPager2) view.findViewById(R.id.viewPager2_corner_detected_captures);
-        cornerDetectionCapturesAdapter = new CornerDetectionCapturesAdapter(getActivity(), cornerDetectionViewModel.getPreProcessedCornerDetectedCaptures(), viewPager);
+        cornerDetectionCapturesAdapter =
+                new CornerDetectionCapturesAdapter(
+                        getActivity().getSupportFragmentManager(),
+                        getActivity().getLifecycle(),
+                        cornerDetectionViewModel.getPreProcessedCDCs(), viewPager);
         viewPager.setAdapter(cornerDetectionCapturesAdapter);
-        ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
-                "1/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
-        );
+
         cornerDetectionCapturesAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
-                        integer + "/" + cornerDetectionCapturesAdapter.getmItemCount().getValue()
+                        (integer+1) + "/" + cornerDetectionCapturesAdapter.getmItemCount().getValue()
                 );
             }
         });
@@ -72,18 +74,16 @@ public class CornerDetectionFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 ((TextView) view.findViewById(R.id.textView_cd_current_position)).setText(
-                        cornerDetectionCapturesAdapter.getPosition().getValue() + "/" + integer
+                        (cornerDetectionCapturesAdapter.getPosition().getValue()+1) + "/" + integer
                 );
             }
         });
-        ((TextView) view.findViewById(R.id.textView_cd_processing_progress)).setText(
-                "0/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
-        );
-        cornerDetectionViewModel.getNumberOfAnswersScannedCaptures().observe(getActivity(), new Observer<Integer>() {
+
+        cornerDetectionViewModel.getNumberOfScannedCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 ((TextView) view.findViewById(R.id.textView_cd_processing_progress)).setText(
-                        integer + "/" + cornerDetectionViewModel.getNumberOfCornerDetectedCaptures().getValue()
+                        integer + "/" + cornerDetectionViewModel.getNumberOfCDCaptures().getValue()
                 );
             }
         });
@@ -94,14 +94,15 @@ public class CornerDetectionFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action);
             }
         });
-        ((Button) view.findViewById(R.id.button_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
+        ((Button) view.findViewById(R.id.button_cd_approve_and_scan_answers)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue() - 1;
-                int cdcId = cornerDetectionCapturesAdapter.getCDCaptureInPosition(adapterBasedOPosition);
-                cornerDetectionCapturesAdapter.notifiProcessBegun(adapterBasedOPosition);
-                CornerDetectedCapture cdc = cornerDetectionViewModel.getCornerDetectedCaptureById(cdcId).getValue();
+                int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue();
+                long cdcId = cornerDetectionCapturesAdapter.getCDCaptureIdInPosition(adapterBasedOPosition);
+                cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
+                CornerDetectedCapture cdc = cornerDetectionViewModel.getCDCById(cdcId).getValue();
                 processRequestDisposableContainer.add(generateCaptureScanningCompletable(cdc,adapterBasedOPosition));
+                waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
             }
         });
 
@@ -120,14 +121,27 @@ public class CornerDetectionFragment extends Fragment {
                     @Override
                     public void onComplete() {
                         cornerDetectionViewModel.postProcessTransformAndScanAnswers(cdc.getId());
-                        cornerDetectionCapturesAdapter.handleProcessFinish(adapterBasedOPosition);
+                        cornerDetectionCapturesAdapter.handleProcessFinish(cdc.getId());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CornerDetectionFragment", "generateCaptureScanningCompletable");
+                        Log.d(TAG, "generateCaptureScanningCompletable");
                         e.printStackTrace();
-                        cornerDetectionCapturesAdapter.notifiProcessFinished(adapterBasedOPosition);
+                    }
+                });
+    }
+    @SuppressLint("CheckResult")
+    private void waitABitAndSwipeLeft(ViewPager2 viewPager, CornerDetectionCapturesAdapter adapter) {
+        Observable.fromCallable(() -> {
+                    Thread.sleep(200);
+                    return "done";
+                }
+        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        viewPager.setCurrentItem(adapter.getPosition().getValue()+1);
                     }
                 });
     }

@@ -33,7 +33,6 @@
     android:contentDescription="@string/switch_camera_button_alt"
     android:padding="@dimen/spacing_small"
     android:scaleType="fitCenter"
-    android:text="0/0"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent" />
 

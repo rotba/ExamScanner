@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -27,7 +26,7 @@ public class ResolveAnswersFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         resolveAnswersViewModel = new ViewModelProvider(
                 this.getActivity(),
-                new ResolveAnswersViewModelFactory(getActivity())
+                new RAViewModelFactory(getActivity())
         ).get(ResolveAnswersViewModel.class);
         View root = inflater.inflate(R.layout.fragment_resolve_answers, container, false);
         return root;
