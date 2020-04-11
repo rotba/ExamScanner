@@ -2,6 +2,7 @@ package com.example.examscanner.stubs;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.PointF;
 
 import com.example.examscanner.MainActivity;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
@@ -20,7 +21,7 @@ public class StubImageProcessingFactory {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                consumer.consume(null,null,null,null);
+                consumer.consume(new PointF(),null,null,new PointF());
             }
 
             @Override

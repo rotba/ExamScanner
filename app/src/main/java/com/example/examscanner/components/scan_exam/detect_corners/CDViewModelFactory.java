@@ -11,13 +11,14 @@ import com.example.examscanner.repositories.corner_detected_capture.CDCRepositor
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
+import com.example.examscanner.repositories.version.VersionRepoFactory;
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 public class CDViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
     private Exam exam;
 
-    public CDViewModelFactory(FragmentActivity activity, int examId) {
+    public CDViewModelFactory(FragmentActivity activity, long examId) {
         this.activity = activity;
         this.exam = new ExamRepositoryFactory().create().get(examId);
     }
@@ -30,6 +31,7 @@ public class CDViewModelFactory implements ViewModelProvider.Factory {
                 new ImageProcessingFactory(new BitmapInstancesFactory(activity)).create(),
                 new CDCRepositoryFacrory().create(),
                 new ScannedCaptureRepositoryFactory().create(),
+                new VersionRepoFactory().create(),
                 exam
         );
     }

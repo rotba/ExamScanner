@@ -2,6 +2,7 @@ package com.example.examscanner;
 
 import com.example.examscanner.components.scan_exam.StateFullTest;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -11,6 +12,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public class MainActivityTest extends StateFullTest {
+
+    @Override
+    @Before
+    public void setUp() {
+        super.setUp();
+    }
 
     @Test
     public void testAfterLoginHomeIsDisplayed() {

@@ -1,20 +1,30 @@
 package com.example.examscanner.repositories.version;
 
-import com.example.examscanner.repositories.exam.Exam;
-
 public class Version {
-    private Exam exam;
-    private int[] answers;
+    private long eId;
+    private long[] answers;
     private long id;
+    private int num;
 
-    public Version(Exam exam, int[] answers, long id) {
-        this.exam = exam;
+    public Version(int num, long eId, long[] answers) {
+        this.eId = eId;
         this.answers = answers;
-        this.id = id;
+        this.num = num;
     }
 
-    public boolean isAssociatedWith(int examId) {
-        return exam.getId()==examId;
+    public Version(long id, int number, long examId, long[] questions) {
+        this.id=id;
+        this.eId = examId;
+        this.answers = questions;
+        this.num = number;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
     }
 
     public void setId(long id) {
@@ -23,5 +33,13 @@ public class Version {
 
     public long getId() {
         return id;
+    }
+
+    public long getExamId() {
+        return eId;
+    }
+
+    public long[] getQuestions() {
+        return answers;
     }
 }

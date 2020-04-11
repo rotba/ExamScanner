@@ -16,6 +16,6 @@ class ResolvedConflictedAnswer extends ConflictedAnswer {
 
     @Override
     public Answer commitResolution() {
-        return new CheckedAnswer(getAnsNum(),getUpperLeft(),getBottomRight(), choice.value);
+        return new ResolvedAnswer(getAnsNum(),getUpperLeft(),getBottomRight(), choice.value);
     }
 }

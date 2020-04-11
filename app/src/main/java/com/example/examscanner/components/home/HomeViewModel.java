@@ -11,33 +11,38 @@ import com.example.examscanner.State;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
+import com.example.examscanner.repositories.session.ScanExamSession;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<List<Exam>> mExams;
-    private Repository<Exam> examRepository = new ExamRepositoryFactory().create();
+    private Repository<Exam> examRepository;
+    private Repository<ScanExamSession> sesRepo;
 
-    public LiveData<List<Exam>> getExams() {
+    public HomeViewModel(Repository<Exam> examRepository, Repository<ScanExamSession> sesRepo) {
+         this.examRepository = examRepository;
+        this.sesRepo = sesRepo;
+    }
+
+    public List<LiveData<Exam>> getExams() {
+        List<LiveData<Exam>>  mExams = new ArrayList<>();
+        for (Exam e :examRepository.get(e->true)) {
+            mExams.add(new MutableLiveData<>(e));
+        }
         return mExams;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void init() {
-        if(mExams!=null){
-            return;
-        }else{
-            mExams = new MutableLiveData<>();
-            final int currentGraderId = State.getState().getGraderId();
-            mExams.setValue(examRepository.get(new Predicate<Exam>() {
-                @Override
-                public boolean test(Exam exam) {
-                    return exam.associatedWithGrader(currentGraderId);
-                }
-            }));
+    public long getLastSession(long examId) {
+        List<ScanExamSession> ses = sesRepo.get(s->s.examId()==examId);
+        if(ses.size()==0)return -1;
+        long last = -1;
+        for (ScanExamSession s:ses) {
+            last = Math.max(last,s.getId());
         }
+        return last;
     }
 }

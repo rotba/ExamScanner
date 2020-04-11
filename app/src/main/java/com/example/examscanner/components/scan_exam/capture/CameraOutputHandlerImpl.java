@@ -14,6 +14,8 @@ import io.reactivex.schedulers.Schedulers;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class CameraOutputHandlerImpl implements CameraOutputHander {
+    private static String TAG = "ExamScanner";
+    private static String MSG_PREF = "CameraOutputHandlerImpl::";
     private CaptureViewModel captureViewModel;
     private final CompositeDisposable processRequestDisposableContainer;
 
@@ -26,24 +28,23 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
     public void handleBitmap(Bitmap bm) {
         captureViewModel.consumeCapture(new Capture(bm));
         processRequestDisposableContainer.add(
-                Completable.fromCallable(() -> {
-                    captureViewModel.processCapture();
-                    return "Done";
-                })
+                Completable.fromAction(this::processCapture)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(new DisposableCompletableObserver() {
-                            @Override
-                            public void onComplete() {
-                                captureViewModel.postProcessCapture();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.d(TAG, "captureViewModel.processCapture() with ");
-                                e.printStackTrace();
-                            }
-                        })
+                        .subscribe(this::onCaptureProcessed, this::onCapturePtocessError)
         );
+    }
+
+    private void processCapture(){
+        captureViewModel.processCapture();
+    }
+
+    private void onCapturePtocessError(Throwable throwable) {
+        Log.d(TAG, MSG_PREF);
+        throwable.printStackTrace();
+    }
+
+    private void onCaptureProcessed() {
+        captureViewModel.postProcessCapture();
     }
 }

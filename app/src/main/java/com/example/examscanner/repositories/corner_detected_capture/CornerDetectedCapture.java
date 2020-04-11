@@ -9,24 +9,36 @@ import com.example.examscanner.repositories.version.Version;
 public class CornerDetectedCapture {
     private long id;
     private Bitmap bm;
-    private PointF upperLeft;
-    private PointF upperRight;
-    private PointF bottomRight;
-    private PointF bottomLeft;
-    private Version version;
     private long sessionId;
+    private int leftMostX;
+    private int upperMostY;
+    private int rightMostX;
+    private int bottomMosty;
+    private Long versionId;
 
-    public CornerDetectedCapture(Bitmap bm, PointF upperLeft, PointF upperRight, PointF bottomRight, PointF bottomLeft, Version version , long sessionId) {
-        this.bm = bm;
-        this.upperLeft = upperLeft;
-        this.upperRight = upperRight;
-        this.bottomRight = bottomRight;
-        this.bottomLeft = bottomLeft;
-        this.version = version;
+
+    public CornerDetectedCapture(Bitmap bitmap, int leftMostX, int upperMostY, int rightMostX, int bottomMosty,long sessionId) {
+        this.leftMostX = leftMostX;
+        this.upperMostY = upperMostY;
+        this.rightMostX = rightMostX;
+        this.bottomMosty = bottomMosty;
+        this.bm = bitmap;
         this.sessionId=sessionId;
     }
 
-    public CornerDetectedCapture(Bitmap bitmap, int leftMostX, int upperMostY, int rightMostX, int bottomMosty, Version version, long sessionId) {
+    public CornerDetectedCapture(Bitmap bitmap, PointF upperLeft, PointF bottomRight, long sessionId) {
+        int bmHeight  = bitmap.getHeight();
+        int bmWidth  = bitmap.getWidth();
+        this.leftMostX = (int)upperLeft.x*bmWidth;
+        this.upperMostY = (int)upperLeft.y*bmHeight;
+        this.rightMostX = (int)bottomRight.x*bmWidth;
+        this.bottomMosty = (int)bottomRight.y*bmHeight;
+        this.bm = bitmap;
+        this.sessionId=sessionId;
+    }
+
+    public CornerDetectedCapture() {
+
     }
 
     public void setId(long id) {
@@ -62,26 +74,30 @@ public class CornerDetectedCapture {
     }
 
     public int getLeftMostX() {
-        return -1;
+        return leftMostX;
     }
 
     public int getUpperMostY() {
-        return -1;
+        return upperMostY;
     }
 
     public int getRightMostX() {
-        return -1;
+        return rightMostX;
     }
 
     public int getBottomMostY() {
-        return -1;
+        return bottomMosty;
     }
 
     public long getSession() {
         return sessionId;
     }
 
-    public long getVersionId() {
-        return version.getId();
+    public void setVersionId(long id) {
+        versionId = id;
+    }
+
+    public boolean hasVersion() {
+        return versionId!=null;
     }
 }

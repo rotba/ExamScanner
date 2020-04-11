@@ -26,4 +26,6 @@ public interface VersionDao {
     @Query("SELECT * FROM version WHERE id IS :id LIMIT 1")
     VersionWithQuestions getVersionWithQuestions(long id);
 
+    @Query("SELECT *  FROM version WHERE id IS :vId")
+    Version getById(long vId);
 }

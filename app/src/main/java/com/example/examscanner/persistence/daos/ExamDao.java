@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import com.example.examscanner.persistence.entities.Exam;
 import com.example.examscanner.persistence.entities.relations.ExamWithVersions;
@@ -23,6 +24,12 @@ public interface ExamDao {
     @Query("SELECT * FROM exam WHERE id IS :id LIMIT 1")
     ExamWithVersions getExamWithVersions(long id);
 
-    @Query("SELECT * FROM exam WHERE sessionId IS :sId LIMIT 1")
+    @Query("SELECT * FROM exam WHERE examCreationSessionId IS :sId LIMIT 1")
     long getBySessionId(long sId);
+
+    @Query("SELECT *  FROM exam")
+    List<Exam> getAll();
+
+    @Update
+    void update(Exam exam);
 }

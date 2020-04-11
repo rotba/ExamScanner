@@ -9,14 +9,14 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.examscanner.Utils.navFromHomeToCapture;
+import static com.example.examscanner.Utils.navFromHomeToCaptureQuickAndDirty;
 
-@Ignore
+@Ignore("Empty")
 public class CaptureFragmentStatefull extends StateFullTest {
     @Override
     @Before
     public void setUp() {
         super.setUp();
-        navFromHomeToCapture();
+        navFromHomeToCaptureQuickAndDirty();
     }
 }

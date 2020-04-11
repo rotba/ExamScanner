@@ -1,10 +1,7 @@
 package com.example.examscanner.communication;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 
-import androidx.room.Room;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
@@ -13,13 +10,12 @@ import com.example.examscanner.communication.entities_interfaces.SemiScannedCapt
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.persistence.AppDatabase;
+import com.example.examscanner.persistence.AppDatabaseFactory;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
@@ -29,39 +25,33 @@ public class CommunicationFacadeTest {
 
     @Before
     public void setUp() throws Exception {
-        Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
-        RealFacadeImple.setDBTestInstance(db);
+        AppDatabaseFactory.setTestMode();
+        db = AppDatabaseFactory.getInstance();
         oot = new CommunicationFacadeFactory().create();
     }
 
     @After
     public void tearDown() throws Exception {
-        db.clearAllTables();
-    }
-
-    private long setUpSessionContext() {
-        return oot.createNewSession("TEST");
+        AppDatabaseFactory.tearDownDb();
     }
 
     private ExamContext setUpExamContext() {
-        long sId = setUpSessionContext();
+        long examCreationContext = oot.createNewCreateExamSession();
         return new ExamContext(
-                oot.createExam("COMP", "walla.co.il", "2020", 1, 1, sId),
-                sId
+                oot.createExam("COMP", "walla.co.il", "2020", 1, 1, examCreationContext)
         );
     }
 
     private VersionContext setUpVersionContext() {
         ExamContext context = setUpExamContext();
         final int versionNumber = 1;
-        return new VersionContext(oot.addVersion(context.eId, versionNumber), context.sId, context.eId, versionNumber);
+        return new VersionContext(oot.addVersion(context.eId, versionNumber),  context.eId, versionNumber);
     }
 
     private VersionContext setUpVersionNonEmptyContext() {
         ExamContext context = setUpExamContext();
         final int versionNumber = 1;
-        VersionContext ans = new VersionContext(oot.addVersion(context.eId, versionNumber), context.sId,context.eId,versionNumber);
+        VersionContext ans = new VersionContext(oot.addVersion(context.eId, versionNumber),context.eId,versionNumber);
         oot.addQuestion(ans.vId, 1, 1,0,0,0,0);
         oot.addQuestion(ans.vId, 2, 400,0,0,0,0);
         oot.addQuestion(ans.vId, 3, 5,0,0,0,0);
@@ -72,11 +62,16 @@ public class CommunicationFacadeTest {
 
     private ExamineeSolutionContext setUpExamineeSolutionContextWithNonEmptyVersion() {
         VersionContext versionContext = setUpVersionNonEmptyContext();
+        long scanExamSessionId= setUpScanExamSessionContext(versionContext.eId);
         return new ExamineeSolutionContext(
                 0,
-                oot.createExamineeSolution(versionContext.sId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0),
+                oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0),
                 versionContext.vId
         );
+    }
+
+    private long setUpScanExamSessionContext(long eId) {
+        return oot.createNewScanExamSession(eId);
     }
 
     @Test
@@ -106,29 +101,33 @@ public class CommunicationFacadeTest {
 
     @Test
     public void testSessionIdUpdates() {
-        assertTrue(oot.createNewSession("hey") != oot.createNewSession("brother"));
+        ExamContext e1 = setUpExamContext();
+        ExamContext e2 = setUpExamContext();
+        assertTrue(oot.createNewScanExamSession(e1.eId) != oot.createNewScanExamSession(e1.eId));
     }
 
     @Test
-    public void testFetExamBySession() {
-        long sId = setUpSessionContext();
-        long eId = oot.createExam("", "", "", 0, 0, sId);
-        assertEquals(eId, oot.getExamIdBySession(sId));
+    public void testGetExamByScanExamSessionId() {
+        ExamContext e = setUpExamContext();
+        long scanExamSessionId = oot.createNewScanExamSession(e.eId);
+        assertEquals(e.eId, oot.getExamIdByScanExamSession(scanExamSessionId));
     }
 
     @Test
     public void testCreateAndGetSemiScannedCaptureNotNull() {
         VersionContext context = setUpVersionContext();
-        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context.sId, context.vId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
+        long scanExamSessionId = oot.createNewScanExamSession(context.eId);
+        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         assertNotNull(oot.getSemiScannedCapture(sscId));
     }
 
     @Test
     public void testCreateAndGetBySessionSemiScannedCaptureNotNull() {
         VersionContext context = setUpVersionContext();
-        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context.sId, context.vId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
+        long scanExamSessionId = setUpScanExamSessionContext(context.eId);
+        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         boolean assertion = false;
-        long[] sscs = oot.getSemiScannedCaptureBySession(context.sId);
+        long[] sscs = oot.getSemiScannedCaptureBySession(scanExamSessionId);
         for (int i = 0; i < sscs.length; i++) {
             assertion |= sscs[i] == sscId;
         }
@@ -139,9 +138,10 @@ public class CommunicationFacadeTest {
     public void testWeirdBug() {
         setUpVersionContext();
         VersionContext context2 = setUpVersionContext();
-        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, context2.sId, context2.vId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
+        long scanExamSessionId = setUpScanExamSessionContext(context2.eId);
+        long sscId = oot.createSemiScannedCapture(0, 0, 0, 0, scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         boolean assertion = false;
-        long[] sscs = oot.getSemiScannedCaptureBySession(context2.sId);
+        long[] sscs = oot.getSemiScannedCaptureBySession(scanExamSessionId);
         for (int i = 0; i < sscs.length; i++) {
             assertion |= sscs[i] == sscId;
         }
@@ -151,16 +151,18 @@ public class CommunicationFacadeTest {
     @Test
     public void testGetAndCreateExamineeSolutionsBySessionNotEmpty() {
         VersionContext vContext = setUpVersionContext();
-        long esId = oot.createExamineeSolution(vContext.sId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0);
-        assertTrue(oot.getExamineeSolutionsBySession(vContext.sId).length > 0);
+        long scanExamSessionId = setUpScanExamSessionContext(vContext.eId);
+        long esId = oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0);
+        assertTrue(oot.getExamineeSolutionsBySession(scanExamSessionId).length > 0);
     }
 
     @Test
     public void testGetAndCreateExamineeSolutionsBySessionUpdates() {
         VersionContext vContext = setUpVersionContext();
-        long esId = oot.createExamineeSolution(vContext.sId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0);
+        long scanExamSessionId = setUpScanExamSessionContext(vContext.eId);
+        long esId = oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0);
         boolean assertion = false;
-        long[] ess = oot.getExamineeSolutionsBySession(vContext.sId);
+        long[] ess = oot.getExamineeSolutionsBySession(scanExamSessionId);
         for (int i = 0; i < ess.length; i++) {
             assertion |= ess[i] == esId;
         }
@@ -190,17 +192,18 @@ public class CommunicationFacadeTest {
     @Test
     public void testSemiScannedCaptureEntityInterface() {
         VersionContext versionContext = setUpVersionContext();
+        long scanExamSessionId = setUpScanExamSessionContext(versionContext.eId);
         final Bitmap testJpg1Marked = BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked();
         final int rightMostY = 1;
         final int rightMostX = 2;
         final int upperMostY = 3;
         final int leftMostX = 4;
-        oot.createSemiScannedCapture(leftMostX, upperMostY, rightMostX, rightMostY,versionContext.sId,versionContext.vId, testJpg1Marked);
+        oot.createSemiScannedCapture(leftMostX, upperMostY, rightMostX, rightMostY,scanExamSessionId, testJpg1Marked);
         SemiScannedCaptureEntityInterface ei = oot.getSemiScannedCapture(
-                oot.getSemiScannedCaptureBySession(versionContext.sId)[0]
+                oot.getSemiScannedCaptureBySession(scanExamSessionId)[0]
         );
         assertTrue(ei.getBitmap().sameAs(testJpg1Marked));
-        assertEquals(ei.getSessionId(),versionContext.sId);
+        assertEquals(ei.getSessionId(),scanExamSessionId);
         assertEquals(ei.getLeftMostX(),leftMostX);
         assertEquals(ei.getUpperMostY(),upperMostY);
         assertEquals(ei.getRightMostX(),rightMostX);
@@ -219,7 +222,6 @@ public class CommunicationFacadeTest {
     }
     @Test
     public void testExamEntityInterface() {
-        long sId = setUpSessionContext();
         final String comp = "COMP";
         final String url = "walla.co.il";
         final String year = "2020";
@@ -253,22 +255,17 @@ public class CommunicationFacadeTest {
         assertEquals(ei.getCorrectAnswer(),correctAnswer);
         assertEquals(ei.getVersionId(),versionContext.vId);
     }
-    @Test
-    public void testExamineeAnswerEntityInterface() {
 
-    }
 
 
 
     private class VersionContext {
         long vId;
-        long sId;
         long eId;
         int vNum;
 
-        public VersionContext(long vId, long sId, long eId, int vNum) {
+        public VersionContext(long vId, long eId, int vNum) {
             this.vId = vId;
-            this.sId = sId;
             this.eId =eId;
             this.vNum = vNum;
         }
@@ -277,11 +274,9 @@ public class CommunicationFacadeTest {
 
     private class ExamContext {
         long eId;
-        long sId;
 
-        public ExamContext(long eId, long sId) {
+        public ExamContext(long eId) {
             this.eId = eId;
-            this.sId = sId;
         }
     }
 

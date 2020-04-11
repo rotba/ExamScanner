@@ -40,7 +40,7 @@ import java.util.concurrent.Executor;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
-    private static String TAG = "CameraManagerImpl";
+    private static String TAG = "ExamScan";
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private FragmentActivity activity;
     private ImageCapture imageCapture;
@@ -98,7 +98,6 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
                             @RequiresApi(api = Build.VERSION_CODES.P)
                             @Override
                             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                                Log.d(TAG, "stop");
                                 Matrix matrix = new Matrix();
                                 matrix.postRotate(90f);
                                 Bitmap source = BitmapFactory.decodeFile(activity.getFilesDir()+"/foo.jpg");

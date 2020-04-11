@@ -14,6 +14,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.features2d.FastFeatureDetector;
@@ -184,7 +185,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         Utils.bitmapToMat(bmp32, exam);
 //        Mat img_template = Imgcodecs.imread("template.png");
 
-        Bitmap bm = BitmapInatancesFactory.getTestTemplate1();
+        Bitmap bm = bmFact.getTestTemplate1();
         Mat img_template = new Mat();
         Utils.bitmapToMat(bm, img_template);
         int amountOfQuestions = leftMostXs.length;
