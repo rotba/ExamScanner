@@ -52,21 +52,21 @@ public class ImageProcessor implements ImageProcessingFacade {
         List<Point> filtered = filterPoints(points);
         List<Point> clockwiseOrderedPoints = orderPoints(filtered);
         Point upperLeft = clockwiseOrderedPoints.get(1);
-        Point upperRight = clockwiseOrderedPoints.get(0);
+        Point upperRight = clockwiseOrderedPoints.get(2);
         Point bottomRight = clockwiseOrderedPoints.get(3);
-        Point bottomLeft = clockwiseOrderedPoints.get(2);
-//        consumer.consume(
-//                new PointF((float) upperLeft.x, (float) upperLeft.y),
-//                new PointF((float) upperRight.x, (float) upperRight.y),
-//                new PointF((float) bottomLeft.x, (float) bottomLeft.y),
-//                new PointF((float) bottomRight.x, (float) bottomRight.y)
-//        );
+        Point bottomLeft = clockwiseOrderedPoints.get(0);
         consumer.consume(
                 new PointF((float) upperLeft.x, (float) upperLeft.y),
                 new PointF((float) upperRight.x, (float) upperRight.y),
                 new PointF((float) bottomLeft.x, (float) bottomLeft.y),
-                new PointF((float) upperRight.x, (float) upperRight.y)
+                new PointF((float) bottomRight.x, (float) bottomRight.y)
         );
+//        consumer.consume(
+//                new PointF((float) upperLeft.x, (float) upperLeft.y),
+//                new PointF((float) upperRight.x, (float) upperRight.y),
+//                new PointF((float) bottomLeft.x, (float) bottomLeft.y),
+//                new PointF((float) upperRight.x, (float) upperRight.y)
+//        );
 
     }
 

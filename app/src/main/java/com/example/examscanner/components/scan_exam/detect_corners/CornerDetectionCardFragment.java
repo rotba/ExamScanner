@@ -275,10 +275,14 @@ public class CornerDetectionCardFragment extends Fragment {
             layPoint(upperRight, (int)(cdc.getUpperLeft().x*xScale), (int)(cdc.getUpperLeft().y*yScale));
             layPoint(upperLeft, (int)(cdc.getUpperRight().x*xScale), (int)(cdc.getUpperRight().y*yScale));
             layPoint(bottomLeft, (int)(cdc.getBottomLeft().x*xScale), (int)(cdc.getBottomLeft().y*yScale));
-            upperRight.setVisibility(View.INVISIBLE);
-            upperLeft.setVisibility(View.INVISIBLE);
-            bottomLeft.setVisibility(View.INVISIBLE);
+//            upperRight.setVisibility(View.INVISIBLE);
+//            upperLeft.setVisibility(View.INVISIBLE);
+//            bottomLeft.setVisibility(View.INVISIBLE);
             layPoint(bottomRight, (int)(cdc.getBottomRight().x*xScale), (int)(cdc.getBottomRight().y*yScale));
+            layPoint(upperRight, (int)(cdc.getUpperRight().x*xScale), (int)(cdc.getUpperRight().y*yScale));
+            layPoint(upperLeft, (int)(cdc.getUpperLeft().x*xScale), (int)(cdc.getUpperLeft().y*yScale));
+            layPoint(bottomLeft, (int)(cdc.getBottomLeft().x*xScale), (int)(cdc.getBottomLeft().y*yScale));
+
         }
     }
 }
