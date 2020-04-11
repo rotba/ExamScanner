@@ -15,9 +15,28 @@ public class CornerDetectedCapture {
     private int rightMostX;
     private int bottomMosty;
     private Long versionId;
+    private Point upperLeft;
+    private Point upperRight;
+    private Point bottomRight;
+    private Point bottomLeft;
 
+    public Point getUpperLeft() {
+        return upperLeft;
+    }
 
-    public CornerDetectedCapture(Bitmap bitmap, int leftMostX, int upperMostY, int rightMostX, int bottomMosty,long sessionId) {
+    public Point getUpperRight() {
+        return upperRight;
+    }
+
+    public Point getBottomRight() {
+        return bottomRight;
+    }
+
+    public Point getBottomLeft() {
+        return bottomLeft;
+    }
+
+    public CornerDetectedCapture(Bitmap bitmap, int leftMostX, int upperMostY, int rightMostX, int bottomMosty, long sessionId) {
         this.leftMostX = leftMostX;
         this.upperMostY = upperMostY;
         this.rightMostX = rightMostX;
@@ -31,6 +50,14 @@ public class CornerDetectedCapture {
         this.upperMostY = (int)upperLeft.y;
         this.rightMostX = (int)bottomRight.x;
         this.bottomMosty = (int)bottomRight.y;
+        this.bm = bitmap;
+        this.sessionId=sessionId;
+    }
+    public CornerDetectedCapture(Bitmap bitmap, PointF upperLeft, PointF upperRight ,PointF bottomRight,  PointF bottomLeft, long sessionId) {
+        this.upperLeft = new Point((int)upperLeft.x,(int)upperLeft.y);
+        this.upperRight = new Point((int)upperRight.x,(int)upperRight.y);
+        this.bottomRight = new Point((int)bottomRight.x,(int)bottomRight.y);
+        this.bottomLeft = new Point((int)bottomLeft.x,(int)bottomLeft.y);
         this.bm = bitmap;
         this.sessionId=sessionId;
     }
@@ -55,21 +82,7 @@ public class CornerDetectedCapture {
         this.bm = bm;
     }
 
-    public Point getUpperLeft() {
-        return null;
-    }
 
-    public Point getUpperRight() {
-        return null;
-    }
-
-    public Point getBottomRight() {
-        return null;
-    }
-
-    public Point getBottomLeft() {
-        return null;
-    }
 
     public int getLeftMostX() {
         return leftMostX;

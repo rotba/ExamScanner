@@ -55,23 +55,34 @@ public class ImageProcessor implements ImageProcessingFacade {
         Point upperRight = clockwiseOrderedPoints.get(0);
         Point bottomRight = clockwiseOrderedPoints.get(3);
         Point bottomLeft = clockwiseOrderedPoints.get(2);
-//        consumer.consume(
-//                new PointF((float) upperLeft.x, (float) upperLeft.y),
-//                new PointF((float) upperRight.x, (float) upperRight.y),
-//                new PointF((float) bottomLeft.x, (float) bottomLeft.y),
-//                new PointF((float) bottomRight.x, (float) bottomRight.y)
-//        );
         consumer.consume(
                 new PointF((float) upperLeft.x, (float) upperLeft.y),
                 new PointF((float) upperRight.x, (float) upperRight.y),
                 new PointF((float) bottomLeft.x, (float) bottomLeft.y),
-                new PointF((float) upperRight.x, (float) upperRight.y)
+                new PointF((float) bottomRight.x, (float) bottomRight.y)
         );
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private List<Point> orderPoints(List<Point> points) {
+<<<<<<< HEAD
+//        List<Point> ordered = new ArrayList<>(4);
+        double maxPointSum = Collections.max(points.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
+        double minPointSum = Collections.min(points.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
+        Point bottomRight = points.stream().filter(point -> point.x + point.y == maxPointSum).collect(Collectors.toList()).get(0);
+        Point topLeft = points.stream().filter(point -> point.x + point.y == minPointSum).collect(Collectors.toList()).get(0);
+        double maxPointDiff = Collections.max(points.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
+        double minPointDiff = Collections.min(points.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
+        Point bottomLeft = points.stream().filter(point -> point.y - point.x == maxPointDiff).collect(Collectors.toList()).get(0);
+        Point topRight = points.stream().filter(point -> point.y - point.x == minPointDiff).collect(Collectors.toList()).get(0);
+
+        return new ArrayList<Point>() {{
+            add(topLeft);
+            add(topRight);
+            add(bottomRight);
+            add(bottomLeft);
+        }};
+=======
         List<Double> Xs = points.stream().map(p -> p.x).collect(Collectors.toList());
         List<Double> Ys = points.stream().map(p -> p.y).collect(Collectors.toList());
         double sumXs = Xs.stream().reduce(0.0, (subtotal, p) -> subtotal + p) / points.size();
@@ -88,6 +99,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         PointComparator pc = new PointComparator();
         points.sort(pc);
         return points;
+>>>>>>> 5fe27474e158a98252c25d72f8592767e7fc8369
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

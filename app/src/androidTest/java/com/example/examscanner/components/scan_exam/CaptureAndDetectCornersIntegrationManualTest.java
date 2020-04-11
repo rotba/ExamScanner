@@ -125,6 +125,43 @@ public class CaptureAndDetectCornersIntegrationManualTest extends StateFullTest 
         onView(withText("1/2")).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testDetectDiagonalImg() {
+        CameraMangerFactory.setStubInstance(new CameraManager() {
+            @Override
+            public void setUp() {
+            }
+
+            @Override
+            public View.OnClickListener createCaptureClickListener(CameraOutputHander handler) {
+                return new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        handler.handleBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpgDiagonal1());
+                    }
+                };
+            }
+
+            @Override
+            public void onPause() {
+
+            }
+
+            @Override
+            public void onDestroy() {
+
+            }
+        });
+        navToCapture();
+        sleepCameraPreviewSetupTime();
+        sleepCameraPreviewSetupTime();
+        onView(withId(R.id.capture_image_button)).perform(click());
+        sleepSingleCaptureProcessingTime();
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        sleepMovingFromCaptureToDetectCorners();
+        onView(withText("1/2")).check(matches(isDisplayed()));
+    }
+
 
 
     private void navToCapture() {

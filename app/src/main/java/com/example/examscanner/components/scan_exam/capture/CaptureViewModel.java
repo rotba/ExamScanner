@@ -58,7 +58,7 @@ public class CaptureViewModel extends ViewModel {
                     public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
                         cdcRepo.create(
                                 new CornerDetectedCapture(
-                                        capture.getBitmap(), upperLeft,bottomRight, sessionId
+                                        capture.getBitmap(), upperLeft, upperRight,bottomRight,bottomLeft, sessionId
                                 )
                         );
                     }
