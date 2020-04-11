@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.examscanner.R;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.version.Version;
 
 import io.reactivex.Observable;
@@ -83,22 +84,50 @@ public class CornerDetectionCardFragment extends Fragment {
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView2_corner_detected_capture);
         Drawable drawable = imageView.getDrawable();
         Rect imageBounds = drawable.getBounds();
-        ((ConstraintLayout) view.findViewById(R.id.constraintLayout_upper_left_container)).setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
-        ((ConstraintLayout) view.findViewById(R.id.constraintLayout_upper_right_container)).setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
-        ((ConstraintLayout) view.findViewById(R.id.constraintLayout_bottom_right_container)).setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
-        ((ConstraintLayout) view.findViewById(R.id.constraintLayout_bottom_left_container)).setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
+        ConstraintLayout upperLeft = (ConstraintLayout) view.findViewById(R.id.constraintLayout_upper_left_container);
+        upperLeft.setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
+        ConstraintLayout upperRight = (ConstraintLayout) view.findViewById(R.id.constraintLayout_upper_right_container);
+        upperRight.setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
+        ConstraintLayout bottomRight = (ConstraintLayout) view.findViewById(R.id.constraintLayout_bottom_right_container);
+        bottomRight.setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
+        ConstraintLayout bottomLeft = (ConstraintLayout) view.findViewById(R.id.constraintLayout_bottom_left_container);
+        bottomLeft.setOnTouchListener(new CornerPointOnTouchListener(imageBounds.left, imageBounds.right, imageBounds.top, imageBounds.bottom));
+        CornerDetectedCapture cdc = cornerDetectionViewModel.getCDCById(captureId).getValue();
+        layPoints(upperLeft, upperRight, bottomRight, bottomLeft, cdc, 1, 1);
         Observable.fromCallable(() -> cornerDetectionViewModel.getVersionNumbers())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
     }
 
+    private void layPoints(ConstraintLayout upperLeft, ConstraintLayout upperRight, ConstraintLayout bottomRight, ConstraintLayout bottomLeft, CornerDetectedCapture cdc, int xScale, int yScale) {
+//        upperLeft.animate()
+//                .x(cdc.getLeftMostX() * cdc.getBitmap().getWidth())
+//                .y(cdc.getUpperMostY() * cdc.getBitmap().getHeight());
+        layPoint(upperLeft, cdc.getLeftMostX() * xScale, cdc.getUpperMostY() * yScale);
+        layPoint(upperRight, cdc.getRightMostX() * xScale, cdc.getUpperMostY() * yScale);
+        layPoint(bottomRight, cdc.getRightMostX() * xScale, cdc.getBottomMostY() * yScale);
+        layPoint(bottomLeft, cdc.getLeftMostX() * xScale, cdc.getBottomMostY() * yScale);
+//        upperLeft.setX(cdc.getLeftMostX()*cdc.getBitmap().getWidth());
+//        upperLeft.setY(cdc.getUpperMostY()*cdc.getBitmap().getHeight());
+//        bottomLeft.setX(cdc.getLeftMostX()*cdc.getBitmap().getWidth());
+//        bottomLeft.setY(cdc.getBottomMostY()*cdc.getBitmap().getHeight());
+//        upperRight.setX(cdc.getRightMostX()*cdc.getBitmap().getWidth());
+//        upperRight.setY(cdc.getUpperMostY()*cdc.getBitmap().getHeight());
+//        bottomRight.setX(cdc.getRightMostX()*cdc.getBitmap().getWidth());
+//        bottomLeft.setY(cdc.getBottomMostY()*cdc.getBitmap().getHeight());
+    }
+
+    private void layPoint(View v, int x, int y) {
+        v.animate().x(x).y(y);
+    }
+
     private void onVersionNumbersRetrived(int[] versionNumbers) {
         String[] versionStrings = new String[versionNumbers.length + 1];
         String theEmptyChoice = getActivity().getString(R.string.detect_corners_the_empty_version_choice);
         versionStrings[0] = theEmptyChoice;
-        for (int i = 1; i < versionNumbers.length+1; i++) {
-            versionStrings[i] = new String(Integer.toString(versionNumbers[i-1]));
+        for (int i = 1; i < versionNumbers.length + 1; i++) {
+            versionStrings[i] = new String(Integer.toString(versionNumbers[i - 1]));
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, versionStrings);
 

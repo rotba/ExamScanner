@@ -2,16 +2,14 @@ package com.example.examscanner.components.scan_exam.capture;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.View;
 
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class CameraOutputHandlerImpl implements CameraOutputHander {
     private static String TAG = "ExamScanner";
@@ -25,7 +23,7 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
     }
 
     @Override
-    public void handleBitmap(Bitmap bm) {
+    public View.OnClickListener handleBitmap(Bitmap bm) {
         captureViewModel.consumeCapture(new Capture(bm));
         processRequestDisposableContainer.add(
                 Completable.fromAction(this::processCapture)
@@ -33,6 +31,7 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onCaptureProcessed, this::onCapturePtocessError)
         );
+        return null;
     }
 
     private void processCapture(){

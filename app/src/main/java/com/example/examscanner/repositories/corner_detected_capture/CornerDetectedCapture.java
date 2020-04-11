@@ -27,12 +27,10 @@ public class CornerDetectedCapture {
     }
 
     public CornerDetectedCapture(Bitmap bitmap, PointF upperLeft, PointF bottomRight, long sessionId) {
-        int bmHeight  = bitmap.getHeight();
-        int bmWidth  = bitmap.getWidth();
-        this.leftMostX = (int)upperLeft.x*bmWidth;
-        this.upperMostY = (int)upperLeft.y*bmHeight;
-        this.rightMostX = (int)bottomRight.x*bmWidth;
-        this.bottomMosty = (int)bottomRight.y*bmHeight;
+        this.leftMostX = (int)upperLeft.x;
+        this.upperMostY = (int)upperLeft.y;
+        this.rightMostX = (int)bottomRight.x;
+        this.bottomMosty = (int)bottomRight.y;
         this.bm = bitmap;
         this.sessionId=sessionId;
     }
