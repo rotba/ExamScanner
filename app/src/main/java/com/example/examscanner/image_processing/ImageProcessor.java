@@ -51,10 +51,10 @@ public class ImageProcessor implements ImageProcessingFacade {
         // Then, supposing a rectangle exists, find its 4 corners coordinates
         List<Point> filtered = filterPoints(points);
         List<Point> clockwiseOrderedPoints = orderPoints(filtered);
-        Point upperLeft = clockwiseOrderedPoints.get(0);
-        Point upperRight = clockwiseOrderedPoints.get(1);
-        Point bottomRight = clockwiseOrderedPoints.get(2);
-        Point bottomLeft = clockwiseOrderedPoints.get(3);
+        Point upperLeft = clockwiseOrderedPoints.get(1);
+        Point upperRight = clockwiseOrderedPoints.get(0);
+        Point bottomRight = clockwiseOrderedPoints.get(3);
+        Point bottomLeft = clockwiseOrderedPoints.get(2);
         consumer.consume(
                 new PointF((float) upperLeft.x, (float) upperLeft.y),
                 new PointF((float) upperRight.x, (float) upperRight.y),
@@ -65,22 +65,22 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private List<Point> orderPoints(List<Point> points) {
-//        List<Point> ordered = new ArrayList<>(4);
-        double maxPointSum = Collections.max(points.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
-        double minPointSum = Collections.min(points.stream().map(point -> point.x + point.y).collect(Collectors.toList()));
-        Point bottomRight = points.stream().filter(point -> point.x + point.y == maxPointSum).collect(Collectors.toList()).get(0);
-        Point topLeft = points.stream().filter(point -> point.x + point.y == minPointSum).collect(Collectors.toList()).get(0);
-        double maxPointDiff = Collections.max(points.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
-        double minPointDiff = Collections.min(points.stream().map(point -> point.y - point.x).collect(Collectors.toList()));
-        Point bottomLeft = points.stream().filter(point -> point.y - point.x == maxPointDiff).collect(Collectors.toList()).get(0);
-        Point topRight = points.stream().filter(point -> point.y - point.x == minPointDiff).collect(Collectors.toList()).get(0);
-
-        return new ArrayList<Point>() {{
-            add(topLeft);
-            add(topRight);
-            add(bottomRight);
-            add(bottomLeft);
-        }};
+        List<Double> Xs = points.stream().map(p -> p.x).collect(Collectors.toList());
+        List<Double> Ys = points.stream().map(p -> p.y).collect(Collectors.toList());
+        double sumXs = Xs.stream().reduce(0.0, (subtotal, p) -> subtotal + p) / points.size();
+        double sumYs = Ys.stream().reduce(0.0, (subtotal, p) -> subtotal + p) / points.size();
+        class PointComparator implements Comparator {
+            public int compare(Object o1, Object o2) {
+                Point p1 = (Point) o1;
+                Point p2 = (Point) o2;
+                double first = (Math.atan2(p1.x - sumXs, p1.y - sumYs) + 2 * Math.PI) % (2 * Math.PI);
+                double second = (Math.atan2(p2.x - sumXs, p2.y - sumYs) + 2 * Math.PI) % (2 * Math.PI);
+                return (int) Math.ceil(first - second);
+            }
+        }
+        PointComparator pc = new PointComparator();
+        points.sort(pc);
+        return points;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
