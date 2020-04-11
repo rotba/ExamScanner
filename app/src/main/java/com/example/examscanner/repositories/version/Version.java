@@ -1,30 +1,26 @@
 package com.example.examscanner.repositories.version;
 
+import com.example.examscanner.repositories.exam.Exam;
+import com.example.examscanner.repositories.exam.ExamConverter;
+import com.example.examscanner.repositories.question.Question;
+
+import java.util.List;
+import java.util.concurrent.Future;
+
 public class Version {
-    private long eId;
-    private long[] answers;
+    private Exam exam;
     private long id;
     private int num;
+    private Future<List<Question>> fQuestions;
 
-    public Version(int num, long eId, long[] answers) {
-        this.eId = eId;
-        this.answers = answers;
+
+    public Version(int num, Exam e) {
         this.num = num;
-    }
-
-    public Version(long id, int number, long examId, long[] questions) {
-        this.id=id;
-        this.eId = examId;
-        this.answers = questions;
-        this.num = number;
+        this.exam = e;
     }
 
     public int getNum() {
         return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
     }
 
     public void setId(long id) {
@@ -35,11 +31,12 @@ public class Version {
         return id;
     }
 
-    public long getExamId() {
-        return eId;
+
+    public void setQuestionsFuture(Future<List<Question>> qf) {
+        this.fQuestions = qf;
     }
 
-    public long[] getQuestions() {
-        return answers;
+    public Exam getExam() {
+        return exam;
     }
 }

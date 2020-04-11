@@ -20,10 +20,12 @@ import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.VersionRepoStubFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
+import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.version.Version;
 import com.example.examscanner.repositories.version.VersionRepoFactory;
+import com.example.examscanner.stubs.ExamStubFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -61,23 +63,19 @@ public class CornerDetectionFragmentTest {
     private ImageProcessingFacade imageProcessor;
     private BaseLoaderCallback mLoaderCallback;
     private long sessionId;
-    private int theDevilVersion;
-    private int dinaBarzilayVersion;
 
     @Before
     public void setUp() {
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
+        Repository<Exam> stubERepo  = ExamEmptyRepositoryFactory.create();
+        stubERepo.create(
+                ExamStubFactory.instance1()
+        );
         ExamRepositoryFactory.setStubInstance(ExamEmptyRepositoryFactory.create());
         imageProcessor = nullIP();
         repo = new CDCRepositoryFacrory().create();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(slowIP());
-        theDevilVersion = 666;
-        dinaBarzilayVersion = 496351;
-        VersionRepoFactory.setStub(VersionRepoStubFactory.createStubThatReturns(new ArrayList() {{
-            add(new Version(dinaBarzilayVersion, 0, null));
-            add(new Version(theDevilVersion, 0, null));
-        }}));
     }
 
     @After
@@ -142,7 +140,7 @@ public class CornerDetectionFragmentTest {
         loadOpenCV(scenraio);
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
         onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersion))).perform(click());
+        onView(withText(Integer.toString(ExamStubFactory.instance1_dinaBarzilayVersion))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         sleepSwipingTime();
         sleepSwipingTime();
@@ -313,8 +311,8 @@ public class CornerDetectionFragmentTest {
         b.putLong("sessioId", sessionId);
         FragmentScenario<CornerDetectionFragment> scenraio = FragmentScenario.launchInContainer(CornerDetectionFragment.class, b);
         onView(withId(R.id.spinner_detect_corners_version_num)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersion))).check(matches(isDisplayed()));
-        onView(withText(Integer.toString(theDevilVersion))).check(matches(isDisplayed()));
+        onView(withText(Integer.toString(ExamStubFactory.instance1_dinaBarzilayVersion))).check(matches(isDisplayed()));
+        onView(withText(Integer.toString(ExamStubFactory.instance1_theDevilVersion))).check(matches(isDisplayed()));
     }
 
 
@@ -333,7 +331,7 @@ public class CornerDetectionFragmentTest {
     }
     private void selectVersionAndScanAnswers() {
         onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-        onView(withText(Integer.toString(dinaBarzilayVersion))).perform(click());
+        onView(withText(Integer.toString(ExamStubFactory.instance1_dinaBarzilayVersion))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
     }
 }

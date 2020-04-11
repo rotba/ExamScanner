@@ -10,12 +10,13 @@ import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepos
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
-import com.example.examscanner.persistence.entities.Exam;
 import com.example.examscanner.persistence.entities.ExamCreationSession;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.VersionRepoStubFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
+import com.example.examscanner.repositories.exam.Exam;
+import com.example.examscanner.repositories.exam.ExamInCreation;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
 import com.example.examscanner.repositories.version.Version;
@@ -56,14 +57,17 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
     public void setUp() {
         dbCallback = db ->{
             long creationId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
-            examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId));
+            com.example.examscanner.persistence.entities.Exam ee = new com.example.examscanner.persistence.entities.Exam(theTestExamCourseName,0,"2020","url",0,creationId);
+            examId = db.getExamDao().insert(ee);
+            db.getVersionDao().insert(new com.example.examscanner.persistence.entities.Version(dinaBarzilayVersionNumber,examId));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.entities.Version(theDevilVersionNumber,examId));
         };
         super.setUp();
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
-        VersionRepoFactory.setStub(VersionRepoStubFactory.createStubThatReturns(new ArrayList<Version>(){{
-            add(new Version(dinaBarzilayVersionNumber,0,null));
-            add(new Version(theDevilVersionNumber,0,null));
-        }}));
+//        VersionRepoFactory.setStub(VersionRepoStubFactory.createStubThatReturns(new ArrayList<Version>(){{
+//            add(new Version(dinaBarzilayVersionNumber,0,null));
+//            add(new Version(theDevilVersionNumber,0,null));
+//        }}));
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
         imageProcessor = nullIP();
         repo = new CDCRepositoryFacrory().create();

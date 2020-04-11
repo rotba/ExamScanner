@@ -22,4 +22,7 @@ public interface QuestionDao {
 
     @Query("SELECT * FROM question WHERE verId IS :verId AND questionNum IS :qNum LIMIT 1")
     Question getQuestionByVerIdAndQNum(long verId, int qNum);
+
+    @Query("SELECT * FROM question WHERE id IS :qId LIMIT 1")
+    Question get(long qId);
 }

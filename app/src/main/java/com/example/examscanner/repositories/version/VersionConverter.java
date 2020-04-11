@@ -12,10 +12,8 @@ public class VersionConverter implements Converter<VersionEntityInterface, Versi
     @Override
     public Version convert(VersionEntityInterface ei) {
         return new Version(
-                ei.getId(),
                 ei.getNumber(),
-                ei.getExamId(),
-                ei.getQuestions()
+                null
         );
     }
 }

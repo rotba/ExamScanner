@@ -308,6 +308,63 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
+    public QuestionEntityInterface getQuestionById(long qId) {
+        Question theQuestion =  db.getQuestionDao().get(qId);
+        return new QuestionEntityInterface() {
+            @Override
+            public long getId() {
+                return theQuestion.getId();
+            }
+
+            @Override
+            public long getVersionId() {
+                return theQuestion.getVerId();
+            }
+
+            @Override
+            public long getCorrectAnswer() {
+                return theQuestion.getCorrectAns();
+            }
+
+            @Override
+            public int getLeftX() {
+                return theQuestion.getLeftX();
+            }
+
+            @Override
+            public int getUpY() {
+                return theQuestion.getUpY();
+            }
+
+            @Override
+            public int getRightX() {
+                return theQuestion.getRightX();
+            }
+
+            @Override
+            public int getBottomY() {
+                return theQuestion.getBorromY();
+            }
+
+            @Override
+            public int getNum() {
+                return theQuestion.getQuestionNum();
+            }
+        };
+    }
+
+    @Override
+    public long insertVersionReplaceOnConflict(long examId, int num) {
+        Version maybeVersion = db.getVersionDao().getByExamIdAndNumber(examId, num);
+        if(maybeVersion==null){
+            return db.getVersionDao().insert(new Version(num,examId));
+        }else{
+            db.getVersionDao().update(maybeVersion);
+            return maybeVersion.getId();
+        }
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         Version theVersion = db.getVersionDao().getByExamIdAndNumber(eId, num);
         return new VersionEntityInterface() {

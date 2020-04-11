@@ -50,7 +50,7 @@ public class VersionRepository implements Repository<Version> {
 
     @Override
     public void create(Version version) {
-        long verId = comFacade.createVersion(version.getExamId(), version.getNum());
+        long verId = comFacade.createVersion(version.getExam().getId(), version.getNum());
         version.setId(verId);
     }
 

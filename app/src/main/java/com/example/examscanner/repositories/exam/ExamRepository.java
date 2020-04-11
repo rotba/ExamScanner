@@ -4,11 +4,15 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.android.volley.Response;
 import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
+
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.version.Version;
+import com.example.examscanner.repositories.version.VersionRepoFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +20,8 @@ import java.util.function.Predicate;
 
 
 public class ExamRepository implements Repository<Exam> {
-    private CommunicationFacade comFacade = new CommunicationFacadeFactory().create();
-    private Converter<ExamEntityInterface, Exam> converter = new ExamConverter();
+    private CommunicationFacade comFacade;
+    private Converter<ExamEntityInterface, Exam> converter;
 
     private static ExamRepository instance;
     private static final String TAG = "ExamRepository";
@@ -25,11 +29,17 @@ public class ExamRepository implements Repository<Exam> {
 
     public static ExamRepository getInstance() {
         if (instance == null) {
-            instance = new ExamRepository();
+            final CommunicationFacade comFacade = new CommunicationFacadeFactory().create();
+            instance = new ExamRepository(comFacade, new ExamConverter(comFacade));
             return instance;
         } else {
             return instance;
         }
+    }
+
+    public ExamRepository(CommunicationFacade comFacade, Converter<ExamEntityInterface,Exam> converter) {
+        this.comFacade = comFacade;
+        this.converter =converter;
     }
 
     @Override
@@ -68,16 +78,26 @@ public class ExamRepository implements Repository<Exam> {
         exam.setId(id);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Exam exam) {
+        updateVersions(exam.getVersions());
         comFacade.updateExam(
                 exam.getId(),
                 exam.getCourseName(),
                 exam.getSemester(),
                 exam.getTerm(),
-                exam.getVersions(),
+                exam.getVersions().stream().mapToLong(Version::getId).toArray(),
                 exam.getSessionId(),
                 exam.getYear());
+    }
+
+    private void updateVersions(List<Version> versions) {
+        for (Version v:versions) {
+            long maybeNewId = comFacade.insertVersionReplaceOnConflict(v.getExam().getId(),v.getNum());
+            v.setId(maybeNewId);
+            //TODO update questions
+        }
     }
 
     @Override

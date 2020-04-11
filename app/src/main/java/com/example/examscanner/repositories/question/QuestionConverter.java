@@ -8,7 +8,7 @@ class QuestionConverter implements Converter<QuestionEntityInterface, Question> 
     public Question convert(QuestionEntityInterface ei) {
         return new Question(
                 ei.getId(),
-                ei.getVersionId(),
+                null,
                 ei.getNum(),
                 (int) ei.getCorrectAnswer(),
                 ei.getLeftX(),

@@ -8,10 +8,7 @@ import com.example.examscanner.repositories.version.Version;
 import org.json.JSONException;
 
 public class CDCConverter implements Converter<SemiScannedCaptureEntityInterface, CornerDetectedCapture> {
-    private Repository<Version> verRepo;
-    public CDCConverter(Repository<Version> verRepo) {
-        this.verRepo = verRepo;
-    }
+
 
     @Override
     public CornerDetectedCapture convert(SemiScannedCaptureEntityInterface semiScannedCapture) {

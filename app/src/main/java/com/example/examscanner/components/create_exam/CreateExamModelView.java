@@ -29,14 +29,12 @@ public class CreateExamModelView extends ViewModel {
     private ImageProcessingFacade imageProcessor;
     private ExamInCreation examCreated;
     private Repository<Exam> eRepo;
-    private Repository<Version> vRepo;
     private Bitmap currentVersionBitmap;
     private Integer currentVersionNumber;
 
 
-    public CreateExamModelView(Repository<Exam> eRepo, Repository<Version> vRepo, Repository<Question>  qRepo, ImageProcessingFacade imageProcessor, long sessionId) {
+    public CreateExamModelView(Repository<Exam> eRepo, Repository<Question>  qRepo, ImageProcessingFacade imageProcessor, long sessionId) {
         this.eRepo = eRepo;
-        this.vRepo = vRepo;
         this.qRepo = qRepo;
         this.imageProcessor = imageProcessor;
         examCreated = new ExamInCreation(sessionId);
@@ -75,8 +73,8 @@ public class CreateExamModelView extends ViewModel {
                 ScannedCapture scannedCapture = new ScannedCapture(-1,null,numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections);
                 if(versionScanningWentWell(scannedCapture))
                     throw new VersionScanningDidntGoWell();
-                Version v = new Version(currentVersionNumber,examCreated.getId(),new long[0]);
-                vRepo.create(v);
+                Version v = new Version(currentVersionNumber,examCreated);
+                examCreated.addVersion(v);
                 for (ResolvedAnswer ans: scannedCapture.getResolvedAnswers()) {
                     qRepo.create(new Question(
                             v.getId(),

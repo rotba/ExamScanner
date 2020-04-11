@@ -31,7 +31,6 @@ public class CDViewModelFactory implements ViewModelProvider.Factory {
                 new ImageProcessingFactory(new BitmapInstancesFactory(activity)).create(),
                 new CDCRepositoryFacrory().create(),
                 new ScannedCaptureRepositoryFactory().create(),
-                new VersionRepoFactory().create(),
                 exam
         );
     }

@@ -28,7 +28,7 @@ public class CDCRepository implements Repository<CornerDetectedCapture> {
         if (instance == null) {
             instance = new CDCRepository(
                     new CommunicationFacadeFactory().create(),
-                    new CDCConverter(new VersionRepoFactory().create())
+                    new CDCConverter()
             );
             return instance;
         } else {

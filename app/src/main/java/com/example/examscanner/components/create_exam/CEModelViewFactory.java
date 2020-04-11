@@ -28,7 +28,6 @@ public class CEModelViewFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T)new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
-                new VersionRepoFactory().create(),
                 new QuestionRepositoryFactory().create(),
                 new ImageProcessingFactory(new BitmapInstancesFactory(activity.getApplicationContext())).create(),
                 new CreateExamSessionProviderFactory().create().provide()

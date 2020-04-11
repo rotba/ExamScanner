@@ -1,9 +1,20 @@
 package com.example.examscanner.repositories.question;
 
+import com.example.examscanner.repositories.version.Version;
+
 public class Question {
-    public Question(long id, long versionId, int ansNum, int selection, int left, int up, int right, int bottom) {
+    private long id;
+    private Version version;
+    private int num;
+    private int ans;
+    private int left;
+    private int up;
+    private int bottom;
+    private int right;
+
+    public Question(long id, Version v, int ansNum, int selection, int left, int up, int right, int bottom) {
         this.id= id;
-        this.versionId = versionId;
+        this.version = v;
         this.num = ansNum;
         this.ans = selection;
         this.left=left;
@@ -28,17 +39,7 @@ public class Question {
         return right;
     }
 
-    private long id;
-    private long versionId;
-    private int num;
-    private int ans;
-    private int left;
-    private int up;
-    private int bottom;
-    private int right;
-
     public Question(long versionId, int ansNum, int selection, int left, int up, int right, int bottom) {
-        this.versionId = versionId;
         this.num = ansNum;
         this.ans = selection;
         this.left=left;
@@ -56,11 +57,11 @@ public class Question {
     }
 
     public long getVersionId() {
-        return versionId;
+        return version.getId();
     }
 
     public void setVersionId(long versionId) {
-        this.versionId = versionId;
+
     }
 
     public int getNum() {
