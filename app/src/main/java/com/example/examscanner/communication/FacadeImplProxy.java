@@ -130,8 +130,13 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public long insertVersionReplaceOnConflict(long id, int num) {
-        return realImpl.insertVersionReplaceOnConflict(id, num);
+    public long insertVersionReplaceOnConflict(long examId, int num) {
+        return realImpl.insertVersionReplaceOnConflict(examId, num);
+    }
+
+    @Override
+    public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
+        return realImpl.insertQuestionReplaceOnConflict(vId, qNum, qAns, left, right, up, bottom);
     }
 
     @Override

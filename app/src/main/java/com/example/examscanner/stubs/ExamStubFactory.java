@@ -2,7 +2,7 @@ package com.example.examscanner.stubs;
 
 
 import com.example.examscanner.repositories.exam.Exam;
-import com.example.examscanner.repositories.version.Version;
+import com.example.examscanner.repositories.exam.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,8 @@ public class ExamStubFactory {
             @Override
             public List<Version> get() throws ExecutionException, InterruptedException {
                 return new ArrayList<Version>(){{
-                    add(new Version(instance1_dinaBarzilayVersion, es[0]));
-                    add(new Version(instance1_theDevilVersion, es[0]));
+                    add(new Version(-1,instance1_dinaBarzilayVersion, es[0], Version.theEmptyFutureQuestionsList()));
+                    add(new Version(-1,instance1_theDevilVersion, es[0], Version.theEmptyFutureQuestionsList()));
                 }};
             }
 

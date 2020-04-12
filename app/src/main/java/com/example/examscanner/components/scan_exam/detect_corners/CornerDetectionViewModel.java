@@ -13,7 +13,7 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.repositories.version.Version;
+import com.example.examscanner.repositories.exam.Version;
 
 import java.util.ArrayList;
 import java.util.List;

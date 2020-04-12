@@ -4,15 +4,12 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.android.volley.Response;
 import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
-import com.example.examscanner.repositories.version.Version;
-import com.example.examscanner.repositories.version.VersionRepoFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +73,24 @@ public class ExamRepository implements Repository<Exam> {
                 exam.getSessionId()
         );
         exam.setId(id);
+        insertVersions(exam);
+    }
+
+    private void insertVersions(Exam exam) {
+        for (Version v: exam.getVersions()) {
+            long versionId = comFacade.insertVersionReplaceOnConflict(exam.getId(),v.getNum());
+            v.setId(versionId);
+            insertQuestions(v);
+        }
+    }
+
+    private void insertQuestions(Version v) {
+        for (Question q:v.getQuestions()) {
+            long qId = comFacade.insertQuestionReplaceOnConflict(
+                    v.getId(), q.getNum(),q.getAns(), q.getLeft(),q.getRight(),q.getUp(),q.getBottom()
+            );
+            q.setId(qId);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

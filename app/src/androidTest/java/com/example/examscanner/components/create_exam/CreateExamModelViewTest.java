@@ -8,15 +8,15 @@ import com.example.examscanner.persistence.AppDatabaseFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
-import com.example.examscanner.repositories.question.QuestionRepositoryFactory;
-import com.example.examscanner.repositories.version.Version;
-import com.example.examscanner.repositories.version.VersionRepoFactory;
+import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.stubs.ImageProcessorStub;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,7 +34,6 @@ public class CreateExamModelViewTest {
         imageProcessor = new ImageProcessorStub();
         out  = new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
-                new QuestionRepositoryFactory().create(),
                 imageProcessor,
                 0
         );
@@ -62,12 +61,13 @@ public class CreateExamModelViewTest {
         out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
         out.holdVersionNumber(3);
         out.addVersion();
-        Exam exam = examRepository.get(out.getExam().getId());
-        assertTrue(exam.getVersions().size()==1);
-        final Version version = exam.getVersions().get(0);
-        long verId = version.getId();;
-//        assertEquals(expectedNumOfAnswers[0] ,version.getQuestions().length);
-        //TODO - uncomment when quaetions setup
+        out.create("testAddVersion()_courseName","A","Fall","2020");
+        List<Exam> exams = examRepository.get((e)->true);
+        assertEquals(exams.size(),1);
+        Exam theExam = exams.get(0);
+        assertTrue(theExam.getVersions().size()==1);
+        final Version version = theExam.getVersions().get(0);
+        assertEquals(expectedNumOfAnswers[0] ,version.getQuestions().size());
     }
 
 

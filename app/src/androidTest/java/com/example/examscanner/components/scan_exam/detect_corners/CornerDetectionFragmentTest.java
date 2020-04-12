@@ -3,7 +3,6 @@ package com.example.examscanner.components.scan_exam.detect_corners;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.espresso.action.ViewActions;
@@ -17,14 +16,11 @@ import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.Repository;
-import com.example.examscanner.repositories.VersionRepoStubFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
-import com.example.examscanner.repositories.version.Version;
-import com.example.examscanner.repositories.version.VersionRepoFactory;
 import com.example.examscanner.stubs.ExamStubFactory;
 
 import org.junit.After;
@@ -32,18 +28,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-
-import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -54,7 +44,6 @@ import static com.example.examscanner.Utils.sleepRectangleTransformationTime;
 import static com.example.examscanner.Utils.sleepScanAnswersTime;
 import static com.example.examscanner.Utils.sleepSwipingTime;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
 public class CornerDetectionFragmentTest {

@@ -2,16 +2,15 @@ package com.example.examscanner.repositories.exam;
 
 import android.util.Log;
 
-import com.example.examscanner.persistence.entities.Question;
 import com.example.examscanner.repositories.grader.ExamManager;
 import com.example.examscanner.repositories.grader.Grader;
-import com.example.examscanner.repositories.version.Version;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class Exam {
     private final static String TAG = "ExamScanner";
@@ -27,13 +26,13 @@ public class Exam {
     private List<Version> newVersions;
     private Future<List<Version>> fVersions;
 
-    public Exam(ExamManager manager, long id, Future<List<Version>> fVersions,List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year) {
+    public Exam(ExamManager manager, long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year) {
         this.id = id;
         this.courseName = courseName;
         this.term = moed;
         this.semester = semester;
-        this.manager=manager;
-        this.graders=graders;
+        this.manager = manager;
+        this.graders = graders;
         this.sessionId = sessionId;
         this.year = year;
         this.fVersions = fVersions;
@@ -54,12 +53,11 @@ public class Exam {
     }
 
     public boolean associatedWithGrader(int currentGraderId) {
-        for (Grader g:graders) {
+        for (Grader g : graders) {
             if (g.getId() == currentGraderId) return true;
         }
         return false;
     }
-
 
 
     public void setId(long id) {
@@ -77,6 +75,7 @@ public class Exam {
     public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
     }
+
     public ExamManager getManager() {
         return manager;
     }
@@ -108,33 +107,36 @@ public class Exam {
 
     @Override
     public String toString() {
-        return String.format("%s %d %s", getCourseName(),getTerm(), getYear());
+        return String.format("%s %d %s", getCourseName(), getTerm(), getYear());
     }
 
     public Version getVersionByNum(int verNum) {
-        for (Version v:accessVersionFuture()) {
-            if(v.getNum() == verNum)
+        for (Version v : accessVersionFuture()) {
+            if (v.getNum() == verNum)
                 return v;
         }
         throw new NuSuchVerion();
     }
-    public List<Version> getVersions(){
-        List<Version> ans = newVersions;
+
+    public List<Version> getVersions() {
+        List<Version> ans = new ArrayList<>();
+        ans.addAll(newVersions);
         ans.addAll(accessVersionFuture());
-        return  ans;
+        return ans;
     }
 
     private List<Version> accessVersionFuture() {
         try {
             return fVersions.get();
         } catch (ExecutionException e) {
-            Log.d(TAG,MSG_PREF+ " getVersionByNum");
+            Log.d(TAG, MSG_PREF + " getVersionByNum");
             e.printStackTrace();
+            throw new RuntimeException("Problem with furure");
         } catch (InterruptedException e) {
             Log.d(TAG, MSG_PREF + " getVersionByNum");
             e.printStackTrace();
+            throw new RuntimeException("Problem with furure");
         }
-        throw new RuntimeException("Problem with furure");
     }
 
     public void addVersion(Version v) {
@@ -142,5 +144,34 @@ public class Exam {
     }
 
     public class NuSuchVerion extends RuntimeException {
+
+    }
+    public static Future<List<Version>> theErrorFutureVersionsList() {
+        return new Future<List<Version>>() {
+            @Override
+            public boolean cancel(boolean mayInterruptIfRunning) {
+                return false;
+            }
+
+            @Override
+            public boolean isCancelled() {
+                return false;
+            }
+
+            @Override
+            public boolean isDone() {
+                return false;
+            }
+
+            @Override
+            public List<Version> get() throws ExecutionException, InterruptedException {
+                throw new RuntimeException("Bug in exam scanner. Probably Versions future was not set");
+            }
+
+            @Override
+            public List<Version> get(long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+                return null;
+            }
+        };
     }
 }

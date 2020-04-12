@@ -10,23 +10,17 @@ import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.persistence.entities.Exam;
 import com.example.examscanner.persistence.entities.ExamCreationSession;
 import com.example.examscanner.repositories.Repository;
-import com.example.examscanner.repositories.VersionRepoStubFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
-import com.example.examscanner.repositories.version.Version;
-import com.example.examscanner.repositories.version.VersionRepoFactory;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;

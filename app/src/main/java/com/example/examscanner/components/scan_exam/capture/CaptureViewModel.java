@@ -10,7 +10,6 @@ import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
-import com.example.examscanner.repositories.version.Version;
 
 import java.util.LinkedList;
 import java.util.Queue;

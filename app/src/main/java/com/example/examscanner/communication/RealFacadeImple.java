@@ -1,5 +1,6 @@
 package com.example.examscanner.communication;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Build;
 
@@ -361,6 +362,18 @@ public class RealFacadeImple implements CommunicationFacade {
         }else{
             db.getVersionDao().update(maybeVersion);
             return maybeVersion.getId();
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
+        Question maybeQuestion = db.getQuestionDao().getQuestionByVerIdAndQNum(right, up);
+        if(maybeQuestion==null){
+            return db.getQuestionDao().insert(new Question(qNum,vId,qAns,left,up,right,bottom));
+        }else {
+            db.getQuestionDao().update(maybeQuestion);
+            return maybeQuestion.getId();
         }
     }
 

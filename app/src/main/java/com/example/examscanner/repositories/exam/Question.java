@@ -1,6 +1,6 @@
-package com.example.examscanner.repositories.question;
+package com.example.examscanner.repositories.exam;
 
-import com.example.examscanner.repositories.version.Version;
+import com.example.examscanner.repositories.exam.Version;
 
 public class Question {
     private long id;
@@ -12,8 +12,7 @@ public class Question {
     private int bottom;
     private int right;
 
-    public Question(long id, Version v, int ansNum, int selection, int left, int up, int right, int bottom) {
-        this.id= id;
+    public Question(long qId, Version v, int ansNum, int selection, int left, int up, int right, int bottom) {
         this.version = v;
         this.num = ansNum;
         this.ans = selection;

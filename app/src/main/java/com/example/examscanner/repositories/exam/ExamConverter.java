@@ -5,9 +5,6 @@ import com.example.examscanner.communication.entities_interfaces.ExamEntityInter
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.repositories.Converter;
-import com.example.examscanner.repositories.Repository;
-import com.example.examscanner.repositories.question.Question;
-import com.example.examscanner.repositories.version.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +23,10 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
     @Override
     public Exam convert(final ExamEntityInterface examEntityInterface) {
         Exam e = null;
-        VersionsFuture vf = new VersionsFuture(e,examEntityInterface.getVersionsIds());
         e = new Exam(
                 null,
                 examEntityInterface.getID(),
-                vf,
+                Exam.theErrorFutureVersionsList(),
                 new ArrayList<>(),
                 examEntityInterface.getCourseName(),
                 examEntityInterface.getTerm(),
@@ -38,10 +34,11 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
                 examEntityInterface.getSessionId(),
                 examEntityInterface.getYear()
         );
+        e.setFutureVersions(new VersionsFuture(e, examEntityInterface.getVersionsIds()));
         return e;
     }
 
-    private class VersionsFuture implements Future<List<Version>>{
+    private class VersionsFuture implements Future<List<Version>> {
         private final Exam exam;
         private final long[] vIds;
 
@@ -51,20 +48,25 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
         }
 
         private List<Version> lazy = null;
-        @Override
-        public boolean cancel(boolean mayInterruptIfRunning) {return false;}
 
         @Override
-        public boolean isCancelled() {return false;}
+        public boolean cancel(boolean mayInterruptIfRunning) {
+            return false;
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return false;
+        }
 
         @Override
         public boolean isDone() {
-            return lazy==null;
+            return lazy != null;
         }
 
         @Override
         public List<Version> get() throws ExecutionException, InterruptedException {
-            if(!isDone()){
+            if (!isDone()) {
                 lazy = create();
             }
             return lazy;
@@ -72,42 +74,47 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
 
         private List<Version> create() {
             lazy = new ArrayList<>();
-            for (long vId:vIds) {
+            for (long vId : vIds) {
                 VersionEntityInterface vei = communicationFacade.getVersionById(vId);
-                Version v =  new Version(vei.getNumber(), exam);
-                QuestionsFuture qf = new QuestionsFuture(v, vei.getQuestions());
-                v.setQuestionsFuture(qf);
+                Version v = new Version(vei.getId(),vei.getNumber(), exam, Version.theErrorFutureQuestionsList());
+                v.setQuestionsFuture(new QuestionsFuture(v));
                 lazy.add(v);
             }
             return lazy;
         }
 
         @Override
-        public List<Version> get(long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {return null;}
+        public List<Version> get(long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+            return null;
+        }
     }
 
     private class QuestionsFuture implements Future<List<Question>> {
         private final Version v;
-        private final long[] questions;
         private List<Question> lazy;
 
-        public QuestionsFuture(Version v, long[] questions) {
+        public QuestionsFuture(Version v) {
             this.v = v;
-            this.questions = questions;
         }
 
         @Override
-        public boolean cancel(boolean mayInterruptIfRunning) {return false;}
+        public boolean cancel(boolean mayInterruptIfRunning) {
+            return false;
+        }
 
         @Override
-        public boolean isCancelled() {return false;}
+        public boolean isCancelled() {
+            return false;
+        }
 
         @Override
-        public boolean isDone() {return lazy==null;}
+        public boolean isDone() {
+            return lazy != null;
+        }
 
         @Override
         public List<Question> get() throws ExecutionException, InterruptedException {
-            if(!isDone()){
+            if (!isDone()) {
                 lazy = create();
             }
             return lazy;
@@ -115,14 +122,16 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
 
         private List<Question> create() {
             lazy = new ArrayList<>();
-            for (long qId: communicationFacade.getQuestionsByVersionId(v.getId())) {
+            for (long qId : communicationFacade.getQuestionsByVersionId(v.getId())) {
                 QuestionEntityInterface qei = communicationFacade.getQuestionById(qId);
-                lazy.add(new Question(qId,v,qei.getNum(),(int)qei.getCorrectAnswer(),qei.getLeftX(),qei.getUpY(),qei.getRightX(),qei.getBottomY()));
+                lazy.add(new Question(qId, v, qei.getNum(), (int) qei.getCorrectAnswer(), qei.getLeftX(), qei.getUpY(), qei.getRightX(), qei.getBottomY()));
             }
             return lazy;
         }
 
         @Override
-        public List<Question> get(long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {return null;}
+        public List<Question> get(long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+            return null;
+        }
     }
 }
