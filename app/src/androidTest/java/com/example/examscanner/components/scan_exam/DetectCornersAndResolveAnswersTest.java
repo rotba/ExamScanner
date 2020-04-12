@@ -38,13 +38,6 @@ import static org.hamcrest.Matchers.containsString;
 
 
 public class DetectCornersAndResolveAnswersTest extends StateFullTest {
-//    private Repository<CornerDetectedCapture> repo;
-//    private ImageProcessingFacade imageProcessor;
-//    private long scanExamSession;
-//    private String theTestExamCourseName = "TEST_courseName";
-//    private long examId;
-//    private int dinaBarzilayVersionNumber = 496351;
-//    private int theDevilVersionNumber = 666;
     private CornerDetectionContext1Setuper usecaseContext;
 
     @Before
@@ -130,6 +123,7 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         onView(withText(R.string.detect_corners_the_empty_version_choice)).perform(click());
         onView(withText(Integer.toString(usecaseContext.getDinaBarzilayVersion()))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        Utils.sleepSwipingTime();
         onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
         onView(withText(Integer.toString(usecaseContext.getTheDevilVersion()))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());

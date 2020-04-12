@@ -19,8 +19,17 @@ public class ExamStubFactory {
     private static long sessionId = -900;
 
     public static Exam instance1() {
-        Exam e = null;
-        Exam[] es = new Exam[]{e};
+        Exam e = new Exam(
+                null,
+                instance1Id,
+                Exam.theErrorFutureVersionsList(),
+                new ArrayList<>(),
+                instance1_courseName,
+                0,
+                1,
+                sessionId,
+                "2020"
+        );
         Future<List<Version>> fv = new Future<List<Version>>() {
             @Override
             public boolean cancel(boolean mayInterruptIfRunning) {
@@ -40,8 +49,8 @@ public class ExamStubFactory {
             @Override
             public List<Version> get() throws ExecutionException, InterruptedException {
                 return new ArrayList<Version>(){{
-                    add(new Version(-1,instance1_dinaBarzilayVersion, es[0], Version.theEmptyFutureQuestionsList()));
-                    add(new Version(-1,instance1_theDevilVersion, es[0], Version.theEmptyFutureQuestionsList()));
+                    add(new Version(-1,instance1_dinaBarzilayVersion, e, Version.theEmptyFutureQuestionsList()));
+                    add(new Version(-1,instance1_theDevilVersion, e, Version.theEmptyFutureQuestionsList()));
                 }};
             }
 
@@ -50,17 +59,7 @@ public class ExamStubFactory {
                 return null;
             }
         };
-        es[0] = new Exam(
-                null,
-                instance1Id,
-                fv,
-                new ArrayList<>(),
-                instance1_courseName,
-                0,
-                1,
-                sessionId,
-                "2020"
-        );
-        return es[0];
+        e.setFutureVersions(fv);
+        return e;
     }
 }
