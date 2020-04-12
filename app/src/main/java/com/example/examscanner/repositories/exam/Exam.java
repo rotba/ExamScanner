@@ -145,6 +145,7 @@ public class Exam {
 
     public class NuSuchVerion extends RuntimeException {
 
+
     }
     public static Future<List<Version>> theErrorFutureVersionsList() {
         return new Future<List<Version>>() {
@@ -166,6 +167,34 @@ public class Exam {
             @Override
             public List<Version> get() throws ExecutionException, InterruptedException {
                 throw new RuntimeException("Bug in exam scanner. Probably Versions future was not set");
+            }
+
+            @Override
+            public List<Version> get(long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+                return null;
+            }
+        };
+    }
+    public static Future<List<Version>> theEmptyFutureVersionsList() {
+        return new Future<List<Version>>() {
+            @Override
+            public boolean cancel(boolean mayInterruptIfRunning) {
+                return false;
+            }
+
+            @Override
+            public boolean isCancelled() {
+                return false;
+            }
+
+            @Override
+            public boolean isDone() {
+                return true;
+            }
+
+            @Override
+            public List<Version> get() throws ExecutionException, InterruptedException {
+                return new ArrayList<>();
             }
 
             @Override

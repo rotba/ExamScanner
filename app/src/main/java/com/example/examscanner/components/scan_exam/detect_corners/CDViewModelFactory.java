@@ -21,6 +21,7 @@ public class CDViewModelFactory implements ViewModelProvider.Factory {
         this.activity = activity;
         this.exam = new ExamRepositoryFactory().create().get(examId);
     }
+
     public CDViewModelFactory() {}
 
     @NonNull

@@ -57,7 +57,6 @@ public class CornerDetectionCardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        captureId = getArguments().getInt(CornerDetectionCapturesAdapter.captureId());
         CDViewModelFactory factory = new CDViewModelFactory();
         cornerDetectionViewModel = new ViewModelProvider(getActivity(), factory).get(CornerDetectionViewModel.class);
         root = inflater.inflate(R.layout.item_corner_detected_capture, container, false);
