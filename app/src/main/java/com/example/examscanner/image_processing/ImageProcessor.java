@@ -20,8 +20,6 @@ import org.opencv.core.Size;
 import org.opencv.features2d.FastFeatureDetector;
 import org.opencv.imgproc.Imgproc;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,12 +59,6 @@ public class ImageProcessor implements ImageProcessingFacade {
                 new PointF((float) bottomLeft.x, (float) bottomLeft.y),
                 new PointF((float) bottomRight.x, (float) bottomRight.y)
         );
-//        consumer.consume(
-//                new PointF((float) upperLeft.x, (float) upperLeft.y),
-//                new PointF((float) upperRight.x, (float) upperRight.y),
-//                new PointF((float) bottomLeft.x, (float) bottomLeft.y),
-//                new PointF((float) upperRight.x, (float) upperRight.y)
-//        );
 
     }
 
@@ -494,8 +486,9 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     // split source image into chunksNum smaller images
     // split is done according to the image width
-    private ArrayList<Bitmap> splitImage(Bitmap bitmap, int chunkNumbers) {
+    public static ArrayList<Bitmap> splitImage(Bitmap bitmap, int chunkNumbers) {
 
+        if(bitmap == null) return new ArrayList<>();
         ArrayList<Bitmap> chunkedImages = new ArrayList<Bitmap>(chunkNumbers);
         int sizeOfPart = bitmap.getWidth() / chunkNumbers;
         for (int i = 0; i < chunkNumbers; i++) {
