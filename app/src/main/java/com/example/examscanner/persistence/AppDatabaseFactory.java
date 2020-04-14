@@ -5,7 +5,7 @@ import androidx.room.Room;
 
 import com.example.examscanner.communication.ContextProvider;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static androidx.test.core.app.ApplicationProvider.*;
 
 
 public class AppDatabaseFactory {

@@ -5,10 +5,6 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-
-import com.example.examscanner.MainActivity;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
