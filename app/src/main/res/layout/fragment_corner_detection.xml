@@ -61,7 +61,7 @@
             android:id="@+id/textView_cd_current_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -89,46 +89,30 @@
             app:layout_constraintVertical_bias="0.492" />
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="89dp"
-            android:layout_height="84dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <Button
+            android:id="@+id/button_cd_nav_to_resolve_answers"
+            android:layout_width="67dp"
+            android:layout_height="62dp"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/button_next_step"
+            app:layout_constraintBottom_toBottomOf="@+id/button_cd_approve_and_scan_answers"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.342">
+            app:layout_constraintTop_toTopOf="@+id/button_cd_approve_and_scan_answers" />
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <Button
-                    android:id="@+id/button_cd_nav_to_resolve_answers"
-                    android:layout_width="64dp"
-                    android:layout_height="72dp"
-                    android:layout_gravity="bottom"
-                    android:background="@drawable/button_next_step"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/textView_cd_processing_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_gravity="end"
-                android:background="@drawable/badge_circle"
-                android:gravity="center"
-                android:text="TextView"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textView_cd_processing_progress"
+            android:layout_width="53dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/badge_circle"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/button_cd_nav_to_resolve_answers"
+            app:layout_constraintEnd_toEndOf="@+id/button_cd_nav_to_resolve_answers"
+            app:layout_constraintStart_toStartOf="@+id/button_cd_nav_to_resolve_answers" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -29,13 +29,16 @@ import static org.hamcrest.Matchers.containsString;
 
 public class CreateExamFragmentTestStateFull extends StateFullTest {
 
+    Fragment f;
     @Override
     @Before
     public void setUp() {
         super.setUp();
         VersionImageGetterFactory.setStubInstance(new VersionImageGetter() {
             @Override
-            public void get(Fragment fragment, int pickfileRequestCode) {}
+            public void get(Fragment fragment, int pickfileRequestCode) {
+                f = fragment;
+            }
 
             @Override
             public Bitmap accessBitmap(Intent data, FragmentActivity activity) {
@@ -56,7 +59,16 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
         onView(withId(R.id.editText_create_exam_year)).perform(replaceText(year));
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText(verNum));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
+        mainActivityScenarioRule.getScenario().onActivity(a->f.onActivityResult(0,0,null));
+        onView(withId(R.id.button_create_exam_add_version)).perform(click());
+        Utils.sleepScanAnswersTime();
         onView(withId(R.id.editText_create_exam_grader_address)).perform(replaceText(aGraderAdress));
+        onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("1")));
+        onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
+        onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText("20"));
+        onView(withId(R.id.button_create_exam_add_version)).perform(click());
+
+
         onView(withId(R.id.button_create_exam_create)).perform(click());
         Utils.sleepAlertPoppingTime();
         onView(withText(R.string.create_exam_dialog_ok)).perform(click());
