@@ -1,11 +1,13 @@
 package com.example.examscanner.image_processing;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.examscanner.R;
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 import org.opencv.android.Utils;
@@ -20,6 +22,8 @@ import org.opencv.core.Size;
 import org.opencv.features2d.FastFeatureDetector;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,13 +35,42 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 
 public class ImageProcessor implements ImageProcessingFacade {
-//    private BitmapInstancesFactory bmFact;//TODO - remove dependecy
+
+    Mat questionTemplate;
+
+    private Bitmap bitmapFromMat(Mat mat){
+        Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(mat, bm);
+        return bm;
+    }
+
+    private Mat matFromBitmap(Bitmap bm){
+        Mat mat = new Mat();
+        Utils.bitmapToMat(bm, mat);
+        return mat;
+    }
+
+
+    private Bitmap loadFromAssets(String filename) {
+
+        Bitmap bitmap = null;
+        try {
+            InputStream ims = getApplicationContext().getAssets().open(filename);
+            bitmap = BitmapFactory.decodeStream(ims);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
 
     public ImageProcessor() {
-        questionTemplate =
+        questionTemplate = matFromBitmap(loadFromAssets("template"));
     }
 
 
@@ -179,14 +212,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void scanAnswers(Bitmap bitmap, int[] leftMostXs, int[] upperMostYs, ScanAnswersConsumer consumer){
 
-        Mat exam = new Mat();
-        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, exam);
-//        Mat img_template = Imgcodecs.imread("template.png");
-
-        Bitmap bm = bmFact.getTestTemplate1();
-        Mat img_template = new Mat();
-        Utils.bitmapToMat(bm, img_template);
+        Mat exam = matFromBitmap(bitmap);
         int amountOfQuestions = leftMostXs.length;
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
@@ -194,30 +220,23 @@ public class ImageProcessor implements ImageProcessingFacade {
         float rights[] = new float[amountOfQuestions];
         float bottoms[] = new float[amountOfQuestions];
         int selections[] = new int[amountOfQuestions];
-        Map<Point, Integer> answersMap = findQuestions(exam, img_template, leftMostXs, upperMostYs);
-        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, img_template.cols(), img_template. rows(), exam.cols(), exam.rows());
+        Map<Point, Integer> answersMap = findQuestions(exam, questionTemplate, leftMostXs, upperMostYs);
+        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate. rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
     }
 
 
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer){
 
-        Mat exam = new Mat();
-        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, exam);
-//        Mat img_template = Imgcodecs.imread("template.png");
-
-        Bitmap bm = bmFact.getTestTemplate1();
-        Mat img_template = new Mat();
-        Utils.bitmapToMat(bm, img_template);
+        Mat exam = matFromBitmap(bitmap);
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
         float tops[] = new float[amountOfQuestions];
         float rights[] = new float[amountOfQuestions];
         float bottoms[] = new float[amountOfQuestions];
         int selections[] = new int[amountOfQuestions];
-        Map<Point, Integer> answersMap = findQuestions(exam, img_template, amountOfQuestions);
-        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, img_template.cols(), img_template. rows(), exam.cols(), exam.rows());
+        Map<Point, Integer> answersMap = findQuestions(exam, questionTemplate, amountOfQuestions);
+        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate. rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
 
     }
@@ -228,14 +247,8 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer){
-        Mat exam = new Mat();
-        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, exam);
-        Bitmap bm = bmFact.getTestTemplate1();
-        Mat img_template = new Mat();
-        Utils.bitmapToMat(bm, img_template);
-//        Mat img_template = Imgcodecs.imread("template.png");
-        Map<Point, Integer> answersMap = findQuestions(exam, img_template);
+        Mat exam = matFromBitmap(bitmap);
+        Map<Point, Integer> answersMap = findQuestions(exam, questionTemplate);
         int amountOfQuestions = answersMap.size();
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
@@ -243,7 +256,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         float rights[] = new float[amountOfQuestions];
         float bottoms[] = new float[amountOfQuestions];
         int selections[] = new int[amountOfQuestions];
-        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, img_template.cols(), img_template. rows(), exam.cols(), exam.rows());
+        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate. rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
     }
 
