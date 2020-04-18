@@ -34,9 +34,10 @@ import java.util.stream.Collectors;
 
 
 public class ImageProcessor implements ImageProcessingFacade {
-    private BitmapInstancesFactory bmFact;//TODO - remove dependecy
-    public ImageProcessor(BitmapInstancesFactory bmFact) {
-        this.bmFact = bmFact;
+//    private BitmapInstancesFactory bmFact;//TODO - remove dependecy
+
+    public ImageProcessor() {
+        questionTemplate =
     }
 
 
