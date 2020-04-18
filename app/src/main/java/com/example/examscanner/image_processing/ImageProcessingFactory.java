@@ -14,7 +14,7 @@ public class ImageProcessingFactory {
     public ImageProcessingFacade create(){
         if (testInstance!=null) return testInstance;
         if (stubInstance!=null) return stubInstance;
-        return new ImageProcessor(bmFact);
+        return new ImageProcessor();
     }
     public static void ONLYFORTESTINGsetTestInstance(ImageProcessingFacade theStubInstance){
         stubInstance=theStubInstance;

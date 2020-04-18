@@ -7,8 +7,6 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.examscanner.R;
-import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -24,8 +22,6 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
