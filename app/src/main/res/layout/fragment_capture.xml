@@ -32,7 +32,7 @@
             android:id="@+id/button_move_to_detect_corners"
             android:layout_width="67dp"
             android:layout_height="62dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/button_next_step"
             app:layout_constraintBottom_toBottomOf="@+id/capture_image_button"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -88,7 +88,7 @@
                 android:layout_height="match_parent">
 
             </androidx.camera.view.PreviewView>
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
