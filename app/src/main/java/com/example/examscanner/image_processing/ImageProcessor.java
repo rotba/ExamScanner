@@ -33,8 +33,20 @@ import java.util.stream.Collectors;
 public class ImageProcessor implements ImageProcessingFacade {
     private BitmapInstancesFactory bmFact;//TODO - remove dependecy
 
-    public ImageProcessor(BitmapInstancesFactory bmFact) {
+    public ImageProcessor() {
         this.bmFact = bmFact;
+    }
+
+    private Bitmap bitmapFromMat(Mat mat){
+        Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(mat, bm);
+        return bm;
+    }
+
+    private Mat matFromBitmap(Bitmap bm){
+        Mat mat = new Mat();
+        Utils.bitmapToMat(bm, mat);
+        return mat;
     }
 
 
@@ -44,9 +56,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         if(bm == null || consumer == null)
             throw new NullPointerException("given input is null");
 
-        Mat mat = new Mat();
-        Bitmap bmp32 = bm.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, mat);
+        Mat mat = matFromBitmap(bm);
         // First find all the corners in the given image
         List<Point> points = cornerDetection(mat);
         // Then, supposing a rectangle exists, find its 4 corners coordinates
@@ -498,7 +508,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     // split source image into chunksNum smaller images
     // split is done according to the image width
-    public static ArrayList<Bitmap> splitImage(Bitmap bitmap, int chunkNumbers) {
+    private static ArrayList<Bitmap> splitImage(Bitmap bitmap, int chunkNumbers) {
 
         if(bitmap == null) return new ArrayList<>();
         ArrayList<Bitmap> chunkedImages = new ArrayList<Bitmap>(chunkNumbers);
@@ -512,7 +522,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     // Detect corners in the given image
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private List<Point> cornerDetection(Mat inputImg) {
+    protected List<Point> cornerDetection(Mat inputImg) {
 
         MatOfKeyPoint pointsMat = new MatOfKeyPoint();
         int threshold = 20;

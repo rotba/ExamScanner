@@ -18,19 +18,19 @@ import org.opencv.core.Mat;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 @RunWith(AndroidJUnit4.class)
 public class ImageProcessorTest {
 
+    ImageProcessor imageProcessor = new ImageProcessor();
     Mat pdfTest;
 
     @Before
     public void setUp() {
         OpenCVLoader.initDebug();
-        pdfTest = loadFromResource();
+        pdfTest = loadFromResource(R.drawable.exam);
         // pdfTest = loadFromAssets("test_jpeg_diagonal1");
     }
 
@@ -46,11 +46,11 @@ public class ImageProcessorTest {
         return mat;
     }
 
-    private Mat loadFromResource() {
+    private Mat loadFromResource(int file) {
 
         Mat img = null;
         try {
-            img = Utils.loadResource(getApplicationContext(), R.drawable.exam);
+            img = Utils.loadResource(getApplicationContext(), file);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -74,10 +74,124 @@ public class ImageProcessorTest {
     }
 
     @Test
-    public void splitImageTestZeroChunks() throws IOException {
-
-        Bitmap bm = bitmapFromMat(pdfTest);
-        ArrayList<Bitmap> chunks = ImageProcessor.splitImage(bm, 0);
-        assert bm.equals(chunks.get(0));
+    public void cornerDetectionTestWithRectangle(){
+        loadFromResource(R.drawable.examZoomOut);
+        List<Point> points =
     }
+
+    @Test
+    public void cornerDetectionTestWithRotatedRectangle(){}
+
+    @Test
+    public void cornerDetectionTestWithCircle(){}
+
+    @Test
+    public void cornerDetectionTestWith2Rectangles(){}
+
+    @Test
+    public void cornerDetectionTestImageWithNoBounds(){}
+
+
+
+    @Test
+    public void findQuestions2TestInputWithoutATemplate(){}
+
+    @Test
+    public void findQuestions2TestInputContainsOneTemplate(){}
+
+    @Test
+    public void findQuestions2TestInputContainsMoreThanOneTemplate(){}
+
+    @Test
+    public void findQuestions2TestOneColExam(){}
+
+    @Test
+    public void findQuestions2TestTwoColsExam(){}
+
+    @Test
+    public void findQuestions2TestThreeColsExam(){}
+
+    @Test
+    public void findQuestions2TestUnbalancedColsExam(){}
+
+    @Test
+    public void findQuestions3TestInputWithoutATemplate(){}
+
+    @Test
+    public void findQuestions3TestInputContainsOneTemplate(){}
+
+    @Test
+    public void findQuestions3TestInputContainsMoreThanOneTemplate(){}
+
+    @Test
+    public void findQuestions3TestOneColExam(){}
+
+    @Test
+    public void findQuestions3TestTwoColsExam(){}
+
+    @Test
+    public void findQuestions3TestThreeColsExam(){}
+
+    @Test
+    public void findQuestions3TestUnbalancedColsExam(){}
+
+    @Test
+    public void transformToRectangleTestWithImageRotatedToLeft(){}
+
+    @Test
+    public void transformToRectangleTestWithImageRotatedToRight(){}
+
+    @Test
+    public void transformToRectangleTestWithImageNotRotated(){}
+
+    @Test
+    public void transformToRectangleTestWithUnboundedPoints(){}
+
+    @Test
+    public void markedAnswerTestEmptyArray(){}
+
+    @Test
+    public void markedAnswerTestWithOnePicture(){}
+
+    @Test
+    public void markedAnswerTestWithNothingMarked(){}
+
+    @Test
+    public void markedAnswerTestWithTwoMarking(){}
+
+    @Test
+    public void markedAnswerTestWithXMarking(){}
+
+    @Test
+    public void markedAnswerTestWithNotFullMarking(){}
+
+
+
+
+    // need to test indirectly
+
+    @Test
+    public void splitImageTestZeroChunks(){}
+
+    @Test
+    public void splitImageTestOneChunks(){}
+
+    @Test
+    public void splitImageTestTwoChunks(){}
+
+    @Test
+    public void splitImageTestTenChunks(){}
+
+    @Test
+    public void orderPointsTestWithAlreadyOrderedPoints(){}
+
+    @Test
+    public void orderPointsTestWithNot4ElementsArray(){}
+
+    @Test
+    public void orderPointsTestWithPointsWithSameX(){}
+
+    @Test
+    public void orderPointsTestWithPointsWithSameY(){}
+
 }
