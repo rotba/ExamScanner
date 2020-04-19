@@ -1,4 +1,4 @@
-package com.example.examscanner.communication;
+package com.example.examscanner.image_processing;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
