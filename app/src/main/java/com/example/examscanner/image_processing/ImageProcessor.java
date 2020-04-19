@@ -41,6 +41,9 @@ public class ImageProcessor implements ImageProcessingFacade {
     // given an image of an exam try to detect the 4 corners of the exam
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
+        if(bm == null || consumer == null)
+            throw new NullPointerException("given input is null");
+
         Mat mat = new Mat();
         Bitmap bmp32 = bm.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, mat);
@@ -85,6 +88,9 @@ public class ImageProcessor implements ImageProcessingFacade {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Bitmap transformToRectangle(Bitmap bitmap, android.graphics.Point upperLeft, android.graphics.Point upperRight, android.graphics.Point bottomRight, android.graphics.Point bottomLeft) {
+
+        if(bitmap == null || upperLeft == null || upperRight == null || bottomLeft == null || bottomRight == null)
+            throw new NullPointerException("given input is null");
 
         Mat inputMat = new Mat();
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -179,6 +185,9 @@ public class ImageProcessor implements ImageProcessingFacade {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void scanAnswers(Bitmap bitmap, int[] leftMostXs, int[] upperMostYs, ScanAnswersConsumer consumer) {
 
+        if(bitmap == null || leftMostXs == null || upperMostYs == null || consumer == null)
+            throw new NullPointerException("given input is null");
+
         Mat exam = new Mat();
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, exam);
@@ -202,6 +211,9 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
 
+        if(bitmap == null || amountOfQuestions <= 0 || consumer == null)
+            throw new NullPointerException("invalid input");
+
         Mat exam = new Mat();
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, exam);
@@ -222,12 +234,12 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     }
 
-    @Override
-    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
-
-    }
 
     public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
+
+        if(bitmap == null || consumer == null)
+            throw new NullPointerException("given input is null");
+
         Mat exam = new Mat();
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, exam);
