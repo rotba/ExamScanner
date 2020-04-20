@@ -15,21 +15,26 @@ import org.junit.runner.RunWith;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 @RunWith(AndroidJUnit4.class)
 public class ImageProcessorTest {
 
-    ImageProcessor imageProcessor = new ImageProcessor();
+    ImageProcessor imageProcessor;
     Mat pdfTest;
 
     @Before
     public void setUp() {
         OpenCVLoader.initDebug();
+        imageProcessor = new ImageProcessor();
         pdfTest = loadFromResource(R.drawable.exam);
         // pdfTest = loadFromAssets("test_jpeg_diagonal1");
     }
@@ -75,8 +80,17 @@ public class ImageProcessorTest {
 
     @Test
     public void cornerDetectionTestWithRectangle(){
-        loadFromResource(R.drawable.examZoomOut);
-        List<Point> points =
+        OpenCVLoader.initDebug();
+        Mat examZoomOut = loadFromResource(R.drawable.exam_zoom_out);
+        List<Point> points = imageProcessor.cornerDetection(examZoomOut);
+        List<Point> filtered = imageProcessor.removePoints(points);
+        List<Point> clockwiseOrderedPoints = imageProcessor.orderPoints(filtered);
+        Point upperLeft = clockwiseOrderedPoints.get(1);
+        Point upperRight = clockwiseOrderedPoints.get(2);
+        Point bottomRight = clockwiseOrderedPoints.get(3);
+        Point bottomLeft = clockwiseOrderedPoints.get(0);
+
+
     }
 
     @Test

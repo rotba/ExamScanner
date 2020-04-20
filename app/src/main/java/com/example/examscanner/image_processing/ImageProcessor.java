@@ -1,12 +1,13 @@
 package com.example.examscanner.image_processing;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.examscanner.stubs.BitmapInstancesFactory;
+import com.example.examscanner.R;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -20,6 +21,8 @@ import org.opencv.core.Size;
 import org.opencv.features2d.FastFeatureDetector;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,13 +32,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+
 
 public class ImageProcessor implements ImageProcessingFacade {
-    private BitmapInstancesFactory bmFact;//TODO - remove dependecy
-
-    public ImageProcessor() {
-        this.bmFact = bmFact;
-    }
+    Mat questionTemplate;
 
     private Bitmap bitmapFromMat(Mat mat){
         Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
@@ -50,6 +51,39 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
 
+    private Mat loadFromResource(int file) {
+
+        Mat img = null;
+        try {
+            img = Utils.loadResource(getApplicationContext(), file);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return img;
+    }
+
+    private Bitmap loadFromAssets(String filename) {
+
+        Bitmap bitmap = null;
+        try {
+            InputStream ims = getApplicationContext().getAssets().open(filename);
+            bitmap = BitmapFactory.decodeStream(ims);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
+
+    public ImageProcessor() {
+        questionTemplate = loadFromResource(R.drawable.template);
+    }
+
+
+
     // given an image of an exam try to detect the 4 corners of the exam
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
@@ -60,7 +94,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         // First find all the corners in the given image
         List<Point> points = cornerDetection(mat);
         // Then, supposing a rectangle exists, find its 4 corners coordinates
-        List<Point> filtered = filterPoints(points);
+        List<Point> filtered = removePoints(points);
         List<Point> clockwiseOrderedPoints = orderPoints(filtered);
         Point upperLeft = clockwiseOrderedPoints.get(1);
         Point upperRight = clockwiseOrderedPoints.get(2);
@@ -76,7 +110,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private List<Point> orderPoints(List<Point> points) {
+    List<Point> orderPoints(List<Point> points) {
         List<Double> Xs = points.stream().map(p -> p.x).collect(Collectors.toList());
         List<Double> Ys = points.stream().map(p -> p.y).collect(Collectors.toList());
         double sumXs = Xs.stream().reduce(0.0, (subtotal, p) -> subtotal + p) / points.size();
@@ -102,9 +136,8 @@ public class ImageProcessor implements ImageProcessingFacade {
         if(bitmap == null || upperLeft == null || upperRight == null || bottomLeft == null || bottomRight == null)
             throw new NullPointerException("given input is null");
 
-        Mat inputMat = new Mat();
-        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, inputMat);
+
+        Mat inputMat = matFromBitmap(bitmap);
 
         double widthCandidateA = Math.sqrt(Math.pow((bottomRight.x - bottomLeft.x), 2) + Math.pow((bottomRight.y - bottomLeft.y), 2));
         double widthCandidateB = Math.sqrt(Math.pow((upperRight.x - upperLeft.x), 2) + Math.pow((upperRight.y - upperLeft.y), 2));
@@ -191,30 +224,45 @@ public class ImageProcessor implements ImageProcessingFacade {
         return pointsWithoutDuplicates;
     }
 
+    private static double distance(Point p1, Point p2){
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    }
+
+    List<Point> removePoints(List<Point> points) {
+        int thresh = 50;
+
+        int n = points.size();
+        for(int i=0; i<n; i++ ){
+            for(int j= i+1; j<n; j++){
+                Point point1 = points.get(i);
+                Point point2 = points.get(j);
+                if(distance(point1, point2) < thresh){
+                    points.remove(point2);
+                    j--;
+                    n--;
+                }
+            }
+        }
+        return points;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void scanAnswers(Bitmap bitmap, int[] leftMostXs, int[] upperMostYs, ScanAnswersConsumer consumer) {
+    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
 
         if(bitmap == null || leftMostXs == null || upperMostYs == null || consumer == null)
             throw new NullPointerException("given input is null");
 
-        Mat exam = new Mat();
-        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, exam);
-//        Mat img_template = Imgcodecs.imread("template.png");
+         Mat exam = matFromBitmap(bitmap);
 
-        Bitmap bm = bmFact.getTestTemplate1();
-        Mat img_template = new Mat();
-        Utils.bitmapToMat(bm, img_template);
-        int amountOfQuestions = leftMostXs.length;
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
         float tops[] = new float[amountOfQuestions];
         float rights[] = new float[amountOfQuestions];
         float bottoms[] = new float[amountOfQuestions];
         int selections[] = new int[amountOfQuestions];
-        Map<Point, Integer> answersMap = findQuestions(exam, img_template, leftMostXs, upperMostYs);
-        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, img_template.cols(), img_template.rows(), exam.cols(), exam.rows());
+        Map<Point, Integer> answersMap = findQuestions(exam, questionTemplate, leftMostXs, upperMostYs);
+        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate.rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
     }
 
@@ -224,22 +272,16 @@ public class ImageProcessor implements ImageProcessingFacade {
         if(bitmap == null || amountOfQuestions <= 0 || consumer == null)
             throw new NullPointerException("invalid input");
 
-        Mat exam = new Mat();
-        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, exam);
-//        Mat img_template = Imgcodecs.imread("template.png");
+        Mat exam = matFromBitmap(bitmap);
 
-        Bitmap bm = bmFact.getTestTemplate1();
-        Mat img_template = new Mat();
-        Utils.bitmapToMat(bm, img_template);
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
         float tops[] = new float[amountOfQuestions];
         float rights[] = new float[amountOfQuestions];
         float bottoms[] = new float[amountOfQuestions];
         int selections[] = new int[amountOfQuestions];
-        Map<Point, Integer> answersMap = findQuestions(exam, img_template, amountOfQuestions);
-        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, img_template.cols(), img_template.rows(), exam.cols(), exam.rows());
+        Map<Point, Integer> answersMap = findQuestions(exam, questionTemplate, amountOfQuestions);
+        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate.rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
 
     }
@@ -250,14 +292,9 @@ public class ImageProcessor implements ImageProcessingFacade {
         if(bitmap == null || consumer == null)
             throw new NullPointerException("given input is null");
 
-        Mat exam = new Mat();
-        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, exam);
-        Bitmap bm = bmFact.getTestTemplate1();
-        Mat img_template = new Mat();
-        Utils.bitmapToMat(bm, img_template);
-//        Mat img_template = Imgcodecs.imread("template.png");
-        Map<Point, Integer> answersMap = findQuestions(exam, img_template);
+        Mat exam = matFromBitmap(bitmap);
+
+        Map<Point, Integer> answersMap = findQuestions(exam, questionTemplate);
         int amountOfQuestions = answersMap.size();
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
@@ -265,7 +302,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         float rights[] = new float[amountOfQuestions];
         float bottoms[] = new float[amountOfQuestions];
         int selections[] = new int[amountOfQuestions];
-        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, img_template.cols(), img_template.rows(), exam.cols(), exam.rows());
+        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate.rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
     }
 

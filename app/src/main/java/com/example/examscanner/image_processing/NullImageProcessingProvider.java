@@ -31,9 +31,14 @@ public class NullImageProcessingProvider implements ImageProcessingFacade {
         consumer.consume(0,null,null,null,null,null,null);
     }
 
+//    @Override
+//    public void scanAnswers(Bitmap bitmap, int[] leftMostXs, int[] upperMostYs, ScanAnswersConsumer consumer) {
+//        consumer.consume(0,null,null,null,null,null,null);
+//    }
+
     @Override
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
-
+        consumer.consume(0,null,null,null,null,null,null);
     }
 
     @Override
