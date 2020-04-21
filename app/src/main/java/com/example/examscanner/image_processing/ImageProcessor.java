@@ -210,7 +210,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private List<Point> filterPoints(List<Point> points) {
+    List<Point> filterPoints(List<Point> points) {
         List<Point> pointsWithoutDuplicates = new ArrayList<>();
         int i = 0;
         for (Point p : points) {

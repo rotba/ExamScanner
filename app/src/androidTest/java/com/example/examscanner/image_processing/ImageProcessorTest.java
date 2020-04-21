@@ -82,6 +82,7 @@ public class ImageProcessorTest {
     public void cornerDetectionTestWithRectangle(){
         OpenCVLoader.initDebug();
         Mat examZoomOut = loadFromResource(R.drawable.exam_zoom_out);
+        Imgproc.cvtColor(examZoomOut, examZoomOut, Imgproc.COLOR_BGR2GRAY);
         List<Point> points = imageProcessor.cornerDetection(examZoomOut);
         List<Point> filtered = imageProcessor.removePoints(points);
         List<Point> clockwiseOrderedPoints = imageProcessor.orderPoints(filtered);
