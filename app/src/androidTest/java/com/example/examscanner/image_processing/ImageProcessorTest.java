@@ -129,7 +129,16 @@ public class ImageProcessorTest {
     }
 
     @Test
-    public void transformToRectangleTestWithImageNotRotated(){}
+    public void transformToRectangleTestWithImageNotRotated(){
+        Mat example_05 = loadFromResource(R.drawable.exam);
+        Bitmap bm = bitmapFromMat(example_05);
+        Bitmap transformed = imageProcessor.transformToRectangle(bm,
+                new android.graphics.Point(0,0),
+                new android.graphics.Point(bm.getWidth(), 0),
+                new android.graphics.Point(bm.getWidth(), bm.getHeight()),
+                new android.graphics.Point(0, bm.getHeight()));
+        assert transformed.equals(bm);
+    }
 
     @Test
     public void cornerDetectionTestWithRectangle(){
