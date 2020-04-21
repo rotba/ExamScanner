@@ -80,6 +80,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     public ImageProcessor() {
+
         questionTemplate = loadFromResource(R.drawable.template);
     }
 
@@ -373,7 +374,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         return chunkedImages;
     }
 
-    public Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int numOfQuestions) {
+    private Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int numOfQuestions) {
 
         int result_cols = img_exam.cols() - img_template.cols() + 1;
         int result_rows = img_exam.rows() - img_template.rows() + 1;
@@ -422,7 +423,8 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
 
-    private Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template) {
+    Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template) {
+
         int result_cols = img_exam.cols() - img_template.cols() + 1;
         int result_rows = img_exam.rows() - img_template.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1); //CV_32FC1 means 32 bit floating point signed depth in one channel

@@ -22,6 +22,7 @@ import org.opencv.imgproc.Imgproc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
@@ -30,12 +31,14 @@ public class ImageProcessorTest {
 
     ImageProcessor imageProcessor;
     Mat pdfTest;
+    Mat questionTemplate;
 
     @Before
     public void setUp() {
         OpenCVLoader.initDebug();
         imageProcessor = new ImageProcessor();
         pdfTest = loadFromResource(R.drawable.exam);
+        questionTemplate = loadFromResource(R.drawable.template);
         // pdfTest = loadFromAssets("test_jpeg_diagonal1");
     }
 
@@ -157,6 +160,13 @@ public class ImageProcessorTest {
     }
 
     @Test
+    public void findQuestions2TestInputContainsOneTemplate(){
+        Mat exam_1_q = loadFromResource(R.drawable.exam_1_q);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_1_q, questionTemplate);
+        assert transformed.equals(bm);
+    }
+
+    @Test
     public void cornerDetectionTestWithRotatedRectangle(){}
 
     @Test
@@ -173,8 +183,7 @@ public class ImageProcessorTest {
     @Test
     public void findQuestions2TestInputWithoutATemplate(){}
 
-    @Test
-    public void findQuestions2TestInputContainsOneTemplate(){}
+
 
     @Test
     public void findQuestions2TestInputContainsMoreThanOneTemplate(){}
