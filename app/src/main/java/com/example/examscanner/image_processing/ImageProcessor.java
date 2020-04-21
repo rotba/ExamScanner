@@ -14,6 +14,7 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -147,25 +148,37 @@ public class ImageProcessor implements ImageProcessingFacade {
         double heightCandidateB = Math.sqrt(Math.pow((upperLeft.x - bottomLeft.x), 2) + Math.pow((upperLeft.y - bottomLeft.y), 2));
         double newHeight = Math.max(heightCandidateA, heightCandidateB);
 
-
         // compute the perspective transform matrix and then apply it
-//         dst = [(0,0), (newWidth-1,0), (newWidth-1, newHeight-1), (0, newHeight-1)]
-//         M = cv2.getPerspectiveTransform(rect, dst)
-//         warped = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
 
-        Mat src = new Mat(4, 1, CvType.CV_32FC2);
-        src.put((int) upperLeft.y, (int) upperLeft.x, (int) upperRight.y, (int) upperRight.x, (int) bottomLeft.y, (int) bottomLeft.x, (int) bottomRight.y, (int) bottomRight.x);
-        Mat dst = new Mat(4, 1, CvType.CV_32FC2);
-        dst.put(0, 0, 0, inputMat.width(), inputMat.height(), inputMat.width(), inputMat.height(), 0);
+        MatOfPoint2f src = new MatOfPoint2f(
+                new Point(upperLeft.x, upperLeft.y),
+                new Point(upperRight.x, upperRight.y),
+                new Point(bottomRight.x, bottomRight.y),
+                new Point(bottomLeft.x, bottomLeft.y));
+
+        MatOfPoint2f dst = new MatOfPoint2f(
+                new Point(0, 0),
+                new Point(newWidth-1,0),
+                new Point(newWidth-1,newHeight-1),
+                new Point(0,newHeight-1)
+        );
+
+
+//        Mat src = new Mat(4, 1, CvType.CV_32FC2);
+//        src.put((int) upperLeft.y, (int) upperLeft.x, (int) upperRight.y, (int) upperRight.x, (int) bottomLeft.y, (int) bottomLeft.x, (int) bottomRight.y, (int) bottomRight.x);
+//        Mat dst = new Mat(4, 1, CvType.CV_32FC2);
+//        dst.put(0, 0, 0, inputMat.width(), inputMat.height(), inputMat.width(), inputMat.height(), 0);
 
         Mat perspectiveTransform = Imgproc.getPerspectiveTransform(src, dst);
-        Mat transformedMat = inputMat.clone();
-        Imgproc.warpPerspective(inputMat, transformedMat, perspectiveTransform, new Size(inputMat.width(), inputMat.height()));
+        Mat transformedMat = new Mat();
+        Imgproc.warpPerspective(inputMat, transformedMat, perspectiveTransform, new Size(newWidth, newHeight));
 
         Bitmap transformedBitmap = Bitmap.createBitmap(transformedMat.cols(), transformedMat.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(transformedMat, transformedBitmap);
         return transformedBitmap;
     }
+
+
 
     private Point getBottomRight(List<Point> points) {
         PointComparator pointComp = new PointComparator();

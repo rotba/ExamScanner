@@ -79,6 +79,59 @@ public class ImageProcessorTest {
     }
 
     @Test
+    public void transformToRectangleTestWithImageRotatedToLeft(){
+        Mat example_01 = loadFromResource(R.drawable.example_01);
+        Bitmap bm = bitmapFromMat(example_01);
+        Bitmap transformed = imageProcessor.transformToRectangle(bm,
+                new android.graphics.Point(73,239),
+                new android.graphics.Point(356, 117),
+                new android.graphics.Point(475, 265),
+                new android.graphics.Point(187, 443));
+        assert transformed.getHeight() == 233 && transformed.getWidth() == 338;
+    }
+
+    @Test
+    public void transformToRectangleTestWithImageRotatedToLeft2(){
+        Mat example_02 = loadFromResource(R.drawable.example_02);
+        Bitmap bm = bitmapFromMat(example_02);
+        Bitmap transformed = imageProcessor.transformToRectangle(bm,
+                new android.graphics.Point(101,185),
+                new android.graphics.Point(393, 151),
+                new android.graphics.Point(479, 323),
+                new android.graphics.Point(187, 441));
+        assert transformed.getHeight() == 270 && transformed.getWidth() == 314;
+    }
+
+    @Test
+    public void transformToRectangleTestWithImageRotatedToRight(){
+        Mat example_03 = loadFromResource(R.drawable.example_03);
+        Bitmap bm = bitmapFromMat(example_03);
+        Bitmap transformed = imageProcessor.transformToRectangle(bm,
+                new android.graphics.Point(63,242),
+                new android.graphics.Point(291, 110),
+                new android.graphics.Point(361, 252),
+                new android.graphics.Point(78, 386));
+        assert transformed.getHeight() == 118 && transformed.getWidth() == 313;
+
+    }
+
+    @Test
+    public void transformToRectangleTestWithImageRotatedToRight2(){
+        Mat example_04 = loadFromResource(R.drawable.example_04);
+        Bitmap bm = bitmapFromMat(example_04);
+        Bitmap transformed = imageProcessor.transformToRectangle(bm,
+                new android.graphics.Point(176,109),
+                new android.graphics.Point(272, 11),
+                new android.graphics.Point(335, 76),
+                new android.graphics.Point(239, 172));
+        assert transformed.getHeight() == 90 && transformed.getWidth() == 137;
+
+    }
+
+    @Test
+    public void transformToRectangleTestWithImageNotRotated(){}
+
+    @Test
     public void cornerDetectionTestWithRectangle(){
         OpenCVLoader.initDebug();
         Mat examZoomOut = loadFromResource(R.drawable.exam_zoom_out);
@@ -150,17 +203,7 @@ public class ImageProcessorTest {
     @Test
     public void findQuestions3TestUnbalancedColsExam(){}
 
-    @Test
-    public void transformToRectangleTestWithImageRotatedToLeft(){}
 
-    @Test
-    public void transformToRectangleTestWithImageRotatedToRight(){}
-
-    @Test
-    public void transformToRectangleTestWithImageNotRotated(){}
-
-    @Test
-    public void transformToRectangleTestWithUnboundedPoints(){}
 
     @Test
     public void markedAnswerTestEmptyArray(){}
