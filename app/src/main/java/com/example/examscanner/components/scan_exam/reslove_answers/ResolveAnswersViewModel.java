@@ -80,5 +80,6 @@ public class ResolveAnswersViewModel extends ViewModel {
         ScannedCapture scannedCapture = getScannedCapture(scanId).getValue();
         scannedCapture.commitResolutions();
         getScannedCapture(scanId).setValue(scannedCapture);
+        scRepo.create(scannedCapture);
     }
 }

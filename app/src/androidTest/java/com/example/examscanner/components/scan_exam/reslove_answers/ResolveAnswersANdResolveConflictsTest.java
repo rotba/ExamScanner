@@ -10,23 +10,17 @@ import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.persistence.entities.Exam;
 import com.example.examscanner.persistence.entities.ExamCreationSession;
 import com.example.examscanner.repositories.Repository;
-import com.example.examscanner.repositories.VersionRepoStubFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
-import com.example.examscanner.repositories.version.Version;
-import com.example.examscanner.repositories.version.VersionRepoFactory;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -54,15 +48,18 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
         dbCallback = db ->{
             long creationId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
             examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.entities.Version(dinaBarzilayVersionNumber, examId));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.entities.Version(theDevilVersionNumber, examId));
+
         };
         super.setUp();
         scanExamSession =new ScanExamSessionProviderFactory().create().provide(examId);
         cdcRepo = new CDCRepositoryFacrory().create();
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
-        VersionRepoFactory.setStub(VersionRepoStubFactory.createStubThatReturns(new ArrayList<Version>(){{
-            add(new Version(dinaBarzilayVersionNumber,0,null));
-            add(new Version(theDevilVersionNumber,0,null));
-        }}));
+//        VersionRepoFactory.setStub(VersionRepoStubFactory.createStubThatReturns(new ArrayList<Version>(){{
+//            add(new Version(dinaBarzilayVersionNumber,0,null));
+//            add(new Version(theDevilVersionNumber,0,null));
+//        }}));
         imageProcessor = nullIP();
         repo = new ScannedCaptureRepositoryFactory().create();
         repo.create(ScannedCapturesInstancesFactory.instance1(repo));

@@ -1,19 +1,17 @@
 package com.example.examscanner.image_processing;
 
 import android.graphics.Bitmap;
-import android.graphics.PointF;
 
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCaptureRepositoryFacrory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
 
-@Ignore("No tests")
+
 public class ImageProcessorTest {
 
-//
-    private ImageProcessingFacade imgProcessor = new ImageProcessingFactory().create();
+//private ImageProcessingFacade imgProcessor = new ImageProcessingFactory().create();
 
     @Before
     public void setUp() {
@@ -106,7 +104,17 @@ public class ImageProcessorTest {
     public void markedAnswerTestWithNotFullMarking(){}
 
     @Test
-    public void splitImageTestZeroChunks(){}
+    public void splitImageTestZeroChunks(){
+        OpenCVLoader.initDebug();
+        //     Mat img = Imgcodecs.imread("path/to/img");
+//        Bitmap bm = Bitmap.createBitmap(img.cols(), img.rows(), Bitmap.Config.ARGB_8888);
+//        Utils.matToBitmap(img, bm);
+        Mat m = new Mat();
+        Bitmap bm = null;
+        //       ArrayList<Bitmap> chunks = ImageProcessor.splitImage(bm, 0);
+//        assert bm.equals(chunks.get(0));
+//        assert chunks.size()==0;
+    }
 
     @Test
     public void splitImageTestOneChunks(){}

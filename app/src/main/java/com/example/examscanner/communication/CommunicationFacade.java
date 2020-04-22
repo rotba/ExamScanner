@@ -33,8 +33,9 @@ public interface CommunicationFacade {
     public long createNewCreateExamSession();
     public ScanExamSessionEntityInterface[] getScanExamSessions();
     public  long createQuestion(long versionId, int num, int ans, int left, int up, int right, int bottom);
-
     public long createVersion(long examId, int num);
-
     public VersionEntityInterface getVersionById(long vId);
+    public QuestionEntityInterface getQuestionById(long qId);
+    public long insertVersionReplaceOnConflict(long examId, int num);
+    public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom);
 }

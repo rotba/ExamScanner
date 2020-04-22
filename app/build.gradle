@@ -73,6 +73,8 @@ dependencies {
     // volley
     implementation 'com.android.volley:volley:1.1.0'
 
+    implementation 'androidx.test:core:' + rootProject.coreVersion
+
     // androidTest
     androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
     androidTestImplementation 'androidx.test:core-ktx:' + rootProject.coreVersion

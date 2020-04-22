@@ -243,7 +243,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:text="@string/choose_pdf"
+        android:text="@string/choose_jpg"
         app:layout_constraintBottom_toTopOf="@+id/button_create_exam_add_version"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/textView_create_exam_version_num" />
@@ -262,7 +262,10 @@
         android:layout_height="32dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="12dp"
+        android:textColor="@color/colorAccent"
         android:ems="10"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toStartOf="@+id/textView_create_exam_versions_added" />
@@ -273,6 +276,8 @@
         android:layout_height="33dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
         android:text="@string/added"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -313,8 +318,9 @@
 
     <Button
         android:id="@+id/button_create_exam_add_greader"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_width="109dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="4dp"
         android:layout_marginBottom="16dp"
         android:text="@string/add_grader_action"
         app:layout_constraintBottom_toTopOf="@+id/guideline10"
@@ -325,13 +331,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.98" />
 
     <Button
         android:id="@+id/button_create_exam_create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_width="135dp"
+        android:layout_height="61dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/create_the_exam"
         app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintEnd_toEndOf="parent"
@@ -351,8 +357,8 @@
 
     <Button
         android:id="@+id/button_create_exam_add_version"
-        android:layout_width="110dp"
-        android:layout_height="42dp"
+        android:layout_width="109dp"
+        android:layout_height="47dp"
         android:layout_marginStart="4dp"
         android:layout_marginBottom="12dp"
         android:text="@string/add_version_action"

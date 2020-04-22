@@ -125,6 +125,21 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
+    public QuestionEntityInterface getQuestionById(long qId) {
+        return realImpl.getQuestionById(qId);
+    }
+
+    @Override
+    public long insertVersionReplaceOnConflict(long examId, int num) {
+        return realImpl.insertVersionReplaceOnConflict(examId, num);
+    }
+
+    @Override
+    public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
+        return realImpl.insertQuestionReplaceOnConflict(vId, qNum, qAns, left, right, up, bottom);
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         return realImpl.getVersionByExamIdAndNumber(eId, num);
     }

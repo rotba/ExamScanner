@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
+
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
 
@@ -16,8 +17,8 @@ import java.util.function.Predicate;
 
 
 public class ExamRepository implements Repository<Exam> {
-    private CommunicationFacade comFacade = new CommunicationFacadeFactory().create();
-    private Converter<ExamEntityInterface, Exam> converter = new ExamConverter();
+    private CommunicationFacade comFacade;
+    private Converter<ExamEntityInterface, Exam> converter;
 
     private static ExamRepository instance;
     private static final String TAG = "ExamRepository";
@@ -25,11 +26,17 @@ public class ExamRepository implements Repository<Exam> {
 
     public static ExamRepository getInstance() {
         if (instance == null) {
-            instance = new ExamRepository();
+            final CommunicationFacade comFacade = new CommunicationFacadeFactory().create();
+            instance = new ExamRepository(comFacade, new ExamConverter(comFacade));
             return instance;
         } else {
             return instance;
         }
+    }
+
+    public ExamRepository(CommunicationFacade comFacade, Converter<ExamEntityInterface,Exam> converter) {
+        this.comFacade = comFacade;
+        this.converter =converter;
     }
 
     @Override
@@ -66,18 +73,46 @@ public class ExamRepository implements Repository<Exam> {
                 exam.getSessionId()
         );
         exam.setId(id);
+        insertVersions(exam);
     }
 
+    private void insertVersions(Exam exam) {
+        for (Version v: exam.getVersions()) {
+            long versionId = comFacade.insertVersionReplaceOnConflict(exam.getId(),v.getNum());
+            v.setId(versionId);
+            insertQuestions(v);
+        }
+    }
+
+    private void insertQuestions(Version v) {
+        for (Question q:v.getQuestions()) {
+            long qId = comFacade.insertQuestionReplaceOnConflict(
+                    v.getId(), q.getNum(),q.getAns(), q.getLeft(),q.getRight(),q.getUp(),q.getBottom()
+            );
+            q.setId(qId);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Exam exam) {
+        updateVersions(exam.getVersions());
         comFacade.updateExam(
                 exam.getId(),
                 exam.getCourseName(),
                 exam.getSemester(),
                 exam.getTerm(),
-                exam.getVersions(),
+                exam.getVersions().stream().mapToLong(Version::getId).toArray(),
                 exam.getSessionId(),
                 exam.getYear());
+    }
+
+    private void updateVersions(List<Version> versions) {
+        for (Version v:versions) {
+            long maybeNewId = comFacade.insertVersionReplaceOnConflict(v.getExam().getId(),v.getNum());
+            v.setId(maybeNewId);
+            //TODO update questions
+        }
     }
 
     @Override

@@ -46,43 +46,26 @@
             android:id="@+id/button_answer_5"
             android:layout_width="89dp"
             android:layout_height="75dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/answers_is_5"
-            app:layout_constraintEnd_toStartOf="@+id/button_answer_2"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_no_answer"
+            app:layout_constraintHorizontal_bias="0.913"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_answer_1" />
-
-        <Button
-            android:id="@+id/button_answer_6"
-            android:layout_width="89dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/answers_is_6"
-            app:layout_constraintStart_toEndOf="@+id/button_answer_5"
-            app:layout_constraintTop_toBottomOf="@+id/button_answer_2" />
-
-        <Button
-            android:id="@+id/button_answer_7"
-            android:layout_width="89dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="7dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/answers_is_7"
-            app:layout_constraintStart_toEndOf="@+id/button_answer_6"
-            app:layout_constraintTop_toBottomOf="@+id/button_answer_3" />
+            app:layout_constraintTop_toBottomOf="@+id/button_answer_1"
+            app:layout_constraintVertical_bias="0.333" />
 
         <Button
             android:id="@+id/button_no_answer"
             android:layout_width="89dp"
             android:layout_height="75dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="100dp"
             android:text="@string/answers_is_no_answer"
-            app:layout_constraintStart_toEndOf="@+id/button_answer_7"
-            app:layout_constraintTop_toBottomOf="@+id/button_answer_4" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_answer_4"
+            app:layout_constraintVertical_bias="0.333" />
 
         <Button
             android:id="@+id/button_answer_2"

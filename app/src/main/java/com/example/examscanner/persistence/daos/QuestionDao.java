@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
@@ -22,4 +23,10 @@ public interface QuestionDao {
 
     @Query("SELECT * FROM question WHERE verId IS :verId AND questionNum IS :qNum LIMIT 1")
     Question getQuestionByVerIdAndQNum(long verId, int qNum);
+
+    @Query("SELECT * FROM question WHERE id IS :qId LIMIT 1")
+    Question get(long qId);
+
+    @Update
+    void update(Question maybeQuestion);
 }
