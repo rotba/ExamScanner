@@ -6,8 +6,8 @@ public enum Choice {
     THREE(3),
     FOUR(4),
     FIVE(5),
-    SIX(6),
-    SEVEN(7),
+//    SIX(6),
+//    SEVEN(7),
     NO_ANSWER(0)
     ;
     public final int value;

@@ -105,10 +105,10 @@ public class ResolveConflictedAnswersFragment extends Fragment {
                 return Choice.FOUR;
             case R.id.button_answer_5:
                 return Choice.FIVE;
-            case R.id.button_answer_6:
-                return Choice.SIX;
-            case R.id.button_answer_7:
-                return Choice.SEVEN;
+//            case R.id.button_answer_6:
+//                return Choice.SIX;
+//            case R.id.button_answer_7:
+//                return Choice.SEVEN;
             case R.id.button_no_answer:
                 return Choice.NO_ANSWER;
             default:
@@ -123,8 +123,8 @@ public class ResolveConflictedAnswersFragment extends Fragment {
         ans.add(view.findViewById(R.id.button_answer_3));
         ans.add(view.findViewById(R.id.button_answer_4));
         ans.add(view.findViewById(R.id.button_answer_5));
-        ans.add(view.findViewById(R.id.button_answer_6));
-        ans.add(view.findViewById(R.id.button_answer_7));
+//        ans.add(view.findViewById(R.id.button_answer_6));
+//        ans.add(view.findViewById(R.id.button_answer_7));
         ans.add(view.findViewById(R.id.button_no_answer));
         return ans;
 

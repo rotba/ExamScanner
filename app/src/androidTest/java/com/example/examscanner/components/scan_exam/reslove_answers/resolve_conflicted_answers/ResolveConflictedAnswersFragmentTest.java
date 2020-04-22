@@ -53,8 +53,8 @@ public class ResolveConflictedAnswersFragmentTest {
         onView(withText("3")).check(matches(isDisplayed()));
         onView(withText("4")).check(matches(isDisplayed()));
         onView(withText("5")).check(matches(isDisplayed()));
-        onView(withText("6")).check(matches(isDisplayed()));
-        onView(withText("7")).check(matches(isDisplayed()));
+//        onView(withText("6")).check(matches(isDisplayed()));
+//        onView(withText("7")).check(matches(isDisplayed()));
         onView(withText("No Answer")).check(matches(isDisplayed()));
     }
 
