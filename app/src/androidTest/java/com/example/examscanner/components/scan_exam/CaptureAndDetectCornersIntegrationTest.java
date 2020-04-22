@@ -17,6 +17,7 @@ import com.example.examscanner.persistence.entities.Exam;
 import com.example.examscanner.persistence.entities.ExamCreationSession;
 import com.example.examscanner.persistence.entities.ScanExamSession;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
+import com.example.examscanner.use_case_contexts_creators.Context2Setuper;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -40,7 +41,6 @@ import static org.hamcrest.Matchers.containsString;
 @RunWith(AndroidJUnit4.class)
 public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
 
-    private ImageProcessingFacade imageProcessor;
     private String test_course_name;
 
     @Before
@@ -52,8 +52,8 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
             long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId));
         };
         super.setUp();
-        CameraMangerFactory.setStubInstance(new CameraManagerStub());
-        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
+        Context2Setuper context = new Context2Setuper();
+        context.setup();
     }
 
     @Test

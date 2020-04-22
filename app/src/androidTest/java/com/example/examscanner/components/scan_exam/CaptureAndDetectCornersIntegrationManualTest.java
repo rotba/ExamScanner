@@ -16,6 +16,7 @@ import com.example.examscanner.persistence.entities.ExamCreationSession;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,6 +32,7 @@ import static com.example.examscanner.Utils.sleepMovingFromCaptureToDetectCorner
 import static com.example.examscanner.Utils.sleepSingleCaptureProcessingTime;
 import static org.hamcrest.Matchers.containsString;
 
+@Ignore("Manual testing")
 @RunWith(AndroidJUnit4.class)
 public class CaptureAndDetectCornersIntegrationManualTest extends StateFullTest {
 

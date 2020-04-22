@@ -48,7 +48,7 @@ public class ImageProcessorsGenerator {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                consumer.consume(new PointF(),null,null,new PointF());
+                consumer.consume(new PointF(0,0),new PointF(0,0),new PointF(0,0),new PointF(0,0));
             }
 
             @Override
@@ -112,6 +112,35 @@ public class ImageProcessorsGenerator {
             @Override
             public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
                 ScannedCapturesInstancesFactory.instance1(consumer);
+            }
+        };
+    }
+
+    public static ImageProcessingFacade fakeIP(){
+        return new ImageProcessingFacade() {
+            @Override
+            public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
+                consumer.consume(new PointF(0,0),new PointF(0,0),new PointF(0,0),new PointF(0,0));
+            }
+
+            @Override
+            public Bitmap transformToRectangle(Bitmap bitmap, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
+                return bitmap;
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
+                consumer.consume(0,null,null,null,null,null,null);
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
+                consumer.consume(0,null,null,null,null,null,null);
             }
         };
     }

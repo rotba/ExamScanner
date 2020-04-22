@@ -20,6 +20,7 @@ import com.example.examscanner.stubs.ExamStubFactory;
 
 import java.util.ArrayList;
 
+import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 
 public class CornerDetectionContext1Setuper {
@@ -43,25 +44,25 @@ public class CornerDetectionContext1Setuper {
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
         scRepo = SCEmptyRepositoryFactory.create();
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
-        imageProcessor = nullIP();
+        imageProcessor = fakeIP();
         cdcRepo = new CDCRepositoryFacrory().create();
         scanExamSession = new ScanExamSessionProviderFactory().create().provide(e.getId());
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg1(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, bottomRight, scanExamSession));
+                cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg2(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg2Marked(), upperLeft, bottomRight, scanExamSession));
+                cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession));
             }
         });
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg3(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg3Marked(), upperLeft, bottomRight, scanExamSession));
+                cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession));
             }
         });
     }
