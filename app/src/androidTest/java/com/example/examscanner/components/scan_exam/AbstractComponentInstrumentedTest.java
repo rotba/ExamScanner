@@ -26,6 +26,8 @@ public abstract class AbstractComponentInstrumentedTest {
     protected AppDatabase db;
     protected DBCallback dbCallback = (theDb -> {
     });
+    protected Runnable setupCallback = ()->{};
+
 
     @Rule
     public ActivityScenarioRule<MainActivity> mainActivityScenarioRule =
@@ -36,6 +38,7 @@ public abstract class AbstractComponentInstrumentedTest {
         AppDatabaseFactory.setTestMode();
         db = AppDatabaseFactory.getInstance();
         dbCallback.call(db);
+        setupCallback.run();
     }
 
     @After

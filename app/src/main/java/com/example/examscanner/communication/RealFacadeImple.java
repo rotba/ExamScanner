@@ -1,5 +1,6 @@
 package com.example.examscanner.communication;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Build;
 
@@ -305,6 +306,75 @@ public class RealFacadeImple implements CommunicationFacade {
                 return theVersion.getVerNum();
             }
         };
+    }
+
+    @Override
+    public QuestionEntityInterface getQuestionById(long qId) {
+        Question theQuestion =  db.getQuestionDao().get(qId);
+        return new QuestionEntityInterface() {
+            @Override
+            public long getId() {
+                return theQuestion.getId();
+            }
+
+            @Override
+            public long getVersionId() {
+                return theQuestion.getVerId();
+            }
+
+            @Override
+            public long getCorrectAnswer() {
+                return theQuestion.getCorrectAns();
+            }
+
+            @Override
+            public int getLeftX() {
+                return theQuestion.getLeftX();
+            }
+
+            @Override
+            public int getUpY() {
+                return theQuestion.getUpY();
+            }
+
+            @Override
+            public int getRightX() {
+                return theQuestion.getRightX();
+            }
+
+            @Override
+            public int getBottomY() {
+                return theQuestion.getBorromY();
+            }
+
+            @Override
+            public int getNum() {
+                return theQuestion.getQuestionNum();
+            }
+        };
+    }
+
+    @Override
+    public long insertVersionReplaceOnConflict(long examId, int num) {
+        Version maybeVersion = db.getVersionDao().getByExamIdAndNumber(examId, num);
+        if(maybeVersion==null){
+            return db.getVersionDao().insert(new Version(num,examId));
+        }else{
+            db.getVersionDao().update(maybeVersion);
+            return maybeVersion.getId();
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
+        Question maybeQuestion = db.getQuestionDao().getQuestionByVerIdAndQNum(right, up);
+        if(maybeQuestion==null){
+            return db.getQuestionDao().insert(new Question(qNum,vId,qAns,left,up,right,bottom));
+        }else {
+            db.getQuestionDao().update(maybeQuestion);
+            return maybeQuestion.getId();
+        }
     }
 
     @Override

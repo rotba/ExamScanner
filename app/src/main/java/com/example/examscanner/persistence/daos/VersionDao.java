@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import com.example.examscanner.persistence.entities.Version;
 import com.example.examscanner.persistence.entities.relations.VersionWithQuestions;
@@ -28,4 +29,7 @@ public interface VersionDao {
 
     @Query("SELECT *  FROM version WHERE id IS :vId")
     Version getById(long vId);
+
+    @Update
+    void update(Version maybeVersion);
 }

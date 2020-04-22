@@ -70,30 +70,48 @@ public class CreateExamFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ProgressBar pb = ((ProgressBar) view.findViewById(R.id.progressBar_create_exam));
         pb.setVisibility(View.VISIBLE);
-        ((Button)getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(false);
+        ((Button) getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(false);
         Completable.fromAction(this::createModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onModelCreated, this::onModelCreatedError);
-        ((Button) view.findViewById(R.id.button_create_exam_create)).setOnClickListener(new CreateClickListener());
+
+        final Button createExamButton = (Button) view.findViewById(R.id.button_create_exam_create);
+        createExamButton.setEnabled(false);
+        createExamButton.setOnClickListener(new CreateClickListener());
         ((Button) view.findViewById(R.id.button_create_exam_upload_version_image)).setOnClickListener(this::onChooseVersionPdfClick);
-        ((EditText)view.findViewById(R.id.editText_create_exam_version_number)).addTextChangedListener(new TextWatcher() {
+        ((EditText) view.findViewById(R.id.editText_create_exam_version_number)).addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 viewModel.holdVersionNumber(Integer.valueOf(s.toString()));
                 refreshAddVersionButton();
             }
+
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
-        ((Button)view.findViewById(R.id.button_create_exam_add_version)).setOnClickListener(this::onAddVersion);
+        ((Button) view.findViewById(R.id.button_create_exam_add_version)).setOnClickListener(this::onAddVersion);
+    }
+
+    private void refreshCreateExamButton() {
+        ((Button) getActivity().findViewById(R.id.button_create_exam_create)).setEnabled(
+                viewModel.getAddedVersions().getValue()>0 &&
+                        ((TextView)getActivity().findViewById(R.id.editText_create_exam_course_name)).getText()!=null&&
+                        ((TextView)getActivity().findViewById(R.id.editText_create_exam_year)).getText()!=null &&
+                        ((RadioGroup)getActivity().findViewById(R.id.radioGroup_semester)).getCheckedRadioButtonId()!=-1 &&
+                        ((RadioGroup)getActivity().findViewById(R.id.radioGroup_term)).getCheckedRadioButtonId()!=-1
+
+        );
     }
 
     private void refreshAddVersionButton() {
-        ((Button)getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(
-                viewModel.getCurrentVersionNumber()!=null&&viewModel.getCurrentVersionBitmap()!=null
+        ((Button) getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(
+                viewModel.getCurrentVersionNumber() != null && viewModel.getCurrentVersionBitmap() != null
         );
     }
 
@@ -101,8 +119,8 @@ public class CreateExamFragment extends Fragment {
         versionImageGetter.get(this, PICKFILE_REQUEST_CODE);
     }
 
-    public void onAddVersion(View v){
-        ((ProgressBar)getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
+    public void onAddVersion(View v) {
+        ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
         Completable.fromAction(() -> viewModel.addVersion())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -134,10 +152,11 @@ public class CreateExamFragment extends Fragment {
         ((TextView) getActivity().findViewById(R.id.textView_create_exam_version_num)).clearComposingText();
         viewModel.holdVersionNumber(null);
         viewModel.holdVersionBitmap(null);
-        ((ImageView)getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageResource(0);
+        ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageResource(0);
         refreshAddVersionButton();
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
         viewModel.incNumOfVersions();
+        refreshCreateExamButton();
     }
 
     private void onModelCreatedError(Throwable throwable) {
@@ -187,6 +206,8 @@ public class CreateExamFragment extends Fragment {
         private final RadioGroup term;
         private final EditText year;
         private ProgressBar pb;
+        private TextWatcher textWatcher;
+        private RadioGroup.OnCheckedChangeListener radioButtonListner;
 
         public CreateClickListener() {
             this.courseName = getActivity().findViewById(R.id.editText_create_exam_course_name);
@@ -194,6 +215,28 @@ public class CreateExamFragment extends Fragment {
             this.term = getActivity().findViewById(R.id.radioGroup_term);
             this.year = getActivity().findViewById(R.id.editText_create_exam_year);
             pb = getActivity().findViewById(R.id.progressBar_create_exam);
+            radioButtonListner= new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    refreshAddVersionButton();
+                }
+            };
+            textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    refreshCreateExamButton();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            };
+            courseName.addTextChangedListener(textWatcher);
+            year.addTextChangedListener(textWatcher);
+            semester.setOnCheckedChangeListener(radioButtonListner);
+            term.setOnCheckedChangeListener(radioButtonListner);
         }
 
 

@@ -65,6 +65,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         return img;
     }
 
+
     private Bitmap loadFromAssets(String filename) {
 
         Bitmap bitmap = null;
@@ -268,7 +269,6 @@ public class ImageProcessor implements ImageProcessingFacade {
             throw new NullPointerException("given input is null");
 
          Mat exam = matFromBitmap(bitmap);
-
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
         float tops[] = new float[amountOfQuestions];
@@ -287,7 +287,6 @@ public class ImageProcessor implements ImageProcessingFacade {
             throw new NullPointerException("invalid input");
 
         Mat exam = matFromBitmap(bitmap);
-
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
         float tops[] = new float[amountOfQuestions];

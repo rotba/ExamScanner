@@ -13,7 +13,7 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.repositories.version.Version;
+import com.example.examscanner.repositories.exam.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +24,16 @@ public class CornerDetectionViewModel extends ViewModel {
     private MutableLiveData<Integer> mNumberOfCornerDetectedCaptures;
     private MutableLiveData<Integer> mNumberOfAnswersScannedCaptures;
     private ImageProcessingFacade imageProcessor;
-    private Repository<Version> verRepo;
     private Repository<CornerDetectedCapture> cdcRepo;
     private Repository<ScannedCapture> scRepo;
     private List<Long> thisSessionProcessedCaptures;
     private Exam exam;
 
 
-    public CornerDetectionViewModel(ImageProcessingFacade imageProcessor, Repository<CornerDetectedCapture> cdcRepo, Repository<ScannedCapture> scRepo, Repository<Version> verRepo , Exam exam) {
+    public CornerDetectionViewModel(ImageProcessingFacade imageProcessor, Repository<CornerDetectedCapture> cdcRepo, Repository<ScannedCapture> scRepo , Exam exam) {
         this.cdcRepo = cdcRepo;
         this.scRepo = scRepo;
         this.imageProcessor = imageProcessor;
-        this.verRepo = verRepo;
         cornerDetectedCaptures = new ArrayList<>();
         for (CornerDetectedCapture cdc : this.cdcRepo.get(c -> true)) {
             cornerDetectedCaptures.add(new MutableLiveData<CornerDetectedCapture>(cdc));
@@ -100,13 +98,13 @@ public class CornerDetectionViewModel extends ViewModel {
 
     public void setVersion(long captureId, int verNum){
         CornerDetectedCapture cdc = getCDCById(captureId).getValue();
-        cdc.setVersionId(verRepo.get(v->v.getExamId()==exam.getId() && v.getNum()==verNum).get(0).getId());
+        cdc.setVersionId(exam.getVersionByNum(verNum).getId());
         getCDCById(captureId).setValue(cdc);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public int[] getVersionNumbers() {
-        return verRepo.get(v->v.getExamId()==exam.getId()).stream().mapToInt(Version::getNum).toArray();
+        return exam.getVersions().stream().mapToInt(Version::getNum).toArray();
     }
 
     public List<MutableLiveData<CornerDetectedCapture>>getCDCs() {

@@ -8,51 +8,41 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamInCreation;
-import com.example.examscanner.repositories.question.Question;
-import com.example.examscanner.repositories.scanned_capture.Answer;
+import com.example.examscanner.repositories.exam.Question;
 import com.example.examscanner.repositories.scanned_capture.ResolvedAnswer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
-import com.example.examscanner.repositories.version.Version;
+import com.example.examscanner.repositories.exam.Version;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateExamModelView extends ViewModel {
     private MutableLiveData<Integer> addedVersions;
-    private List<Version> versions;
-    private Repository<Question> qRepo;
     private ImageProcessingFacade imageProcessor;
     private ExamInCreation examCreated;
     private Repository<Exam> eRepo;
-    private Repository<Version> vRepo;
     private Bitmap currentVersionBitmap;
     private Integer currentVersionNumber;
 
 
-    public CreateExamModelView(Repository<Exam> eRepo, Repository<Version> vRepo, Repository<Question>  qRepo, ImageProcessingFacade imageProcessor, long sessionId) {
+    public CreateExamModelView(Repository<Exam> eRepo, ImageProcessingFacade imageProcessor, long sessionId) {
         this.eRepo = eRepo;
-        this.vRepo = vRepo;
-        this.qRepo = qRepo;
         this.imageProcessor = imageProcessor;
         examCreated = new ExamInCreation(sessionId);
-        versions = new ArrayList<>();
-        eRepo.create(examCreated);
         addedVersions = new MutableLiveData<>(0);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void create(String courseName, String term, String semester, String year){
-        eRepo.update(
+        eRepo.create(
                 examCreated.commit(
                         courseName,
                         Term.createByViewValue(term).getValue(),
                         Semester.createByViewValue(semester).getValue(),
-                        versions.stream().mapToLong(Version::getId).toArray(),
                         year
                 )
         );
@@ -75,18 +65,20 @@ public class CreateExamModelView extends ViewModel {
                 ScannedCapture scannedCapture = new ScannedCapture(-1,null,numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections);
                 if(versionScanningWentWell(scannedCapture))
                     throw new VersionScanningDidntGoWell();
-                Version v = new Version(currentVersionNumber,examCreated.getId(),new long[0]);
-                vRepo.create(v);
+                Version v = new Version(-1,currentVersionNumber,examCreated, Version.theEmptyFutureQuestionsList());
+                examCreated.addVersion(v);
                 for (ResolvedAnswer ans: scannedCapture.getResolvedAnswers()) {
-                    qRepo.create(new Question(
-                            v.getId(),
-                            ans.getAnsNum(),
-                            ans.getSelection(),
-                            (int)ans.getUpperLeft().x*currentVersionBitmap.getWidth(),
-                            (int)ans.getUpperLeft().y*currentVersionBitmap.getHeight(),
-                            (int)ans.getBottomRight().x*currentVersionBitmap.getWidth(),
-                            (int)ans.getBottomRight().y*currentVersionBitmap.getHeight()
-                    ));
+                    v.addQuestion(
+                            new Question(
+                                    -1,
+                                    v,ans.getAnsNum(),
+                                    ans.getSelection(),
+                                    (int)ans.getUpperLeft().x*currentVersionBitmap.getWidth(),
+                                    (int)ans.getUpperLeft().y*currentVersionBitmap.getHeight(),
+                                    (int)ans.getBottomRight().x*currentVersionBitmap.getWidth(),
+                                    (int)ans.getBottomRight().y*currentVersionBitmap.getHeight()
+                            )
+                    );
                 }
             }
         });

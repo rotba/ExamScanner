@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
 
-import com.example.examscanner.repositories.version.Version;
-
 public class CornerDetectedCapture {
     private long id;
     private Bitmap bm;

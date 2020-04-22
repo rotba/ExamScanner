@@ -164,7 +164,7 @@ public class CornerDetectionFragment extends Fragment {
                         getActivity(),
                         CornerDetectionFragmentArgs.fromBundle(getArguments()).getExamId()
                 );
-        cornerDetectionViewModel = new ViewModelProvider(this, factory).get(CornerDetectionViewModel.class);
+        cornerDetectionViewModel = new ViewModelProvider(requireActivity(), factory).get(CornerDetectionViewModel.class);
     }
 
     @NotNull
