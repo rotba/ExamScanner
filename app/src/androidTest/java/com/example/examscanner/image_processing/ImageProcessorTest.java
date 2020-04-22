@@ -21,10 +21,17 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class ImageProcessorTest {
@@ -90,7 +97,8 @@ public class ImageProcessorTest {
                 new android.graphics.Point(356, 117),
                 new android.graphics.Point(475, 265),
                 new android.graphics.Point(187, 443));
-        assert transformed.getHeight() == 233 && transformed.getWidth() == 338;
+        assertEquals(transformed.getHeight(), 233);
+        assertEquals(transformed.getWidth(), 338);
     }
 
     @Test
@@ -102,7 +110,8 @@ public class ImageProcessorTest {
                 new android.graphics.Point(393, 151),
                 new android.graphics.Point(479, 323),
                 new android.graphics.Point(187, 441));
-        assert transformed.getHeight() == 270 && transformed.getWidth() == 314;
+        assertEquals(transformed.getHeight(), 270);
+        assertEquals(transformed.getWidth(), 314);
     }
 
     @Test
@@ -114,7 +123,8 @@ public class ImageProcessorTest {
                 new android.graphics.Point(291, 110),
                 new android.graphics.Point(361, 252),
                 new android.graphics.Point(78, 386));
-        assert transformed.getHeight() == 118 && transformed.getWidth() == 313;
+        assertEquals(transformed.getHeight(), 158);
+        assertEquals(transformed.getWidth(), 313);
 
     }
 
@@ -127,7 +137,8 @@ public class ImageProcessorTest {
                 new android.graphics.Point(272, 11),
                 new android.graphics.Point(335, 76),
                 new android.graphics.Point(239, 172));
-        assert transformed.getHeight() == 90 && transformed.getWidth() == 137;
+        assertEquals(transformed.getHeight(), 90);
+        assertEquals(transformed.getWidth(), 137);
 
     }
 
@@ -140,8 +151,128 @@ public class ImageProcessorTest {
                 new android.graphics.Point(bm.getWidth(), 0),
                 new android.graphics.Point(bm.getWidth(), bm.getHeight()),
                 new android.graphics.Point(0, bm.getHeight()));
-        assert transformed.equals(bm);
+        assertEquals(transformed.getWidth(), bm.getWidth());
+        assertEquals(transformed.getHeight(), bm.getHeight());
+
     }
+
+
+    @Test
+    public void findQuestions2TestInputContainsOneTemplate(){
+        ArrayList<Integer> answers = new ArrayList<>(
+                Arrays.asList(4));
+        Mat exam_1_q = loadFromResource(R.drawable.exam_1_q);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_1_q, questionTemplate);
+        assertEquals(answersMap.size(), 1);
+        assertEquals(new ArrayList<>(answersMap.values()), answers);
+    }
+
+    @Test
+    public void findQuestions2TestOneColExam(){
+        ArrayList<Integer> answers = new ArrayList<>(
+                Arrays.asList(4, 3, 4, 3, 5, 1 ,5, 2, 1, 3, 4, 1, 5, 2, 4, 1, 5, 5, 1, 2, 1 ,2, 1, 4, 3));
+        Mat exam_25_q = loadFromResource(R.drawable.exam_25_q);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_25_q, questionTemplate);
+        assert answersMap.size() == 25 && answersMap.values().equals(answers);
+    }
+
+    @Test
+    public void findQuestions2TestTwoColsExam(){
+        ArrayList<Integer> answers = new ArrayList<Integer>(
+                Arrays.asList(4, 3, 4, 3, 5, 1 ,5, 2, 1, 3, 4, 1, 5, 2, 4, 1, 5, 5, 1, 2, 1 ,2, 1, 4, 3,
+                              4, 3, 4, 3, 2, 2, 4, 2, 3 ,2 ,2 ,1 ,1, 2 ,1 ,1, 4, 1 ,3, 4 ,5, 4 ,3 ,5 ,2));
+        Mat exam_50_q = loadFromResource(R.drawable.exam_50_q);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_50_q, questionTemplate);
+        assert answersMap.size() == 50 && answersMap.values().equals(answers);
+    }
+
+    @Test
+    public void findQuestions2TestInputWithoutATemplate(){
+        Mat noTemplate = loadFromResource(R.drawable.example_01);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(noTemplate, questionTemplate);
+        assertEquals(answersMap.size(), 0);
+    }
+
+    @Test
+    public void findQuestions2TestThreeColsExam(){
+        ArrayList<Integer> answers = new ArrayList<Integer>(
+                Arrays.asList(4, 3, 4, 3, 5, 1 ,5, 2, 1, 3, 4, 1, 5, 2, 4, 1, 5, 5, 1, 2, 1 ,2, 1, 4, 3,
+                        4, 3, 4, 3, 2, 2, 4, 2, 3 ,2 ,2 ,1 ,1, 2 ,1 ,1, 4, 1 ,3, 4 ,5, 4 ,3 ,5 ,2));
+        Mat exam_3_cols = loadFromResource(R.drawable.exam_3_cols);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_3_cols, questionTemplate);
+        assert answersMap.size() == 50 && answersMap.values().equals(answers);
+    }
+
+    @Test
+    public void findQuestions2TestUnbalancedColsExam(){}
+
+    @Test
+    public void findQuestions3TestInputWithoutATemplate(){
+        Mat noTemplate = loadFromResource(R.drawable.example_01);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(noTemplate, questionTemplate, 0);
+        assertEquals(answersMap.size(), 0);
+    }
+
+    @Test
+    public void findQuestions3TestInputContainsOneTemplate(){
+        ArrayList<Integer> answers = new ArrayList<>(
+                Arrays.asList(4));
+        Mat exam_1_q = loadFromResource(R.drawable.exam_1_q);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_1_q, questionTemplate, 1);
+        assertEquals(answersMap.size(), 1);
+        assertEquals(new ArrayList<>(answersMap.values()), answers);
+    }
+
+    @Test
+    public void findQuestions3TestInputContainsMoreThanOneTemplate(){}
+
+    @Test
+    public void findQuestions3TestOneColExam(){
+        ArrayList<Integer> answers = new ArrayList<>(
+                Arrays.asList(4, 3, 4, 3, 5, 1 ,5, 2, 1, 3, 4, 1, 5, 2, 4, 1, 5, 5, 1, 2, 1 ,2, 1, 4, 3));
+        Mat exam_25_q = loadFromResource(R.drawable.exam_25_q);
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_25_q, questionTemplate, 25);
+//        assertEquals(answersMap.size(), 25);
+//        assertEquals(new ArrayList<>(answersMap.values()), answers);
+        assert answersMap.size() == 25 && answersMap.values().equals(answers);
+    }
+
+    @Test
+    public void findQuestions3TestTwoColsExam(){}
+
+    @Test
+    public void findQuestions3TestThreeColsExam(){}
+
+    @Test
+    public void findQuestions3TestUnbalancedColsExam(){}
+
+    @Test
+    public void findQuestions5TestInputContainsOneTemplate(){
+        ArrayList<Integer> answers = new ArrayList<>(
+                Arrays.asList(4));
+        Mat exam_1_q = loadFromResource(R.drawable.exam_1_q);
+        int[] leftMostXs = {268};
+        int[] upperMostYs = {79};
+        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_1_q, questionTemplate, leftMostXs, upperMostYs);
+        assertEquals(answersMap.size(), 1);
+        assertEquals(new ArrayList<>(answersMap.values()), answers);
+
+    }
+
+    @Test
+    public void findQuestions5TestOneColExam(){ }
+
+    @Test
+    public void findQuestions5TestTwoColsExam(){}
+
+    @Test
+    public void findQuestions5TestInputWithoutATemplate(){}
+
+    @Test
+    public void findQuestions5TestThreeColsExam(){}
+
+    @Test
+    public void findQuestions5TestUnbalancedColsExam(){}
 
     @Test
     public void cornerDetectionTestWithRectangle(){
@@ -160,13 +291,6 @@ public class ImageProcessorTest {
     }
 
     @Test
-    public void findQuestions2TestInputContainsOneTemplate(){
-        Mat exam_1_q = loadFromResource(R.drawable.exam_1_q);
-        Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_1_q, questionTemplate);
-        assert transformed.equals(bm);
-    }
-
-    @Test
     public void cornerDetectionTestWithRotatedRectangle(){}
 
     @Test
@@ -177,51 +301,6 @@ public class ImageProcessorTest {
 
     @Test
     public void cornerDetectionTestImageWithNoBounds(){}
-
-
-
-    @Test
-    public void findQuestions2TestInputWithoutATemplate(){}
-
-
-
-    @Test
-    public void findQuestions2TestInputContainsMoreThanOneTemplate(){}
-
-    @Test
-    public void findQuestions2TestOneColExam(){}
-
-    @Test
-    public void findQuestions2TestTwoColsExam(){}
-
-    @Test
-    public void findQuestions2TestThreeColsExam(){}
-
-    @Test
-    public void findQuestions2TestUnbalancedColsExam(){}
-
-    @Test
-    public void findQuestions3TestInputWithoutATemplate(){}
-
-    @Test
-    public void findQuestions3TestInputContainsOneTemplate(){}
-
-    @Test
-    public void findQuestions3TestInputContainsMoreThanOneTemplate(){}
-
-    @Test
-    public void findQuestions3TestOneColExam(){}
-
-    @Test
-    public void findQuestions3TestTwoColsExam(){}
-
-    @Test
-    public void findQuestions3TestThreeColsExam(){}
-
-    @Test
-    public void findQuestions3TestUnbalancedColsExam(){}
-
-
 
     @Test
     public void markedAnswerTestEmptyArray(){}

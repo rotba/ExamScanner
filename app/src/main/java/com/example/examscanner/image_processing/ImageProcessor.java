@@ -322,7 +322,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int[] leftMostXs, int[] upperMostYs) {
+    Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int[] leftMostXs, int[] upperMostYs) {
 
         int numOfQuestions = leftMostXs.length;
         int unIdentifiedThreshold = (int) Math.ceil(numOfQuestions * 0.2);
@@ -374,7 +374,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         return chunkedImages;
     }
 
-    private Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int numOfQuestions) {
+    Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int numOfQuestions) {
 
         int result_cols = img_exam.cols() - img_template.cols() + 1;
         int result_rows = img_exam.rows() - img_template.rows() + 1;
