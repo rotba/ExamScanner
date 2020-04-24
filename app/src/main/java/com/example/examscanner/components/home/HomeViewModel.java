@@ -1,22 +1,16 @@
 package com.example.examscanner.components.home;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.examscanner.State;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
-import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.session.ScanExamSession;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class HomeViewModel extends ViewModel {
 

@@ -1,8 +1,8 @@
-package com.example.examscanner.components.scan_exam;
+package com.example.examscanner;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 
-import com.example.examscanner.R;
+import com.example.examscanner.state.StateFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,9 +22,7 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
         login();
     }
 
-    public int getCurrentGraderId() {
-        return State.getState().getGraderId();
-    }
+
 
     private void login() {
         onView(ViewMatchers.withId(R.id.button_login)).perform(click());
@@ -33,6 +31,6 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
     @After
     public void tearDown() throws Exception {
         super.tearDown();
-        State.getState().logout();
+        mainActivityScenarioRule.getScenario().onActivity(activity -> activity.logOut());
     }
 }

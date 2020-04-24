@@ -8,6 +8,7 @@ import android.view.Menu;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,47 +17,37 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.examscanner.communication.ContextProvider;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.stubs.StubImageProcessingFactory;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.navigation.NavigationView;
-
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
+import com.google.firebase.auth.FirebaseAuth;
 import org.opencv.android.OpenCVLoader;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static final int RC_SIGN_IN = 0;
     private AppBarConfiguration mAppBarConfiguration;
+    private MainActivityViewModel viewModel;
     private static boolean stubsMode = false;
-//    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-//        @Override
-//        public void onManagerConnected(int status) {
-//            switch (status) {
-//                case LoaderCallbackInterface.SUCCESS:
-//                    Log.i(TAG, "OpenCV loaded successfully");
-//
-//                    break;
-//                default:
-//                    super.onManagerConnected(status);
-//                    break;
-//            }
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
         OpenCVLoader.initDebug();
-//        if (!OpenCVLoader.initDebug()) {
-//            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-//            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
-//        } else {
-//            Log.d(TAG, "OpenCV library found inside package. Using it!");
-//            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-//        }
         if(stubsMode) ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(StubImageProcessingFactory.create(this));
         ContextProvider.set(this.getApplicationContext());
-        State.getState().onInitialCreate(this);
+        MainActivityViewModelFactory factory = new MainActivityViewModelFactory();
+        viewModel = new ViewModelProvider(this,factory).get(MainActivityViewModel.class);
+        if(!viewModel.isAuthenticated()){
+            navigateToAuthentication();
+        }else{
+            createHome();
+        }
     }
 
     @Override
@@ -74,26 +65,53 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToAuthentication() {
-        startActivity(new Intent(this,AuthenticationActivity.class));
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+
+// Create and launch sign-in intent
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .build(),
+                RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                viewModel.authenticate(FirebaseAuth.getInstance().getCurrentUser());
+                createHome();
+            } else {
+                Log.d(
+                        TAG,
+                        String.format(
+                                "%s\n"+
+                                        "response.getError().getErrorCode()=%d\n"+
+                                        "response.getError().getMessage()=%s"
+                                ,
+                                response.getError().getErrorCode(),
+                                response.getError().getMessage()
+                        )
+                );
+            }
+        }
     }
 
     public void createHome() {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send)
