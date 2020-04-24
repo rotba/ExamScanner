@@ -71,4 +71,6 @@
     <string name="detect_corners_ok">OK</string>
     <string name="detect_corners_the_empty_version_choice">Choose version</string>
     <string name="add_version_action">Add</string>
+    <string name="menu_logout">Logout</string>
+    <string name="button_main_activity_logout">Logout</string>
 </resources>

@@ -16,6 +16,9 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class GalleryFragment extends Fragment {
 
@@ -52,6 +55,16 @@ public class GalleryFragment extends Fragment {
 //                startActivity(new Intent(getActivity(), ScanExamActivity.class));
             }
         });
+        ((Button)root.findViewById(R.id.button_galley_logout)).setOnClickListener(this::logout);
         return root;
+    }
+
+    private void logout(View view) {
+        AuthUI.getInstance()
+                .signOut(this.getContext())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
     }
 }

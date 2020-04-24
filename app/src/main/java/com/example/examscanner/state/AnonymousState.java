@@ -2,9 +2,9 @@ package com.example.examscanner.state;
 
 import com.example.examscanner.MainActivity;
 
-class AnonymousState implements State {
+class AnonymousState<T> implements State<T> {
     @Override
-    public <T> void login(StateHolder holder, T stateContent) {
+    public void login(StateHolder holder, T stateContent) {
         holder.setState(new AuthenticatedState<T>(stateContent));
     }
 
@@ -15,5 +15,10 @@ class AnonymousState implements State {
     @Override
     public boolean isAuthenticated() {
         return false;
+    }
+
+    @Override
+    public T getContent() {
+        return null;
     }
 }

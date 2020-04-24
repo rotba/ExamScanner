@@ -25,4 +25,8 @@ public class MainActivityViewModel extends ViewModel implements StateHolder {
     public void setState(State s) {
         this.theState = s;
     }
+
+    public Object getState() {
+        return theState.getContent();
+    }
 }

@@ -31,6 +31,6 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
     @After
     public void tearDown() throws Exception {
         super.tearDown();
-        mainActivityScenarioRule.getScenario().onActivity(activity -> activity.logOut());
+//        mainActivityScenarioRule.getScenario().onActivity(activity -> activity.logOut());
     }
 }
