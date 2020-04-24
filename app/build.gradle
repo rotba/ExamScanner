@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 android {
     compileSdkVersion 29
@@ -116,4 +117,11 @@ dependencies {
 
     apply plugin: "androidx.navigation.safeargs"
     implementation project(path: ':openCVLibrary343')
+
+    // Google Services
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+    // implementation 'com.google.firebase:firebase-storage:19.1.1'
+
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "799385925399",
+    "firebase_url": "https://examscanner-1585482396993.firebaseio.com",
+    "project_id": "examscanner-1585482396993",
+    "storage_bucket": "examscanner-1585482396993.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799385925399:android:eeb8f043d7e69103ec2952",
+        "android_client_info": {
+          "package_name": "com.example.examscanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799385925399-i62lcvafbu9pq65gfs0mmth3agbj72s4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.examscanner",
+            "certificate_hash": "21ce3c5caaff2b1c0bb1f0059d85bca4421c1b2c"
+          }
+        },
+        {
+          "client_id": "799385925399-h5n192ds662akmf77v19qcf8sj5817od.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfzjcQSYmHYOrGcR8G2sSlB1SVZI5rzU0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799385925399-h5n192ds662akmf77v19qcf8sj5817od.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
