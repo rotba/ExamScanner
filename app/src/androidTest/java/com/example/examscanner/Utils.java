@@ -5,8 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.testing.FragmentScenario;
-
-import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment;
+import androidx.test.core.app.ActivityScenario;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -55,6 +54,36 @@ public class Utils {
             }
         });
     }
+//    public static void loadOpenCV(ActivityScenario<FragmentScenario.EmptyFragmentActivity> empAc) {
+//        final BaseLoaderCallback[] mLoaderCallback = new BaseLoaderCallback[1];
+//        empAc.onActivity(activity -> {
+//            mLoaderCallback[0] = new BaseLoaderCallback(activity) {
+//                @Override
+//                public void onManagerConnected(int status) {
+//                    switch (status) {
+//                        case LoaderCallbackInterface.SUCCESS: {
+//                            Log.i("MainActivity", "OpenCV loaded successfully");
+//                        }
+//                        break;
+//                        default: {
+//                            super.onManagerConnected(status);
+//                        }
+//                        break;
+//                    }
+//                }
+//            };
+//        });
+//
+//        empAc.onActivity(activity -> {
+//            if (!OpenCVLoader.initDebug()) {
+//                Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+//                OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_4_0, activity, mLoaderCallback[0]);
+//            } else {
+//                Log.d(TAG, "OpenCV library found inside package. Using it!");
+//                mLoaderCallback[0].onManagerConnected(LoaderCallbackInterface.SUCCESS);
+//            }
+//        });
+//    }
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
         return new TypeSafeMatcher<View>() {
             int currentIndex = 0;
@@ -77,6 +106,7 @@ public class Utils {
         onView(withText(R.string.gallery_button_alt)).perform(click());
         onView(withText(R.string.start_scan_exam)).perform(click());
     }
+
     public static Matcher<View> currentVisChild(final Matcher<View> parentMatcher) {
         return new TypeSafeMatcher<View>() {
             @Override
@@ -96,16 +126,15 @@ public class Utils {
             }
         };
     }
-
     public static void navFromHomeToDetecteCornersQuickAndDirty() {
         navFromHomeToCaptureQuickAndDirty();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
     }
+
     public static void navFromHomeToResolveAnswers() {
         navFromHomeToDetecteCornersQuickAndDirty();
         onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
     }
-
     public static void sleepCameraPreviewSetupTime() {
         try {
             Thread.sleep(1000);
@@ -113,6 +142,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
     public static void sleepSwipingTime() {
         try {
             Thread.sleep(1000);
@@ -128,7 +158,6 @@ public class Utils {
             e.printStackTrace();
         }
     }
-
     public static void sleepSingleCaptureProcessingTime() {
         try {
             Thread.sleep(3000);
@@ -143,6 +172,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
     public static void sleepScreenRotationTime(){
         try {
             Thread.sleep(1500);

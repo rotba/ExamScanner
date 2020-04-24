@@ -26,6 +26,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static com.example.examscanner.Utils.sleepCameraPreviewSetupTime;
 import static com.example.examscanner.Utils.sleepSingleCaptureProcessingTime;
@@ -34,7 +35,6 @@ import static com.example.examscanner.components.scan_exam.capture.CaptureUtils.
 
 @RunWith(AndroidJUnit4.class)
 public class CaptureFragmentTest{
-
     private FragmentScenario<CaptureFragment> scenario;
     private UiDevice device;
 
@@ -42,11 +42,11 @@ public class CaptureFragmentTest{
     public void setUp() {
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
         CameraMangerFactory.setStubInstance(new CameraManagerStub());
-        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(nullIP());
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
         Bundle b = new Bundle();
-        b.putInt("examId", -1);
-        scenario =
-                FragmentScenario.launchInContainer(CaptureFragment.class, b);
+        b.putInt("examId", 0);
+        b.putInt("sessionId", 0);
+        scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
         sleepCameraPreviewSetupTime();
     }
 

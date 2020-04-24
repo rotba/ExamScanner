@@ -13,6 +13,7 @@ import com.example.examscanner.components.create_exam.get_version_file.VersionIm
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetterFactory;
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
 
 import org.junit.Test;
 
@@ -23,6 +24,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.Utils.loadOpenCV;
 import static org.hamcrest.core.IsNot.not;
 
@@ -42,13 +44,26 @@ public class CreateExamFragmentTest extends AbstractComponentInstrumentedTest {
                 return BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked();
             }
         });
-        scenraio = FragmentScenario.launchInContainer(CreateExamFragment.class);
-        loadOpenCV(scenraio);
     }
 
 
     @Test
-    public void testAddVersion() {
+    public void testAddVersionStubIP() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
+        scenraio = FragmentScenario.launchInContainer(CreateExamFragment.class);
+        loadOpenCV(scenraio);
+        testAddVersion();
+    }
+
+    @Test
+    public void testAddVersionRealIP() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
+        scenraio = FragmentScenario.launchInContainer(CreateExamFragment.class);
+        loadOpenCV(scenraio);
+        testAddVersion();
+    }
+
+    private void testAddVersion() {
         onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("0")));
         onView(withId(R.id.button_create_exam_add_version)).check(matches(not(isEnabled())));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());

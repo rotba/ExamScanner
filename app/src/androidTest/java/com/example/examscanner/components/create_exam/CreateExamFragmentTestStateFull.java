@@ -12,6 +12,7 @@ import com.example.examscanner.components.create_exam.get_version_file.VersionIm
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetterFactory;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.StateFullTest;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +26,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static org.hamcrest.Matchers.containsString;
 
 public class CreateExamFragmentTestStateFull extends StateFullTest {
@@ -82,17 +84,38 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
         testCreateOneExam(courseName, year, verNum, term, aGraderAdress);
     }
 
-    @Test
-    public void testOnCreatedExamItAddsToTheHomeAdapter() {
+    private void testOnCreatedExamItAddsToTheHomeAdapter() {
         onView(withId(R.id.floating_button_home_create_exam)).perform(click());
         testCreateCourse("COMP", "2020", "1");
     }
 
-    @Test
-    public void testOn2CreatedExamItAddsToTheHomeAdapter() {
+    private void testOn2CreatedExamItAddsToTheHomeAdapter() {
         onView(withId(R.id.floating_button_home_create_exam)).perform(click());
         testCreateCourse("COMP", "2020", "1");
         onView(withId(R.id.floating_button_home_create_exam)).perform(click());
         testCreateCourse("SPL", "2019", "2");
+    }
+
+    @Test
+    public void testOnCreatedExamItAddsToTheHomeAdapterStubIP() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
+        testOnCreatedExamItAddsToTheHomeAdapter();
+    }
+    @Test
+    public void testOnCreatedExamItAddsToTheHomeAdapterRealIP() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
+        testOnCreatedExamItAddsToTheHomeAdapter();
+    }
+
+    @Test
+    public void testOn2CreatedExamItAddsToTheHomeAdapterStubIP() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
+        testOn2CreatedExamItAddsToTheHomeAdapter();
+    }
+
+    @Test
+    public void testOn2CreatedExamItAddsToTheHomeAdapterRealIP() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
+        testOn2CreatedExamItAddsToTheHomeAdapter();
     }
 }

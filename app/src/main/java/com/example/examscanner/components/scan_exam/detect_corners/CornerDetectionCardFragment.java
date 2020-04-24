@@ -133,13 +133,6 @@ public class CornerDetectionCardFragment extends Fragment {
 
             }
         });
-
-//        new VersionNumberWatcher() {
-//            @Override
-//            public void onVersionReceived(int verNum) {
-//
-//            }
-//        });
     }
 
     private void onVersionNumbersRetrivedError(Throwable throwable) {

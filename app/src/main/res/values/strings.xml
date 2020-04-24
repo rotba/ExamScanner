@@ -69,6 +69,6 @@
     <string name="detect_corners_version_number_hint">version#</string>
     <string name="detect_corners_please_choose_version">Please choose version</string>
     <string name="detect_corners_ok">OK</string>
-    <string name="detect_corners_the_empty_version_choice">choose version</string>
+    <string name="detect_corners_the_empty_version_choice">Choose version</string>
     <string name="add_version_action">Add</string>
 </resources>
