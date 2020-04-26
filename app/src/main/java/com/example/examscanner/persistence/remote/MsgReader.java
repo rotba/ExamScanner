@@ -8,10 +8,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.opencv.core.Rect;
-
-import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
