@@ -30,6 +30,14 @@ function adminApp() {
   return firebase.initializeAdminApp({ databaseName }).database();
 }
 
+function createExam(id){
+	return {id:id};
+};
+
+function createVersion(id, examId){
+	return {id:id, examId:examId};
+};
+
 /*
  * ============
  *  Test Cases
@@ -56,83 +64,81 @@ after(async () => {
   console.log(`View rule coverage information at ${coverageUrl}\n`);
 });
 
-describe("profile read rules", () => {
-  it("should allow anyone to read profiles", async () => {
+
+describe("version validate rules", () => {
+  it("should allow permit create version with an existing exam id", async () => {
     const alice = authedApp({ uid: "alice" });
-    const bob = authedApp({ uid: "bob" });
-    const noone = authedApp(null);
+	  await alice.ref("exams/e1").set(createExam(1));
 
-    await adminApp()
-      .ref("users/alice")
-      .set({
-        name: "Alice",
-        profilePicture: "http://cool_photos/alice.jpg"
-      });
-
-    await firebase.assertSucceeds(alice.ref("users/alice").once("value"));
-    await firebase.assertSucceeds(bob.ref("users/alice").once("value"));
-    await firebase.assertSucceeds(noone.ref("users/alice").once("value"));
+    // await adminApp()
+    //   .ref("users/alice")
+    //   .set({
+    //     name: "Alice",
+    //     profilePicture: "http://cool_photos/alice.jpg"
+    //   });
+    await firebase.assertSucceeds(alice.ref("versions/v1").set(createVersion(1,1)));
+    await firebase.assertFails(alice.ref("versions/v1").set(createVersion(1,1)));
   });
 
-  it("should only allow users to modify their own profiles", async () => {
-    const alice = authedApp({ uid: "alice" });
-    const bob = authedApp({ uid: "bob" });
-    const noone = authedApp(null);
+  // it("should only allow users to modify their own profiles", async () => {
+  //   const alice = authedApp({ uid: "alice" });
+  //   const bob = authedApp({ uid: "bob" });
+  //   const noone = authedApp(null);
 
-    await firebase.assertSucceeds(
-      alice.ref("users/alice").update({
-        favorite_color: "blue"
-      })
-    );
-    await firebase.assertFails(
-      bob.ref("users/alice").update({
-        favorite_color: "red"
-      })
-    );
-    await firebase.assertFails(
-      noone.ref("users/alice").update({
-        favorite_color: "orange"
-      })
-    );
-  });
+  //   await firebase.assertSucceeds(
+  //     alice.ref("users/alice").update({
+  //       favorite_color: "blue"
+  //     })
+  //   );
+  //   await firebase.assertFails(
+  //     bob.ref("users/alice").update({
+  //       favorite_color: "red"
+  //     })
+  //   );
+  //   await firebase.assertFails(
+  //     noone.ref("users/alice").update({
+  //       favorite_color: "orange"
+  //     })
+  //   );
+  // });
 });
 
-describe("room creation", () => {
-  it("should require the user creating a room to be its owner", async () => {
-    const alice = authedApp({ uid: "alice" });
+// describe("room creation", () => {
+//   it("should require the user creating a room to be its owner", async () => {
+//     const alice = authedApp({ uid: "alice" });
 
-    // should not be able to create room owned by another user
-    await firebase.assertFails(alice.ref("rooms/room1").set({ owner: "bob" }));
-    // should not be able to create room with no owner
-    await firebase.assertFails(
-      alice.ref("rooms/room1").set({ members: { alice: true } })
-    );
-    // alice should be allowed to create a room she owns
-    await firebase.assertSucceeds(
-      alice.ref("rooms/room1").set({ owner: "alice" })
-    );
-  });
-});
+//     // should not be able to create room owned by another user
+//     await firebase.assertFails(alice.ref("rooms/room1").set({ owner: "bob" }));
+//     // should not be able to create room with no owner
+//     await firebase.assertFails(
+//       alice.ref("rooms/room1").set({ members: { alice: true } })
+//     );
+//     // alice should be allowed to create a room she owns
+//     await firebase.assertSucceeds(
+//       alice.ref("rooms/room1").set({ owner: "alice" })
+//     );
+//   });
+// });
 
-describe("room members", () => {
-  it("must be added by the room owner", async () => {
-    const ownerId = "room_owner";
-    const owner = authedApp({ uid: ownerId });
-    await owner.ref("rooms/room2").set({ owner: ownerId });
+// describe("room members", () => {
+//   it("must be added by the room owner", async () => {
+//     const ownerId = "room_owner";
+//     const owner = authedApp({ uid: ownerId });
+//     await owner.ref("rooms/room2").set({ owner: ownerId });
 
-    const aliceId = "alice";
-    const alice = authedApp({ uid: aliceId });
-    // alice cannot add random people to a room
-    await firebase.assertFails(
-      alice.ref("rooms/room2/members/rando").set(true)
-    );
-    // alice cannot add herself to a room
-    await firebase.assertFails(
-      alice.ref("rooms/room2/members/alice").set(true)
-    );
-    // the owner can add alice to a room
-    await firebase.assertSucceeds(
-      owner.ref("rooms/room2/members/alice").set(true)
-    );
-  });
-});
+//     const aliceId = "alice";
+//     const alice = authedApp({ uid: aliceId });
+//     // alice cannot add random people to a room
+//     await firebase.assertFails(
+//       alice.ref("rooms/room2/members/rando").set(true)
+//     );
+//     // alice cannot add herself to a room
+//     await firebase.assertFails(
+//       alice.ref("rooms/room2/members/alice").set(true)
+//     );
+//     // the owner can add alice to a room
+//     await firebase.assertSucceeds(
+//       owner.ref("rooms/room2/members/alice").set(true)
+//     );
+//   });
+// });
