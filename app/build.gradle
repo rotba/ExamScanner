@@ -80,6 +80,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.3.0'
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.firebaseui:firebase-ui-auth:' +rootProject.firebase_ui_auth_version
+    implementation 'com.google.firebase:firebase-database:' +rootProject.firebase_db_version
 
     // androidTest
     androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion

@@ -4,7 +4,7 @@ import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.StateFullTest;
+import com.example.examscanner.StateFullTest;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;

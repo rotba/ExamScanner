@@ -1,6 +1,6 @@
 package com.example.examscanner.components.scan_exam.capture;
 
-import com.example.examscanner.components.scan_exam.StateFullTest;
+import com.example.examscanner.StateFullTest;
 
 import org.junit.Before;
 import org.junit.Ignore;

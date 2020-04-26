@@ -1,9 +1,5 @@
 package com.example.examscanner.communication;
 
-import android.content.Context;
-
-import com.example.examscanner.persistence.AppDatabase;
-
 public class CommunicationFacadeFactory {
 
 

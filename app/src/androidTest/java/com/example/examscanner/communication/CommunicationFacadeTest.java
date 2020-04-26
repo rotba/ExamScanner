@@ -9,8 +9,8 @@ import com.example.examscanner.communication.entities_interfaces.QuestionEntityI
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
-import com.example.examscanner.persistence.AppDatabase;
-import com.example.examscanner.persistence.AppDatabaseFactory;
+import com.example.examscanner.persistence.local.AppDatabase;
+import com.example.examscanner.persistence.local.AppDatabaseFactory;
 
 import org.junit.After;
 import org.junit.Before;

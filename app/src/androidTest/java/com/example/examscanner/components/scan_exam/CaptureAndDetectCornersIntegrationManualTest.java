@@ -6,13 +6,14 @@ import android.view.View;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.R;
+import com.example.examscanner.StateFullTest;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.persistence.entities.Exam;
-import com.example.examscanner.persistence.entities.ExamCreationSession;
+import com.example.examscanner.persistence.local.entities.Exam;
+import com.example.examscanner.persistence.local.entities.ExamCreationSession;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 
 import org.junit.Before;

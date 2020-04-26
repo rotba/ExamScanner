@@ -12,18 +12,18 @@ import com.example.examscanner.communication.entities_interfaces.QuestionEntityI
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
-import com.example.examscanner.persistence.AppDatabase;
-import com.example.examscanner.persistence.AppDatabaseFactory;
-import com.example.examscanner.persistence.entities.Exam;
-import com.example.examscanner.persistence.entities.ExamCreationSession;
-import com.example.examscanner.persistence.entities.ExamineeAnswer;
-import com.example.examscanner.persistence.entities.ExamineeSolution;
-import com.example.examscanner.persistence.entities.Question;
-import com.example.examscanner.persistence.entities.SemiScannedCapture;
-import com.example.examscanner.persistence.entities.ScanExamSession;
-import com.example.examscanner.persistence.entities.Version;
-import com.example.examscanner.persistence.files_management.FilesManager;
-import com.example.examscanner.persistence.files_management.FilesManagerFactory;
+import com.example.examscanner.persistence.local.AppDatabase;
+import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.local.entities.Exam;
+import com.example.examscanner.persistence.local.entities.ExamCreationSession;
+import com.example.examscanner.persistence.local.entities.ExamineeAnswer;
+import com.example.examscanner.persistence.local.entities.ExamineeSolution;
+import com.example.examscanner.persistence.local.entities.Question;
+import com.example.examscanner.persistence.local.entities.SemiScannedCapture;
+import com.example.examscanner.persistence.local.entities.ScanExamSession;
+import com.example.examscanner.persistence.local.entities.Version;
+import com.example.examscanner.persistence.local.files_management.FilesManager;
+import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 
 import org.jetbrains.annotations.NotNull;
 

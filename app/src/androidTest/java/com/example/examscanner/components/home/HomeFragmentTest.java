@@ -1,8 +1,8 @@
 package com.example.examscanner.components.home;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.StateFullTest;
-import com.example.examscanner.persistence.entities.Exam;
+import com.example.examscanner.StateFullTest;
+import com.example.examscanner.persistence.local.entities.Exam;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
 
 public class HomeFragmentTest extends StateFullTest {
 

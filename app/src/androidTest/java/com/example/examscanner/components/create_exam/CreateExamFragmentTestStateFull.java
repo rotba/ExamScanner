@@ -11,7 +11,7 @@ import com.example.examscanner.Utils;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetter;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetterFactory;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
-import com.example.examscanner.components.scan_exam.StateFullTest;
+import com.example.examscanner.StateFullTest;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 
 import org.junit.After;

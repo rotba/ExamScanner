@@ -1,7 +1,5 @@
 package com.example.examscanner;
 
-import com.example.examscanner.components.scan_exam.StateFullTest;
-
 import org.junit.Before;
 import org.junit.Test;
 

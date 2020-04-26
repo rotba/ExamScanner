@@ -4,14 +4,14 @@ import android.graphics.PointF;
 
 import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
-import com.example.examscanner.components.scan_exam.StateFullTest;
+import com.example.examscanner.StateFullTest;
 import com.example.examscanner.Utils;
 import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
-import com.example.examscanner.persistence.entities.Exam;
-import com.example.examscanner.persistence.entities.ExamCreationSession;
+import com.example.examscanner.persistence.local.entities.Exam;
+import com.example.examscanner.persistence.local.entities.ExamCreationSession;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
@@ -48,8 +48,8 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
         dbCallback = db ->{
             long creationId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
             examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId));
-            db.getVersionDao().insert(new com.example.examscanner.persistence.entities.Version(dinaBarzilayVersionNumber, examId));
-            db.getVersionDao().insert(new com.example.examscanner.persistence.entities.Version(theDevilVersionNumber, examId));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(dinaBarzilayVersionNumber, examId));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(theDevilVersionNumber, examId));
 
         };
         super.setUp();

@@ -6,6 +6,7 @@ import androidx.test.espresso.PerformException;
 
 import com.example.examscanner.R;
 import com.example.examscanner.Utils;
+import com.example.examscanner.StateFullTest;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
@@ -24,7 +25,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.examscanner.ImageProcessorsGenerator.slowIP;
 import static org.hamcrest.Matchers.containsString;
 
 
