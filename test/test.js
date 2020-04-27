@@ -37,13 +37,13 @@ function createVersion(examId){
 	return {examId:examId.toString()};
 };
 
-function createExamContext(db , id){
-	db.ref(`exams/${id}`).set(createExam());
+async function createExamContext(db , id){
+	await db.ref(`exams/${id}`).set(createExam());
 };
 
-function createVersionContext(db,id, examId){
+async function createVersionContext(db,id, examId){
   createExamContext(db, examId);
-  db.ref(`versions/${id}`).set(createVersion(id, examId));
+  await db.ref(`versions/${id}`).set(createVersion(id, examId));
 };
 
 /*
