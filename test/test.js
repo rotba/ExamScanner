@@ -31,7 +31,7 @@ function adminApp() {
 }
 
 function createExam(manager){
-	return {manager:manager};
+	return {manager:manager, seal:false};
 };
 
 function createVersion(examId){
@@ -113,13 +113,27 @@ describe("exam creation", () => {
   });
 });
 
-// describe("exam manager write rules", () => {
-//   it("should seal the exam write permissions to the exam graders except the exam manager", async () => {
-//     const alice = authedApp({ uid: "alice" });
-//     createVersionContext(alice, 1,1);
-//     await firebase.assertSucceeds(alice.ref("questions/1").set(createQuestion(1)));
-//     await firebase.assertFails(alice.ref("questions/2").set(createQuestion(2)));
-//   });
-// });
+describe("exam write rules", () => {
+  it("should allow only the manager to update exam  after he seals the exam", async () => {
+    const alice = authedApp({ uid: "alice" });
+    const bob = authedApp({ uid: "bob" });
+    await alice.ref("exams/1").set(createExam("alice"));
+    await alice.ref("exams/1/course_name").set("COMP");
+    await firebase.assertSucceeds(
+      bob.ref("exams/1/course_name").set("SPL")
+    );
+    await firebase.assertSucceeds(
+      alice.ref("exams/1/course_name").set("COMP")
+    );
+    await alice.ref("exams/1/seal").set(true);
+    await firebase.assertFails(
+      bob.ref("exams/1/course_name").set("SPL")
+    );
+    await firebase.assertSucceeds(
+      alice.ref("exams/1/course_name").set("CASPL")
+    );
+  });
+});
+
 
 
