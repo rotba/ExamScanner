@@ -34,8 +34,8 @@ function createExam(id){
 	return true;
 };
 
-function createVersion(ID, examid){
-	return {id:ID.toString(), "examId":examid.toString()};
+function createVersion(id, examId){
+	return {id:id, examId:examId.toString()};
 };
 
 /*
