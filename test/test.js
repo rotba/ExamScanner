@@ -77,7 +77,7 @@ describe("version validate rules", () => {
     //     profilePicture: "http://cool_photos/alice.jpg"
     //   });
     await firebase.assertSucceeds(alice.ref("versions/1").set(createVersion(1,1)));
-    // await firebase.assertFails(alice.ref("versions/2").set(createVersion(1,2)));
+    await firebase.assertFails(alice.ref("versions/2").set(createVersion(1,2)));
   });
 
   // it("should only allow users to modify their own profiles", async () => {
