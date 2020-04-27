@@ -29,6 +29,12 @@
 				".write":true,
 				".validate":"root.child('versions').child(newData.child('versionId').val()).exists()"
 			}
+		},
+		"examineeSolutions":{
+			"$esid":{
+				".write":true,
+				".validate":"root.child('versions').child(newData.child('versionId').val()).exists()"
+			}
 		}
 	}
 }

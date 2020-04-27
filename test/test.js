@@ -42,6 +42,10 @@ function createQuestion(versionId){
 	return {versionId:versionId.toString()};
 };
 
+function createExamineeSolution(versionId){
+	return {versionId:versionId.toString()};
+};
+
 async function createExamContext(db, id, manager){
   await db.ref(`exams/${id}`).set(createExam(manager));
 }
@@ -87,6 +91,15 @@ describe("versions validate rules", () => {
   });
 });
 
+describe("examinees solution validate rules", () => {
+  it("should have FK to versions", async () => {
+    const alice = authedApp({ uid: "alice" });
+    createVersionContext(alice, 1,1, "alice");
+    await firebase.assertSucceeds(alice.ref("examineeSolutions/1").set(createExamineeSolution(1)));
+    await firebase.assertFails(alice.ref("examineeSolutions/2").set(createExamineeSolution(2)));
+  });
+});
+
 describe("questions validate rules", () => {
   it("should have FK to versions", async () => {
     const alice = authedApp({ uid: "alice" });
@@ -118,19 +131,19 @@ describe("exam write rules", () => {
     const alice = authedApp({ uid: "alice" });
     const bob = authedApp({ uid: "bob" });
     await alice.ref("exams/1").set(createExam("alice"));
-    await alice.ref("exams/1/course_name").set("COMP");
+    await alice.ref("exams/1/courseName").set("COMP");
     await firebase.assertSucceeds(
-      bob.ref("exams/1/course_name").set("SPL")
+      bob.ref("exams/1/courseName").set("SPL")
     );
     await firebase.assertSucceeds(
-      alice.ref("exams/1/course_name").set("COMP")
+      alice.ref("exams/1/courseName").set("COMP")
     );
     await alice.ref("exams/1/seal").set(true);
     await firebase.assertFails(
-      bob.ref("exams/1/course_name").set("SPL")
+      bob.ref("exams/1/courseName").set("SPL")
     );
     await firebase.assertSucceeds(
-      alice.ref("exams/1/course_name").set("CASPL")
+      alice.ref("exams/1/courseName").set("CASPL")
     );
   });
 });
