@@ -11,6 +11,12 @@
 				".write":true,
 				".validate":"root.child('exams').child(newData.child('examId').val()).exists()"
 			}
+		},
+		"questions":{
+			"$qid":{
+				".write":true,
+				".validate":"root.child('versions').child(newData.child('versionId').val()).exists()"
+			}
 		}
 	}
 }

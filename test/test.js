@@ -38,8 +38,17 @@ function createVersion(id, examId){
 	return {id:id, examId:examId.toString()};
 };
 
+function createQuestion(id, versionId){
+	return {id:id, versionId:versionId.toString()};
+};
+
 async function createExamContext(db, id){
   await db.ref(`exams/${id}`).set(createExam());
+}
+
+async function createVersionContext(db, id, examId){
+  createExamContext(db,examId);
+  await db.ref(`versions/${id}`).set(createVersion(id,examId));
 }
 
 /*
@@ -69,35 +78,22 @@ after(async () => {
 });
 
 
-describe("version validate rules", () => {
-  it("should allow permit create version with an existing exam id", async () => {
+describe("versions validate rules", () => {
+  it("should have FK to exams", async () => {
     const alice = authedApp({ uid: "alice" });
     createExamContext(alice, 1);
     await firebase.assertSucceeds(alice.ref("versions/1").set(createVersion(1,1)));
     await firebase.assertFails(alice.ref("versions/2").set(createVersion(1,2)));
   });
+});
 
-  // it("should only allow users to modify their own profiles", async () => {
-  //   const alice = authedApp({ uid: "alice" });
-  //   const bob = authedApp({ uid: "bob" });
-  //   const noone = authedApp(null);
-
-  //   await firebase.assertSucceeds(
-  //     alice.ref("users/alice").update({
-  //       favorite_color: "blue"
-  //     })
-  //   );
-  //   await firebase.assertFails(
-  //     bob.ref("users/alice").update({
-  //       favorite_color: "red"
-  //     })
-  //   );
-  //   await firebase.assertFails(
-  //     noone.ref("users/alice").update({
-  //       favorite_color: "orange"
-  //     })
-  //   );
-  // });
+describe("questions validate rules", () => {
+  it("should have FK to versions", async () => {
+    const alice = authedApp({ uid: "alice" });
+    createVersionContext(alice, 1,1);
+    await firebase.assertSucceeds(alice.ref("questions/1").set(createQuestion(1,1)));
+    await firebase.assertFails(alice.ref("questions/2").set(createQuestion(1,2)));
+  });
 });
 
 // describe("room creation", () => {
