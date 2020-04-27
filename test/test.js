@@ -30,13 +30,17 @@ function adminApp() {
   return firebase.initializeAdminApp({ databaseName }).database();
 }
 
-function createExam(id){
+function createExam(){
 	return true;
 };
 
 function createVersion(id, examId){
 	return {id:id, examId:examId.toString()};
 };
+
+async function createExamContext(db, id){
+  await db.ref(`exams/${id}`).set(createExam());
+}
 
 /*
  * ============
@@ -68,8 +72,7 @@ after(async () => {
 describe("version validate rules", () => {
   it("should allow permit create version with an existing exam id", async () => {
     const alice = authedApp({ uid: "alice" });
-	  await alice.ref("exams/1").set(createExam(1));
-
+    createExamContext(alice, 1);
     // await adminApp()
     //   .ref("users/alice")
     //   .set({
