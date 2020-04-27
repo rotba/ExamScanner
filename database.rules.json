@@ -39,7 +39,28 @@
 		"examineeAnswers":{
 			"$eaid":{
 				".write":true,
-				".validate":"root.child('examineeSolutions').child(newData.child('examineeSolutionId').val()).exists()"
+				".validate":"root.child('examineeSolutions').child(newData.child('examineeSolutionId').val()).exists() &&
+							(
+								root.child('exams').child(
+									root.child('versions').child(
+										root.child('examineeSolutions').child(
+											newData.child('examineeSolutionId').val())
+										.child('versionId').val()
+										)
+									.child('examId').val()
+									)
+								.child('seal').val()===false
+							||
+								root.child('exams').child(
+									root.child('versions').child(
+										root.child('examineeSolutions').child(
+											newData.child('examineeSolutionId').val())
+										.child('versionId').val()
+										)
+									.child('examId').val()
+									)
+								.child('manager').val()===auth.uid
+							)"
 			}
 		}
 	}

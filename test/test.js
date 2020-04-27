@@ -42,12 +42,12 @@ function createQuestion(versionId){
 	return {versionId:versionId.toString()};
 };
 
-function createExamineeSolution(versionId, examineeNumber){
-	return {versionId:versionId.toString(),examineeNumber:examineeNumber.toString()};
+function createExamineeSolution(versionId){
+	return {versionId:versionId.toString()};
 };
 
-function createExamineeAnswer(examineeSolutionId){
-	return {examineeSolutionId:examineeSolutionId.toString()};
+function createExamineeAnswer(examineeSolutionId, ans){
+	return {examineeSolutionId:examineeSolutionId.toString(), answer:ans.toString()};
 };
 
 async function createExamContext(db, id, manager){
@@ -56,12 +56,12 @@ async function createExamContext(db, id, manager){
 
 async function createVersionContext(db, id, examId, manager){
   createExamContext(db,examId, manager);
-  await db.ref(`versions/${id}`).set(createVersion(id,examId));
+  await db.ref(`versions/${id}`).set(createVersion(examId));
 }
 
-async function createExamineeSolutionContext(db, id, examineeNumber,verionId, examId, manager){
+async function createExamineeSolutionContext(db, examineeNumber,verionId, examId, manager){
   createVersionContext(db, verionId,examId, manager);
-  await db.ref(`examineeSolutions/${id}`).set(createExamineeSolution(verionId,examineeNumber));
+  await db.ref(`examineeSolutions/${examineeNumber}`).set(createExamineeSolution(verionId));
 }
 
 /*
@@ -94,18 +94,18 @@ after(async () => {
 describe("versions validate rules", () => {
   it("should have FK to exams", async () => {
     const alice = authedApp({ uid: "alice" });
-    createExamContext(alice, 1, "alice");
-    await firebase.assertSucceeds(alice.ref("versions/1").set(createVersion(1)));
-    await firebase.assertFails(alice.ref("versions/2").set(createVersion(2)));
+    createExamContext(alice, 2, "alice");
+    await firebase.assertSucceeds(alice.ref("versions/1").set(createVersion(2)));
+    await firebase.assertFails(alice.ref("versions/2").set(createVersion(3)));
   });
 });
 
 describe("examinees solution validate rules", () => {
   it("should have FK to versions", async () => {
     const alice = authedApp({ uid: "alice" });
-    createVersionContext(alice, 1,1, "alice");
-    await firebase.assertSucceeds(alice.ref("examineeSolutions/1").set(createExamineeSolution(1,1)));
-    await firebase.assertFails(alice.ref("examineeSolutions/2").set(createExamineeSolution(2,2)));
+    createVersionContext(alice, 2,1, "alice");
+    await firebase.assertSucceeds(alice.ref("examineeSolutions/1").set(createExamineeSolution(2)));
+    await firebase.assertFails(alice.ref("examineeSolutions/2").set(createExamineeSolution(3)));
   });
   // it("should have unique natural key in examineeNumber", async () => {
   //   const alice = authedApp({ uid: "alice" });
@@ -118,9 +118,9 @@ describe("examinees solution validate rules", () => {
 describe("examinees answer validate rules", () => {
   it("should have FK to examinee solutions", async () => {
     const alice = authedApp({ uid: "alice" });
-    createExamineeSolutionContext(alice, 1,1,1,1, "alice");
-    await firebase.assertSucceeds(alice.ref("examineeAnswers/1").set(createExamineeAnswer(1)));
-    await firebase.assertFails(alice.ref("examineeAnswers/2").set(createExamineeAnswer(2)));
+    createExamineeSolutionContext(alice, 4,3,2, "alice");
+    await firebase.assertSucceeds(alice.ref("examineeAnswers/1").set(createExamineeAnswer(4,1)));
+    await firebase.assertFails(alice.ref("examineeAnswers/2").set(createExamineeAnswer(2,1)));
   });
 });
 
@@ -168,6 +168,36 @@ describe("exam write rules", () => {
     );
     await firebase.assertSucceeds(
       alice.ref("exams/1/courseName").set("CASPL")
+    );
+  });
+  it("should allow only the manager to update examinee answers associated with his exam after he seals the exam", async () => {
+    const theManager = authedApp({ uid: "theManager" });
+    const someGrader = authedApp({ uid: "someGrader" });
+    const theExamId = 1;
+    const theVersionId = 2;
+    const theExamineeSolutionNumber = 3;
+    const theExamineeAnswerId = 4;
+    await createExamineeSolutionContext(
+      theManager,
+      theExamineeSolutionNumber,
+      theVersionId,
+      theExamId,
+      "theManager"
+      );
+    await theManager.ref(`examineeAnswers/${theExamineeAnswerId}`).set(createExamineeAnswer(theExamineeSolutionNumber, 1));
+    await someGrader.ref(`examineeAnswers/${theExamineeAnswerId}`).set(createExamineeAnswer(theExamineeSolutionNumber, 2));
+    await firebase.assertSucceeds(
+      someGrader.ref(`examineeAnswers/${theExamineeAnswerId}/answer`).set("2")
+    );
+    await firebase.assertSucceeds(
+      theManager.ref(`examineeAnswers/${theExamineeAnswerId}/answer`).set("4")
+    );
+    await theManager.ref(`exams/${theExamId}/seal`).set(true);
+    await firebase.assertFails(
+      someGrader.ref(`examineeAnswers/${theExamineeAnswerId}/answer`).set("5")
+    );
+    await firebase.assertSucceeds(
+      theManager.ref(`examineeAnswers/${theExamineeAnswerId}/answer`).set("1")
     );
   });
 });
