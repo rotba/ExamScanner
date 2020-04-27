@@ -30,12 +30,20 @@ function adminApp() {
   return firebase.initializeAdminApp({ databaseName }).database();
 }
 
-function createExam(id){
+function createExam(){
 	return true;
 };
+function createVersion(examId){
+	return {examId:examId.toString()};
+};
 
-function createVersion(id, examId){
-	return {id:id, examId:examId.toString()};
+function createExamContext(db , id){
+	db.ref(`exams/${id}`).set(createExam());
+};
+
+function createVersionContext(db,id, examId){
+  createExamContext(db, examId);
+  db.ref(`versions/${id}`).set(createVersion(id, examId));
 };
 
 /*
@@ -65,42 +73,24 @@ after(async () => {
 });
 
 
-describe("version validate rules", () => {
-  it("should allow permit create version with an existing exam id", async () => {
+describe("versions validate rules", () => {
+  it("should have FK:examId->exams", async () => {
     const alice = authedApp({ uid: "alice" });
-	  await alice.ref("exams/1").set(createExam(1));
-
-    // await adminApp()
-    //   .ref("users/alice")
-    //   .set({
-    //     name: "Alice",
-    //     profilePicture: "http://cool_photos/alice.jpg"
-    //   });
-    await firebase.assertSucceeds(alice.ref("versions/1").set(createVersion(1,1)));
-    await firebase.assertFails(alice.ref("versions/2").set(createVersion(1,2)));
+    const existingExam =1;
+    const noneExistingExam = 2;
+	  createExamContext(alice,existingExam);
+    await firebase.assertSucceeds(alice.ref("versions/1").set(createVersion(1,existingExam)));
+    await firebase.assertFails(alice.ref("versions/2").set(createVersion(1,noneExistingExam)));
   });
+});
 
-  // it("should only allow users to modify their own profiles", async () => {
-  //   const alice = authedApp({ uid: "alice" });
-  //   const bob = authedApp({ uid: "bob" });
-  //   const noone = authedApp(null);
-
-  //   await firebase.assertSucceeds(
-  //     alice.ref("users/alice").update({
-  //       favorite_color: "blue"
-  //     })
-  //   );
-  //   await firebase.assertFails(
-  //     bob.ref("users/alice").update({
-  //       favorite_color: "red"
-  //     })
-  //   );
-  //   await firebase.assertFails(
-  //     noone.ref("users/alice").update({
-  //       favorite_color: "orange"
-  //     })
-  //   );
-  // });
+describe("questions validate rules", () => {
+  it("should have FK:versionId->version", async () => {
+    const alice = authedApp({ uid: "alice" });
+    createVersionContext(alice,1,1);
+    await firebase.assertSucceeds(alice.ref("questions/1").set(createQuestion(1,1)));
+    await firebase.assertFails(alice.ref("versions/2").set(createQuestion(1,2)));
+  });
 });
 
 // describe("room creation", () => {
