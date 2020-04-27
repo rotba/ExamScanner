@@ -42,8 +42,8 @@ function createQuestion(versionId){
 	return {versionId:versionId.toString()};
 };
 
-function createExamineeSolution(versionId){
-	return {versionId:versionId.toString()};
+function createExamineeSolution(versionId, examineeNumber){
+	return {versionId:versionId.toString(),examineeNumber:examineeNumber.toString()};
 };
 
 function createExamineeAnswer(examineeSolutionId){
@@ -59,9 +59,9 @@ async function createVersionContext(db, id, examId, manager){
   await db.ref(`versions/${id}`).set(createVersion(id,examId));
 }
 
-async function createExamineeSolutionContext(db, id, verionId, examId, manager){
+async function createExamineeSolutionContext(db, id, examineeNumber,verionId, examId, manager){
   createVersionContext(db, verionId,examId, manager);
-  await db.ref(`examineeSolutions/${id}`).set(createExamineeSolution(verionId));
+  await db.ref(`examineeSolutions/${id}`).set(createExamineeSolution(verionId,examineeNumber));
 }
 
 /*
@@ -104,15 +104,21 @@ describe("examinees solution validate rules", () => {
   it("should have FK to versions", async () => {
     const alice = authedApp({ uid: "alice" });
     createVersionContext(alice, 1,1, "alice");
-    await firebase.assertSucceeds(alice.ref("examineeSolutions/1").set(createExamineeSolution(1)));
-    await firebase.assertFails(alice.ref("examineeSolutions/2").set(createExamineeSolution(2)));
+    await firebase.assertSucceeds(alice.ref("examineeSolutions/1").set(createExamineeSolution(1,1)));
+    await firebase.assertFails(alice.ref("examineeSolutions/2").set(createExamineeSolution(2,2)));
   });
+  // it("should have unique natural key in examineeNumber", async () => {
+  //   const alice = authedApp({ uid: "alice" });
+  //   createVersionContext(alice, 1,1, "alice");
+  //   await firebase.assertSucceeds(alice.ref("examineeSolutions/3").set(createExamineeSolution(1,1)));
+  //   await firebase.assertFails(alice.ref("examineeSolutions/4").set(createExamineeSolution(1,1)));
+  // });
 });
 
 describe("examinees answer validate rules", () => {
   it("should have FK to examinee solutions", async () => {
     const alice = authedApp({ uid: "alice" });
-    createExamineeSolutionContext(alice, 1,1,1, "alice");
+    createExamineeSolutionContext(alice, 1,1,1,1, "alice");
     await firebase.assertSucceeds(alice.ref("examineeAnswers/1").set(createExamineeAnswer(1)));
     await firebase.assertFails(alice.ref("examineeAnswers/2").set(createExamineeAnswer(2)));
   });
