@@ -35,6 +35,12 @@
 				".write":true,
 				".validate":"root.child('versions').child(newData.child('versionId').val()).exists()"
 			}
+		},
+		"examineeAnswers":{
+			"$eaid":{
+				".write":true,
+				".validate":"root.child('examineeSolutions').child(newData.child('examineeSolutionId').val()).exists()"
+			}
 		}
 	}
 }

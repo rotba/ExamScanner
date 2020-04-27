@@ -46,6 +46,10 @@ function createExamineeSolution(versionId){
 	return {versionId:versionId.toString()};
 };
 
+function createExamineeAnswer(examineeSolutionId){
+	return {examineeSolutionId:examineeSolutionId.toString()};
+};
+
 async function createExamContext(db, id, manager){
   await db.ref(`exams/${id}`).set(createExam(manager));
 }
@@ -53,6 +57,11 @@ async function createExamContext(db, id, manager){
 async function createVersionContext(db, id, examId, manager){
   createExamContext(db,examId, manager);
   await db.ref(`versions/${id}`).set(createVersion(id,examId));
+}
+
+async function createExamineeSolutionContext(db, id, verionId, examId, manager){
+  createVersionContext(db, verionId,examId, manager);
+  await db.ref(`examineeSolutions/${id}`).set(createExamineeSolution(verionId));
 }
 
 /*
@@ -97,6 +106,15 @@ describe("examinees solution validate rules", () => {
     createVersionContext(alice, 1,1, "alice");
     await firebase.assertSucceeds(alice.ref("examineeSolutions/1").set(createExamineeSolution(1)));
     await firebase.assertFails(alice.ref("examineeSolutions/2").set(createExamineeSolution(2)));
+  });
+});
+
+describe("examinees answer validate rules", () => {
+  it("should have FK to examinee solutions", async () => {
+    const alice = authedApp({ uid: "alice" });
+    createExamineeSolutionContext(alice, 1,1,1, "alice");
+    await firebase.assertSucceeds(alice.ref("examineeAnswers/1").set(createExamineeAnswer(1)));
+    await firebase.assertFails(alice.ref("examineeAnswers/2").set(createExamineeAnswer(2)));
   });
 });
 
