@@ -73,12 +73,6 @@ describe("version validate rules", () => {
   it("should allow permit create version with an existing exam id", async () => {
     const alice = authedApp({ uid: "alice" });
     createExamContext(alice, 1);
-    // await adminApp()
-    //   .ref("users/alice")
-    //   .set({
-    //     name: "Alice",
-    //     profilePicture: "http://cool_photos/alice.jpg"
-    //   });
     await firebase.assertSucceeds(alice.ref("versions/1").set(createVersion(1,1)));
     await firebase.assertFails(alice.ref("versions/2").set(createVersion(1,2)));
   });
