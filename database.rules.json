@@ -1,6 +1,16 @@
 {
 	"rules":{
-	".read":true,
-	".write":true
+		".read": "auth.uid!=null",
+		"exams":{
+			"$eid":{
+				".write":true
+			}
+		},
+		"versions":{
+			"$vid":{
+				".write":true,
+				".validate":"root.child('exams').child(newData.child('examId').val()).exists()"
+			}
+		}
 	}
 }

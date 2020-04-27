@@ -31,11 +31,11 @@ function adminApp() {
 }
 
 function createExam(id){
-	return {id:id};
+	return true;
 };
 
-function createVersion(id, examId){
-	return {id:id, examId:examId};
+function createVersion(ID, examid){
+	return {id:ID.toString(), "examId":examid.toString()};
 };
 
 /*
@@ -68,7 +68,7 @@ after(async () => {
 describe("version validate rules", () => {
   it("should allow permit create version with an existing exam id", async () => {
     const alice = authedApp({ uid: "alice" });
-	  await alice.ref("exams/e1").set(createExam(1));
+	  await alice.ref("exams/1").set(createExam(1));
 
     // await adminApp()
     //   .ref("users/alice")
@@ -76,8 +76,8 @@ describe("version validate rules", () => {
     //     name: "Alice",
     //     profilePicture: "http://cool_photos/alice.jpg"
     //   });
-    await firebase.assertSucceeds(alice.ref("versions/v1").set(createVersion(1,1)));
-    await firebase.assertFails(alice.ref("versions/v1").set(createVersion(1,1)));
+    await firebase.assertSucceeds(alice.ref("versions/1").set(createVersion(1,1)));
+    // await firebase.assertFails(alice.ref("versions/2").set(createVersion(1,2)));
   });
 
   // it("should only allow users to modify their own profiles", async () => {
