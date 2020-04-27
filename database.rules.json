@@ -3,8 +3,17 @@
 		".read": "auth.uid!=null",
 		"exams":{
 			"$eid":{
-				".write":true
-			}
+				".write": "data.child('manager').val() == auth.uid || !data.exists()",
+				".validate": "newData.hasChild('manager')",
+				"manager": {
+				  ".validate": "newData.isString() && newData.val() == auth.uid"
+				}
+			},
+			"graders": {
+				"$graderId": {
+				  ".write": "!newData.exists() && auth.uid == $graderId"
+				}
+			  }
 		},
 		"versions":{
 			"$vid":{
