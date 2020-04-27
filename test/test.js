@@ -37,14 +37,16 @@ function createVersion(examId){
 	return {examId:examId.toString()};
 };
 
+// async function createVersionContext(db,id, examId){
+//   createExamContext(db, examId);
+//   await db.ref(`versions/${id}`).set(createVersion(id, examId));
+// };
+
 async function createExamContext(db , id){
 	await db.ref(`exams/${id}`).set(createExam());
 };
 
-async function createVersionContext(db,id, examId){
-  createExamContext(db, examId);
-  await db.ref(`versions/${id}`).set(createVersion(id, examId));
-};
+
 
 /*
  * ============
@@ -84,14 +86,14 @@ describe("versions validate rules", () => {
   });
 });
 
-describe("questions validate rules", () => {
-  it("should have FK:versionId->version", async () => {
-    const alice = authedApp({ uid: "alice" });
-    createVersionContext(alice,1,1);
-    await firebase.assertSucceeds(alice.ref("questions/1").set(createQuestion(1,1)));
-    await firebase.assertFails(alice.ref("versions/2").set(createQuestion(1,2)));
-  });
-});
+// describe("questions validate rules", () => {
+//   it("should have FK:versionId->version", async () => {
+//     const alice = authedApp({ uid: "alice" });
+//     createVersionContext(alice,1,1);
+//     await firebase.assertSucceeds(alice.ref("questions/1").set(createQuestion(1,1)));
+//     await firebase.assertFails(alice.ref("versions/2").set(createQuestion(1,2)));
+//   });
+// });
 
 // describe("room creation", () => {
 //   it("should require the user creating a room to be its owner", async () => {
