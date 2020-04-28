@@ -33,7 +33,14 @@
 		"examineeSolutions":{
 			"$esid":{
 				".write":true,
-				".validate":"root.child('versions').child(newData.child('versionId').val()).exists()"
+				".validate":"root.child('versions').child(newData.child('versionId').val()).exists() &&
+							root.child('exams').child(
+								root.child('versions').child(
+									newData.child('versionId').val()
+									)
+								.child('examId').val()
+								)
+							.child('graders').hasChild(auth.uid)"
 			}
 		},
 		"examineeAnswers":{

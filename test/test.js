@@ -31,7 +31,7 @@ function adminApp() {
 }
 
 function createExam(manager){
-	return {manager:manager, seal:false};
+	return {manager:manager, seal:false, graders:{[manager]:true}};
 };
 
 function createVersion(examId){
@@ -198,6 +198,30 @@ describe("exam write rules", () => {
     );
     await firebase.assertSucceeds(
       theManager.ref(`examineeAnswers/${theExamineeAnswerId}/answer`).set("1")
+    );
+  });
+  it("should allow only to graders associated with the exam to post examinee solutions", async () => {
+    const theManagerId="theManager";
+    const someAssociatedGraderId="someAssociatedGrader";
+    const someNotAssociatedGraderId="someNotAssociatedGrader";
+    const theManager = authedApp({ uid: theManagerId });
+    const someAssociatedGrader = authedApp({ uid: someAssociatedGraderId });
+    const someNotAssociatedGrader = authedApp({ uid: someNotAssociatedGraderId });
+    const theExamId = 1;
+    const theVersionId = 2;
+    const theExamineeSolutionNumber = 3;
+    await createVersionContext(
+      theManager,
+      theVersionId,
+      theExamId,
+      theManagerId
+      );
+    await theManager.ref(`exams/${theExamId}/graders/${someAssociatedGraderId}`).set(true);
+    await firebase.assertSucceeds(
+      someAssociatedGrader.ref(`examineeSolutions/1`).set(createExamineeSolution(theVersionId))
+    );
+    await firebase.assertFails(
+      someNotAssociatedGrader.ref(`examineeSolutions/2`).set(createExamineeSolution(theVersionId))
     );
   });
 });
