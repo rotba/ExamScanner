@@ -34,13 +34,13 @@ public class CommunicationFacadeTest {
         AppDatabaseFactory.setTestMode();
         db = AppDatabaseFactory.getInstance();
         oot = new CommunicationFacadeFactory().create();
+        FirebaseDatabaseFactory.setTestMode();
         TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
             @Override
             public void onNext(FirebaseAuth firebaseAuth) {
                 currentUserId = firebaseAuth.getUid();
             }
         };
-        FirebaseDatabaseFactory.setTestMode();
         CalimentAuthenticationHandlerFactory.getTest().generateAuthentication().subscribe(observer);
         observer.awaitCount(1);
         observer.assertComplete();
@@ -92,8 +92,8 @@ public class CommunicationFacadeTest {
 
     @Test
     public void testCreateAndGetExamNotNull() {
-//        String[] graders = new String[]{"examScannerBob@gmail.com", "examScannerAlice@gmail.com"};
-        long id = oot.createExam("COMP", "walla.co.il", "2020", 1, 1,-1);
+        String[] graders = new String[]{"examScannerBob@gmail.com", "examScannerAlice@gmail.com"};
+        long id = oot.createExam("COMP", "walla.co.il", "2020", 1, 1,currentUserId, graders,-1);
         assertNotNull(oot.getExamById(id));
     }
 
