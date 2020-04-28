@@ -8,6 +8,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.reactivestreams.Subscriber;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
@@ -19,7 +21,8 @@ class MsgReader {
         return new Observable<String>() {
             @Override
             protected void subscribeActual(Observer<? super String> observer) {
-                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                myRef.addListenerForSingleValueEvent(
+                        new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         observer.onNext(dataSnapshot.getValue(String.class));
