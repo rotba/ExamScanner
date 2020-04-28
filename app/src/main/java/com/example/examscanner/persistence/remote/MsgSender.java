@@ -1,23 +1,28 @@
 package com.example.examscanner.persistence.remote;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.internal.operators.completable.CompletableDefer;
 
 public class MsgSender {
     public Completable send(String toRef, String msg) {
         // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance("http://10.0.2.2:9000?ns=examscanner-de46e");
+        FirebaseDatabase database = FirebaseDatabaseFactory.get();
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(toRef);
-        myRef.setValue(msg);
-        return Completable.fromAction(() -> {
-            Task t  = myRef.setValue(msg);
-            if(!t.isSuccessful())
-                throw t.getException();
+        return Completable.fromCallable(() -> {
+            final Task<Void> task = myRef.setValue(msg);
+            Tasks.await(task);
+            if(task.isSuccessful()) {
+                return Completable.complete();
+            } else {
+                return Completable.error(new IllegalStateException("Task not successful", task.getException()));
+            }
         });
-
     }
 }

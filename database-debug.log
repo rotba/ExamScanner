@@ -1,2 +1,7 @@
-15:08:15.521 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-15:08:15.670 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+16:07:14.679 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+16:07:14.831 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+16:33:18.745 [Thread-1] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+16:33:18.792 [NamespaceSystem-akka.actor.default-dispatcher-47] INFO com.firebase.core.namespace.Terminator$Terminator - 1 actors left to terminate: examscanner-de46e
+16:33:18.798 [NamespaceSystem-akka.actor.default-dispatcher-47] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for examscanner-de46e
+16:33:18.798 [NamespaceSystem-akka.actor.default-dispatcher-47] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for examscanner-de46e
+16:33:18.804 [Thread-1] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

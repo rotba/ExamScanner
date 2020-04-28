@@ -16,7 +16,7 @@ import io.reactivex.Observer;
 class MsgReader {
 
     public Observable<String> read(String theRef) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabaseFactory.get();
         DatabaseReference myRef = database.getReference(theRef);
         return new Observable<String>() {
             @Override
