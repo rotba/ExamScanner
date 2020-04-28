@@ -1,15 +1,22 @@
 package com.example.examscanner;
 
+import android.content.Intent;
+
 import androidx.lifecycle.ViewModel;
 
-import com.example.examscanner.state.State;
-import com.example.examscanner.state.StateHolder;
+import com.example.examscanner.authentication.UIClaimentAuthenticationHandler;
+import com.example.examscanner.authentication.state.State;
+import com.example.examscanner.authentication.state.StateHolder;
 
-public class MainActivityViewModel extends ViewModel implements StateHolder {
+public class MainActivityViewModel<T> extends ViewModel implements StateHolder {
 
+    private final UIClaimentAuthenticationHandler tUIClaimentAuthenticationHandler;
     private State theState;
 
-    public MainActivityViewModel(State theState) {
+
+
+    public MainActivityViewModel(State theState, UIClaimentAuthenticationHandler<T> tUIClaimentAuthenticationHandler) {
+        this.tUIClaimentAuthenticationHandler = tUIClaimentAuthenticationHandler;
         this.theState = theState;
     }
 
@@ -17,7 +24,7 @@ public class MainActivityViewModel extends ViewModel implements StateHolder {
         return theState.isAuthenticated();
     }
 
-    public <T> void authenticate(T stateContent) {
+    public void authenticate(T stateContent) {
         theState.login(this, stateContent);
     }
 
@@ -28,5 +35,9 @@ public class MainActivityViewModel extends ViewModel implements StateHolder {
 
     public Object getState() {
         return theState.getContent();
+    }
+
+    public Intent generateAuthenticationIntent() {
+        return tUIClaimentAuthenticationHandler.generateAuthenticationIntent();
     }
 }

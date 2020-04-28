@@ -78,17 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void navigateToAuthentication() {
         // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+//        List<AuthUI.IdpConfig> providers = Arrays.asList(
+//                new AuthUI.IdpConfig.EmailBuilder().build(),
+//                new AuthUI.IdpConfig.GoogleBuilder().build());
 
 // Create and launch sign-in intent
         startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(false    )
-                        .build(),
+                viewModel.generateAuthenticationIntent(),
                 RC_SIGN_IN);
     }
 

@@ -1,4 +1,4 @@
-package com.example.examscanner.state;
+package com.example.examscanner.authentication.state;
 
 public class StateFactory {
     private static State instance;

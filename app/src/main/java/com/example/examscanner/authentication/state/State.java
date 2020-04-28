@@ -1,4 +1,4 @@
-package com.example.examscanner.state;
+package com.example.examscanner.authentication.state;
 
 public interface State<T> {
     public void login(StateHolder holder, T stateContent);

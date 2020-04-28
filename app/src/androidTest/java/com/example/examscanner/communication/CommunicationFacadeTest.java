@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.examscanner.authentication.CalimentAuthenticationHandlerFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
@@ -11,23 +12,38 @@ import com.example.examscanner.communication.entities_interfaces.VersionEntityIn
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import io.reactivex.observers.TestObserver;
+
 import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class CommunicationFacadeTest {
     CommunicationFacade oot;
     AppDatabase db;
+    private String currentUserId;
 
     @Before
     public void setUp() throws Exception {
         AppDatabaseFactory.setTestMode();
         db = AppDatabaseFactory.getInstance();
         oot = new CommunicationFacadeFactory().create();
+        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
+            @Override
+            public void onNext(FirebaseAuth firebaseAuth) {
+                currentUserId = firebaseAuth.getUid();
+            }
+        };
+        FirebaseDatabaseFactory.setTestMode();
+        CalimentAuthenticationHandlerFactory.getTest().generateAuthentication().subscribe(observer);
+        observer.awaitCount(1);
+        observer.assertComplete();
     }
 
     @After
@@ -76,7 +92,8 @@ public class CommunicationFacadeTest {
 
     @Test
     public void testCreateAndGetExamNotNull() {
-        long id = oot.createExam("COMP", "walla.co.il", "2020", 1, 1, -1);
+//        String[] graders = new String[]{"examScannerBob@gmail.com", "examScannerAlice@gmail.com"};
+        long id = oot.createExam("COMP", "walla.co.il", "2020", 1, 1,-1);
         assertNotNull(oot.getExamById(id));
     }
 

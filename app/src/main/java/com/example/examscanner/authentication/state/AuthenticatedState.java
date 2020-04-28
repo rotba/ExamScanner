@@ -1,6 +1,4 @@
-package com.example.examscanner.state;
-
-import com.example.examscanner.MainActivity;
+package com.example.examscanner.authentication.state;
 
 class AuthenticatedState<T> implements State<T> {
     private T stateContent;

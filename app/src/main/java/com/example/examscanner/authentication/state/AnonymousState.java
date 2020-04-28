@@ -1,6 +1,4 @@
-package com.example.examscanner.state;
-
-import com.example.examscanner.MainActivity;
+package com.example.examscanner.authentication.state;
 
 class AnonymousState<T> implements State<T> {
     @Override
