@@ -142,7 +142,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onVersionAddedFailed(Throwable throwable) {
-        Log.d(TAG, MSG_PREF);
+        Log.d(TAG, MSG_PREF, throwable);
         throwable.printStackTrace();
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
     }

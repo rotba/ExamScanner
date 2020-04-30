@@ -963,6 +963,8 @@ public class ImageProcessor implements ImageProcessingFacade {
         int result_rows = img_exam.rows() - img_template.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1); //CV_32FC1 means 32 bit floating point signed depth in one channel
 
+        Imgproc.cvtColor(img_exam, img_exam, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(img_template, img_template, Imgproc.COLOR_BGR2GRAY);
         // / Do the Matching and Normalize
         Imgproc.matchTemplate(img_exam, img_template, result, Imgproc.TM_CCOEFF_NORMED);
         //     Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
