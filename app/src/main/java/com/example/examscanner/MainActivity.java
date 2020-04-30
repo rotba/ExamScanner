@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                viewModel.authenticate(FirebaseAuth.getInstance());
+                viewModel.authenticate();
                 createHome();
             } else {
                 Log.d(
