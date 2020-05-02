@@ -100,11 +100,11 @@ public class CreateExamFragment extends Fragment {
 
     private void refreshCreateExamButton() {
         ((Button) getActivity().findViewById(R.id.button_create_exam_create)).setEnabled(
-                viewModel.getAddedVersions().getValue()>0 &&
-                        ((TextView)getActivity().findViewById(R.id.editText_create_exam_course_name)).getText()!=null&&
-                        ((TextView)getActivity().findViewById(R.id.editText_create_exam_year)).getText()!=null &&
-                        ((RadioGroup)getActivity().findViewById(R.id.radioGroup_semester)).getCheckedRadioButtonId()!=-1 &&
-                        ((RadioGroup)getActivity().findViewById(R.id.radioGroup_term)).getCheckedRadioButtonId()!=-1
+                viewModel.getAddedVersions().getValue() > 0 &&
+                        ((TextView) getActivity().findViewById(R.id.editText_create_exam_course_name)).getText() != null &&
+                        ((TextView) getActivity().findViewById(R.id.editText_create_exam_year)).getText() != null &&
+                        ((RadioGroup) getActivity().findViewById(R.id.radioGroup_semester)).getCheckedRadioButtonId() != -1 &&
+                        ((RadioGroup) getActivity().findViewById(R.id.radioGroup_term)).getCheckedRadioButtonId() != -1
 
         );
     }
@@ -215,7 +215,7 @@ public class CreateExamFragment extends Fragment {
             this.term = getActivity().findViewById(R.id.radioGroup_term);
             this.year = getActivity().findViewById(R.id.editText_create_exam_year);
             pb = getActivity().findViewById(R.id.progressBar_create_exam);
-            radioButtonListner= new RadioGroup.OnCheckedChangeListener() {
+            radioButtonListner = new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     refreshAddVersionButton();
@@ -223,7 +223,8 @@ public class CreateExamFragment extends Fragment {
             };
             textWatcher = new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -231,7 +232,8 @@ public class CreateExamFragment extends Fragment {
                 }
 
                 @Override
-                public void afterTextChanged(Editable s) {}
+                public void afterTextChanged(Editable s) {
+                }
             };
             courseName.addTextChangedListener(textWatcher);
             year.addTextChangedListener(textWatcher);

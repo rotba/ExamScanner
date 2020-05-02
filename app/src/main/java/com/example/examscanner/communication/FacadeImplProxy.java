@@ -18,8 +18,8 @@ public class FacadeImplProxy implements CommunicationFacade {
 
 
     @Override
-    public long createExam(String courseName, String url, String year, int term, int semester, long sessionId) {
-        return realImpl.createExam(courseName, url, year, term, semester, sessionId);
+    public long createExam(String courseName, String url, String year, int term, int semester,String managerId, String[] graders, long sessionId) {
+        return realImpl.createExam(courseName, url, year, term, semester, managerId, graders,sessionId);
     }
 
     @Override

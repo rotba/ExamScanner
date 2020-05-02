@@ -64,7 +64,7 @@ public class RealFacadeImple implements CommunicationFacade {
     
 
     @Override
-    public long createExam(String courseName, String url, String year, int term, int semester, long sessionId) {
+    public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId) {
         return db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId));
     }
 

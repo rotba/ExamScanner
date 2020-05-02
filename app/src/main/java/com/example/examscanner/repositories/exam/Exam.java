@@ -143,6 +143,14 @@ public class Exam {
         newVersions.add(v);
     }
 
+    public String getManagerId() {
+        return null;
+    }
+
+    public String[] getGradersIds() {
+        return null;
+    }
+
     public class NuSuchVerion extends RuntimeException {
 
 
