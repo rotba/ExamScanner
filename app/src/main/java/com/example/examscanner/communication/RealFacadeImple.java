@@ -24,21 +24,28 @@ import com.example.examscanner.persistence.local.entities.ScanExamSession;
 import com.example.examscanner.persistence.local.entities.Version;
 import com.example.examscanner.persistence.local.files_management.FilesManager;
 import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
+import com.example.examscanner.persistence.remote.DatabaseFacade;
+import com.example.examscanner.persistence.remote.DatabaseFacadeFactory;
+import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+
 public class RealFacadeImple implements CommunicationFacade {
     private static RealFacadeImple instance;
     private AppDatabase db;
     private FilesManager fm;
+    private DatabaseFacade remoteDb;
 
     public static synchronized RealFacadeImple getInstance() {
         if (instance == null) {
             instance = new RealFacadeImple(
                     AppDatabaseFactory.getInstance(),
-                    FilesManagerFactory.create()
+                    FilesManagerFactory.create(),
+                    DatabaseFacadeFactory.get()
             );
             return instance;
         } else {
@@ -56,16 +63,25 @@ public class RealFacadeImple implements CommunicationFacade {
 //        testInstance = null;
 //    }
 
-    private RealFacadeImple(AppDatabase db, FilesManager fm) {
+    private RealFacadeImple(AppDatabase db, FilesManager fm, DatabaseFacade remoteDb) {
         this.db = db;
         this.fm = fm;
+        this.remoteDb = remoteDb;
     }
 
     
 
     @Override
     public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId) {
-        return db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId));
+        try{
+            long ans =db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId));
+            remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, sessionId)
+            .blockingAwait();
+            return ans;
+        }catch (Throwable e){
+            /*TODO - delete exam*/
+            throw new CommunicationException();
+        }
     }
 
     @Override

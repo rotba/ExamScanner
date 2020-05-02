@@ -13,6 +13,7 @@ public class MsgSender {
     public Completable send(String toRef, String msg) {
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabaseFactory.get();
+        database.setPersistenceEnabled(true);
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(toRef);
         return Completable.fromCallable(() -> {

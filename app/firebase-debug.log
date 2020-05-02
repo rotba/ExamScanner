@@ -1,0 +1,68 @@
+[debug] [2020-05-02T14:37:57.442Z] ----------------------------------------------------------------------
+[debug] [2020-05-02T14:37:57.443Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\rotem\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2020-05-02T14:37:57.444Z] CLI Version:   8.2.0
+[debug] [2020-05-02T14:37:57.444Z] Platform:      win32
+[debug] [2020-05-02T14:37:57.444Z] Node Version:  v10.14.1
+[debug] [2020-05-02T14:37:57.445Z] Time:          Sat May 02 2020 17:37:57 GMT+0300 (Israel Daylight Time)
+[debug] [2020-05-02T14:37:57.445Z] ----------------------------------------------------------------------
+[debug] [2020-05-02T14:37:57.445Z] 
+[debug] [2020-05-02T14:37:57.452Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-02T14:37:57.452Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Code\School\proj\app\android\ExamScanner
+
+Before we get started, keep in mind:
+
+  * You are currently outside your home directory
+  * You are initializing in an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  .firebaserc already has a default project, using examscanner-de46e.
+[debug] [2020-05-02T14:38:07.665Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-05-02T14:38:07.666Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-05-02T14:38:08.261Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 02 May 2020 17:38:08 GMT","server":"scaffolding on HTTPServer2","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-02T14:38:08.279Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/examscanner-de46e  
+ 
+[debug] [2020-05-02T14:38:09.239Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 02 May 2020 17:38:09 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+=== Database Setup
+[info] 
+[info] Firebase Realtime Database Rules allow you to define how your data should be
+[info] structured and when your data can be read from and written to.
+[info] 
+[info] +  Database Rules for  have been downloaded to database.rules.json.
+[info] Future modifications to database.rules.json will update Database Rules when you run
+[info] firebase deploy.
+[info] 
+=== Functions Setup
+[info] 
+[info] A functions directory will be created in your project with a Node.js
+[info] package pre-configured. Functions can be deployed with firebase deploy.
+[info] 
+[debug] [2020-05-02T14:38:10.717Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-02T14:38:10.718Z] > authorizing via signed-in user
+[debug] [2020-05-02T14:38:10.718Z] [iam] checking project examscanner-de46e for permissions ["firebase.projects.get"]
+[debug] [2020-05-02T14:38:10.719Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/examscanner-de46e:testIamPermissions  
+ {"permissions":["firebase.projects.get"]}
+[debug] [2020-05-02T14:38:12.324Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 02 May 2020 17:38:12 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=762","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-02T14:38:12.326Z] >>> HTTP REQUEST POST https://serviceusage.googleapis.com/v1/projects/examscanner-de46e/services/cloudfunctions.googleapis.com:enable  
+ 
+[debug] [2020-05-02T14:38:12.326Z] >>> HTTP REQUEST POST https://serviceusage.googleapis.com/v1/projects/examscanner-de46e/services/runtimeconfig.googleapis.com:enable  
+ 
+[debug] [2020-05-02T14:38:14.021Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 02 May 2020 17:38:13 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-02T14:38:14.024Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 02 May 2020 17:38:13 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
