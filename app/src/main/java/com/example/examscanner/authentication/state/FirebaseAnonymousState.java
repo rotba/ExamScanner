@@ -5,7 +5,9 @@ import com.google.firebase.auth.FirebaseAuth;
 class FirebaseAnonymousState implements State<FirebaseAuth> {
     @Override
     public void login(StateHolder holder, FirebaseAuth stateContent) {
-        holder.setState(new FirebaseState(stateContent));
+        State theNewState = new FirebaseState(stateContent);
+        holder.setState(theNewState);
+        StateFactory.setState(theNewState);
     }
 
     @Override

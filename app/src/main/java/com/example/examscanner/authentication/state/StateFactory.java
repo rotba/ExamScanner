@@ -8,4 +8,7 @@ public class StateFactory {
         }
         return instance;
     }
+    static void setState(State s){
+        instance = s;
+    }
 }

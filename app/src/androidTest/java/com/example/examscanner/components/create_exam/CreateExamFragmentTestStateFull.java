@@ -5,10 +5,11 @@ import android.graphics.Bitmap;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.examscanner.R;
 import com.example.examscanner.Utils;
+import com.example.examscanner.authentication.state.StateFactory;
+import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetter;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetterFactory;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
@@ -54,6 +55,7 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
     @After
     public void tearDown() throws Exception {
         super.tearDown();
+        StateFactory.get().logout(StateHolder.getDefaultHolder());
     }
     private void createExam(String comp, String year, String verNum, String aGraderAdress) {
         onView(withId(R.id.editText_create_exam_course_name)).perform(replaceText(comp));

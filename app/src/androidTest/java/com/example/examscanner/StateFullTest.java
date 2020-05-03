@@ -32,15 +32,11 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
 
 
     private void login() {
-        try {
-            onView(withText("Sign in with email")).perform(click());
-            onView(withHint("Email")).perform(replaceText("examscanner80@gmail.com"));
-            onView(withText("NEXT")).perform(click());
-            onView(withHint("Password")).perform(replaceText("Ycombinator"));
-            onView(withText("SIGN IN")).perform(click());
-        }catch (NoMatchingViewException e){
-            onView(withText("Exam Scanner")).perform(click());
-        }
+        onView(withText("Sign in with email")).perform(click());
+        onView(withHint("Email")).perform(replaceText("examscanner80@gmail.com"));
+        onView(withText("NEXT")).perform(click());
+        onView(withHint("Password")).perform(replaceText("Ycombinator"));
+        onView(withText("SIGN IN")).perform(click());
     }
 
 //    @After

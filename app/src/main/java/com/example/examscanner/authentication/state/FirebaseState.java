@@ -1,5 +1,6 @@
 package com.example.examscanner.authentication.state;
 
+import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
 class FirebaseState implements State<FirebaseAuth> {
@@ -14,6 +15,10 @@ class FirebaseState implements State<FirebaseAuth> {
 
     @Override
     public void logout(StateHolder holder) {
+        stateContent.signOut();
+        final FirebaseAnonymousState s = new FirebaseAnonymousState();
+        holder.setState(s);
+        StateFactory.setState(s);
     }
 
     @Override

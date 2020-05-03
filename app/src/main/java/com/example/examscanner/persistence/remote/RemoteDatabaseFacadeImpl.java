@@ -7,13 +7,14 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.Arrays;
-import java.util.Observable;
+
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 
 class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     @Override
-    public Completable createExam(long examId, String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, long sessionId) {
+    public Observable<String> createExam(long examId, String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers,boolean seal, long sessionId) {
         return storeObjectInPath(
                 String.format("%s/%d", Paths.toExams,examId),
                 new Exam(
@@ -22,7 +23,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         courseName,
                         semester,
                         term,
-                        year
+                        year,
+                        seal
                 )
         );
 //        DatabaseReference myRef = FirebaseDatabaseFactory.get().getReference(String.format("%s/%l", Paths.toExams, examId));
@@ -47,7 +49,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Completable addVersion(long versionId,long examId, int versionNumber) {
+    public Observable<String> addVersion(long versionId, long examId, int versionNumber) {
         return storeObjectInPath(
                 String.format("%s/%l", Paths.toVersions, versionId),
                 new Version(
@@ -57,15 +59,15 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         );
     }
 
-    private static Completable storeObjectInPath(String path, Object obj) {
+    private static Observable<String> storeObjectInPath(String path, Object obj) {
         DatabaseReference myRef = FirebaseDatabaseFactory.get().getReference(path);
-        return Completable.fromCallable(() -> {
-            final Task<Void> task = myRef.setValue(obj);
+        return Observable.fromCallable(() -> {
+            final Task<Void> task = myRef.push().setValue((Exam)obj);
             Tasks.await(task);
             if (task.isSuccessful()) {
-                return Completable.complete();
+                return myRef.getKey();
             } else {
-                return Completable.error(new IllegalStateException("Task not successful", task.getException()));
+                throw task.getException();
             }
         });
     }
