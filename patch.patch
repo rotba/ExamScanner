@@ -1,0 +1,128 @@
+diff --git a/app/src/main/java/com/example/examscanner/communication/RealFacadeImple.java b/app/src/main/java/com/example/examscanner/communication/RealFacadeImple.java
+index 140929f..284bb9c 100644
+--- a/app/src/main/java/com/example/examscanner/communication/RealFacadeImple.java
++++ b/app/src/main/java/com/example/examscanner/communication/RealFacadeImple.java
+@@ -70,10 +70,11 @@ public class RealFacadeImple implements CommunicationFacade {
+ 
+     @Override
+     public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId) {
++        long ans =db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId));
+         try{
+-            String id = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false,sessionId).blockingFirst();
+-            db.getExamDao().insert(new Exam(id, courseName, term, year, url, semester, sessionId));
+-            return 0;
++            remoteDb.createExam(ans,courseName, url, year, term, semester, managerId, graders, sessionId)
++            .blockingAwait();
++            return ans;
+         }catch (Throwable e){
+             /*TODO - delete exam*/
+             throw new CommunicationException(e);
+diff --git a/app/src/main/java/com/example/examscanner/persistence/remote/RemoteDatabaseFacade.java b/app/src/main/java/com/example/examscanner/persistence/remote/RemoteDatabaseFacade.java
+index 24e549a..e7efbed 100644
+--- a/app/src/main/java/com/example/examscanner/persistence/remote/RemoteDatabaseFacade.java
++++ b/app/src/main/java/com/example/examscanner/persistence/remote/RemoteDatabaseFacade.java
+@@ -1,9 +1,8 @@
+ package com.example.examscanner.persistence.remote;
+ 
+ import io.reactivex.Completable;
+-import io.reactivex.Observable;
+ 
+ public interface RemoteDatabaseFacade {
+-    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers , boolean seal, long sessionId);
+-    public Observable<String> addVersion(long versionId,long examId, int versionNumber);
++    public Completable createExam(long examId,String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers , long sessionId);
++    public Completable addVersion(long versionId,long examId, int versionNumber);
+ }
+diff --git a/app/src/main/java/com/example/examscanner/persistence/remote/RemoteDatabaseFacadeImpl.java b/app/src/main/java/com/example/examscanner/persistence/remote/RemoteDatabaseFacadeImpl.java
+index a8cca3c..e86a19f 100644
+--- a/app/src/main/java/com/example/examscanner/persistence/remote/RemoteDatabaseFacadeImpl.java
++++ b/app/src/main/java/com/example/examscanner/persistence/remote/RemoteDatabaseFacadeImpl.java
+@@ -7,14 +7,13 @@ import com.google.android.gms.tasks.Tasks;
+ import com.google.firebase.database.DatabaseReference;
+ 
+ import java.util.Arrays;
+-
++import java.util.Observable;
+ 
+ import io.reactivex.Completable;
+-import io.reactivex.Observable;
+ 
+ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
+     @Override
+-    public Observable<String> createExam(long examId, String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers,boolean seal, long sessionId) {
++    public Completable createExam(long examId, String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, long sessionId) {
+         return storeObjectInPath(
+                 String.format("%s/%d", Paths.toExams,examId),
+                 new Exam(
+@@ -23,8 +22,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
+                         courseName,
+                         semester,
+                         term,
+-                        year,
+-                        seal
++                        year
+                 )
+         );
+ //        DatabaseReference myRef = FirebaseDatabaseFactory.get().getReference(String.format("%s/%l", Paths.toExams, examId));
+@@ -49,7 +47,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
+     }
+ 
+     @Override
+-    public Observable<String> addVersion(long versionId, long examId, int versionNumber) {
++    public Completable addVersion(long versionId,long examId, int versionNumber) {
+         return storeObjectInPath(
+                 String.format("%s/%l", Paths.toVersions, versionId),
+                 new Version(
+@@ -59,15 +57,15 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
+         );
+     }
+ 
+-    private static Observable<String> storeObjectInPath(String path, Object obj) {
++    private static Completable storeObjectInPath(String path, Object obj) {
+         DatabaseReference myRef = FirebaseDatabaseFactory.get().getReference(path);
+-        return Observable.fromCallable(() -> {
+-            final Task<Void> task = myRef.push().setValue((Exam)obj);
++        return Completable.fromCallable(() -> {
++            final Task<Void> task = myRef.setValue(obj);
+             Tasks.await(task);
+             if (task.isSuccessful()) {
+-                return myRef.getKey();
++                return Completable.complete();
+             } else {
+-                throw task.getException();
++                return Completable.error(new IllegalStateException("Task not successful", task.getException()));
+             }
+         });
+     }
+diff --git a/app/src/main/java/com/example/examscanner/persistence/remote/entities/Exam.java b/app/src/main/java/com/example/examscanner/persistence/remote/entities/Exam.java
+index a197931..7e7598e 100644
+--- a/app/src/main/java/com/example/examscanner/persistence/remote/entities/Exam.java
++++ b/app/src/main/java/com/example/examscanner/persistence/remote/entities/Exam.java
+@@ -7,24 +7,22 @@ import java.util.List;
+ @IgnoreExtraProperties
+ public class Exam {
+ 
+-    public String manager;
++    public String managaerId;
+     public List<String> graders;
+     public String courseName;
+     public int semester;
+     public int term;
+     public String year;
+-    public boolean seal = false;
+ 
+     public Exam() {
+     }
+ 
+-    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal) {
+-        this.manager = manager;
++    public Exam(String managaerId, List<String> graders, String courseName, int semester, int term, String year) {
++        this.managaerId = managaerId;
+         this.graders = graders;
+         this.courseName = courseName;
+         this.semester = semester;
+         this.term = term;
+         this.year = year;
+-        this.seal = seal;
+     }
+ }
