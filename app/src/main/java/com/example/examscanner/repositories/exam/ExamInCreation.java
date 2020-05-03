@@ -45,7 +45,8 @@ public class ExamInCreation extends Exam {
         );
     }
 
-    public Exam commit(String courseName, int term, int semester, String year) {
+    public Exam commit(String userId,String courseName, int term, int semester, String year) {
+        this.managerId = userId;
         this.courseName = courseName;
         this.term = term;
         this.semester = semester;

@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.session.CreateExamSessionProviderFactory;
@@ -23,6 +24,7 @@ public class CEModelViewFactory implements ViewModelProvider.Factory {
         return (T)new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
                 new ImageProcessingFactory(new BitmapInstancesFactory(activity.getApplicationContext())).create(),
+                StateFactory.get(),
                 new CreateExamSessionProviderFactory().create().provide()
         );
     }

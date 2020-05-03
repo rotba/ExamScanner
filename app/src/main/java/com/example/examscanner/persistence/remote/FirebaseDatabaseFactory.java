@@ -5,7 +5,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class FirebaseDatabaseFactory {
     private static FirebaseDatabase instance;
     private static FirebaseDatabase testInstance;
-    private static boolean inTestMode=false;
+    static boolean inTestMode=false;
     public static FirebaseDatabase get() {
         if(inTestMode){
             return getTestInstance();

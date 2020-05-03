@@ -2,6 +2,7 @@ package com.example.examscanner.components.create_exam;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
@@ -35,6 +36,7 @@ public class CreateExamModelViewTest {
         out  = new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
                 imageProcessor,
+                StateFactory.get(),
                 0
         );
         examRepository = new ExamRepositoryFactory().create();

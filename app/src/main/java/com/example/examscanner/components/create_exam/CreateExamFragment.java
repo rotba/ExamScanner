@@ -196,7 +196,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF + "onError");
+        Log.d(TAG, MSG_PREF + "onError",throwable);
         throwable.printStackTrace();
     }
 

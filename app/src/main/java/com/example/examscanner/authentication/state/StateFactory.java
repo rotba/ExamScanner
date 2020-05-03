@@ -4,7 +4,7 @@ public class StateFactory {
     private static State instance;
     public static State get(){
         if (instance == null){
-            instance = new AnonymousState();
+            instance = new FirebaseAnonymousState();
         }
         return instance;
     }

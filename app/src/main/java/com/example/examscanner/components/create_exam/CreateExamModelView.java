@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.repositories.Repository;
@@ -23,15 +24,17 @@ import java.util.List;
 public class CreateExamModelView extends ViewModel {
     private MutableLiveData<Integer> addedVersions;
     private ImageProcessingFacade imageProcessor;
+    private State state;
     private ExamInCreation examCreated;
     private Repository<Exam> eRepo;
     private Bitmap currentVersionBitmap;
     private Integer currentVersionNumber;
 
 
-    public CreateExamModelView(Repository<Exam> eRepo, ImageProcessingFacade imageProcessor, long sessionId) {
+    public CreateExamModelView(Repository<Exam> eRepo, ImageProcessingFacade imageProcessor, State state, long sessionId) {
         this.eRepo = eRepo;
         this.imageProcessor = imageProcessor;
+        this.state = state;
         examCreated = new ExamInCreation(sessionId);
         addedVersions = new MutableLiveData<>(0);
     }
@@ -40,6 +43,7 @@ public class CreateExamModelView extends ViewModel {
     public void create(String courseName, String term, String semester, String year){
         eRepo.create(
                 examCreated.commit(
+                        state.getId(),
                         courseName,
                         Term.createByViewValue(term).getValue(),
                         Semester.createByViewValue(semester).getValue(),

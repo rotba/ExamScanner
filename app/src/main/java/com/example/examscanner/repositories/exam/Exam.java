@@ -15,7 +15,7 @@ import java.util.concurrent.TimeoutException;
 public class Exam {
     private final static String TAG = "ExamScanner";
     private final static String MSG_PREF = "Exam::";
-    private ExamManager manager;
+    protected String managerId;
     private long id;
     protected String courseName;
     protected int term;
@@ -26,12 +26,11 @@ public class Exam {
     private List<Version> newVersions;
     private Future<List<Version>> fVersions;
 
-    public Exam(ExamManager manager, long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year) {
+    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year) {
         this.id = id;
         this.courseName = courseName;
         this.term = moed;
         this.semester = semester;
-        this.manager = manager;
         this.graders = graders;
         this.sessionId = sessionId;
         this.year = year;
@@ -76,9 +75,6 @@ public class Exam {
         this.sessionId = sessionId;
     }
 
-    public ExamManager getManager() {
-        return manager;
-    }
 
     public int getTerm() {
         return term;
@@ -144,11 +140,11 @@ public class Exam {
     }
 
     public String getManagerId() {
-        return null;
+        return managerId;
     }
 
     public String[] getGradersIds() {
-        return null;
+        return new String[0];
     }
 
     public class NuSuchVerion extends RuntimeException {

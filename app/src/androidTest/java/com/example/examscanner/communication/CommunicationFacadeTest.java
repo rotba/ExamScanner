@@ -13,6 +13,8 @@ import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndro
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
@@ -42,11 +44,14 @@ public class CommunicationFacadeTest {
             }
         };
         CalimentAuthenticationHandlerFactory.getTest().generateAuthentication().subscribe(observer);
+        observer.awaitCount(1);
+        observer.assertComplete();
     }
 
     @After
     public void tearDown() throws Exception {
         AppDatabaseFactory.tearDownDb();
+        RemoteDatabaseFacadeFactory.tearDown();
     }
 
     private ExamContext setUpExamContext() {

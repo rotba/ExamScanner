@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.examscanner.R;
 import com.example.examscanner.Utils;
@@ -54,7 +55,7 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
     public void tearDown() throws Exception {
         super.tearDown();
     }
-    private void testCreateOneExam(String comp, String year, String verNum, String term, String aGraderAdress) {
+    private void createExam(String comp, String year, String verNum, String aGraderAdress) {
         onView(withId(R.id.editText_create_exam_course_name)).perform(replaceText(comp));
         onView(withId(R.id.radioButton_create_exam_term_b)).perform(click());
         onView(withId(R.id.radioButton_create_exam_semester_fall)).perform(click());
@@ -69,13 +70,19 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText("20"));
         onView(withId(R.id.button_create_exam_add_version)).perform(click());
-
-
         onView(withId(R.id.button_create_exam_create)).perform(click());
         Utils.sleepAlertPoppingTime();
         onView(withText(R.string.create_exam_dialog_ok)).perform(click());
+    }
+
+    private void checkExamExists(String comp, String year) {
         onView(withText(containsString(comp))).check(matches(isDisplayed()));
         onView(withText(containsString(year))).check(matches(isDisplayed()));
+    }
+
+    private void testCreateOneExam(String comp, String year, String verNum, String term, String aGraderAdress) {
+        createExam(comp, year, verNum, aGraderAdress);
+        checkExamExists(comp, year);
     }
 
     private void testCreateCourse(String courseName, String year, String term) {
@@ -117,5 +124,10 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
     public void testOn2CreatedExamItAddsToTheHomeAdapterRealIP() {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
         testOn2CreatedExamItAddsToTheHomeAdapter();
+    }
+    @Test
+    public void testOnCreatedExamWithAGraderItAddsToTheGraderHomeapater() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
+        testOnCreatedExamItAddsToTheHomeAdapter();
     }
 }
