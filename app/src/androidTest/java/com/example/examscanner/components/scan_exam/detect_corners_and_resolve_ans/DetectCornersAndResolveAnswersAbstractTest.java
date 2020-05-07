@@ -31,7 +31,7 @@ import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static org.hamcrest.Matchers.containsString;
 
 
-public abstract class DetectCornersAndResolveAnswersTestSuite extends StateFullTest {
+public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFullTest {
     protected CornerDetectionContext1Setuper usecaseContext;
     protected abstract CornerDetectionContext1Setuper createContext();
     protected abstract void navFromHomeToDetecteCornersUnderTestExam();
@@ -50,6 +50,12 @@ public abstract class DetectCornersAndResolveAnswersTestSuite extends StateFullT
         clickOnTheVersionSpinner();
         onView(withText(Integer.toString(usecaseContext.getDinaBarzilayVersion()))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        usecaseContext.tearDown();
+        super.tearDown();
     }
 
     static Matcher<View> withTag(final Object tag) {

@@ -9,6 +9,7 @@ import androidx.test.espresso.action.ViewActions;
 
 import com.example.examscanner.R;
 import com.example.examscanner.Utils;
+import com.example.examscanner.communication.RealFacadeImple;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
@@ -69,6 +70,11 @@ public class CornerDetectionFragmentTest {
     public void tearDown() {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(null);
+        ExamRepositoryFactory.setStubInstance(null);
+        RealFacadeImple.tearDown();
+        ExamRepositoryFactory.tearDown();
+        CDCRepositoryFacrory.tearDown();
+        ScannedCaptureRepositoryFactory.tearDown();
 
     }
 

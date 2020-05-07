@@ -20,6 +20,7 @@ import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
+import com.example.examscanner.stubs.ExamRepositoryStub;
 import com.example.examscanner.stubs.ExamStubFactory;
 
 import java.util.ArrayList;
@@ -41,15 +42,6 @@ public class CornerDetectionContext1Setuper {
 //    private String uId;
 
     public void setup(){
-//        final TestObserver observer = new TestObserver<String>() {
-//            @Override
-//            public void onNext(String id) {
-//                super.onNext(id);
-//                uId = id;
-//            }
-//        };
-//        CalimentAuthenticationHandlerFactory.getTest().generateAuthenticationAndReturnId().subscribe(observer);
-//        observer.awaitCount(1);
         e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020");
         examRepository = new ExamRepositoryFactory().create();
         dinaBarzilayVersion = 496351;
@@ -81,7 +73,6 @@ public class CornerDetectionContext1Setuper {
                 cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession));
             }
         });
-//        StateFactory.get().logout(StateHolder.getDefaultHolder());
     }
 
     public ImageProcessingFacade getImageProcessor() {
@@ -106,5 +97,9 @@ public class CornerDetectionContext1Setuper {
 
     public int getTheDevilVersion() {
         return theDevilVersion;
+    }
+
+    public void tearDown() {
+//        ((ExamRepositoryStub)examRepository).tearDown();
     }
 }

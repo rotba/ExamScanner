@@ -2,14 +2,13 @@ package com.example.examscanner.components.scan_exam.detect_corners_and_resolve_
 
 import com.example.examscanner.R;
 import com.example.examscanner.Utils;
-import com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.DetectCornersAndResolveAnswersTestSuite;
+import com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.DetectCornersAndResolveAnswersAbstractTest;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -22,7 +21,7 @@ import static com.example.examscanner.ImageProcessorsGenerator.slowIP;
 import static org.hamcrest.Matchers.containsString;
 
 
-public class DetectCornersAndResolveAnswersStubIPTest extends DetectCornersAndResolveAnswersTestSuite {
+public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveAnswersAbstractTest {
 
     @Override
     @Before

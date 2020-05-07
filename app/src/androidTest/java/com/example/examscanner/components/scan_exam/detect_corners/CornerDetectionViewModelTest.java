@@ -1,7 +1,9 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.repositories.exam.Version;
+import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
 
 import org.junit.Before;
@@ -16,6 +18,7 @@ public class CornerDetectionViewModelTest extends AbstractComponentInstrumentedT
 
     @Before
     public void setUp() {
+        RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
         super.setUp();
         useCaseContext = new CornerDetectionContext1Setuper();
         useCaseContext.setup();
@@ -25,6 +28,12 @@ public class CornerDetectionViewModelTest extends AbstractComponentInstrumentedT
                 useCaseContext.getSCRepo(),
                 useCaseContext.getTheExam()
         );
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        useCaseContext.tearDown();
+        super.tearDown();
     }
 
     @Test

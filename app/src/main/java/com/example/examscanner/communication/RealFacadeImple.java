@@ -49,16 +49,10 @@ public class RealFacadeImple implements CommunicationFacade {
             return instance;
         }
     }
-//    static void setTestInstance(AppDatabase theDBTestInstance){
-//        theDBTestInstance.clearAllTables();
-//        testInstance = new RealFacadeImple(
-//                theDBTestInstance,
-//                FilesManagerFactory.create()
-//        );
-//    }
-//    static void tearDownTestInstance(){
-//        testInstance = null;
-//    }
+    public static void tearDown(){
+        instance =null;
+    }
+
 
     private RealFacadeImple(AppDatabase db, FilesManager fm, RemoteDatabaseFacade remoteDb) {
         this.db = db;

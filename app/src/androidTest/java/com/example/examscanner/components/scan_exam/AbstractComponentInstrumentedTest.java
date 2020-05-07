@@ -4,8 +4,16 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.MainActivity;
+import com.example.examscanner.communication.CommunicationFacadeFactory;
+import com.example.examscanner.communication.RealFacadeImple;
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
+import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
+import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
+import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
+import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,6 +47,11 @@ public abstract class AbstractComponentInstrumentedTest {
     @After
     public void tearDown() throws Exception {
         AppDatabaseFactory.tearDownDb();
+        RemoteDatabaseFacadeFactory.tearDown();
+        RealFacadeImple.tearDown();
+        ExamRepositoryFactory.tearDown();
+        CDCRepositoryFacrory.tearDown();
+        ScannedCaptureRepositoryFactory.tearDown();
     }
 
     protected interface DBCallback {

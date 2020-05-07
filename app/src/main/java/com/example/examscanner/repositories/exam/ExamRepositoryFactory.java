@@ -12,4 +12,7 @@ public class ExamRepositoryFactory {
     public static void setStubInstance(Repository<Exam> examRepository) {
         testInstance = examRepository;
     }
+    public static void tearDown(){
+        ExamRepository.tearDown();
+    }
 }

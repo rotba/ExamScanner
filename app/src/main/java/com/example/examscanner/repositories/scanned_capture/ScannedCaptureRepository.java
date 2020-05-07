@@ -21,6 +21,10 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
         }
     }
 
+    static void tearDown() {
+        instance=null;
+    }
+
     @Override
     public int getId() {
         return 0;

@@ -4,6 +4,11 @@ import com.example.examscanner.repositories.Repository;
 
 public class ScannedCaptureRepositoryFactory {
     private static Repository<ScannedCapture> testInstance = null;
+
+    public static void tearDown() {
+        ScannedCaptureRepository.tearDown();
+    }
+
     public Repository<ScannedCapture> create(){
         if(testInstance!=null){
             return testInstance;

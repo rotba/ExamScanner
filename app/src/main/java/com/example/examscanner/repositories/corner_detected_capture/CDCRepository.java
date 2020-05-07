@@ -38,6 +38,10 @@ public class CDCRepository implements Repository<CornerDetectedCapture> {
         this.converter = converter;
     }
 
+    static void tearDown() {
+        instance=null;
+    }
+
     @Override
     public int getId() {
         return 0;

@@ -33,6 +33,9 @@ public class ExamRepository implements Repository<Exam> {
             return instance;
         }
     }
+    static void tearDown(){
+        instance=null;
+    }
 
     public ExamRepository(CommunicationFacade comFacade, Converter<ExamEntityInterface,Exam> converter) {
         this.comFacade = comFacade;

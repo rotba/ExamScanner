@@ -51,4 +51,8 @@ public class ExamRepositoryStub implements com.example.examscanner.repositories.
     public int genId() {
         return 0;
     }
+
+    public void tearDown(){
+        exams = new ArrayList<>();
+    }
 }
