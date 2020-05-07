@@ -15,6 +15,8 @@ import com.example.examscanner.components.create_exam.get_version_file.VersionIm
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.StateFullTest;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,6 +40,7 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
     @Before
     public void setUp() {
         super.setUp();
+        FirebaseDatabaseFactory.setTestMode();
         VersionImageGetterFactory.setStubInstance(new VersionImageGetter() {
             @Override
             public void get(Fragment fragment, int pickfileRequestCode) {
@@ -56,6 +59,8 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
     public void tearDown() throws Exception {
         super.tearDown();
         StateFactory.get().logout(StateHolder.getDefaultHolder());
+        RemoteDatabaseFacadeFactory.tearDown();
+
     }
     private void createExam(String comp, String year, String verNum, String aGraderAdress) {
         onView(withId(R.id.editText_create_exam_course_name)).perform(replaceText(comp));

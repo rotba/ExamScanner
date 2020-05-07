@@ -7,18 +7,19 @@ import java.util.List;
 @IgnoreExtraProperties
 public class Exam {
 
-    public String managaerId;
+    public String manager;
     public List<String> graders;
     public String courseName;
     public int semester;
     public int term;
     public String year;
-
+    public boolean seal;
     public Exam() {
     }
 
-    public Exam(String managaerId, List<String> graders, String courseName, int semester, int term, String year) {
-        this.managaerId = managaerId;
+    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal) {
+        this.seal =seal;
+        this.manager = manager;
         this.graders = graders;
         this.courseName = courseName;
         this.semester = semester;

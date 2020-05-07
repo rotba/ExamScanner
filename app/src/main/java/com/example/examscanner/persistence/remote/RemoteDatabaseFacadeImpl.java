@@ -22,7 +22,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         courseName,
                         semester,
                         term,
-                        year
+                        year,
+                        false
                 )
         );
 //        DatabaseReference myRef = FirebaseDatabaseFactory.get().getReference(String.format("%s/%l", Paths.toExams, examId));
