@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Exam {
     public static final String pkName = "id";
-    @PrimaryKey(autoGenerate = false)
-    private String id;
+    @PrimaryKey(autoGenerate = true)
+    private long id;
     private String courseName;
     private int term;
     private String year;
@@ -19,8 +19,7 @@ public class Exam {
     public static final String fkSid = "examCreationSessionId";
     @ForeignKey(entity = ExamCreationSession.class, parentColumns = ExamCreationSession.pkName , childColumns ="examCreationSessionId" )
     private long examCreationSessionId;
-    public Exam(String id,String courseName, int term, String year, String url, int semester, long examCreationSessionId) {
-        this.id = id;
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;

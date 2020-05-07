@@ -70,10 +70,11 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId) {
+        long ans =db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId));
         try{
-            String id = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false,sessionId).blockingFirst();
-            db.getExamDao().insert(new Exam(id, courseName, term, year, url, semester, sessionId));
-            return 0;
+            remoteDb.createExam(ans,courseName, url, year, term, semester, managerId, graders, sessionId)
+            .blockingAwait();
+            return ans;
         }catch (Throwable e){
             /*TODO - delete exam*/
             throw new CommunicationException(e);
