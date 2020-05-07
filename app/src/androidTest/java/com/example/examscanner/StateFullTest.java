@@ -4,7 +4,12 @@ import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.examscanner.R;
+import com.example.examscanner.authentication.state.State;
+import com.example.examscanner.authentication.state.StateFactory;
+import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
+import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,8 +44,10 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
         onView(withText("SIGN IN")).perform(click());
     }
 
-//    @After
-//    public void tearDown() throws Exception {
-//        super.tearDown();
-//    }
+    @After
+    public void tearDown() throws Exception {
+        AppDatabaseFactory.tearDownDb();
+        RemoteDatabaseFacadeFactory.tearDown();
+        StateFactory.get().logout(StateHolder.getDefaultHolder());
+    }
 }

@@ -39,26 +39,31 @@ public class DetectCornersAndResolveAnswersStubIPTest extends DetectCornersAndRe
     }
 
     @Override
+    @Test
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition() {
         super.testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition();
     }
 
     @Override
+    @Test
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragments() {
         super.testProcessedCornerDetectedCapturesConsistentBetweenFragments();
     }
 
     @Override
+    @Test
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionProgress() {
         super.testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionProgress();
     }
 
+    @Test
     public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionSlowIP() {
         testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(slowIP());
     }
 
     @Ignore
     @Override
+    @Test
     public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionRealIP() {
         super.testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionRealIP();
     }

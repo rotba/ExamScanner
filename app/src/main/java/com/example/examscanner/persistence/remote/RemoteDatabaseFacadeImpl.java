@@ -49,7 +49,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     @Override
     public Completable addVersion(long versionId,long examId, int versionNumber) {
         return storeObjectInPath(
-                String.format("%s/%l", Paths.toVersions, versionId),
+                String.format("%s/%d", Paths.toVersions, versionId),
                 new Version(
                         examId,
                         versionNumber

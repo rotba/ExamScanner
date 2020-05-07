@@ -185,7 +185,7 @@ public class CornerDetectionFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "generateCaptureScanningCompletable");
+                        Log.d(TAG, "generateCaptureScanningCompletable",e);
                         e.printStackTrace();
                     }
                 });

@@ -55,7 +55,7 @@ public class CreateExamFragmentTestStateFull extends StateFullTest {
     @After
     public void tearDown() throws Exception {
         super.tearDown();
-        StateFactory.get().logout(StateHolder.getDefaultHolder());
+
     }
     private void createExam(String comp, String year, String verNum, String aGraderAdress) {
         onView(withId(R.id.editText_create_exam_course_name)).perform(replaceText(comp));

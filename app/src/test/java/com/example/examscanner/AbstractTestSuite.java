@@ -2,6 +2,7 @@ package com.example.examscanner;
 
 
 
+import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 
 import org.junit.Before;
@@ -15,7 +16,7 @@ public abstract class AbstractTestSuite {
     public void setUp(){
 //        CommunicationFacadeFactory.setTestMode();
     }
-    public int getCurrentGraderId(){
-        return State.getState().getGraderId();
+    public String getCurrentGraderId(){
+        return StateFactory.get().getId();
     }
 }
