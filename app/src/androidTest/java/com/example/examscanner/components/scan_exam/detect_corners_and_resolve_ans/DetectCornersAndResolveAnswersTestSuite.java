@@ -1,14 +1,16 @@
-package com.example.examscanner.components.scan_exam;
+package com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans;
 
 import android.view.View;
 
 import androidx.test.espresso.PerformException;
 
 import com.example.examscanner.R;
-import com.example.examscanner.Utils;
 import com.example.examscanner.StateFullTest;
+import com.example.examscanner.Utils;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
 
 import org.hamcrest.Description;
@@ -25,32 +27,25 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static org.hamcrest.Matchers.containsString;
 
 
-public class DetectCornersAndResolveAnswersTest extends StateFullTest {
+public abstract class DetectCornersAndResolveAnswersTestSuite extends StateFullTest {
     protected CornerDetectionContext1Setuper usecaseContext;
+    protected abstract CornerDetectionContext1Setuper createContext();
+    protected abstract void navFromHomeToDetecteCornersUnderTestExam();
 
-    @Before
     @Override
+    @Before
     public void setUp() {
         setupCallback = ()->{
-            usecaseContext = new CornerDetectionContext1Setuper();
+            usecaseContext = createContext();
             usecaseContext.setup();
         };
         super.setUp();
         navFromHomeToDetecteCornersUnderTestExam();
     }
-
-    protected void navFromHomeToDetecteCornersUnderTestExam() {
-        onView(withText(containsString(usecaseContext.getTheExam().getCourseName()))).perform(click());
-        Utils.sleepAlertPoppingTime();
-        onView(withText(R.string.home_dialog_yes)).perform().perform(click());
-        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
-    }
-
-
-
     private void selectVersionAndScanAnswers() {
         clickOnTheVersionSpinner();
         onView(withText(Integer.toString(usecaseContext.getDinaBarzilayVersion()))).perform(click());
@@ -143,10 +138,4 @@ public class DetectCornersAndResolveAnswersTest extends StateFullTest {
         onView(withContentDescription("Navigate up")).perform(click());
         onView(withId(R.id.textView_cd_processing_progress)).check(matches(withText("2/3")));
     }
-
-    @Test
-    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionRealIP() {
-        testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(null);
-    }
-
 }

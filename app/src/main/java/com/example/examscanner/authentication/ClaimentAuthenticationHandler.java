@@ -6,4 +6,5 @@ import io.reactivex.Observable;
 
 public interface ClaimentAuthenticationHandler<T> {
     public Observable<T> generateAuthentication();
+    public Observable<String> generateAuthenticationAndReturnId();
 }

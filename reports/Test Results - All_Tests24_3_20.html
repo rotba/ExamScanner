@@ -626,7 +626,7 @@ jQuery.cookie = function(name, value, options) {
 <li class="level top failed open">
 <span><em class="time">
 <div class="time">36.85 s</div>
-</em>com.example.examscanner.components.scan_exam.DetectCornersAndResolveAnswersTest</span>
+</em>com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.ip_integration.DetectCornersAndResolveAnswersTest</span>
 <ul>
 <li class="level test">
 <span><em class="time">
@@ -639,7 +639,67 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testProcessedCornerDetectedCapturesConsistentBetweenFragments</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1/2&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1/2&quot;<br/>Got: &quot;AppCompatTextView{id=2131231030, res-name=textView_ra_progress_feedback, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@7a0d459, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=1224.0, text=1/1, input-type=0, ime-target=false, has-links=false}&quot;<br/><br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)<br/>at com.example.examscanner.components.scan_exam.DetectCornersAndResolveAnswersTest.testProcessedCornerDetectedCapturesConsistentBetweenFragments(DetectCornersAndResolveAnswersTest.java:76)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1/2&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1/2&quot;<br/>Got: &quot;AppCompatTextView{id=2131231030, res-name=textView_ra_progress_feedback, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@7a0d459, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=1224.0, text=1/1, input-type=0, ime-target=false, has-links=false}&quot;<br/><br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1/2&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1/2&quot;
+<br/>Got: &quot;AppCompatTextView{id=2131231030, res-name=textView_ra_progress_feedback, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@7a0d459, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=1224.0, text=1/1, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)
+<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.ip_integration.DetectCornersAndResolveAnswersTest.testProcessedCornerDetectedCapturesConsistentBetweenFragments(DetectCornersAndResolveAnswersTest.java:76)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)
+<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1/2&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1/2&quot;
+<br/>Got: &quot;AppCompatTextView{id=2131231030, res-name=textView_ra_progress_feedback, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@7a0d459, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=1224.0, text=1/1, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)
+<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)
+<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -725,7 +785,64 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testOnFinishProcessFragmentIsDiscarded2Captures</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1/1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1/1&quot;<br/>Got: &quot;TextView{id=2131231024, res-name=textView_cd_current_position, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4b2119f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=71.0, text=1/2, input-type=0, ime-target=false, has-links=false}&quot;<br/><br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testOnFinishProcessFragmentIsDiscarded2Captures(CornerDetectionFragmentTest.java:144)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1/1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1/1&quot;<br/>Got: &quot;TextView{id=2131231024, res-name=textView_cd_current_position, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4b2119f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=71.0, text=1/2, input-type=0, ime-target=false, has-links=false}&quot;<br/><br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1/1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1/1&quot;
+<br/>Got: &quot;TextView{id=2131231024, res-name=textView_cd_current_position, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4b2119f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=71.0, text=1/2, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)
+<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testOnFinishProcessFragmentIsDiscarded2Captures(CornerDetectionFragmentTest.java:144)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1/1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1/1&quot;
+<br/>Got: &quot;TextView{id=2131231024, res-name=textView_cd_current_position, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4b2119f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=71.0, text=1/2, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)
+<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)
+<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>

@@ -13,7 +13,7 @@ import io.reactivex.Completable;
 
 class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     @Override
-    public Completable createExam(long examId, String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, long sessionId) {
+    public Completable createExam(long examId, String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal,long sessionId) {
         return storeObjectInPath(
                 String.format("%s/%d", Paths.toExams,examId),
                 new Exam(
@@ -22,7 +22,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         courseName,
                         semester,
                         term,
-                        year
+                        year,
+                        seal
                 )
         );
 //        DatabaseReference myRef = FirebaseDatabaseFactory.get().getReference(String.format("%s/%l", Paths.toExams, examId));

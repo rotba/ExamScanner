@@ -1,32 +1,32 @@
 diff --git a/app/src/main/java/com/example/examscanner/persistence/remote/entities/Exam.java b/app/src/main/java/com/example/examscanner/persistence/remote/entities/Exam.java
-index a197931..7e7598e 100644
+index 7e7598e..a197931 100644
 --- a/app/src/main/java/com/example/examscanner/persistence/remote/entities/Exam.java
 +++ b/app/src/main/java/com/example/examscanner/persistence/remote/entities/Exam.java
-@@ -7,24 +7,22 @@ import java.util.List;
+@@ -7,22 +7,24 @@ import java.util.List;
  @IgnoreExtraProperties
  public class Exam {
  
--    public String manager;
-+    public String managaerId;
+-    public String managaerId;
++    public String manager;
      public List<String> graders;
      public String courseName;
      public int semester;
      public int term;
      public String year;
--    public boolean seal = false;
++    public boolean seal = false;
  
      public Exam() {
      }
  
--    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal) {
--        this.manager = manager;
-+    public Exam(String managaerId, List<String> graders, String courseName, int semester, int term, String year) {
-+        this.managaerId = managaerId;
+-    public Exam(String managaerId, List<String> graders, String courseName, int semester, int term, String year) {
+-        this.managaerId = managaerId;
++    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal) {
++        this.manager = manager;
          this.graders = graders;
          this.courseName = courseName;
          this.semester = semester;
          this.term = term;
          this.year = year;
--        this.seal = seal;
++        this.seal = seal;
      }
  }

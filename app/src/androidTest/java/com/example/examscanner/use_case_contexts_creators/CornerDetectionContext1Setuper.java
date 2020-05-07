@@ -2,6 +2,10 @@ package com.example.examscanner.use_case_contexts_creators;
 
 import android.graphics.PointF;
 
+import com.example.examscanner.authentication.CalimentAuthenticationHandlerFactory;
+import com.example.examscanner.authentication.state.State;
+import com.example.examscanner.authentication.state.StateFactory;
+import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
@@ -20,6 +24,8 @@ import com.example.examscanner.stubs.ExamStubFactory;
 
 import java.util.ArrayList;
 
+import io.reactivex.observers.TestObserver;
+
 import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 
@@ -32,8 +38,18 @@ public class CornerDetectionContext1Setuper {
     private Exam e;
     private int dinaBarzilayVersion;
     private int theDevilVersion;
+//    private String uId;
 
     public void setup(){
+//        final TestObserver observer = new TestObserver<String>() {
+//            @Override
+//            public void onNext(String id) {
+//                super.onNext(id);
+//                uId = id;
+//            }
+//        };
+//        CalimentAuthenticationHandlerFactory.getTest().generateAuthenticationAndReturnId().subscribe(observer);
+//        observer.awaitCount(1);
         e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020");
         examRepository = new ExamRepositoryFactory().create();
         dinaBarzilayVersion = 496351;
@@ -65,6 +81,7 @@ public class CornerDetectionContext1Setuper {
                 cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession));
             }
         });
+//        StateFactory.get().logout(StateHolder.getDefaultHolder());
     }
 
     public ImageProcessingFacade getImageProcessor() {

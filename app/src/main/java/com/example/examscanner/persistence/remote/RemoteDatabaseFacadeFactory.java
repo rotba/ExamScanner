@@ -3,7 +3,7 @@ package com.example.examscanner.persistence.remote;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RemoteDatabaseFacadeFactory {
-    public static RemoteDatabaseFacade instance;
+    private static RemoteDatabaseFacade instance;
     public static RemoteDatabaseFacade get(){
         if(instance==null){
             instance = new RemoteDatabaseFacadeImpl();
@@ -15,5 +15,9 @@ public class RemoteDatabaseFacadeFactory {
         if(!FirebaseDatabaseFactory.inTestMode){
             FirebaseDatabaseFactory.get().getReference().setValue(null);
         }
+    }
+
+    public static void setStubInstance(RemoteDatabaseFacade stubInstance) {
+        instance = stubInstance;
     }
 }
