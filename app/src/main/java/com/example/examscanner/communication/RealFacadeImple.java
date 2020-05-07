@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.GraderEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
@@ -26,10 +27,16 @@ import com.example.examscanner.persistence.local.files_management.FilesManager;
 import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.persistence.remote.entities.Grader;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class RealFacadeImple implements CommunicationFacade {
     private static RealFacadeImple instance;
@@ -49,7 +56,7 @@ public class RealFacadeImple implements CommunicationFacade {
             return instance;
         }
     }
-    public static void tearDown(){
+    static void tearDown(){
         instance =null;
     }
 
@@ -382,6 +389,33 @@ public class RealFacadeImple implements CommunicationFacade {
             db.getQuestionDao().update(maybeQuestion);
             return maybeQuestion.getId();
         }
+    }
+
+    @Override
+    public List<GraderEntityInterface> getGraders() {
+        List<GraderEntityInterface> eis = new ArrayList<>();
+        List<Grader> graders = new ArrayList<>();
+        remoteDb.getGraders().blockingSubscribe( gs -> graders.addAll(gs));
+        for (Grader g:
+             graders) {
+            eis.add(new GraderEntityInterface() {
+                @Override
+                public String getUserName() {
+                    return g.username;
+                }
+
+                @Override
+                public String getId() {
+                    return g.id;
+                }
+            });
+        }
+        return eis;
+    }
+
+    @Override
+    public void createGrader(String userName) {
+        remoteDb.createGrader(userName).blockingAwait();
     }
 
     @Override

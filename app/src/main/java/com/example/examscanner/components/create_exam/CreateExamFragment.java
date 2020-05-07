@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,8 +16,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.examscanner.R;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetter;
@@ -40,12 +37,7 @@ import com.example.examscanner.components.create_exam.get_version_file.VersionIm
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -96,6 +88,7 @@ public class CreateExamFragment extends Fragment {
             }
         });
         ((Button) view.findViewById(R.id.button_create_exam_add_version)).setOnClickListener(this::onAddVersion);
+        ((Button) view.findViewById(R.id.button_create_exam_add_greader)).setOnClickListener(this::onAddGrader);
     }
 
     private void refreshCreateExamButton() {
@@ -125,6 +118,14 @@ public class CreateExamFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onVersionAdded, this::onVersionAddedFailed);
+    }
+    private void onAddGrader(View view) {
+        ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
+        viewModel.holdGraderUsername(((EditText)getActivity().findViewById(R.id.editText_create_exam_grader_address)).getText().toString());
+        Completable.fromAction(() -> viewModel.addGrader())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGraderAdded, this::onGraderAddedFailed);
     }
 
     @SuppressLint("CheckResult")
@@ -157,6 +158,19 @@ public class CreateExamFragment extends Fragment {
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
         viewModel.incNumOfVersions();
         refreshCreateExamButton();
+    }
+
+    private void onGraderAdded() {
+        ((TextView) getActivity().findViewById(R.id.editText_create_exam_grader_address)).setText("");
+        ((TextView) getActivity().findViewById(R.id.textView_create_exam_added_grader_feedback)).setText(String.format("added %s", viewModel.getCurrentGrader()));
+        viewModel.holdGraderUsername(null);
+    }
+
+    private void onGraderAddedFailed(Throwable throwable) {
+        Log.d(TAG, MSG_PREF,throwable);
+        CharSequence text = String.format("Failed adding grader, are you sure %s is a correct username?", viewModel.getCurrentGrader());
+        int duration = Toast.LENGTH_SHORT;
+        Toast.makeText(getActivity(), text, duration).show();
     }
 
     private void onModelCreatedError(Throwable throwable) {

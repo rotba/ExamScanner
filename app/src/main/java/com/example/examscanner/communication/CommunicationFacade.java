@@ -4,10 +4,14 @@ import android.graphics.Bitmap;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.GraderEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
+import com.example.examscanner.repositories.grader.Grader;
+
+import java.util.List;
 
 public interface CommunicationFacade {
     public long createExam(String courseName, String url, String year, int term, int semester,String mangerId, String[] gradersIdentifiers ,long sessionId);
@@ -38,4 +42,6 @@ public interface CommunicationFacade {
     public QuestionEntityInterface getQuestionById(long qId);
     public long insertVersionReplaceOnConflict(long examId, int num);
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom);
+    public List<GraderEntityInterface> getGraders();
+    public void createGrader(String userName);
 }

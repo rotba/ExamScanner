@@ -1,5 +1,7 @@
 package com.example.examscanner.repositories.exam;
 
+import com.example.examscanner.repositories.grader.Grader;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -45,12 +47,13 @@ public class ExamInCreation extends Exam {
         );
     }
 
-    public Exam commit(String userId,String courseName, int term, int semester, String year) {
+    public Exam commit(String userId, String courseName, int term, int semester, List<Grader>  graders, String year) {
         this.managerId = userId;
         this.courseName = courseName;
         this.term = term;
         this.semester = semester;
         this.year=year;
+        this.graders = graders;
         return this;
     }
 }

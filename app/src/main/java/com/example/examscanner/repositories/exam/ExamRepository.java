@@ -74,7 +74,7 @@ public class ExamRepository implements Repository<Exam> {
                 exam.getTerm(),
                 exam.getSemester(),
                 exam.getManagerId(),
-                exam.getGradersIds(),
+                exam.getGradersIdentifiers(),
                 exam.getSessionId()
         );
         exam.setId(id);

@@ -1,15 +1,22 @@
 package com.example.examscanner.persistence.remote;
 
 import com.example.examscanner.persistence.remote.entities.Exam;
+import com.example.examscanner.persistence.remote.entities.Grader;
 import com.example.examscanner.persistence.remote.entities.Version;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Observable;
+import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 
 class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     @Override
@@ -55,6 +62,43 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         examId,
                         versionNumber
                 )
+        );
+    }
+
+    @Override
+    public Observable<List<Grader>> getGraders() {
+        DatabaseReference ref= FirebaseDatabaseFactory.get().getReference(Paths.toGraders);
+        return new Observable<List<Grader>>() {
+            @Override
+            protected void subscribeActual(Observer<? super List<Grader>> observer) {
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<Grader> ans = new ArrayList<>();
+                        for (DataSnapshot graderSnapshot: dataSnapshot.getChildren()) {
+                            ans.add(new Grader(
+                                    graderSnapshot.child(Paths.gId).getValue().toString(),
+                                    graderSnapshot.child(Paths.gUsername).getValue().toString()
+                            ));
+                        }
+                        observer.onNext(ans);
+                        observer.onComplete();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        observer.onError(databaseError.toException());
+                    }
+                });
+            }
+        };
+    }
+
+    @Override
+    public Completable createGrader(String userName) {
+        return storeObjectInPath(
+                String.format("%s/%s", Paths.toGraders, userName),
+                new Grader("0",userName)
         );
     }
 

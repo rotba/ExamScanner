@@ -7,10 +7,13 @@ import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.GraderEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
+
+import java.util.List;
 
 public class FacadeImplProxy implements CommunicationFacade {
     private RealFacadeImple realImpl  = RealFacadeImple.getInstance();
@@ -137,6 +140,16 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
         return realImpl.insertQuestionReplaceOnConflict(vId, qNum, qAns, left, right, up, bottom);
+    }
+
+    @Override
+    public List<GraderEntityInterface> getGraders() {
+        return realImpl.getGraders();
+    }
+
+    @Override
+    public void createGrader(String userName) {
+        realImpl.createGrader(userName);
     }
 
     @Override

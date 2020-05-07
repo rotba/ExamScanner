@@ -8,10 +8,12 @@ import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.RealFacadeImple;
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
+import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
@@ -39,6 +41,7 @@ public abstract class AbstractComponentInstrumentedTest {
     @Before
     public void setUp() {
         AppDatabaseFactory.setTestMode();
+        FirebaseDatabaseFactory.setTestMode();
         db = AppDatabaseFactory.getInstance();
         dbCallback.call(db);
         setupCallback.run();
@@ -48,10 +51,11 @@ public abstract class AbstractComponentInstrumentedTest {
     public void tearDown() throws Exception {
         AppDatabaseFactory.tearDownDb();
         RemoteDatabaseFacadeFactory.tearDown();
-        RealFacadeImple.tearDown();
+        CommunicationFacadeFactory.tearDown();
         ExamRepositoryFactory.tearDown();
         CDCRepositoryFacrory.tearDown();
         ScannedCaptureRepositoryFactory.tearDown();
+        GraderRepoFactory.tearDown();
     }
 
     protected interface DBCallback {

@@ -14,6 +14,7 @@ import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamInCreation;
 import com.example.examscanner.repositories.exam.Question;
+import com.example.examscanner.repositories.grader.Grader;
 import com.example.examscanner.repositories.scanned_capture.ResolvedAnswer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.exam.Version;
@@ -23,20 +24,25 @@ import java.util.List;
 
 public class CreateExamModelView extends ViewModel {
     private MutableLiveData<Integer> addedVersions;
+    private Repository<Grader> gRepo;
     private ImageProcessingFacade imageProcessor;
     private State state;
     private ExamInCreation examCreated;
     private Repository<Exam> eRepo;
     private Bitmap currentVersionBitmap;
+    private String currentGraderUsername;
     private Integer currentVersionNumber;
+    private List<Grader> graderUsernames;
 
 
-    public CreateExamModelView(Repository<Exam> eRepo, ImageProcessingFacade imageProcessor, State state, long sessionId) {
+    public CreateExamModelView(Repository<Exam> eRepo, Repository<Grader> gRepo, ImageProcessingFacade imageProcessor, State state, long sessionId) {
         this.eRepo = eRepo;
+        this.gRepo = gRepo;
         this.imageProcessor = imageProcessor;
         this.state = state;
         examCreated = new ExamInCreation(sessionId);
         addedVersions = new MutableLiveData<>(0);
+        graderUsernames = new ArrayList<>();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -47,6 +53,7 @@ public class CreateExamModelView extends ViewModel {
                         courseName,
                         Term.createByViewValue(term).getValue(),
                         Semester.createByViewValue(semester).getValue(),
+                        graderUsernames,
                         year
                 )
         );
@@ -110,5 +117,22 @@ public class CreateExamModelView extends ViewModel {
 
     public Integer getCurrentVersionNumber() {
         return currentVersionNumber;
+    }
+
+    public void holdGraderUsername(String graderUsername) {
+        this.currentGraderUsername = graderUsername;
+    }
+
+    public void addGrader() {
+        final List<Grader> gradersWithCurrentUsername = gRepo.get(grader -> grader.getUserName().equals(currentGraderUsername));
+        if(
+                gradersWithCurrentUsername
+                .size() ==0
+        ) throw new NoSuchGraderException();
+        graderUsernames.add(gradersWithCurrentUsername.get(0));
+    }
+
+    public String getCurrentGrader() {
+        return currentGraderUsername;
     }
 }

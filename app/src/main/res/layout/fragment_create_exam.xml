@@ -262,8 +262,8 @@
         android:layout_height="32dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="12dp"
-        android:textColor="@color/colorAccent"
         android:ems="10"
+        android:textColor="@color/colorAccent"
         android:autoSizeTextType="uniform"
         android:gravity="center"
         android:inputType="number"
@@ -308,8 +308,8 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:hint="@string/hint_email"
-        android:inputType="textEmailAddress"
+        android:hint="@string/hint_username"
+        android:inputType="textPersonName"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/button_create_exam_add_greader"
         app:layout_constraintEnd_toEndOf="parent"
@@ -366,5 +366,16 @@
         app:layout_constraintEnd_toStartOf="@+id/textView_number_of_versions_added"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <TextView
+        android:id="@+id/textView_create_exam_added_grader_feedback"
+        android:layout_width="96dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/colorAccent"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/button_create_exam_add_greader"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

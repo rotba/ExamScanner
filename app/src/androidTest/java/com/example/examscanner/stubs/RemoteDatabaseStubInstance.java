@@ -1,8 +1,13 @@
 package com.example.examscanner.stubs;
 
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
+import com.example.examscanner.persistence.remote.entities.Grader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 
 public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     @Override
@@ -12,6 +17,16 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     @Override
     public Completable addVersion(long versionId, long examId, int versionNumber) {
+        return Completable.fromAction(()->{});
+    }
+
+    @Override
+    public Observable<List<Grader>> getGraders() {
+        return Observable.fromCallable(()->{return new ArrayList<Grader>();});
+    }
+
+    @Override
+    public Completable createGrader(String userName) {
         return Completable.fromAction(()->{});
     }
 }

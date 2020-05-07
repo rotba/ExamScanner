@@ -1,13 +1,18 @@
 package com.example.examscanner.repositories.grader;
 
 public class Grader {
-    private int id;
+    private String userName;
 
-    public Grader(int id) {
-        this.id = id;
+    public Grader(String userName) {
+        this.userName = userName;
     }
 
-    public int getId() {
-        return id;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getIdentifier(){
+        return userName;
     }
 }

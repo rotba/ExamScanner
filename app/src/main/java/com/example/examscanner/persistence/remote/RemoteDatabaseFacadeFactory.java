@@ -12,7 +12,7 @@ public class RemoteDatabaseFacadeFactory {
     }
 
     public static void tearDown() {
-        if(!FirebaseDatabaseFactory.inTestMode){
+        if(FirebaseDatabaseFactory.inTestMode){
             FirebaseDatabaseFactory.get().getReference().setValue(null);
         }
     }

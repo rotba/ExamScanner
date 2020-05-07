@@ -14,6 +14,8 @@ import com.example.examscanner.components.create_exam.get_version_file.VersionIm
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.repositories.grader.Grader;
+import com.example.examscanner.repositories.grader.GraderRepoFactory;
 
 import org.junit.Test;
 
@@ -28,9 +30,9 @@ import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.Utils.loadOpenCV;
 import static org.hamcrest.core.IsNot.not;
 
-public class CreateExamFragmentTest extends AbstractComponentInstrumentedTest {
+public abstract class CreateExamFragmentAbstractTest extends AbstractComponentInstrumentedTest {
 
-    private FragmentScenario<CreateExamFragment> scenraio;
+    protected FragmentScenario<CreateExamFragment> scenraio;
 
     @Override
     public void setUp() {
@@ -46,24 +48,7 @@ public class CreateExamFragmentTest extends AbstractComponentInstrumentedTest {
         });
     }
 
-
-    @Test
-    public void testAddVersionStubIP() {
-        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
-        scenraio = FragmentScenario.launchInContainer(CreateExamFragment.class);
-        loadOpenCV(scenraio);
-        testAddVersion();
-    }
-
-    @Test
-    public void testAddVersionRealIP() {
-        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
-        scenraio = FragmentScenario.launchInContainer(CreateExamFragment.class);
-        loadOpenCV(scenraio);
-        testAddVersion();
-    }
-
-    private void testAddVersion() {
+    protected void testAddVersion() {
         onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("0")));
         onView(withId(R.id.button_create_exam_add_version)).check(matches(not(isEnabled())));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());

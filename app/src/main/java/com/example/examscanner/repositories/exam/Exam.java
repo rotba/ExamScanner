@@ -2,7 +2,7 @@ package com.example.examscanner.repositories.exam;
 
 import android.util.Log;
 
-import com.example.examscanner.repositories.grader.ExamManager;
+
 import com.example.examscanner.repositories.grader.Grader;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class Exam {
     protected String courseName;
     protected int term;
     protected int semester;
-    private List<Grader> graders;
+    protected List<Grader> graders;
     protected String year;
     private long sessionId;
     private List<Version> newVersions;
@@ -51,13 +51,6 @@ public class Exam {
         return id;
     }
 
-    public boolean associatedWithGrader(int currentGraderId) {
-        for (Grader g : graders) {
-            if (g.getId() == currentGraderId) return true;
-        }
-        return false;
-    }
-
 
     public void setId(long id) {
         this.id = id;
@@ -74,7 +67,6 @@ public class Exam {
     public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
     }
-
 
     public int getTerm() {
         return term;
@@ -143,8 +135,12 @@ public class Exam {
         return managerId;
     }
 
-    public String[] getGradersIds() {
-        return new String[0];
+    public String[] getGradersIdentifiers() {
+        String[] ans = new String[graders.size()];
+        for (int i = 0; i <ans.length ; i++) {
+            ans[i] = graders.get(i).getIdentifier();
+        }
+        return ans;
     }
 
     public class NuSuchVerion extends RuntimeException {
