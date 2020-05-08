@@ -1,7 +1,8 @@
-package com.example.examscanner.components.create_exam.view_model;
+package com.example.examscanner.components.create_exam.view_model.integration_with_remote_db;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.examscanner.StateFullTest;
 import com.example.examscanner.authentication.CalimentAuthenticationHandlerFactory;
 import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.authentication.state.StateHolder;
@@ -10,13 +11,14 @@ import com.example.examscanner.components.create_exam.CreateExamModelView;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.exam.Version;
+import com.example.examscanner.repositories.grader.Grader;
 import com.example.examscanner.repositories.grader.GraderRepoFactory;
-import com.example.examscanner.stubs.BobGradersStubRepoFacroty;
 import com.example.examscanner.stubs.ImageProcessorStub;
 
 import org.junit.After;
@@ -32,14 +34,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public abstract class CreateExamModelViewAbstractTest {
-
+public class CreateExamUpdatesGraderTest {
     private CreateExamModelView out;
     private Repository<Exam> examRepository;
     private ImageProcessorStub imageProcessor;
+    private Exam theExpectedExam;
 
     @Before
     public void setUp() throws Exception {
+        FirebaseDatabaseFactory.setTestMode();
         AppDatabaseFactory.setTestMode();
         TestObserver to = new TestObserver(){
             @Override
@@ -58,19 +61,7 @@ public abstract class CreateExamModelViewAbstractTest {
                 0
         );
         examRepository = new ExamRepositoryFactory().create();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        AppDatabaseFactory.tearDownDb();
-        RemoteDatabaseFacadeFactory.tearDown();
-        ExamRepositoryFactory.tearDown();
-        CommunicationFacadeFactory.tearDown();
-        GraderRepoFactory.tearDown();
-    }
-
-    @Test
-    public void testAddVersion() {
+        new GraderRepoFactory().create().create(new Grader("bob"));
         final int[] expectedNumOfAnswers = new int[1];
         imageProcessor.scanAnswers(null, new ScanAnswersConsumer() {
             @Override
@@ -90,9 +81,24 @@ public abstract class CreateExamModelViewAbstractTest {
         out.create("testAddVersion()_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
         assertEquals(exams.size(),1);
-        Exam theExam = exams.get(0);
-        assertTrue(theExam.getVersions().size()==1);
-        final Version version = theExam.getVersions().get(0);
-        assertEquals(expectedNumOfAnswers[0] ,version.getQuestions().size());
+        theExpectedExam = exams.get(0);
+        tearDown();
+        CalimentAuthenticationHandlerFactory.getTest().generateAuthentication("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
+        imageProcessor = new ImageProcessorStub();
+        imageProcessor = new ImageProcessorStub();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        AppDatabaseFactory.tearDownDb();
+        RemoteDatabaseFacadeFactory.tearDown();
+        ExamRepositoryFactory.tearDown();
+        CommunicationFacadeFactory.tearDown();
+        GraderRepoFactory.tearDown();
+    }
+
+    @Test
+    public void testGraderIsUpdated() {
+        assertTrue(examRepository.get(e->true).contains(theExpectedExam));
     }
 }

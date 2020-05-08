@@ -14,11 +14,12 @@ public class Exam {
     public int term;
     public String year;
     public boolean seal = false;
+    public String url;
 
     public Exam() {
     }
 
-    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal) {
+    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url) {
         this.manager = manager;
         this.graders = graders;
         this.courseName = courseName;
@@ -26,5 +27,10 @@ public class Exam {
         this.term = term;
         this.year = year;
         this.seal = seal;
+        this.url=url;
+    }
+
+    public String _getId() {
+        return null;
     }
 }

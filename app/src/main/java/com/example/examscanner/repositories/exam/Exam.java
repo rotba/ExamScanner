@@ -3,6 +3,8 @@ package com.example.examscanner.repositories.exam;
 import android.util.Log;
 
 
+import androidx.annotation.Nullable;
+
 import com.example.examscanner.repositories.grader.Grader;
 
 import java.util.ArrayList;
@@ -202,5 +204,23 @@ public class Exam {
                 return null;
             }
         };
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof Exam))
+            return false;
+        Exam other = (Exam)obj;
+        boolean ans = true;
+        ans &= getCourseName().equals(other.getCourseName());
+        ans &= getYear().equals(other.getYear());
+        ans &= getSemester() == other.getSemester();
+        List<Version> otherVersions = other.getVersions();
+        ans &= otherVersions.size() == getVersions().size();
+        for (Version ver:
+             getVersions()) {
+            ans&= otherVersions.contains(ver);
+        };
+        return ans;
     }
 }

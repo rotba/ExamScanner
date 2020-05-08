@@ -241,14 +241,59 @@ public class RealFacadeImple implements CommunicationFacade {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public ExamEntityInterface[] getExams() {
         List<Exam> examEntities = db.getExamDao().getAll();
+        List<com.example.examscanner.persistence.remote.entities.Exam> remoteExams = new ArrayList<>();
+        remoteDb.getExams().blockingSubscribe(res -> remoteExams.addAll(res));
+        for (com.example.examscanner.persistence.remote.entities.Exam re :
+                remoteExams) {
+            if(!examExists(examEntities, re)){
+                importRemoteExam(re);
+            }
+        }
         ExamEntityInterface[] ans = new ExamEntityInterface[examEntities.size()];
         for (int i = 0; i <ans.length ; i++) {
             ans[i] = examEntity2EntityInterface(examEntities.get(i));
         }
         return ans;
+    }
+
+    private void importRemoteExam(com.example.examscanner.persistence.remote.entities.Exam re) {
+        long eId = createExam(re.courseName,re.url,re.year,re.term,re.semester,re.manager,re.graders,-1);
+        List<com.example.examscanner.persistence.remote.entities.Version> remoteVersions = new ArrayList<>();
+        remoteDb.getVersions().blockingSubscribe(rvs -> remoteVersions.addAll(rvs));
+        for (com.example.examscanner.persistence.remote.entities.Version rv :
+                remoteVersions) {
+            if(rv.examId.equals(re._getId())){
+                importRemoteVersion(rv, eId);
+            }
+        }
+    }
+    private void importRemoteVersion(com.example.examscanner.persistence.remote.entities.Version rv, long examId) {
+        long vId = createVersion(examId, rv.versionNumber);
+        List<com.example.examscanner.persistence.remote.entities.Question> remoteQuestions = new ArrayList<>();
+        remoteDb.getQuestions().blockingSubscribe(rqs -> remoteQuestions.addAll(rqs));
+        for (com.example.examscanner.persistence.remote.entities.Question q :
+                remoteQuestions) {
+            if(q.versionId.equals(rv._getId()))
+                importRemoteQuestion(q, vId);
+        }
+    }
+
+    private void importRemoteQuestion(com.example.examscanner.persistence.remote.entities.Question rq, long verionId) {
+        createQuestion(verionId, rq.num, rq.ans,rq.left,rq.up,rq.right,rq.bottom);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private boolean examExists(List<Exam> examEntities, com.example.examscanner.persistence.remote.entities.Exam re) {
+        Object[] arr =examEntities.stream().filter(s ->
+                s.getCourseName().equals(re.courseName) &&
+                        s.getSemester() == re.semester &&
+                        s.getTerm() == re.term
+        ).toArray();
+        return arr.length==1;
     }
 
     @Override

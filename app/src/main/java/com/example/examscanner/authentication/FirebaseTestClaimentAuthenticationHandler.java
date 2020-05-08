@@ -60,4 +60,26 @@ class FirebaseTestClaimentAuthenticationHandler implements ClaimentAuthenticatio
             }
         };
     }
+
+    @Override
+    public Observable<FirebaseAuth> generateAuthentication(String userEmail, String password) {
+        mAuth = FirebaseAuth.getInstance();
+        return new Observable<FirebaseAuth>() {
+            @Override
+            protected void subscribeActual(Observer<? super FirebaseAuth> observer) {
+                mAuth.signInWithEmailAndPassword(userEmail, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    observer.onNext(mAuth);
+                                    observer.onComplete();
+                                } else {
+                                    observer.onError(task.getException());
+                                }
+                            }
+                        });
+            }
+        };
+    }
 }

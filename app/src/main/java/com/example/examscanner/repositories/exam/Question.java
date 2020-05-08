@@ -1,5 +1,7 @@
 package com.example.examscanner.repositories.exam;
 
+import androidx.annotation.Nullable;
+
 import com.example.examscanner.repositories.exam.Version;
 
 public class Question {
@@ -77,5 +79,20 @@ public class Question {
 
     public void setAns(int ans) {
         this.ans = ans;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof  Question)){
+            return false;
+        }
+        Question other = (Question)obj;
+        boolean ans =true;
+        ans&= getNum()==other.getNum();
+        ans&= getAns()==other.getAns();
+        ans&= getUp() == other.getUp();
+        ans&= getBottom() == other.getBottom();
+        ans&= getRight() == other.getRight();
+        return ans;
     }
 }

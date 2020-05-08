@@ -2,6 +2,8 @@ package com.example.examscanner.repositories.exam;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -129,5 +131,22 @@ public class Version {
 
     public void setQuestionsFuture(Future<List<Question>> questionsFuture) {
         this.fQuestions = questionsFuture;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof Version)){
+            return false;
+        }
+        Version other = (Version) obj;
+        boolean ans = true;
+        ans&= getNum()==other.getNum();
+        List<Question> otherQuestions = other.getQuestions();
+        ans&= otherQuestions.size()==getQuestions().size();
+        for (Question q:
+             getQuestions()) {
+            ans&= otherQuestions.contains(q);
+        }
+        return ans;
     }
 }
