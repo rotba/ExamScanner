@@ -4,19 +4,19 @@ import android.content.Intent;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.examscanner.authentication.UIClaimentAuthenticationHandler;
+import com.example.examscanner.authentication.UIAuthenticationHandler;
 import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.authentication.state.StateHolder;
 
 public class MainActivityViewModel<T> extends ViewModel implements StateHolder {
 
-    private final UIClaimentAuthenticationHandler tUIClaimentAuthenticationHandler;
+    private final UIAuthenticationHandler tUIAuthenticationHandler;
     private State theState;
 
 
 
-    public MainActivityViewModel(State theState, UIClaimentAuthenticationHandler<T> tUIClaimentAuthenticationHandler) {
-        this.tUIClaimentAuthenticationHandler = tUIClaimentAuthenticationHandler;
+    public MainActivityViewModel(State theState, UIAuthenticationHandler<T> tUIAuthenticationHandler) {
+        this.tUIAuthenticationHandler = tUIAuthenticationHandler;
         this.theState = theState;
     }
 
@@ -25,7 +25,7 @@ public class MainActivityViewModel<T> extends ViewModel implements StateHolder {
     }
 
     public void authenticate() {
-        theState.login(this, tUIClaimentAuthenticationHandler.getAuthenticationContent());
+        theState.login(this, tUIAuthenticationHandler.getOnResultContent());
     }
 
     @Override
@@ -38,6 +38,6 @@ public class MainActivityViewModel<T> extends ViewModel implements StateHolder {
     }
 
     public Intent generateAuthenticationIntent() {
-        return tUIClaimentAuthenticationHandler.generateAuthenticationIntent();
+        return tUIAuthenticationHandler.generateAuthenticationIntent();
     }
 }

@@ -17,7 +17,7 @@ import com.example.examscanner.repositories.corner_detected_capture.CDCRepositor
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
-import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
+import com.example.examscanner.repositories.session.SESessionProviderFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +53,7 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
 
         };
         super.setUp();
-        scanExamSession =new ScanExamSessionProviderFactory().create().provide(examId);
+        scanExamSession =new SESessionProviderFactory().create().provide(examId);
         cdcRepo = new CDCRepositoryFacrory().create();
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
 //        VersionRepoFactory.setStub(VersionRepoStubFactory.createStubThatReturns(new ArrayList<Version>(){{

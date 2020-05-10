@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.example.examscanner.authentication.CalimentAuthenticationHandlerFactory;
+import com.example.examscanner.authentication.AuthenticationHandlerFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
@@ -13,7 +13,6 @@ import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndro
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
-import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -43,7 +42,7 @@ public class CommunicationFacadeTest {
                 currentUserId = firebaseAuth.getUid();
             }
         };
-        CalimentAuthenticationHandlerFactory.getTest().generateAuthentication().subscribe(observer);
+        AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
         observer.awaitCount(1);
         observer.assertComplete();
     }

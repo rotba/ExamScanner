@@ -180,7 +180,7 @@ public class CreateExamFragment extends Fragment {
 
 
     private void createModel() {
-        CEModelViewFactory factory = new CEModelViewFactory(this.getActivity());
+        CEViewModelFactory factory = new CEViewModelFactory(this.getActivity());
         viewModel = new ViewModelProvider(this, factory).get(CreateExamModelView.class);
     }
 

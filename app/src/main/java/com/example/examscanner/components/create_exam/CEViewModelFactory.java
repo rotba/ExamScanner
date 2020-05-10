@@ -9,13 +9,13 @@ import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.grader.GraderRepoFactory;
-import com.example.examscanner.repositories.session.CreateExamSessionProviderFactory;
+import com.example.examscanner.repositories.session.CESessionProviderFactory;
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
-public class CEModelViewFactory implements ViewModelProvider.Factory {
+public class CEViewModelFactory implements ViewModelProvider.Factory {
     private FragmentActivity activity;
 
-    public CEModelViewFactory(FragmentActivity activity) {
+    public CEViewModelFactory(FragmentActivity activity) {
         this.activity = activity;
     }
 
@@ -27,7 +27,7 @@ public class CEModelViewFactory implements ViewModelProvider.Factory {
                 new GraderRepoFactory().create(),
                 new ImageProcessingFactory(new BitmapInstancesFactory(activity.getApplicationContext())).create(),
                 StateFactory.get(),
-                new CreateExamSessionProviderFactory().create().provide()
+                new CESessionProviderFactory().create().provide()
         );
     }
 }

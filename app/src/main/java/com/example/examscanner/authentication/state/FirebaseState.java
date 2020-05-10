@@ -1,6 +1,5 @@
 package com.example.examscanner.authentication.state;
 
-import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
 class FirebaseState implements State<FirebaseAuth> {

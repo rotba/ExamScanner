@@ -16,8 +16,7 @@ public class Exam {
     public boolean seal = false;
     public String url;
 
-    public Exam() {
-    }
+    public Exam(){}
 
     public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url) {
         this.manager = manager;

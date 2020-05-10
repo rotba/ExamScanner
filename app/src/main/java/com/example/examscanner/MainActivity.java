@@ -1,18 +1,10 @@
 package com.example.examscanner;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,17 +17,10 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.examscanner.communication.ContextProvider;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.stubs.StubImageProcessingFactory;
-import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import org.opencv.android.OpenCVLoader;
 
-import java.util.Arrays;
-import java.util.List;
+import org.opencv.android.OpenCVLoader;
 
 public class MainActivity extends AppCompatActivity {
 

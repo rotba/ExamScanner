@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment {
     }
 
     private long getLastSession(long examId) {
-        return homeViewModel.getLastSession(examId);
+        return homeViewModel.getLastSESession(examId);
     }
 
     private void onExamSessionRetrieved(long sessionId, long examId) {

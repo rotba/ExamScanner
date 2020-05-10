@@ -2,8 +2,7 @@ package com.example.examscanner.components.create_exam.view_model.integration_wi
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.example.examscanner.StateFullTest;
-import com.example.examscanner.authentication.CalimentAuthenticationHandlerFactory;
+import com.example.examscanner.authentication.AuthenticationHandlerFactory;
 import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
@@ -16,7 +15,6 @@ import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
-import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.grader.Grader;
 import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.stubs.ImageProcessorStub;
@@ -50,7 +48,7 @@ public class CreateExamUpdatesGraderTest {
                 StateFactory.get().login(StateHolder.getDefaultHolder(), value);
             }
         };
-        CalimentAuthenticationHandlerFactory.getTest().generateAuthentication().subscribe(to);
+        AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
         to.awaitCount(1);
         imageProcessor = new ImageProcessorStub();
         out  = new CreateExamModelView(
@@ -83,7 +81,7 @@ public class CreateExamUpdatesGraderTest {
         assertEquals(exams.size(),1);
         theExpectedExam = exams.get(0);
         tearDown();
-        CalimentAuthenticationHandlerFactory.getTest().generateAuthentication("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
+        AuthenticationHandlerFactory.getTest().authenticate("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
         imageProcessor = new ImageProcessorStub();
         imageProcessor = new ImageProcessorStub();
     }

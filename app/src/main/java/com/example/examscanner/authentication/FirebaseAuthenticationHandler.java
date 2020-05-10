@@ -1,24 +1,21 @@
 package com.example.examscanner.authentication;
 
-import android.content.Intent;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
-class FirebaseTestClaimentAuthenticationHandler implements ClaimentAuthenticationHandler<FirebaseAuth> {
+class FirebaseAuthenticationHandler implements AuthenticationHandler<FirebaseAuth> {
     private FirebaseAuth mAuth;
 
 
     @Override
-    public Observable<FirebaseAuth> generateAuthentication() {
+    public Observable<FirebaseAuth> authenticate() {
         mAuth = FirebaseAuth.getInstance();
         return new Observable<FirebaseAuth>() {
             @Override
@@ -40,7 +37,7 @@ class FirebaseTestClaimentAuthenticationHandler implements ClaimentAuthenticatio
     }
 
     @Override
-    public Observable<String> generateAuthenticationAndReturnId() {
+    public Observable<String> authenticateAndReturnId() {
         mAuth = FirebaseAuth.getInstance();
         return new Observable<String>() {
             @Override
@@ -62,7 +59,7 @@ class FirebaseTestClaimentAuthenticationHandler implements ClaimentAuthenticatio
     }
 
     @Override
-    public Observable<FirebaseAuth> generateAuthentication(String userEmail, String password) {
+    public Observable<FirebaseAuth> authenticate(String userEmail, String password) {
         mAuth = FirebaseAuth.getInstance();
         return new Observable<FirebaseAuth>() {
             @Override

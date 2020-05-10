@@ -32,7 +32,7 @@ public class CreateExamModelView extends ViewModel {
     private Bitmap currentVersionBitmap;
     private String currentGraderUsername;
     private Integer currentVersionNumber;
-    private List<Grader> graderUsernames;
+    private List<Grader> graders;
 
 
     public CreateExamModelView(Repository<Exam> eRepo, Repository<Grader> gRepo, ImageProcessingFacade imageProcessor, State state, long sessionId) {
@@ -42,7 +42,7 @@ public class CreateExamModelView extends ViewModel {
         this.state = state;
         examCreated = new ExamInCreation(sessionId);
         addedVersions = new MutableLiveData<>(0);
-        graderUsernames = new ArrayList<>();
+        graders = new ArrayList<>();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -53,7 +53,7 @@ public class CreateExamModelView extends ViewModel {
                         courseName,
                         Term.createByViewValue(term).getValue(),
                         Semester.createByViewValue(semester).getValue(),
-                        graderUsernames,
+                        graders,
                         year
                 )
         );
@@ -129,7 +129,7 @@ public class CreateExamModelView extends ViewModel {
                 gradersWithCurrentUsername
                 .size() ==0
         ) throw new NoSuchGraderException();
-        graderUsernames.add(gradersWithCurrentUsername.get(0));
+        graders.add(gradersWithCurrentUsername.get(0));
     }
 
     public String getCurrentGrader() {

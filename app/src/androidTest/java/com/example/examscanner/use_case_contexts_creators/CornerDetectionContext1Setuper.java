@@ -2,10 +2,6 @@ package com.example.examscanner.use_case_contexts_creators;
 
 import android.graphics.PointF;
 
-import com.example.examscanner.authentication.CalimentAuthenticationHandlerFactory;
-import com.example.examscanner.authentication.state.State;
-import com.example.examscanner.authentication.state.StateFactory;
-import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
@@ -19,16 +15,11 @@ import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
-import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
-import com.example.examscanner.stubs.ExamRepositoryStub;
-import com.example.examscanner.stubs.ExamStubFactory;
+import com.example.examscanner.repositories.session.SESessionProviderFactory;
 
 import java.util.ArrayList;
 
-import io.reactivex.observers.TestObserver;
-
 import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
-import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 
 public class CornerDetectionContext1Setuper {
     private Repository<Exam> examRepository;
@@ -54,7 +45,7 @@ public class CornerDetectionContext1Setuper {
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
         imageProcessor = fakeIP();
         cdcRepo = new CDCRepositoryFacrory().create();
-        scanExamSession = new ScanExamSessionProviderFactory().create().provide(e.getId());
+        scanExamSession = new SESessionProviderFactory().create().provide(e.getId());
         imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg1(), new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {

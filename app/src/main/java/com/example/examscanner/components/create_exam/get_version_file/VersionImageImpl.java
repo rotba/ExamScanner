@@ -29,7 +29,7 @@ class VersionImageImpl implements VersionImageGetter {
         try {
             return MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
         } catch (IOException e) {
-            Log.d(TAG,MSG_PREF+" accessBitmap");
+            Log.d(TAG,MSG_PREF+" accessBitmap",e);
             e.printStackTrace();
         }
         throw new FailedGettingVersionImageException();

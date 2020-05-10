@@ -2,7 +2,7 @@ package com.example.examscanner.components.create_exam.view_model;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.example.examscanner.authentication.CalimentAuthenticationHandlerFactory;
+import com.example.examscanner.authentication.AuthenticationHandlerFactory;
 import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
@@ -16,7 +16,6 @@ import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.grader.GraderRepoFactory;
-import com.example.examscanner.stubs.BobGradersStubRepoFacroty;
 import com.example.examscanner.stubs.ImageProcessorStub;
 
 import org.junit.After;
@@ -47,7 +46,7 @@ public abstract class CreateExamModelViewAbstractTest {
                 StateFactory.get().login(StateHolder.getDefaultHolder(), value);
             }
         };
-        CalimentAuthenticationHandlerFactory.getTest().generateAuthentication().subscribe(to);
+        AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
         to.awaitCount(1);
         imageProcessor = new ImageProcessorStub();
         out  = new CreateExamModelView(

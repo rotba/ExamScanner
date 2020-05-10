@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.Arrays;
 import java.util.List;
 
-class UIFirebaseClaimentAuthenticationHandler implements UIClaimentAuthenticationHandler<FirebaseAuth> {
+class UIFirebaseAuthenticationHandler implements UIAuthenticationHandler<FirebaseAuth> {
     @Override
     public Intent generateAuthenticationIntent() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -22,7 +22,7 @@ class UIFirebaseClaimentAuthenticationHandler implements UIClaimentAuthenticatio
     }
 
     @Override
-    public FirebaseAuth getAuthenticationContent() {
+    public FirebaseAuth getOnResultContent() {
         return FirebaseAuth.getInstance();
     }
 }

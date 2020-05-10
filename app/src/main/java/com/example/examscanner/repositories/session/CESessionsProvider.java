@@ -2,10 +2,10 @@ package com.example.examscanner.repositories.session;
 
 import com.example.examscanner.communication.CommunicationFacade;
 
-public class CreateExamSessionsProvider {
+public class CESessionsProvider {
     private CommunicationFacade communicationFacade;
 
-    public CreateExamSessionsProvider(CommunicationFacade communicationFacade) {
+    public CESessionsProvider(CommunicationFacade communicationFacade) {
         this.communicationFacade = communicationFacade;
     }
     public long provide(){
