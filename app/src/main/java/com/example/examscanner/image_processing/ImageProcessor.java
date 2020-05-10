@@ -544,7 +544,9 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -559,8 +561,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -568,6 +572,8 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 public class ImageProcessor implements ImageProcessingFacade {
     Mat questionTemplate;
+    int thresh = 50;
+    int N = 11;
 
     private Bitmap bitmapFromMat(Mat mat){
         Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
@@ -625,27 +631,20 @@ public class ImageProcessor implements ImageProcessingFacade {
 
         Mat mat = matFromBitmap(bm);
         // First find all the corners in the given image
-        List<Point> points = cornerDetection(mat);
+        List<Point> points = detectCorners(mat);
         // Then, supposing a rectangle exists, find its 4 corners coordinates
-        List<Point> filtered = removePoints(points);
-        List<Point> clockwiseOrderedPoints = orderPoints(filtered);
-        Point upperLeft = clockwiseOrderedPoints.get(1);
-        Point upperRight = clockwiseOrderedPoints.get(2);
-        Point bottomRight = clockwiseOrderedPoints.get(3);
-        Point bottomLeft = clockwiseOrderedPoints.get(0);
+       // List<Point> filtered = removePoints(points);
+        List<Point> clockwiseOrderedPoints = orderPoints(points);
+        Point bottomRight = clockwiseOrderedPoints.get(0);
+        Point upperRight = clockwiseOrderedPoints.get(1);
+        Point upperLeft = clockwiseOrderedPoints.get(2);
+        Point bottomLeft = clockwiseOrderedPoints.get(3);
         consumer.consume(
                 new PointF((float) upperLeft.x, (float) upperLeft.y),
                 new PointF((float) upperRight.x, (float) upperRight.y),
                 new PointF((float) bottomLeft.x, (float) bottomLeft.y),
                 new PointF((float) bottomRight.x, (float) bottomRight.y)
         );
-
-//                new PointF((float) upperLeft.x, (float) upperLeft.y),
-//                new PointF((float) upperRight.x, (float) upperRight.y),
-//                new PointF((float) bottomLeft.x, (float) bottomLeft.y),
-//                new PointF((float) upperRight.x, (float) upperRight.y)
-//        );
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -1128,5 +1127,127 @@ public class ImageProcessor implements ImageProcessingFacade {
 //        Features2d.drawKeypoints(mRgba, pointsMat, mRgba, redColor);
         List<Point> points = pointsMat.toList().stream().map(p -> p.pt).collect(Collectors.toList());
         return points;
+    }
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<Point> detectCorners(Mat image){
+        List<MatOfPoint> squares = new ArrayList<>();
+
+        Mat smallerImg = new Mat(new Size(image.width()/2, image.height()/2),image.type());
+
+        Mat gray = new Mat(image.size(),image.type());
+
+        Mat gray0 = new Mat(image.size(),CvType.CV_8U);
+
+        // down-scale and upscale the image to filter out the noise
+        Imgproc.pyrDown(image, smallerImg, smallerImg.size());
+        Imgproc.pyrUp(smallerImg, image, image.size());
+
+        // find squares in every color plane of the image
+        for( int c = 0; c < 3; c++ )
+        {
+
+            extractChannel(image, gray, c);
+
+            // try several threshold levels
+            for( int l = 1; l < N; l++ )
+            {
+                //Cany removed... Didn't work so well
+
+
+                Imgproc.threshold(gray, gray0, (l+1)*255/N, 255, Imgproc.THRESH_BINARY);
+                List<MatOfPoint> contours=new ArrayList<MatOfPoint>();
+                // find contours and store them all as a list
+                Imgproc.findContours(gray0, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+
+                MatOfPoint approx=new MatOfPoint();
+
+                // test each contour
+                for( int i = 0; i < contours.size(); i++ )
+                {
+                    // approximate contour with accuracy proportional
+                    // to the contour perimeter
+                    approx = approxPolyDP(contours.get(i),  Imgproc.arcLength(new MatOfPoint2f(contours.get(i).toArray()), true)*0.02, true);
+                    // square contours should have 4 vertices after approximation
+                    // relatively large area (to filter out noisy contours)
+                    // and be convex.
+                    // Note: absolute value of an area is used because
+                    // area may be positive or negative - in accordance with the
+                    // contour orientation
+
+                    if( approx.toArray().length == 4 &&
+                            Math.abs(Imgproc.contourArea(approx)) > 1000 &&
+                            Imgproc.isContourConvex(approx) )
+                    {
+                        double maxCosine = 0;
+
+                        for( int j = 2; j < 5; j++ )
+                        {
+                            // find the maximum cosine of the angle between joint edges
+                            double cosine = Math.abs(angle(approx.toArray()[j%4], approx.toArray()[j-2], approx.toArray()[j-1]));
+                            maxCosine = Math.max(maxCosine, cosine);
+                        }
+
+                        // if cosines of all angles are small
+                        // (all angles are ~90 degree) then write quandrange
+                        // vertices to resultant sequence
+                        if( maxCosine < 0.3 )
+                            squares.add(approx);
+                    }
+                }
+            }
+        }
+
+        List<List<Point>> listOfPoints = squares.stream().map(m -> m.toList()).collect(Collectors.toList());
+        LinkedHashSet<List<Point>> hashSet = new LinkedHashSet<>(listOfPoints);
+        ArrayList<List<Point>> lstWithoutDuplicates = new ArrayList<>(hashSet);
+
+        // the largest rectangle is the whole image - remove it
+        lstWithoutDuplicates.removeIf(l ->
+                l.contains(new Point(0,0)) && l.contains(new Point(0, image.rows()-1)) &&
+                        l.contains(new Point(image.cols()-1, 0)) && l.contains(new Point(image.cols()-1, image.rows()-1)));
+
+        List<MatOfPoint> mats = lstWithoutDuplicates.stream().map(l -> new MatOfPoint(l.get(0), l.get(1), l.get(2), l.get(3))).collect(Collectors.toList());
+        // search for next largest rect area
+        MatOfPoint max = mats.stream().max(Comparator.comparing(m->Imgproc.contourArea((Mat) m))).orElseThrow(NoSuchElementException::new);
+        // pts are the points of the largest rectangle
+        List<Point> pts = max.toList();
+        return pts;
+
+    }
+
+
+
+
+
+    void extractChannel(Mat source, Mat out, int channelNum) {
+        List<Mat> sourceChannels=new ArrayList<Mat>();
+        List<Mat> outChannel=new ArrayList<Mat>();
+
+        Core.split(source, sourceChannels);
+
+        outChannel.add(new Mat(sourceChannels.get(0).size(),sourceChannels.get(0).type()));
+
+        Core.mixChannels(sourceChannels, outChannel, new MatOfInt(channelNum,0));
+
+        Core.merge(outChannel, out);
+    }
+
+    MatOfPoint approxPolyDP(MatOfPoint curve, double epsilon, boolean closed) {
+        MatOfPoint2f tempMat=new MatOfPoint2f();
+
+        Imgproc.approxPolyDP(new MatOfPoint2f(curve.toArray()), tempMat, epsilon, closed);
+
+        return new MatOfPoint(tempMat.toArray());
+    }
+
+    double angle( Point pt1, Point pt2, Point pt0 ) {
+        double dx1 = pt1.x - pt0.x;
+        double dy1 = pt1.y - pt0.y;
+        double dx2 = pt2.x - pt0.x;
+        double dy2 = pt2.y - pt0.y;
+        return (dx1*dx2 + dy1*dy2)/Math.sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
     }
 }
