@@ -40,6 +40,7 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
 
     private void onCapturePtocessError(Throwable throwable) {
         Log.d(TAG, MSG_PREF);
+        Log.d(TAG, throwable.toString());
         throwable.printStackTrace();
     }
 
