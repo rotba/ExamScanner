@@ -261,8 +261,8 @@ public class CornerDetectionCardFragment extends Fragment {
         }
         @Override
         public void lay(View upperLeft, View upperRight, View bottomRight, View bottomLeft, CornerDetectedCapture cdc) {
-            float xScale = ((float) iv.getMeasuredWidth()) / ((float) cdc.getBitmap().getWidth());
-            float yScale = ((float) iv.getMeasuredHeight()) / ((float) cdc.getBitmap().getHeight());
+            float xScale = (((float) iv.getMeasuredWidth()) / ((float) cdc.getBitmap().getWidth()))/2;
+            float yScale = (((float) iv.getMeasuredHeight()) / ((float) cdc.getBitmap().getHeight()))/2;
 //            layPoint(upperRight, (int)(cdc.getUpperLeft().x*xScale), (int)(cdc.getUpperLeft().y*yScale));
 //            layPoint(upperLeft, (int)(cdc.getUpperRight().x*xScale), (int)(cdc.getUpperRight().y*yScale));
 //            layPoint(bottomLeft, (int)(cdc.getBottomLeft().x*xScale), (int)(cdc.getBottomLeft().y*yScale));

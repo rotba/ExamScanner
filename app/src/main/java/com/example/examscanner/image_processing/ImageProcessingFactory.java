@@ -1,5 +1,7 @@
 package com.example.examscanner.image_processing;
 
+import android.content.Context;
+
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 public class ImageProcessingFactory {

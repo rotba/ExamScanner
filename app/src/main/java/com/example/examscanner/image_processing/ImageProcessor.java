@@ -1144,6 +1144,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     public List<Point> detectCorners(Mat image){
         List<MatOfPoint> squares = new ArrayList<>();
 
+        Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2HSV);
         Mat smallerImg = new Mat(new Size(image.width()/2, image.height()/2),image.type());
 
         Mat gray = new Mat(image.size(),image.type());
