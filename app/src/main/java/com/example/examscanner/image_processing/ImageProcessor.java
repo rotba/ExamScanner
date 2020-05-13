@@ -531,6 +531,7 @@
 
 package com.example.examscanner.image_processing;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
@@ -621,6 +622,19 @@ public class ImageProcessor implements ImageProcessingFacade {
     public ImageProcessor() {
 
         questionTemplate = loadFromResource(R.drawable.template);
+    }
+
+    protected ImageProcessor(Context c) {
+
+        Mat img = null;
+        try {
+            img = Utils.loadResource(c, R.drawable.template);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        questionTemplate = img;
     }
 
 

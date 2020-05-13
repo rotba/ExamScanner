@@ -42,7 +42,7 @@ public class ImageProcessorTest {
     @Before
     public void setUp() {
         OpenCVLoader.initDebug();
-        imageProcessor = new ImageProcessor();
+        imageProcessor = new ImageProcessor(getApplicationContext());
         pdfTest = loadFromResource(R.drawable.exam);
         questionTemplate = loadFromResource(R.drawable.template);
         // pdfTest = loadFromAssets("test_jpeg_diagonal1");
