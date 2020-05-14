@@ -839,6 +839,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
 
         if(bitmap == null || amountOfQuestions <= 0 || consumer == null)
@@ -931,6 +932,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         return chunkedImages;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int numOfQuestions) {
 
         Size scaleSize = new Size(2550, 3300);
@@ -959,23 +961,29 @@ public class ImageProcessor implements ImageProcessingFacade {
             // x + -> right direction
             // y + -> down direction
             matchLoc = mmr.maxLoc;
+            Mat img_result = img_exam.clone();
 
             if (i <= numOfQuestions) {
-                Mat img_result = img_exam.clone();
-                Imgproc.rectangle(img_exam, matchLoc, new Point(matchLoc.x + img_template.cols(),
-                        matchLoc.y + img_template.rows()), new Scalar(0, 0, 255), -1);
-
-                // find the answer
-                // part the matching image into 5
-                Bitmap img_bitmap = Bitmap.createBitmap(img_result.cols(), img_result.rows(), Bitmap.Config.ARGB_8888);
-                Utils.matToBitmap(img_result, img_bitmap);
-                Bitmap bm = Bitmap.createBitmap(img_bitmap, (int) matchLoc.x, (int) matchLoc.y, img_template.cols(), img_template.rows());
-                ArrayList<Bitmap> imgChunks = splitImage(bm, 5);
-                int correctAns = markedAnswer(imgChunks);
-                answersMap.put(matchLoc, correctAns + 1);
-                // erase this matching to prevent infinite loop
-                Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + img_template.cols(),
-                        matchLoc.y + img_template.rows()), new Scalar(0, 0, 0), -1);
+                if(!checkOverlapping(answersMap, matchLoc)) {
+                    Imgproc.rectangle(img_exam, matchLoc, new Point(matchLoc.x + img_template.cols(),
+                            matchLoc.y + img_template.rows()), new Scalar(0, 0, 255), -1);
+                    // find the answer
+                    // part the matching image into 5
+                    Bitmap img_bitmap = Bitmap.createBitmap(img_result.cols(), img_result.rows(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(img_result, img_bitmap);
+                    Bitmap bm = Bitmap.createBitmap(img_bitmap, (int) matchLoc.x, (int) matchLoc.y, img_template.cols(), img_template.rows());
+                    ArrayList<Bitmap> imgChunks = splitImage(bm, 5);
+                    int correctAns = markedAnswer(imgChunks);
+                    answersMap.put(matchLoc, correctAns + 1);
+                    // erase this matching to prevent infinite loop
+                    Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + img_template.cols(),
+                            matchLoc.y + img_template.rows()), new Scalar(0, 0, 0), -1);
+                }
+                else{
+                    Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + img_template.cols(),
+                            matchLoc.y + img_template.rows()), new Scalar(0, 0, 0), -1);
+                    i--;
+                }
             } else {
                 break; // No more results within tolerance, break search
             }
@@ -983,6 +991,11 @@ public class ImageProcessor implements ImageProcessingFacade {
         return answersMap;
 
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private boolean checkOverlapping(Map<Point, Integer> answersMap, Point matchLoc) {
+        return answersMap.keySet().stream().anyMatch(p -> p.x == matchLoc.x && Math.abs(p.y - matchLoc.y) < 70);
     }
 
 
