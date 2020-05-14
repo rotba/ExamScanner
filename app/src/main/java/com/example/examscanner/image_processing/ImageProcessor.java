@@ -1223,7 +1223,9 @@ public class ImageProcessor implements ImageProcessingFacade {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<Point> detectCorners(Mat image){
+    public List<Point> detectCorners(Mat image_input){
+
+        Mat image = image_input.clone();
         List<MatOfPoint> squares = new ArrayList<>();
 
         Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2HSV);

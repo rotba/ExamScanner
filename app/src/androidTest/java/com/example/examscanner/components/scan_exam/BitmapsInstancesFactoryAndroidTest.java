@@ -23,6 +23,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static final String testJpgReal2 = "test_jpg_real2.jpg";
     private static final String testJpegReal1 = "test_jpg_real1.jpeg";
     private static  final String getTestJpegDiagonal1 = "test_jpeg_diagonal1.jpeg";
+    private static  final String getTestJpegBlackBackgroud = "black_back.jpg";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -45,6 +46,9 @@ public class BitmapsInstancesFactoryAndroidTest {
 
     public static Bitmap getTestJpegReal1() {
         return getBitmapFromAssets(testJpegReal1);
+    }
+    public static Bitmap getTestJpgBlackBack() {
+        return getBitmapFromAssets(getTestJpegBlackBackgroud);
     }
 
     public static Bitmap getTestJpg1Marked() {
