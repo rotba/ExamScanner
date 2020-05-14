@@ -74,6 +74,7 @@ public class CreateExamFragmentTest extends AbstractComponentInstrumentedTest {
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText("20"));
         onView(withId(R.id.button_create_exam_add_version)).perform(click());
         Utils.sleepScanAnswersTime();
+        Utils.sleepScanAnswersTime();
         onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("1")));
     }
 }
