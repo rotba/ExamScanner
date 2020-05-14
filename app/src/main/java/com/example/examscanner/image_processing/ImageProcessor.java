@@ -959,11 +959,12 @@ public class ImageProcessor implements ImageProcessingFacade {
             // x + -> right direction
             // y + -> down direction
             matchLoc = mmr.maxLoc;
-            // threshold chosen empirically
+
             if (i <= numOfQuestions) {
                 Mat img_result = img_exam.clone();
                 Imgproc.rectangle(img_exam, matchLoc, new Point(matchLoc.x + img_template.cols(),
                         matchLoc.y + img_template.rows()), new Scalar(0, 0, 255), -1);
+
                 // find the answer
                 // part the matching image into 5
                 Bitmap img_bitmap = Bitmap.createBitmap(img_result.cols(), img_result.rows(), Bitmap.Config.ARGB_8888);
@@ -1059,7 +1060,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
 
-    private void sortQuestions(Map<Point, Integer> answersMap, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, int delta_x, int delta_y, int img_cols, int img_rows) {
+    void sortQuestions(Map<Point, Integer> answersMap, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, int delta_x, int delta_y, int img_cols, int img_rows) {
         // sort points:
         // x value is the most significant
         class PointComparator implements Comparator {
@@ -1082,7 +1083,6 @@ public class ImageProcessor implements ImageProcessingFacade {
         Set<Point> keys = answersMap.keySet();
         ArrayList<Point> keysList = new ArrayList<>(keys);
         Collections.sort(keysList, pointComp);
-        Map<Integer, Integer> ret = new HashMap<>();
         int q_num = 0;
         for (Point p : keysList) {
             answersIds[q_num] = q_num + 1;
@@ -1091,6 +1091,42 @@ public class ImageProcessor implements ImageProcessingFacade {
             tops[q_num] = (float) (p.y / img_cols);
             rights[q_num] = (float) ((p.x + delta_x) / img_rows);
             bottoms[q_num] = (float) ((p.y + delta_y) / img_cols);
+            q_num++;
+        }
+    }
+
+    // JUST FOR TEST
+    void sortiQuestions(Map<Point, Integer> answersMap, int[] answersIds, double[] lefts, double[] tops, double[] rights, double[] bottoms, int[] selections, int delta_x, int delta_y) {
+        // sort points:
+        // x value is the most significant
+        class PointComparator implements Comparator {
+            public int compare(Object o1, Object o2) {
+                Point p1 = (Point) o1;
+                Point p2 = (Point) o2;
+
+                if (p1.x == p2.x && p1.y == p2.y)
+                    return 0;
+                else if (p1.x > p2.x)
+                    return 1;
+                else if (p1.x == p2.x && p1.y > p2.y)
+                    return 1;
+                else
+                    return -1;
+            }
+        }
+
+        Comparator pointComp = new PointComparator();
+        Set<Point> keys = answersMap.keySet();
+        ArrayList<Point> keysList = new ArrayList<>(keys);
+        Collections.sort(keysList, pointComp);
+        int q_num = 0;
+        for (Point p : keysList) {
+            answersIds[q_num] = q_num + 1;
+            selections[q_num] = answersMap.get(p);
+            lefts[q_num] = (p.x );
+            tops[q_num] =  (p.y );
+            rights[q_num] =  ((p.x + delta_x));
+            bottoms[q_num] = ((p.y + delta_y) );
             q_num++;
         }
     }

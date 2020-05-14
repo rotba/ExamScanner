@@ -243,6 +243,14 @@ public class ImageProcessorTest {
                         4, 3, 4, 3, 2, 2, 4, 2, 3 ,2 ,2 ,1 ,1, 2 ,1 ,1, 4, 1 ,3, 4 ,5, 4 ,3 ,5 ,2));
         Mat exam_50_q = loadFromResource(R.drawable.exam_50_q);
         Map<Point,Integer> answersMap = imageProcessor.findQuestions(exam_50_q, questionTemplate, 50);
+
+        int answersIds[] = new int[50];
+        double lefts[] = new double[50];
+        double tops[] = new double[50];
+        double rights[] = new double[50];
+        double bottoms[] = new double[50];
+        int selections[] = new int[50];
+        imageProcessor.sortiQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate.rows());
         assert answersMap.size() == 50 && answersMap.values().equals(answers);
     }
 
