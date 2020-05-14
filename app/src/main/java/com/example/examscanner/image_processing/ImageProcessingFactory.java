@@ -7,10 +7,9 @@ import com.example.examscanner.stubs.BitmapInstancesFactory;
 public class ImageProcessingFactory {
     private static ImageProcessingFacade testInstance;
     private static ImageProcessingFacade stubInstance;
-    private BitmapInstancesFactory bmFact;
+//    private BitmapInstancesFactory bmFact;
 
-    public ImageProcessingFactory(BitmapInstancesFactory bmFact) {//TODO - remove dependency
-        this.bmFact = bmFact;
+    public ImageProcessingFactory() {//TODO - remove dependency
     }
 
     public ImageProcessingFacade create(){

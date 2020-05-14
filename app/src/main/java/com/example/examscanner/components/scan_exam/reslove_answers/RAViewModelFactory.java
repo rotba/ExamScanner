@@ -20,7 +20,7 @@ public class RAViewModelFactory implements ViewModelProvider.Factory {
 
     public RAViewModelFactory(FragmentActivity fragmentActivity) {
         this.fragmentActivity = fragmentActivity;
-        this.imageProcessor = new ImageProcessingFactory(new BitmapInstancesFactory(fragmentActivity)).create();
+        this.imageProcessor = new ImageProcessingFactory().create();
     }
 
 //    public ResolveAnswersViewModelFactory(FragmentActivity activity, ImageProcessingFacade imageProcessor) {

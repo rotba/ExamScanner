@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -69,7 +70,20 @@ public class BitmapsInstancesFactoryAndroidTest {
     }
 
     public static Bitmap getTestAuthPic1Marked() {
-        return getBitmapFromAssets(testAuthPic1);
+        Matrix matrix = new Matrix();
+
+        matrix.postRotate(90);
+
+        final Bitmap bitmapFromAssets = getBitmapFromAssets(testAuthPic1);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
+                bitmapFromAssets,
+                bitmapFromAssets.getWidth(),
+                bitmapFromAssets.getHeight(),
+                true
+        );
+
+
+        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
     }
 
     @Nullable

@@ -29,7 +29,7 @@ public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T) new CaptureViewModel(
                 new CDCRepositoryFacrory().create(),
-                new ImageProcessingFactory(new BitmapInstancesFactory(activity)).create(),
+                new ImageProcessingFactory().create(),
                 sessionId
         );
     }

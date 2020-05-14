@@ -28,7 +28,7 @@ public class CDViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T)new CornerDetectionViewModel(
-                new ImageProcessingFactory(new BitmapInstancesFactory(activity)).create(),
+                new ImageProcessingFactory().create(),
                 new CDCRepositoryFacrory().create(),
                 new ScannedCaptureRepositoryFactory().create(),
                 exam
