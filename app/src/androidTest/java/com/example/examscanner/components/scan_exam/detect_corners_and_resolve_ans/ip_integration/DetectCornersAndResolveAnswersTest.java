@@ -8,7 +8,6 @@ import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -30,7 +29,7 @@ public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveA
 
     @Override
     protected CornerDetectionContext1Setuper createContext() {
-        return new CornerDetectionContext1Setuper();
+        return new CornerDetectionContext1Setuper(1);
     }
 
     protected void navFromHomeToDetecteCornersUnderTestExam() {
@@ -40,7 +39,7 @@ public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveA
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
     }
 
-    @Ignore
+
     @Test
     public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionRealIP() {
         testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(null);

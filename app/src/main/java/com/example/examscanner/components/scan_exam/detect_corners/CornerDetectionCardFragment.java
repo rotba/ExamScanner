@@ -1,6 +1,8 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.annotation.SuppressLint;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -72,6 +74,43 @@ public class CornerDetectionCardFragment extends Fragment {
             pb.setVisibility(View.INVISIBLE);
         }
         return root;
+    }
+
+    private void updateCDC() {
+        CornerDetectedCapture cdc = cornerDetectionViewModel.getCDCById(captureId).getValue();
+        ConstraintLayout upperLeft = (ConstraintLayout) getActivity().findViewById(R.id.constraintLayout_upper_left_container);
+        ConstraintLayout upperRight = (ConstraintLayout) getActivity().findViewById(R.id.constraintLayout_upper_right_container);
+        ConstraintLayout bottomRight = (ConstraintLayout) getActivity().findViewById(R.id.constraintLayout_bottom_right_container);
+        ConstraintLayout bottomLeft = (ConstraintLayout) getActivity().findViewById(R.id.constraintLayout_bottom_left_container);
+        ImageView iv = (ImageView) getActivity().findViewById(R.id.imageView2_corner_detected_capture);
+        float xRScale = ((float) cdc.getBitmap().getWidth()) / (((float) iv.getMeasuredWidth()));
+        float yRScale = ((float) cdc.getBitmap().getHeight()) / (((float) iv.getMeasuredHeight()));
+        cdc.setUpperLeft(
+                new Point(
+                        ((int)((upperLeft.getX() +upperLeft.getMeasuredWidth()/2)* xRScale)) ,
+                        ((int)((upperLeft.getY() +upperLeft.getMeasuredHeight()/2)*yRScale))
+                )
+        );
+        cdc.setUpperRight(
+                new Point(
+                        ((int)((upperRight.getX() +upperRight.getMeasuredWidth()/2)* xRScale)),
+                        ((int)((upperRight.getY() +upperRight.getMeasuredHeight()/2)*yRScale))
+                )
+        );
+        cdc.setBottomRight(
+                new Point(
+                        ((int)((bottomRight.getX() +bottomRight.getMeasuredWidth()/2)* xRScale)),
+                        ((int)((bottomRight.getY() +bottomRight.getMeasuredHeight()/2)*yRScale))
+                )
+        );
+        cdc.setBottomLeft(
+                new Point(
+                        ((int)((bottomLeft.getX() +bottomLeft.getMeasuredWidth()/2)* xRScale)),
+                        ((int)((bottomLeft.getY() +bottomLeft.getMeasuredHeight()/2)*yRScale))
+                )
+        );
+        cornerDetectionViewModel.getCDCById(captureId).setValue(cdc);
+        Log.d(TAG,MSG_PREF+ "::updateCDC");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -189,6 +228,7 @@ public class CornerDetectionCardFragment extends Fragment {
                     dY = motionEvent.getRawY();
                     break;
                 default:
+                    updateCDC();
                     return false;
             }
             return true;
@@ -200,6 +240,7 @@ public class CornerDetectionCardFragment extends Fragment {
 //            return absoluteLeft <= rawX && rawX<= absoluteRight && absoluteTop<= rawY && rawY <=absoluteBottom;
         }
     }
+
 
     private abstract class VersionNumberWatcher implements TextWatcher {
 
@@ -221,11 +262,11 @@ public class CornerDetectionCardFragment extends Fragment {
         public abstract void onVersionReceived(int verNum);
     }
 
-    private class PointsLayingFactory{
-        public  PointsLayingStrategy create(ImageView iv){
-            if(iv.getScaleType()== ImageView.ScaleType.FIT_XY){
+    private class PointsLayingFactory {
+        public PointsLayingStrategy create(ImageView iv) {
+            if (iv.getScaleType() == ImageView.ScaleType.FIT_XY) {
                 return new AdjustingPointsLayingStrategy(iv);
-            }else{
+            } else {
                 return new NotAdjustingPointsLayingStrategy(iv);
             }
         }
@@ -233,32 +274,39 @@ public class CornerDetectionCardFragment extends Fragment {
 
     private abstract class PointsLayingStrategy {
         protected ImageView iv;
+
         public PointsLayingStrategy(ImageView iv) {
             this.iv = iv;
         }
+
         public abstract void lay(View upperLeft, View upperRight, View bottomRight, View bottomLeft, CornerDetectedCapture cdc);
+
         protected void layPoint(View v, int x, int y) {
-            v.animate().x(x).y(y).setDuration(0).start();
+            v.animate().x(x - v.getMeasuredWidth() / 2).y(y - v.getMeasuredHeight() / 2).setDuration(0).start();
         }
     }
+
     private class NotAdjustingPointsLayingStrategy extends PointsLayingStrategy {
         public NotAdjustingPointsLayingStrategy(ImageView iv) {
             super(iv);
         }
+
         @Override
         public void lay(View upperLeft, View upperRight, View bottomRight, View bottomLeft, CornerDetectedCapture cdc) {
             float xScale = ((float) iv.getMeasuredWidth()) / ((float) cdc.getBitmap().getWidth());
             int delta = (iv.getMeasuredHeight() - cdc.getBitmap().getHeight()) / 2;
-            layPoint(upperRight, (int)(cdc.getUpperLeft().x*xScale), (int)(cdc.getUpperLeft().y+delta));
-            layPoint(upperLeft, (int)(cdc.getUpperRight().x*xScale), (int)(cdc.getUpperRight().y+delta));
-            layPoint(bottomRight, (int)(cdc.getBottomRight().x*xScale), (int)(cdc.getBottomRight().y+delta));
-            layPoint(bottomLeft, (int)(cdc.getBottomLeft().x*xScale), (int)(cdc.getBottomLeft().y+delta));
+            layPoint(upperRight, (int) (cdc.getUpperLeft().x * xScale), (int) (cdc.getUpperLeft().y + delta));
+            layPoint(upperLeft, (int) (cdc.getUpperRight().x * xScale), (int) (cdc.getUpperRight().y + delta));
+            layPoint(bottomRight, (int) (cdc.getBottomRight().x * xScale), (int) (cdc.getBottomRight().y + delta));
+            layPoint(bottomLeft, (int) (cdc.getBottomLeft().x * xScale), (int) (cdc.getBottomLeft().y + delta));
         }
     }
-    private  class AdjustingPointsLayingStrategy extends PointsLayingStrategy {
+
+    private class AdjustingPointsLayingStrategy extends PointsLayingStrategy {
         public AdjustingPointsLayingStrategy(ImageView iv) {
             super(iv);
         }
+
         @Override
         public void lay(View upperLeft, View upperRight, View bottomRight, View bottomLeft, CornerDetectedCapture cdc) {
             float xScale = (((float) iv.getMeasuredWidth()) / ((float) cdc.getBitmap().getWidth()));
@@ -269,10 +317,10 @@ public class CornerDetectionCardFragment extends Fragment {
 //            upperRight.setVisibility(View.INVISIBLE);
 //            upperLeft.setVisibility(View.INVISIBLE);
 //            bottomLeft.setVisibility(View.INVISIBLE);
-            layPoint(bottomRight, (int)(cdc.getBottomRight().x*xScale), (int)(cdc.getBottomRight().y*yScale));
-            layPoint(upperRight, (int)(cdc.getUpperRight().x*xScale), (int)(cdc.getUpperRight().y*yScale));
-            layPoint(upperLeft, (int)(cdc.getUpperLeft().x*xScale), (int)(cdc.getUpperLeft().y*yScale));
-            layPoint(bottomLeft, (int)(cdc.getBottomLeft().x*xScale), (int)(cdc.getBottomLeft().y*yScale));
+            layPoint(bottomRight, (int) (cdc.getBottomRight().x * xScale), (int) (cdc.getBottomRight().y * yScale));
+            layPoint(upperRight, (int) (cdc.getUpperRight().x * xScale), (int) (cdc.getUpperRight().y * yScale));
+            layPoint(upperLeft, (int) (cdc.getUpperLeft().x * xScale), (int) (cdc.getUpperLeft().y * yScale));
+            layPoint(bottomLeft, (int) (cdc.getBottomLeft().x * xScale), (int) (cdc.getBottomLeft().y * yScale));
 
         }
     }

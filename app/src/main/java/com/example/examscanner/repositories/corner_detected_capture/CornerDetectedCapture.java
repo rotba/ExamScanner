@@ -109,4 +109,20 @@ public class CornerDetectedCapture {
     public boolean hasVersion() {
         return versionId!=null;
     }
+
+    public void setUpperLeft(Point point) {
+        upperLeft = point;
+    }
+
+    public void setUpperRight(Point point) {
+        upperRight = point;
+    }
+
+    public void setBottomRight(Point point) {
+        bottomRight  = point;
+    }
+
+    public void setBottomLeft(Point point) {
+        bottomLeft = point;
+    }
 }

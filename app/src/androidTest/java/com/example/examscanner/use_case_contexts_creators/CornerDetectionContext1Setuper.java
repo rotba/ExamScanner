@@ -2,10 +2,6 @@ package com.example.examscanner.use_case_contexts_creators;
 
 import android.graphics.PointF;
 
-import com.example.examscanner.authentication.CalimentAuthenticationHandlerFactory;
-import com.example.examscanner.authentication.state.State;
-import com.example.examscanner.authentication.state.StateFactory;
-import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
@@ -20,15 +16,10 @@ import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
-import com.example.examscanner.stubs.ExamRepositoryStub;
-import com.example.examscanner.stubs.ExamStubFactory;
 
 import java.util.ArrayList;
 
-import io.reactivex.observers.TestObserver;
-
 import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
-import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 
 public class CornerDetectionContext1Setuper {
     private Repository<Exam> examRepository;
@@ -39,6 +30,15 @@ public class CornerDetectionContext1Setuper {
     private Exam e;
     private int dinaBarzilayVersion;
     private int theDevilVersion;
+    private Runnable onSetup;
+
+    public CornerDetectionContext1Setuper() {}
+
+    public CornerDetectionContext1Setuper(int num) {
+        if(num==1){
+            onSetup = ()->this.addAuthPic1();
+        }
+    }
 //    private String uId;
 
     public void setup(){
@@ -73,6 +73,7 @@ public class CornerDetectionContext1Setuper {
                 cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession));
             }
         });
+        onSetup.run();
     }
 
     public ImageProcessingFacade getImageProcessor() {
@@ -101,5 +102,13 @@ public class CornerDetectionContext1Setuper {
 
     public void tearDown() {
 //        ((ExamRepositoryStub)examRepository).tearDown();
+    }
+    public void addAuthPic1(){
+        imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestJpg1(), new DetectCornersConsumer() {
+            @Override
+            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
+                cdcRepo.create(new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getTestAuthPic1Marked(), upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession));
+            }
+        });
     }
 }
