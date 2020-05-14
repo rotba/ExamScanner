@@ -995,7 +995,9 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private boolean checkOverlapping(Map<Point, Integer> answersMap, Point matchLoc) {
-        return answersMap.keySet().stream().anyMatch(p -> p.x == matchLoc.x && Math.abs(p.y - matchLoc.y) < 70);
+        boolean temp =  answersMap.keySet().stream().anyMatch(p -> p.x == matchLoc.x && Math.abs(p.y - matchLoc.y) < 70);
+        temp = temp || answersMap.keySet().stream().anyMatch(p ->Math.abs(p.x - matchLoc.x) < 70 && p.x != matchLoc.x);
+        return temp;
     }
 
 
