@@ -121,6 +121,8 @@ public class CreateExamFragment extends Fragment {
 
     public void onAddVersion(View v) {
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
+        viewModel.holdNumOfQuestions(((EditText) (getActivity()
+                .findViewById(R.id.editText_create_exam_num_of_questions))).getText());
         Completable.fromAction(() -> viewModel.addVersion())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

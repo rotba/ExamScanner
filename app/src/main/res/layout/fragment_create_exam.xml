@@ -58,9 +58,9 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:padding="8dp"
         android:hint="@string/hint_calculus"
         android:inputType="textPersonName"
+        android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -73,14 +73,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.13" />
+        app:layout_constraintGuide_percent="0.11" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.22" />
+        app:layout_constraintGuide_percent="0.17" />
 
     <TextView
         android:id="@+id/textViewcreate_exam_term_term"
@@ -142,17 +142,18 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:text="@string/semester"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <RadioGroup
         android:id="@+id/radioGroup_semester"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="139dp"
+        android:layout_height="26dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -160,14 +161,14 @@
 
         <RadioButton
             android:id="@+id/radioButton_create_exam_semester_fall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="66dp"
+            android:layout_height="match_parent"
             android:text="@string/fall" />
 
         <RadioButton
             android:id="@+id/radioButton_create_exam_semester_spring"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/spring" />
     </RadioGroup>
 
@@ -197,9 +198,9 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:padding="8dp"
         android:hint="@string/year_2013"
         android:inputType="textPersonName"
+        android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -262,11 +263,11 @@
         android:layout_height="32dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="12dp"
-        android:textColor="@color/colorAccent"
-        android:ems="10"
         android:autoSizeTextType="uniform"
+        android:ems="10"
         android:gravity="center"
         android:inputType="number"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toStartOf="@+id/textView_create_exam_versions_added" />
 
@@ -366,5 +367,39 @@
         app:layout_constraintEnd_toStartOf="@+id/textView_number_of_versions_added"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.22" />
+
+    <TextView
+        android:id="@+id/textView_create_exam_num_of_questions"
+        android:layout_width="0dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/nums_questions"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/guideline13"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/editText_create_exam_num_of_questions"
+        android:layout_width="128dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline13"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

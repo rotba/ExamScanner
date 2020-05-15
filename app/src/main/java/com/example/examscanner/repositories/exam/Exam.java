@@ -25,6 +25,7 @@ public class Exam {
     private long sessionId;
     private List<Version> newVersions;
     private Future<List<Version>> fVersions;
+    private int numOfQuestions;
 
     public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year) {
         this.id = id;
@@ -145,6 +146,14 @@ public class Exam {
 
     public String[] getGradersIds() {
         return new String[0];
+    }
+
+    public void setNumOfQuestions(int num) {
+        this.numOfQuestions = num;
+    }
+
+    public int getNumOfQuestions() {
+        return numOfQuestions;
     }
 
     public class NuSuchVerion extends RuntimeException {

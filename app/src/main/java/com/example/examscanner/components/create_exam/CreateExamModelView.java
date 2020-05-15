@@ -2,6 +2,7 @@ package com.example.examscanner.components.create_exam;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.text.Editable;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
@@ -63,7 +64,7 @@ public class CreateExamModelView extends ViewModel {
 
     }
     public void addVersion() {
-        imageProcessor.scanAnswers(currentVersionBitmap, new ScanAnswersConsumer() {
+        imageProcessor.scanAnswers(currentVersionBitmap, examCreated.getNumOfQuestions(), new ScanAnswersConsumer() {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 ScannedCapture scannedCapture = new ScannedCapture(-1,null,numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections);
@@ -110,5 +111,9 @@ public class CreateExamModelView extends ViewModel {
 
     public Integer getCurrentVersionNumber() {
         return currentVersionNumber;
+    }
+
+    public void holdNumOfQuestions(String text) {
+        examCreated.setNumOfQuestions(Integer.parseInt(text));
     }
 }
