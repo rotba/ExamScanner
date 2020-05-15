@@ -27,6 +27,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static  final String getTestJpegBlackBackgroud = "black_back.jpg";
     private static final String testAuthPic1= "test_auth_pic_1.jpg";
     private static final String test50Qs= "exam_50_q.jpg";
+    private static final String test50QsAuth= "exam_50_q_auth.jpg";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -46,6 +47,11 @@ public class BitmapsInstancesFactoryAndroidTest {
     public static Bitmap getTestJpgReal2() {
         return getBitmapFromAssets(testJpgReal2);
     }
+
+    public static Bitmap getExam50QsAuth() {
+        return getBitmapFromAssets(test50QsAuth);
+    }
+
 
     public static Bitmap getTestJpegReal1() {
         return getBitmapFromAssets(testJpegReal1);

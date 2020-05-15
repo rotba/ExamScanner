@@ -887,7 +887,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         Map<Point, Integer> answersMap = new HashMap<>();
         for (int i = 0; i < numOfQuestions; i++) {
             Point matchLoc = new Point(leftMostXs[i], upperMostYs[i]);
-            Rect rect = new Rect((int) matchLoc.x, (int) matchLoc.y, img_template.cols(), img_template.rows());
+            Rect rect = new Rect((int) matchLoc.x, (int) matchLoc.y, (img_template.cols()*img_exam.width())/2550, (img_template.rows()*img_exam.height())/3300);
             Mat currAns = img_exam.submat(rect);
             List<Mat> imgChunks = splitImage2(currAns, 5);
             int correctAns = markedAnswer2(imgChunks);
@@ -1102,10 +1102,10 @@ public class ImageProcessor implements ImageProcessingFacade {
         for (Point p : keysList) {
             answersIds[q_num] = q_num + 1;
             selections[q_num] = answersMap.get(p);
-            lefts[q_num] = (float) (p.x / img_rows);
-            tops[q_num] = (float) (p.y / img_cols);
-            rights[q_num] = (float) ((p.x + delta_x) / img_rows);
-            bottoms[q_num] = (float) ((p.y + delta_y) / img_cols);
+            lefts[q_num] =  ((float)p.x / (float)img_rows);
+            tops[q_num] = ((float)p.y / (float)img_cols);
+            rights[q_num] =  ((float)(p.x + delta_x) / (float)img_rows);
+            bottoms[q_num] =  ((float)(p.y + delta_y) / (float)img_cols);
             q_num++;
         }
     }

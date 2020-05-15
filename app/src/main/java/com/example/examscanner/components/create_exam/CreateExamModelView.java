@@ -78,10 +78,10 @@ public class CreateExamModelView extends ViewModel {
                                     -1,
                                     v,ans.getAnsNum(),
                                     ans.getSelection(),
-                                    (int)ans.getUpperLeft().x*currentVersionBitmap.getWidth(),
-                                    (int)ans.getUpperLeft().y*currentVersionBitmap.getHeight(),
-                                    (int)ans.getBottomRight().x*currentVersionBitmap.getWidth(),
-                                    (int)ans.getBottomRight().y*currentVersionBitmap.getHeight()
+                                    (int)(ans.getUpperLeft().x*currentVersionBitmap.getWidth()),
+                                    (int)(ans.getUpperLeft().y*currentVersionBitmap.getHeight()),
+                                    (int)(ans.getBottomRight().x*currentVersionBitmap.getWidth()),
+                                    (int)(ans.getBottomRight().y*currentVersionBitmap.getHeight())
                             )
                     );
                 }
