@@ -26,7 +26,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static  final String getTestJpegDiagonal1 = "test_jpeg_diagonal1.jpeg";
     private static  final String getTestJpegBlackBackgroud = "black_back.jpg";
     private static final String testAuthPic1= "test_auth_pic_1.jpg";
-    private static final String test50Qs= "exam50Qs.jpg";
+    private static final String test50Qs= "exam_50_q.jpg";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);

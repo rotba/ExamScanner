@@ -16,12 +16,16 @@ import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.stubs.ImageProcessorStub;
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.opencv.android.OpenCVLoader;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -37,12 +41,14 @@ public class CreateExamModelViewTest {
 
     @Before
     public void setUp() throws Exception {
+        OpenCVLoader.initDebug();
         AppDatabaseFactory.setTestMode();
         imageProcessor = new ImageProcessorStub();
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(new ImageProcessor(getApplicationContext()));
         realIP = new ImageProcessingFactory().create();
         out  = new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
-                imageProcessor,
+                realIP,
                 StateFactory.get(),
                 0
         );
@@ -81,20 +87,20 @@ public class CreateExamModelViewTest {
 
     @Test
     public void testAddVersion2RealIP(){
-        final int[] expectedNumOfAnswers = new int[1];
+        out.holdNumOfQuestions("50");
         int numOfQuestions = out.getExam().getNumOfQuestions();
         Bitmap bm = BitmapsInstancesFactoryAndroidTest.getExam50Qs();
-        realIP.scanAnswers(bm, numOfQuestions, new ScanAnswersConsumer() {
-            @Override
-            public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                expectedNumOfAnswers[0] = numOfAnswersDetected;
-                for (int i = 0; i <selections.length ; i++) {
-                    if (selections[i]==-1)
-                        expectedNumOfAnswers[0]--;
-                }
-            }
-        });
-        out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
+//        realIP.scanAnswers(bm, numOfQuestions, new ScanAnswersConsumer() {
+//            @Override
+//            public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
+//                expectedNumOfAnswers[0] = numOfAnswersDetected;
+//                for (int i = 0; i <selections.length ; i++) {
+//                    if (selections[i]==-1)
+//                        expectedNumOfAnswers[0]--;
+//                }
+//            }
+//        });
+        out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getExam50Qs());
         out.holdVersionNumber(3);
         out.addVersion();
         out.create("testAddVersion()_courseName","A","Fall","2020");
@@ -103,7 +109,13 @@ public class CreateExamModelViewTest {
         Exam theExam = exams.get(0);
         assertTrue(theExam.getVersions().size()==1);
         final Version version = theExam.getVersions().get(0);
-        assertEquals(expectedNumOfAnswers[0] ,version.getQuestions().size());
+        ArrayList<Integer> realAnswers = new ArrayList<Integer>(
+                Arrays.asList(4, 3, 4, 3, 5, 1 ,5, 2, 1, 3, 4, 1, 5, 2, 4, 1, 5, 5, 1, 2, 1 ,2, 1, 4, 3,
+                        4, 3, 4, 3, 2, 2, 4, 2, 3 ,2 ,2 ,1 ,1, 2 ,1 ,1, 4, 1 ,3, 4 ,5, 4 ,3 ,5 ,2));
+        assertEquals(50 ,version.getQuestions().size());
+        for(int i =0 ; i < version.getQuestions().size(); i++){
+            assertTrue(realAnswers.get(i) == version.getQuestionByNumber(i+1).getAns());
+        }
     }
 
 }

@@ -624,7 +624,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         questionTemplate = loadFromResource(R.drawable.template);
     }
 
-    protected ImageProcessor(Context c) {
+    public ImageProcessor(Context c) {
 
         Mat img = null;
         try {

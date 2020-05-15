@@ -28,6 +28,14 @@ public class Version {
         this.fQuestions = fQuestions;
     }
 
+    public Question getQuestionByNumber(int i){
+        for(Question q : getQuestions()){
+            if(q.getNum() == i)
+                return q;
+        }
+        throw new NoSuchQuestion();
+    }
+
     public int getNum() {
         return num;
     }
@@ -129,5 +137,8 @@ public class Version {
 
     public void setQuestionsFuture(Future<List<Question>> questionsFuture) {
         this.fQuestions = questionsFuture;
+    }
+
+    public class NoSuchQuestion extends RuntimeException {
     }
 }
