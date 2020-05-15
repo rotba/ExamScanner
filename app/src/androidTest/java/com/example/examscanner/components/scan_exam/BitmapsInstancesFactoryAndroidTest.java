@@ -26,6 +26,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static  final String getTestJpegDiagonal1 = "test_jpeg_diagonal1.jpeg";
     private static  final String getTestJpegBlackBackgroud = "black_back.jpg";
     private static final String testAuthPic1= "test_auth_pic_1.jpg";
+    private static final String test50Qs= "exam50Qs.jpg";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -69,6 +70,8 @@ public class BitmapsInstancesFactoryAndroidTest {
         return getBitmapFromAssets(getTestJpegDiagonal1);
     }
 
+    public static Bitmap getExam50Qs() { return getBitmapFromAssets(test50Qs); }
+
     public static Bitmap getTestAuthPic1Marked() {
         Matrix matrix = new Matrix();
 
@@ -111,5 +114,7 @@ public class BitmapsInstancesFactoryAndroidTest {
         if (curr_c % 3 == 2) return getTestJpg3Marked();
         return null;
     }
+
+
 }
 
