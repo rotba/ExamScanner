@@ -79,6 +79,7 @@ public class CornerDetectionContext2Setuper {
                 cdcRepo.create(cdCaptures[0]);
             }
         });
+        e.setNumOfQuestions(50);
     }
 
     public ImageProcessingFacade getImageProcessor() {

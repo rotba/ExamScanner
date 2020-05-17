@@ -76,7 +76,8 @@ public class CornerDetectionViewModel extends ViewModel {
         };
         int[] leftMostXs = exam.getVersionByNum(versionNum).getQuestions().stream().mapToInt(q -> q.getLeft()).toArray();
         int[] upperMostYs = exam.getVersionByNum(versionNum).getQuestions().stream().mapToInt(q -> q.getUp()).toArray();
-        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer, leftMostXs, upperMostYs);
+//        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer, leftMostXs, upperMostYs);
+        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer);
     }
 
 

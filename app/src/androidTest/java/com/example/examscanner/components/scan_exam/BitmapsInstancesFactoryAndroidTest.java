@@ -48,9 +48,7 @@ public class BitmapsInstancesFactoryAndroidTest {
         return getBitmapFromAssets(testJpgReal2);
     }
 
-    public static Bitmap getExam50QsAuth() {
-        return getBitmapFromAssets(test50QsAuth);
-    }
+
 
 
     public static Bitmap getTestJpegReal1() {
@@ -77,6 +75,22 @@ public class BitmapsInstancesFactoryAndroidTest {
     }
 
     public static Bitmap getExam50Qs() { return getBitmapFromAssets(test50Qs); }
+
+    public static Bitmap getExam50QsAuth() {
+        Matrix matrix = new Matrix();
+
+        matrix.postRotate(90);
+        final Bitmap bitmapFromAssets = getBitmapFromAssets(test50QsAuth);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
+                bitmapFromAssets,
+                bitmapFromAssets.getWidth(),
+                bitmapFromAssets.getHeight(),
+                true
+        );
+
+
+        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+    }
 
     public static Bitmap getTestAuthPic1Marked() {
         Matrix matrix = new Matrix();
