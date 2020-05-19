@@ -541,17 +541,11 @@ import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.R;
 import com.example.examscanner.communication.ContextProvider;
-import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 import org.opencv.android.Utils;
-import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
-import org.opencv.core.DMatch;
-import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.core.MatOfDMatch;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
@@ -560,10 +554,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FastFeatureDetector;
-import org.opencv.features2d.Features2d;
-import org.opencv.features2d.ORB;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
@@ -579,13 +570,15 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 
 public class ImageProcessor implements ImageProcessingFacade {
     Mat questionTemplate;
     final int thresh = 50;
     final int N = 11;
+    final static Scalar param_LOW_BOUND_BLACKS_COUNTING  = new Scalar(50,50,50);
+    final static Scalar param_UPPER_BOUND_BLACKS_COUNTING  = new Scalar(150,150,150);
+    final static boolean param_USE_FINE_AJDUSTMENT  = true;
 
     private Bitmap bitmapFromMat(Mat mat) {
         Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
@@ -903,10 +896,18 @@ public class ImageProcessor implements ImageProcessingFacade {
         int numOfQuestions = leftMostXs.length;
         int unIdentifiedThreshold = (int) Math.ceil(numOfQuestions * 0.2);
         Map<Point, Integer> answersMap = new HashMap<>();
+        FineAdjustment[] forDebugging_ADJUSTMENTS = new FineAdjustment[numOfQuestions];
         for (int i = 0; i < numOfQuestions; i++) {
 
             Point matchLoc = new Point(leftMostXs[i], upperMostYs[i]);
-            Rect rect = new Rect((int) matchLoc.x, (int) matchLoc.y, (img_template.cols() ) , (img_template.rows() ) );
+            Rect rect = null;
+            if(param_USE_FINE_AJDUSTMENT){
+                FineAdjustment adjustment = FineAdjustment.create(img_exam, leftMostXs[i], upperMostYs[i], img_template.cols(), img_template.rows());
+                rect = new Rect((int) matchLoc.x +adjustment.getXAdj(), (int) matchLoc.y+adjustment.getYAdj(), (img_template.cols() ) , (img_template.rows() ) );
+                forDebugging_ADJUSTMENTS[i] = adjustment;
+            }else{
+                rect = new Rect((int) matchLoc.x, (int) matchLoc.y, (img_template.cols() ) , (img_template.rows() ) );
+            }
             Mat currAns = img_exam.submat(rect);
             List<Mat> imgChunks = splitImage2(currAns, 5);
             int correctAns = markedAnswer2(imgChunks);
@@ -919,6 +920,16 @@ public class ImageProcessor implements ImageProcessingFacade {
         }
 
         return answersMap;
+    }
+
+    private static Bitmap showRedRectanglesWithAdj(int[] xs, int[]ys, Mat mat, int tempW, int tempH, FineAdjustment[] adj){
+        for(int i=0; i < xs.length; i++){
+            Imgproc.rectangle(mat, new Point(xs[i]+adj[i].getXAdj(), ys[i]+adj[i].getYAdj()), new Point(xs[i]+adj[i].getXAdj() + tempW,
+                    ys[i] +adj[i].getYAdj() + tempH), new Scalar(0, 0, 255), -1);
+        }
+        Bitmap bm = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(mat, bm);
+        return bm;
     }
 
     private static Bitmap showRedRectangles(int[] xs, int[]ys, Mat mat, int tempW, int tempH){
@@ -936,10 +947,10 @@ public class ImageProcessor implements ImageProcessingFacade {
         int maxImg = 0;
         for (int i = 0; i < imgChunks.size(); i++) {
             Mat currMat = imgChunks.get(i);
-            Mat cloneONLYFORTESTING = currMat.clone();
             //CONVERT IMAGE TO B&W AND DETERMINE IF IT HAS MORE BLACK OR WHITE
             Imgproc.cvtColor(currMat, currMat, Imgproc.COLOR_BGR2GRAY);
-            Core.inRange(currMat, new Scalar(90,90,90), new Scalar(110,110,110), currMat);
+            Mat cloneONLYFORTESTING = currMat.clone();
+            Core.inRange(currMat, param_LOW_BOUND_BLACKS_COUNTING, param_UPPER_BOUND_BLACKS_COUNTING, currMat);
             Core.bitwise_not(currMat, currMat);
             int non_black_pixels = Core.countNonZero(currMat);
             int black_pixels = currMat.rows() * currMat.cols() - non_black_pixels;
@@ -1038,6 +1049,13 @@ public class ImageProcessor implements ImageProcessingFacade {
         Bitmap bm  = Bitmap.createBitmap(m.width(), m.height(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(m , bm);
         return bm;
+    }
+    private static List<Bitmap> helperMatListToBitmapList(List<Mat> ms){
+        List<Bitmap> ans = new ArrayList<>();
+        for(Mat m :ms){
+            ans.add(helperMatToBitmap(m));
+        }
+        return ans;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
