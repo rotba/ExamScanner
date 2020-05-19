@@ -38,6 +38,13 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String Comp191_v1_JPG_ANS = "comp191_v1_ans.jpg";
     private static String Comp191_v1_JPG_ANS_2 = "comp191_v1_ans_jpg_2.jpg";
     private static String comp191_V1_ins_1 = "instances/comp191_v1/_1.jpg";
+    private static String comp191_V1_ins_2= "instances/comp191_v1/_2.jpg";
+    private static String comp191_V1_ins_3= "instances/comp191_v1/_3.jpg";
+    private static String comp191_V1_ins_4= "instances/comp191_v1/_4.jpg";
+    private static String comp191_V1_ins_5= "instances/comp191_v1/_5.jpg";
+    private static String comp191_V1_ins_6= "instances/comp191_v1/_6.jpg";
+    private static String comp191_V1_ins_7= "instances/comp191_v1/_7.jpg";
+    private static String comp191_V1_ins_8= "instances/comp191_v1/_8.jpg";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -144,6 +151,33 @@ public class BitmapsInstancesFactoryAndroidTest {
 
     public static Bitmap getComp191_V1_ins_1() {
         return transform90D(getBitmapFromAssets(comp191_V1_ins_1));
+    }
+    public static Bitmap getComp191_V1_ins_2() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_2));
+    }
+
+    public static Bitmap getComp191_V1_ins_3() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_3));
+    }
+
+    public static Bitmap getComp191_V1_ins_4() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_4));
+    }
+
+    public static Bitmap getComp191_V1_ins_5() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_5));
+    }
+
+    public static Bitmap getComp191_V1_ins_6() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_6));
+    }
+
+    public static Bitmap getComp191_V1_ins_7() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_7));
+    }
+
+    public static Bitmap getComp191_V1_ins_8() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_8));
     }
 
     private static Bitmap transform90D(Bitmap bitmapFromAssets) {
