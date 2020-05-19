@@ -38,6 +38,12 @@ public class CornerDetectionContext2Setuper {
     protected CreateExamModelView ceModelView;
     protected final CornerDetectedCapture[] cdCaptures = new CornerDetectedCapture[1];
     protected Bitmap createExamBitmap;
+    private Bitmap theCDCBitmap;
+
+    public CornerDetectionContext2Setuper(Bitmap cdcBitmap) {
+        this.theCDCBitmap=cdcBitmap;
+    }
+    public CornerDetectionContext2Setuper() {}
 
     public void setup(){
         OpenCVLoader.initDebug();
@@ -68,7 +74,9 @@ public class CornerDetectionContext2Setuper {
      //   ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
         cdcRepo = new CDCRepositoryFacrory().create();
         scanExamSession = new ScanExamSessionProviderFactory().create().provide(e.getId());
-        final Bitmap theCDCBitmap = BitmapsInstancesFactoryAndroidTest.getComp191_V1_PDF_Auth_No_Flash();
+        if(theCDCBitmap==null){
+            theCDCBitmap = BitmapsInstancesFactoryAndroidTest.getComp191_V1_PDF_Auth_No_Flash();
+        }
         imageProcessor.detectCorners(theCDCBitmap, new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {

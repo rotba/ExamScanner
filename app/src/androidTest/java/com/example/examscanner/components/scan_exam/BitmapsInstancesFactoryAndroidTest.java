@@ -37,6 +37,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String Comp191_V1_PDF_Auth_No_Flash = "comp191_v1_pdf_auth.jpg";;
     private static String Comp191_v1_JPG_ANS = "comp191_v1_ans.jpg";
     private static String Comp191_v1_JPG_ANS_2 = "comp191_v1_ans_jpg_2.jpg";
+    private static String comp191_V1_ins_1 = "instances/comp191_v1/_1.jpg";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -138,6 +139,22 @@ public class BitmapsInstancesFactoryAndroidTest {
         );
 
 
+        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+    }
+
+    public static Bitmap getComp191_V1_ins_1() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_1));
+    }
+
+    private static Bitmap transform90D(Bitmap bitmapFromAssets) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
+                bitmapFromAssets,
+                bitmapFromAssets.getWidth(),
+                bitmapFromAssets.getHeight(),
+                true
+        );
         return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
     }
 
