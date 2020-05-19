@@ -17,19 +17,14 @@ import com.example.examscanner.repositories.corner_detected_capture.CDCRepositor
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
-import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
-import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
-import com.example.examscanner.stubs.ImageProcessorStub;
 
 import org.opencv.android.OpenCVLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static org.junit.Assert.assertEquals;
 
 public class CornerDetectionContext2Setuper {
@@ -42,6 +37,7 @@ public class CornerDetectionContext2Setuper {
     protected int dinaBarzilayVersion;
     protected CreateExamModelView ceModelView;
     protected final CornerDetectedCapture[] cdCaptures = new CornerDetectedCapture[1];
+    protected Bitmap createExamBitmap;
 
     public void setup(){
         OpenCVLoader.initDebug();
@@ -57,8 +53,8 @@ public class CornerDetectionContext2Setuper {
         dinaBarzilayVersion = 496351;
         ceModelView.holdNumOfQuestions("50");
         int numOfQuestions = ceModelView.getExam().getNumOfQuestions();
-        Bitmap bm = BitmapsInstancesFactoryAndroidTest.getExam50Qs();
-        ceModelView.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getExam50Qs());
+        createExamBitmap =BitmapsInstancesFactoryAndroidTest.getComp191_v1_JPG_ANS_2();
+        ceModelView.holdVersionBitmap(createExamBitmap);
         ceModelView.holdVersionNumber(dinaBarzilayVersion);
         ceModelView.addVersion();
         ceModelView.create("testAddVersion()_courseName","A","Fall","2020");
@@ -72,10 +68,11 @@ public class CornerDetectionContext2Setuper {
      //   ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
         cdcRepo = new CDCRepositoryFacrory().create();
         scanExamSession = new ScanExamSessionProviderFactory().create().provide(e.getId());
-        imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getExam50QsAuth(), new DetectCornersConsumer() {
+        final Bitmap theCDCBitmap = BitmapsInstancesFactoryAndroidTest.getComp191_V1_PDF_Auth_No_Flash();
+        imageProcessor.detectCorners(theCDCBitmap, new DetectCornersConsumer() {
             @Override
             public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                cdCaptures[0] = new CornerDetectedCapture(BitmapsInstancesFactoryAndroidTest.getExam50QsAuth(), upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession);
+                cdCaptures[0] = new CornerDetectedCapture(theCDCBitmap, upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession);
                 cdcRepo.create(cdCaptures[0]);
             }
         });
@@ -112,5 +109,9 @@ public class CornerDetectionContext2Setuper {
 
     public int getVersionNum() {
         return dinaBarzilayVersion;
+    }
+
+    public Bitmap getOrigVersionImage() {
+        return createExamBitmap;
     }
 }

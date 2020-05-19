@@ -42,6 +42,11 @@ public class NullImageProcessingProvider implements ImageProcessingFacade {
     }
 
     @Override
+    public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+        return null;
+    }
+
+    @Override
     public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
         consumer.consume(new PointF(),null,null,new PointF());
     }

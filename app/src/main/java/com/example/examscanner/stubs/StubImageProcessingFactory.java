@@ -58,6 +58,11 @@ public class StubImageProcessingFactory {
                 }
                 ScannedCapturesInstancesFactory.instance1(consumer);
             }
+
+            @Override
+            public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+                return null;
+            }
         };
     }
 }

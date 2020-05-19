@@ -1,5 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -54,6 +55,15 @@ public class CornerDetectionViewModel extends ViewModel {
         return mNumberOfAnswersScannedCaptures;
     }
 
+    public void align(CornerDetectedCapture cdc, Bitmap perfectExamImg) {
+        cdc.setBitmap(
+                imageProcessor.align(
+                        cdc.getBitmap(),
+                        perfectExamImg
+                )
+        );
+    }
+
     public void transformToRectangle(CornerDetectedCapture cdc) {
         cdc.setBitmap(
                 imageProcessor.transformToRectangle(
@@ -76,8 +86,8 @@ public class CornerDetectionViewModel extends ViewModel {
         };
         int[] leftMostXs = exam.getVersionByNum(versionNum).getQuestions().stream().mapToInt(q -> q.getLeft()).toArray();
         int[] upperMostYs = exam.getVersionByNum(versionNum).getQuestions().stream().mapToInt(q -> q.getUp()).toArray();
-//        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer, leftMostXs, upperMostYs);
-        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer);
+        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer, leftMostXs, upperMostYs);
+//        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer);
     }
 
 

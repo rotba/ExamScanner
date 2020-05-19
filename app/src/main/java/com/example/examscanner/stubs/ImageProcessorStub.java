@@ -32,4 +32,9 @@ public class ImageProcessorStub implements ImageProcessingFacade {
     public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
         ScannedCapturesInstancesFactory.instance1(consumer);
     }
+
+    @Override
+    public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+        return null;
+    }
 }

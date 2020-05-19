@@ -37,6 +37,11 @@ public class ImageProcessorsGenerator {
             public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
                 consumer.consume(0,null,null,null,null,null,null);
             }
+
+            @Override
+            public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+                return null;
+            }
         };
     }
     public static ImageProcessingFacade slowIP(){
@@ -90,6 +95,11 @@ public class ImageProcessorsGenerator {
                 }
                 ScannedCapturesInstancesFactory.instance1(consumer);
             }
+
+            @Override
+            public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+                return null;
+            }
         };
     }
     public static ImageProcessingFacade quickIP(){
@@ -117,6 +127,11 @@ public class ImageProcessorsGenerator {
             @Override
             public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
                 ScannedCapturesInstancesFactory.instance1(consumer);
+            }
+
+            @Override
+            public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+                return null;
             }
         };
     }
@@ -146,6 +161,11 @@ public class ImageProcessorsGenerator {
             @Override
             public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
                 ScannedCapturesInstancesFactory.instance1(consumer);
+            }
+
+            @Override
+            public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+                return null;
             }
         };
     }

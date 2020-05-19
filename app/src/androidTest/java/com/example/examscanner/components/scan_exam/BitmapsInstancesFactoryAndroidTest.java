@@ -5,13 +5,18 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.pdf.PdfRenderer;
+import android.os.ParcelFileDescriptor;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class BitmapsInstancesFactoryAndroidTest {
     private static final String testJpg1FilePath = "test_jpg_1.jpg";
@@ -28,6 +33,10 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static final String testAuthPic1= "test_auth_pic_1.jpg";
     private static final String test50Qs= "exam_50_q.jpg";
     private static final String test50QsAuth= "exam_50_q_auth.jpg";
+    private static String Comp191_V1_JPG_Auth_No_Flash = "comp191_v1_jpg_auth.jpg";
+    private static String Comp191_V1_PDF_Auth_No_Flash = "comp191_v1_pdf_auth.jpg";;
+    private static String Comp191_v1_JPG_ANS = "comp191_v1_ans.jpg";
+    private static String Comp191_v1_JPG_ANS_2 = "comp191_v1_ans_jpg_2.jpg";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -75,6 +84,46 @@ public class BitmapsInstancesFactoryAndroidTest {
     }
 
     public static Bitmap getExam50Qs() { return getBitmapFromAssets(test50Qs); }
+
+    public static Bitmap getComp191_V1_JPG_Auth_No_Flash() {
+        Matrix matrix = new Matrix();
+
+        matrix.postRotate(90);
+        final Bitmap bitmapFromAssets = getBitmapFromAssets(Comp191_V1_JPG_Auth_No_Flash);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
+                bitmapFromAssets,
+                bitmapFromAssets.getWidth(),
+                bitmapFromAssets.getHeight(),
+                true
+        );
+
+
+        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+    }
+
+    public static Bitmap getComp191_V1_PDF_Auth_No_Flash() {
+        Matrix matrix = new Matrix();
+
+        matrix.postRotate(90);
+        final Bitmap bitmapFromAssets = getBitmapFromAssets(Comp191_V1_PDF_Auth_No_Flash);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(
+                bitmapFromAssets,
+                bitmapFromAssets.getWidth(),
+                bitmapFromAssets.getHeight(),
+                true
+        );
+
+
+        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+    }
+
+    public static Bitmap getComp191_v1_JPG_ANS() {
+        return getBitmapFromAssets(Comp191_v1_JPG_ANS);
+    }
+
+    public static Bitmap getComp191_v1_JPG_ANS_2() {
+        return getBitmapFromAssets(Comp191_v1_JPG_ANS_2);
+    }
 
     public static Bitmap getExam50QsAuth() {
         Matrix matrix = new Matrix();
@@ -134,7 +183,5 @@ public class BitmapsInstancesFactoryAndroidTest {
         if (curr_c % 3 == 2) return getTestJpg3Marked();
         return null;
     }
-
-
 }
 
