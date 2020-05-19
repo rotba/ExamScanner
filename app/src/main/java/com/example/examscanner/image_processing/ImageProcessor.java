@@ -576,8 +576,8 @@ public class ImageProcessor implements ImageProcessingFacade {
     Mat questionTemplate;
     final int thresh = 50;
     final int N = 11;
-    final static Scalar param_LOW_BOUND_BLACKS_COUNTING  = new Scalar(50,50,50);
-    final static Scalar param_UPPER_BOUND_BLACKS_COUNTING  = new Scalar(150,150,150);
+    final static Scalar param_LOW_BOUND_BLACKS_COUNTING  = new Scalar(20,20,20);
+    final static Scalar param_UPPER_BOUND_BLACKS_COUNTING  = new Scalar(110,110,110);
     final static boolean param_USE_FINE_AJDUSTMENT  = true;
 
     private Bitmap bitmapFromMat(Mat mat) {
