@@ -86,7 +86,7 @@ public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFu
         }
     }
 
-    protected void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(ImageProcessingFacade ip) {
+    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(ImageProcessingFacade ip) {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(ip);
         Utils.sleepCDFragmentSetupTime();
         onView(withText(R.string.detect_corners_the_empty_version_choice)).perform(click());
@@ -103,7 +103,7 @@ public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFu
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));
     }
 
-    @Test
+
     @Ignore
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition() {
         Utils.sleepCDFragmentSetupTime();
@@ -118,7 +118,7 @@ public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFu
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));
     }
 
-    @Test
+
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragments() {
         selectVersionAndScanAnswers();
         Utils.sleepCDFragmentSetupTime();
@@ -129,7 +129,7 @@ public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFu
         onView(withId(R.id.textView_ra_progress_feedback)).check(matches(withText("1/2")));
     }
 
-    @Test
+
     public void testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionProgress() {
         Utils.sleepCDFragmentSetupTime();
         selectVersionAndScanAnswers();

@@ -68,7 +68,7 @@ public abstract class CreateExamModelViewAbstractTest {
         GraderRepoFactory.tearDown();
     }
 
-    @Test
+
     public void testAddVersion() {
         final int[] expectedNumOfAnswers = new int[1];
         imageProcessor.scanAnswers(null, new ScanAnswersConsumer() {

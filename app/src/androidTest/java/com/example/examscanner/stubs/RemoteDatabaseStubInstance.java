@@ -16,12 +16,12 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     @Override
     public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId) {
-        return Observable.fromCallable(()->{return null;});
+        return Observable.fromCallable(()->{return "null";});
     }
 
     @Override
     public Observable<String> addVersion(String examId, int versionNumber) {
-        return Observable.fromCallable(()->{return null;});
+        return Observable.fromCallable(()->{return "null";});
     }
 
     @Override
@@ -31,21 +31,21 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     @Override
     public Observable<List<Exam>> getExams() {
-        return Observable.fromCallable(()->{return null;});
+        return Observable.fromCallable(()->{return new ArrayList<>();});
     }
 
     @Override
     public Observable<List<Version>> getVersions() {
-        return Observable.fromCallable(()->{return null;});
+        return Observable.fromCallable(()->{return new ArrayList<>();});
     }
 
     @Override
     public Observable<List<Question>> getQuestions() {
-        return Observable.fromCallable(()->{return null;});
+        return Observable.fromCallable(()->{return new ArrayList<>();});
     }
 
     @Override
     public Observable<String> createGrader(String userName, String userId) {
-        return Observable.fromCallable(()->{return null;});
+        return Observable.fromCallable(()->{return "";});
     }
 }
