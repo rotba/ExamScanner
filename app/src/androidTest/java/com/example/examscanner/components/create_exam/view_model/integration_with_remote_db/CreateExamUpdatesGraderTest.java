@@ -79,13 +79,16 @@ public class CreateExamUpdatesGraderTest {
         out.holdGraderUsername("bob");
         out.addGrader();
         out.addVersion();
-        out.create("testAddVersion()_courseName","A","Fall","2020");
+        out.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
-        assertEquals(exams.size(),1);
+        assertEquals(1,exams.size());
         theExpectedExam = exams.get(0);
-        tearDown();
+//        tearDown();
+        AppDatabaseFactory.tearDownDb();
+        ExamRepositoryFactory.tearDown();
+        CommunicationFacadeFactory.tearDown();
+        GraderRepoFactory.tearDown();
         AuthenticationHandlerFactory.getTest().authenticate("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
-
         imageProcessor = new ImageProcessorStub();
         imageProcessor = new ImageProcessorStub();
     }
@@ -101,6 +104,7 @@ public class CreateExamUpdatesGraderTest {
 
     @Test
     public void CreateExamUpdatesGraderTest() {
-        assertTrue(examRepository.get(e->true).contains(theExpectedExam));
+        final List<Exam> exams = examRepository.get(e -> true);
+        assertTrue(exams.contains(theExpectedExam));
     }
 }

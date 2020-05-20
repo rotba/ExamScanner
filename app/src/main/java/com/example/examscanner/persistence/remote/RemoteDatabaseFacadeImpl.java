@@ -94,6 +94,44 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         );
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public Observable<List<Version>> getVersions() {
+        return getChildrenOfRoot(
+                Paths.toVersions,
+                new DataSnapshot2Obj<Version>() {
+                    @Override
+                    public Version convert(DataSnapshot ds) {
+                        return new Version(
+                                ds.child(Version.metaExamId).getValue(String.class),
+                                ds.child(Version.metaVersionNumber).getValue(Integer.class)
+                        );
+                    }
+                }
+        );
+    }
+
+    @Override
+    public Observable<List<Question>> getQuestions() {
+        return getChildrenOfRoot(
+                Paths.toQuestions,
+                new DataSnapshot2Obj<Question>() {
+                    @Override
+                    public Question convert(DataSnapshot ds) {
+                        return new Question(
+                                ds.child(Question.metaNum).getValue(Integer.class),
+                                ds.child(Question.metaAns).getValue(Integer.class),
+                                ds.child(Question.metaLeft).getValue(Integer.class),
+                                ds.child(Question.metaUp).getValue(Integer.class),
+                                ds.child(Question.metaRight).getValue(Integer.class),
+                                ds.child(Question.metaVersionId).getValue(String.class),
+                                ds.child(Question.metaBottom).getValue(Integer.class)
+                        );
+                    }
+                }
+        );
+    }
+
     @NotNull
     protected <T> Observable<List<T>> getChildrenOfRoot(String pathToParent, DataSnapshot2Obj<T> ds2o) {
         return new Observable<List<T>>() {
@@ -126,17 +164,6 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 String.format("%s/%s", Paths.toGraders, userName),
                 new Grader(userId, userName)
         );
-    }
-
-
-    @Override
-    public Observable<List<Version>> getVersions() {
-        return null;
-    }
-
-    @Override
-    public Observable<List<Question>> getQuestions() {
-        return null;
     }
 
     private static Observable<String> storeChildInPath(String parent, Object obj) {

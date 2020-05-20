@@ -1,6 +1,13 @@
 package com.example.examscanner.persistence.remote.entities;
 
 public class Question {
+    public static String metaNum = "num";
+    public static String metaAns = "ans";
+    public static String metaLeft = "left";
+    public static String metaUp = "up";
+    public static String metaRight = "right";
+    public static String metaBottom = "bottom";
+    public static String metaVersionId = "versionId";
     public int num;
     public int ans;
     public int left;

@@ -247,6 +247,7 @@ public class RealFacadeImple implements CommunicationFacade {
                 remoteExams) {
             if(!examExists(examEntities, re)){
                 importRemoteExam(re);
+                examEntities.add(db.getExamDao().getByCoursenameSemeseterTermYear(re.courseName,re.semester,re.term,re.year));
             }
         }
         ExamEntityInterface[] ans = new ExamEntityInterface[examEntities.size()];

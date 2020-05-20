@@ -31,4 +31,7 @@ public interface ExamDao {
 
     @Update
     void update(Exam exam);
+
+    @Query("SELECT * FROM exam WHERE courseName IS :courseName AND semester IS :semester AND term IS :term AND year IS :year LIMIT 1")
+    Exam getByCoursenameSemeseterTermYear(String courseName, int semester, int term, String year);
 }
