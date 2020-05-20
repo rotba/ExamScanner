@@ -1,7 +1,10 @@
 package com.example.examscanner.stubs;
 
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
+import com.example.examscanner.persistence.remote.entities.Exam;
 import com.example.examscanner.persistence.remote.entities.Grader;
+import com.example.examscanner.persistence.remote.entities.Question;
+import com.example.examscanner.persistence.remote.entities.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +13,15 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
+
     @Override
-    public Completable createExam(long examId, String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId) {
-        return Completable.fromAction(()->{});
+    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId) {
+        return Observable.fromCallable(()->{return null;});
     }
 
     @Override
-    public Completable addVersion(long versionId, long examId, int versionNumber) {
-        return Completable.fromAction(()->{});
+    public Observable<String> addVersion(String examId, int versionNumber) {
+        return Observable.fromCallable(()->{return null;});
     }
 
     @Override
@@ -26,7 +30,22 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Completable createGrader(String userName) {
-        return Completable.fromAction(()->{});
+    public Observable<List<Exam>> getExams() {
+        return Observable.fromCallable(()->{return null;});
+    }
+
+    @Override
+    public Observable<List<Version>> getVersions() {
+        return Observable.fromCallable(()->{return null;});
+    }
+
+    @Override
+    public Observable<List<Question>> getQuestions() {
+        return Observable.fromCallable(()->{return null;});
+    }
+
+    @Override
+    public Observable<String> createGrader(String userName, String userId) {
+        return Observable.fromCallable(()->{return null;});
     }
 }

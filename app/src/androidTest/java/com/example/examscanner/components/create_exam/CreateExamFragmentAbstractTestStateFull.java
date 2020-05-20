@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.not;
 public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullTest {
 
     Fragment f;
+    public static final String BOB_ID = "QR6JunUJDvaZr1kSOWEq3iiCToQ2";
 
     @Override
     @Before
@@ -50,7 +51,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
                 return BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked();
             }
         });
-        new GraderRepoFactory().create().create(new Grader("bob"));
+        new GraderRepoFactory().create().create(new Grader("bob",BOB_ID));
     }
 
     @Override

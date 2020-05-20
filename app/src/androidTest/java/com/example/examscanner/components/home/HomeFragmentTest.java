@@ -25,9 +25,9 @@ public class HomeFragmentTest extends StateFullTest {
     public void setUp() {
         dbCallback = db -> {
             comp = "COMP";
-            db.getExamDao().insert(new Exam(comp, 0,"2020","THE_EMPTY_URL",0,0));
+            db.getExamDao().insert(new Exam(comp, 0,"2020","THE_EMPTY_URL",0,0, null));
             caspl = "CASPL";
-            db.getExamDao().insert(new Exam(caspl, 1,"2020","THE_EMPTY_URL",0,0));
+            db.getExamDao().insert(new Exam(caspl, 1,"2020","THE_EMPTY_URL",0,0, null));
         };
         super.setUp();
     }

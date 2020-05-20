@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.BOB_ID;
+
 public class BobGradersStubRepoFacroty {
     public static Repository<Grader> get() {
         return new Repository<Grader>() {
             private List<Grader> graders = new ArrayList<Grader>(){{
-                add(new Grader("bob"));
+                add(new Grader("bob", BOB_ID));
             }};
             @Override
             public int getId() {

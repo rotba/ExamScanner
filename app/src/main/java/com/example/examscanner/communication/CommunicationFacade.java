@@ -43,5 +43,5 @@ public interface CommunicationFacade {
     public long insertVersionReplaceOnConflict(long examId, int num);
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom);
     public List<GraderEntityInterface> getGraders();
-    public void createGrader(String userName);
+    public void createGrader(String userName, String userId);
 }

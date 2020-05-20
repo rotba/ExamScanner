@@ -7,6 +7,14 @@ import java.util.List;
 @IgnoreExtraProperties
 public class Exam {
 
+    public static String metaManager = "manager";
+    public static String metaGraders = "graders";
+    public static String metaCourseName = "courseName";
+    public static String metaSemester = "semester";
+    public static String metaTerm = "term";
+    public static String metaYear = "year";
+    public static String metaSeal = "seal";
+    public static String metaUrl = "url";
     public String manager;
     public List<String> graders;
     public String courseName;
@@ -16,7 +24,8 @@ public class Exam {
     public boolean seal = false;
     public String url;
 
-    public Exam(){}
+    public Exam() {
+    }
 
     public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url) {
         this.manager = manager;
@@ -26,7 +35,7 @@ public class Exam {
         this.term = term;
         this.year = year;
         this.seal = seal;
-        this.url=url;
+        this.url = url;
     }
 
     public String _getId() {

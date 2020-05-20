@@ -74,7 +74,7 @@ class GraderRepository implements Repository<Grader> {
 
     @Override
     public void create(Grader grader) {
-        comFacade.createGrader(grader.getUserName());
+        comFacade.createGrader(grader.getUserName(), grader.getIdentifier());
     }
 
     @Override

@@ -148,8 +148,8 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public void createGrader(String userName) {
-        realImpl.createGrader(userName);
+    public void createGrader(String userName, String userId) {
+        realImpl.createGrader(userName,userId);
     }
 
     @Override

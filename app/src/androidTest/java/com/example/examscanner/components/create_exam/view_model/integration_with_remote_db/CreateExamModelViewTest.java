@@ -11,6 +11,8 @@ import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import static com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.BOB_ID;
+
 @RunWith(AndroidJUnit4.class)
 public class CreateExamModelViewTest extends CreateExamModelViewAbstractTest {
     @Override
@@ -18,6 +20,6 @@ public class CreateExamModelViewTest extends CreateExamModelViewAbstractTest {
     public void setUp() throws Exception {
         FirebaseDatabaseFactory.setTestMode();
         super.setUp();
-        new GraderRepoFactory().create().create(new Grader("bob"));
+        new GraderRepoFactory().create().create(new Grader("bob",BOB_ID));
     }
 }

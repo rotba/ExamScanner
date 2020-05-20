@@ -28,6 +28,7 @@ import java.util.List;
 
 import io.reactivex.observers.TestObserver;
 
+import static com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.BOB_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -35,6 +36,7 @@ import static org.junit.Assert.assertTrue;
 public class CreateExamUpdatesGraderTest {
     private CreateExamModelView out;
     private Repository<Exam> examRepository;
+    private Repository<Grader> graderRepository;
     private ImageProcessorStub imageProcessor;
     private Exam theExpectedExam;
 
@@ -59,7 +61,8 @@ public class CreateExamUpdatesGraderTest {
                 0
         );
         examRepository = new ExamRepositoryFactory().create();
-        new GraderRepoFactory().create().create(new Grader("bob"));
+        graderRepository = new GraderRepoFactory().create();
+        graderRepository.create(new Grader("bob", BOB_ID));
         final int[] expectedNumOfAnswers = new int[1];
         imageProcessor.scanAnswers(null, new ScanAnswersConsumer() {
             @Override
@@ -82,6 +85,7 @@ public class CreateExamUpdatesGraderTest {
         theExpectedExam = exams.get(0);
         tearDown();
         AuthenticationHandlerFactory.getTest().authenticate("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
+
         imageProcessor = new ImageProcessorStub();
         imageProcessor = new ImageProcessorStub();
     }
@@ -96,7 +100,7 @@ public class CreateExamUpdatesGraderTest {
     }
 
     @Test
-    public void testGraderIsUpdated() {
+    public void CreateExamUpdatesGraderTest() {
         assertTrue(examRepository.get(e->true).contains(theExpectedExam));
     }
 }

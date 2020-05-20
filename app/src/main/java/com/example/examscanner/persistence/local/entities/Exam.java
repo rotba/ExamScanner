@@ -12,20 +12,21 @@ public class Exam {
     private String courseName;
     private int term;
     private String year;
-
     private String url;
-
     private int semester;
     public static final String fkSid = "examCreationSessionId";
     @ForeignKey(entity = ExamCreationSession.class, parentColumns = ExamCreationSession.pkName , childColumns ="examCreationSessionId" )
     private long examCreationSessionId;
-    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId) {
+    private String remoteId;
+
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
         this.url = url;
         this.semester = semester;
         this.examCreationSessionId = examCreationSessionId;
+        this.remoteId = remoteId;
     }
 
     public String getUrl() {
@@ -82,5 +83,9 @@ public class Exam {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getRemoteId() {
+        return remoteId;
     }
 }

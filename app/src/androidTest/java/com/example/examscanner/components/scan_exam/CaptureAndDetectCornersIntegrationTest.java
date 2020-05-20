@@ -42,7 +42,7 @@ public class CaptureAndDetectCornersIntegrationTest extends StateFullTest {
         dbCallback = db ->{
             test_course_name = "TEST_course_name";
             long examCreationSessionId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
-            long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId));
+            long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId, null));
         };
         super.setUp();
         Context2Setuper context = new Context2Setuper();

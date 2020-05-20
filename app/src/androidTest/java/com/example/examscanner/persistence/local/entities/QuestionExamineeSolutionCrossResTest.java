@@ -25,10 +25,10 @@ public class QuestionExamineeSolutionCrossResTest extends DaoAbstractTest {
     public void testGettingExamineeAnswers() {
         int bmId =0;
         long creationSessionId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
-        long examId = db.getExamDao().insert(new Exam("COMP A",0,"2020", "url", 0,creationSessionId));
+        long examId = db.getExamDao().insert(new Exam("COMP A",0,"2020", "url", 0,creationSessionId, null));
         long sid = db.getScanExamSessionDao().insert(new ScanExamSession(examId));
         long esId = db.getExamineeSolutionDao().insert(new ExamineeSolution(examId, bmId,sid));
-        long verId = db.getVersionDao().insert(new Version(0, examId));
+        long verId = db.getVersionDao().insert(new Version(0, examId, null));
         long qId1 = db.getQuestionDao().insert(new Question(1,verId, 3,0,1,2,3));
         long qId2 = db.getQuestionDao().insert(new Question(2,verId, 4,0,1,2,3));
         db.getExamineeAnswerDao().insert(new ExamineeAnswer(qId1,esId, 3,0,0,0,0));

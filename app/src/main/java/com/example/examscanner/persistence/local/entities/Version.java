@@ -14,11 +14,13 @@ public class Version {
     public static final String fkExam = "examId";
     @ForeignKey(entity = Exam.class, parentColumns =Exam.pkName , childColumns =fkExam )
     private long examId;
+    private String remoteVersionId;
     private int verNum;
 
-    public Version(int verNum, long examId) {
+    public Version(int verNum, long examId, String remoteVersionId) {
         this.verNum = verNum;
         this.examId = examId;
+        this.remoteVersionId = remoteVersionId;
     }
 
     public long getId() {
@@ -39,5 +41,9 @@ public class Version {
 
     public int getVerNum() {
         return verNum;
+    }
+
+    public String getRemoteVersionId() {
+        return remoteVersionId;
     }
 }

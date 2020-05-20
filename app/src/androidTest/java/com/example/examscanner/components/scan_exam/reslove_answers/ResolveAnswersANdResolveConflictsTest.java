@@ -47,9 +47,9 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
     public void setUp() {
         dbCallback = db ->{
             long creationId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
-            examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId));
-            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(dinaBarzilayVersionNumber, examId));
-            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(theDevilVersionNumber, examId));
+            examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId, null));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(dinaBarzilayVersionNumber, examId, null));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(theDevilVersionNumber, examId, null));
 
         };
         super.setUp();
