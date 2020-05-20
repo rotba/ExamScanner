@@ -348,6 +348,7 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public VersionEntityInterface getVersionById(long vId) {
         Version theVersion =db.getVersionDao().getById(vId);
+        if(theVersion==null) throw new NoSuchElementInLocalDbException(String.format("version with id: %d",vId ));
         return new VersionEntityInterface() {
             @Override
             public long getId() {

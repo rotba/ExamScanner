@@ -105,6 +105,8 @@ public class CreateExamUpdatesGraderTest {
     @Test
     public void CreateExamUpdatesGraderTest() {
         final List<Exam> exams = examRepository.get(e -> true);
+        assertTrue(exams.size()>0);
+        assertTrue(theExpectedExam.getVersions().size()>0);
         assertTrue(exams.contains(theExpectedExam));
     }
 }
