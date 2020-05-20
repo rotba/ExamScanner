@@ -73,4 +73,5 @@
     <string name="add_version_action">Add</string>
     <string name="menu_logout">Logout</string>
     <string name="button_main_activity_logout">Logout</string>
+    <string name="nums_questions">Number of questions:</string>
 </resources>

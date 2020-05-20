@@ -8,6 +8,7 @@ public interface ImageProcessingFacade {
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer);
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs);
     public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer);
+    public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg);
 }
 
 

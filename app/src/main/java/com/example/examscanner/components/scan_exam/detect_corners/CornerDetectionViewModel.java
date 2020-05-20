@@ -1,5 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -15,8 +16,10 @@ import com.example.examscanner.repositories.corner_detected_capture.CornerDetect
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.exam.Version;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CornerDetectionViewModel extends ViewModel {
@@ -52,6 +55,15 @@ public class CornerDetectionViewModel extends ViewModel {
         return mNumberOfAnswersScannedCaptures;
     }
 
+    public void align(CornerDetectedCapture cdc, Bitmap perfectExamImg) {
+        cdc.setBitmap(
+                imageProcessor.align(
+                        cdc.getBitmap(),
+                        perfectExamImg
+                )
+        );
+    }
+
     public void transformToRectangle(CornerDetectedCapture cdc) {
         cdc.setBitmap(
                 imageProcessor.transformToRectangle(
@@ -64,14 +76,18 @@ public class CornerDetectionViewModel extends ViewModel {
         );
     }
 
-    public void scanAnswers(CornerDetectedCapture cdc){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void scanAnswers(CornerDetectedCapture cdc, int versionNum){
         ScanAnswersConsumer consumer = new ScanAnswersConsumer() {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                scRepo.create(new ScannedCapture(scRepo.genId(),cdc.getBitmap(),53/*TODO - get version*/,numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections));
+                scRepo.create(new ScannedCapture(scRepo.genId(),cdc.getBitmap(),exam.getNumOfQuestions(),numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections));
             }
         };
-        imageProcessor.scanAnswers(cdc.getBitmap(), 53, consumer);
+        int[] leftMostXs = exam.getVersionByNum(versionNum).getQuestions().stream().mapToInt(q -> q.getLeft()).toArray();
+        int[] upperMostYs = exam.getVersionByNum(versionNum).getQuestions().stream().mapToInt(q -> q.getUp()).toArray();
+        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer, leftMostXs, upperMostYs);
+//        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer);
     }
 
 

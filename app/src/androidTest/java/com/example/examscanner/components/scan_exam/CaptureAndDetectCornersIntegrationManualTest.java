@@ -33,7 +33,7 @@ import static com.example.examscanner.Utils.sleepMovingFromCaptureToDetectCorner
 import static com.example.examscanner.Utils.sleepSingleCaptureProcessingTime;
 import static org.hamcrest.Matchers.containsString;
 
-@Ignore("Manual testing")
+
 @RunWith(AndroidJUnit4.class)
 public class CaptureAndDetectCornersIntegrationManualTest extends StateFullTest {
 
@@ -65,7 +65,7 @@ public class CaptureAndDetectCornersIntegrationManualTest extends StateFullTest 
                 return new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        handler.handleBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpegReal1());
+                        handler.handleBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpgBlackBack());
                     }
                 };
             }

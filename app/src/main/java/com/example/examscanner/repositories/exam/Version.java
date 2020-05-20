@@ -30,6 +30,14 @@ public class Version {
         this.fQuestions = fQuestions;
     }
 
+    public Question getQuestionByNumber(int i){
+        for(Question q : getQuestions()){
+            if(q.getNum() == i)
+                return q;
+        }
+        throw new NoSuchQuestion();
+    }
+
     public int getNum() {
         return num;
     }
@@ -149,4 +157,5 @@ public class Version {
         }
         return ans;
     }
+    public class NoSuchQuestion extends RuntimeException {}
 }

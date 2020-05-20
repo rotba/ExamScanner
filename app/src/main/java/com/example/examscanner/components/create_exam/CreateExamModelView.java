@@ -2,6 +2,7 @@ package com.example.examscanner.components.create_exam;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.text.Editable;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
@@ -70,7 +71,7 @@ public class CreateExamModelView extends ViewModel {
 
     }
     public void addVersion() {
-        imageProcessor.scanAnswers(currentVersionBitmap, new ScanAnswersConsumer() {
+        imageProcessor.scanAnswers(currentVersionBitmap, examCreated.getNumOfQuestions(), new ScanAnswersConsumer() {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 ScannedCapture scannedCapture = new ScannedCapture(-1,null,numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections);
@@ -84,10 +85,10 @@ public class CreateExamModelView extends ViewModel {
                                     -1,
                                     v,ans.getAnsNum(),
                                     ans.getSelection(),
-                                    (int)ans.getUpperLeft().x*currentVersionBitmap.getWidth(),
-                                    (int)ans.getUpperLeft().y*currentVersionBitmap.getHeight(),
-                                    (int)ans.getBottomRight().x*currentVersionBitmap.getWidth(),
-                                    (int)ans.getBottomRight().y*currentVersionBitmap.getHeight()
+                                    (int)(ans.getUpperLeft().x*currentVersionBitmap.getWidth()),
+                                    (int)(ans.getUpperLeft().y*currentVersionBitmap.getHeight()),
+                                    (int)(ans.getBottomRight().x*currentVersionBitmap.getWidth()),
+                                    (int)(ans.getBottomRight().y*currentVersionBitmap.getHeight())
                             )
                     );
                 }
@@ -121,6 +122,9 @@ public class CreateExamModelView extends ViewModel {
 
     public void holdGraderUsername(String graderUsername) {
         this.currentGraderUsername = graderUsername;
+    }
+    public void holdNumOfQuestions(String text) {
+        examCreated.setNumOfQuestions(Integer.parseInt(text));
     }
 
     public void addGrader() {

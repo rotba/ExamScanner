@@ -25,7 +25,7 @@ public class CEViewModelFactory implements ViewModelProvider.Factory {
         return (T)new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
                 new GraderRepoFactory().create(),
-                new ImageProcessingFactory(new BitmapInstancesFactory(activity.getApplicationContext())).create(),
+                new ImageProcessingFactory().create(),
                 StateFactory.get(),
                 new CESessionProviderFactory().create().provide()
         );

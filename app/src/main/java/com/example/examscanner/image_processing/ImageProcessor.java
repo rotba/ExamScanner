@@ -531,6 +531,7 @@
 
 package com.example.examscanner.image_processing;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
@@ -539,12 +540,15 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.R;
+import com.example.examscanner.communication.ContextProvider;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -559,23 +563,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 
 public class ImageProcessor implements ImageProcessingFacade {
     Mat questionTemplate;
+    final int thresh = 50;
+    final int N = 11;
+    final static Scalar param_LOW_BOUND_BLACKS_COUNTING  = new Scalar(20,20,20);
+    final static Scalar param_UPPER_BOUND_BLACKS_COUNTING  = new Scalar(110,110,110);
+    final static boolean param_USE_FINE_AJDUSTMENT  = true;
 
-    private Bitmap bitmapFromMat(Mat mat){
+    private Bitmap bitmapFromMat(Mat mat) {
         Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(mat, bm);
         return bm;
     }
 
-    private Mat matFromBitmap(Bitmap bm){
+    private Mat matFromBitmap(Bitmap bm) {
         Mat mat = new Mat();
         Utils.bitmapToMat(bm, mat);
         return mat;
@@ -586,7 +597,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
         Mat img = null;
         try {
-            img = Utils.loadResource(getApplicationContext(), file);
+            img = Utils.loadResource(ContextProvider.get(), file);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -600,7 +611,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
         Bitmap bitmap = null;
         try {
-            InputStream ims = getApplicationContext().getAssets().open(filename);
+            InputStream ims = ContextProvider.get().getAssets().open(filename);
             bitmap = BitmapFactory.decodeStream(ims);
 
         } catch (IOException e) {
@@ -613,26 +624,40 @@ public class ImageProcessor implements ImageProcessingFacade {
     public ImageProcessor() {
 
         questionTemplate = loadFromResource(R.drawable.template);
+        Imgproc.cvtColor(questionTemplate, questionTemplate, Imgproc.COLOR_BGR2GRAY);
     }
 
+    public ImageProcessor(Context c) {
+
+        Mat img = null;
+        try {
+            img = Utils.loadResource(c, R.drawable.template);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        questionTemplate = img;
+        Imgproc.cvtColor(questionTemplate, questionTemplate, Imgproc.COLOR_BGR2GRAY);
+    }
 
 
     // given an image of an exam try to detect the 4 corners of the exam
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
-        if(bm == null || consumer == null)
+        if (bm == null || consumer == null)
             throw new NullPointerException("given input is null");
 
         Mat mat = matFromBitmap(bm);
         // First find all the corners in the given image
-        List<Point> points = cornerDetection(mat);
+        List<Point> points = detectCorners(mat);
         // Then, supposing a rectangle exists, find its 4 corners coordinates
-        List<Point> filtered = removePoints(points);
-        List<Point> clockwiseOrderedPoints = orderPoints(filtered);
-        Point upperLeft = clockwiseOrderedPoints.get(1);
-        Point upperRight = clockwiseOrderedPoints.get(2);
-        Point bottomRight = clockwiseOrderedPoints.get(3);
-        Point bottomLeft = clockwiseOrderedPoints.get(0);
+        // List<Point> filtered = removePoints(points);
+        List<Point> clockwiseOrderedPoints = orderPoints(points);
+        Point bottomRight = clockwiseOrderedPoints.get(0);
+        Point upperRight = clockwiseOrderedPoints.get(1);
+        Point upperLeft = clockwiseOrderedPoints.get(2);
+        Point bottomLeft = clockwiseOrderedPoints.get(3);
         consumer.consume(
                 new PointF((float) upperLeft.x, (float) upperLeft.y),
                 new PointF((float) upperRight.x, (float) upperRight.y),
@@ -672,7 +697,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     @Override
     public Bitmap transformToRectangle(Bitmap bitmap, android.graphics.Point upperLeft, android.graphics.Point upperRight, android.graphics.Point bottomRight, android.graphics.Point bottomLeft) {
 
-        if(bitmap == null || upperLeft == null || upperRight == null || bottomLeft == null || bottomRight == null)
+        if (bitmap == null || upperLeft == null || upperRight == null || bottomLeft == null || bottomRight == null)
             throw new NullPointerException("given input is null");
 
 
@@ -696,9 +721,9 @@ public class ImageProcessor implements ImageProcessingFacade {
 
         MatOfPoint2f dst = new MatOfPoint2f(
                 new Point(0, 0),
-                new Point(newWidth-1,0),
-                new Point(newWidth-1,newHeight-1),
-                new Point(0,newHeight-1)
+                new Point(newWidth - 1, 0),
+                new Point(newWidth - 1, newHeight - 1),
+                new Point(0, newHeight - 1)
         );
 
 
@@ -715,7 +740,6 @@ public class ImageProcessor implements ImageProcessingFacade {
         Utils.matToBitmap(transformedMat, transformedBitmap);
         return transformedBitmap;
     }
-
 
 
     private Point getBottomRight(List<Point> points) {
@@ -775,7 +799,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         return pointsWithoutDuplicates;
     }
 
-    private static double distance(Point p1, Point p2){
+    private static double distance(Point p1, Point p2) {
         return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
     }
 
@@ -783,11 +807,11 @@ public class ImageProcessor implements ImageProcessingFacade {
         int thresh = 50;
 
         int n = points.size();
-        for(int i=0; i<n; i++ ){
-            for(int j= i+1; j<n; j++){
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
                 Point point1 = points.get(i);
                 Point point2 = points.get(j);
-                if(distance(point1, point2) < thresh){
+                if (distance(point1, point2) < thresh) {
                     points.remove(point2);
                     j--;
                     n--;
@@ -801,9 +825,18 @@ public class ImageProcessor implements ImageProcessingFacade {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
 
-        if(bitmap == null || leftMostXs == null || upperMostYs == null || consumer == null)
+        if (bitmap == null || leftMostXs == null || upperMostYs == null || consumer == null)
             throw new NullPointerException("given input is null");
 
+        Mat scaledTemplate = questionTemplate.clone();
+        Imgproc.resize(
+                scaledTemplate,
+                scaledTemplate,
+                new Size(
+                        (scaledTemplate.width() * ((float)bitmap.getWidth() / (float)2550)) ,
+                        scaledTemplate.height() * ((float)bitmap.getHeight() / (float)3300)
+                )
+        );
         Mat exam = matFromBitmap(bitmap);
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
@@ -811,15 +844,16 @@ public class ImageProcessor implements ImageProcessingFacade {
         float rights[] = new float[amountOfQuestions];
         float bottoms[] = new float[amountOfQuestions];
         int selections[] = new int[amountOfQuestions];
-        Map<Point, Integer> answersMap = findQuestions(exam, questionTemplate, leftMostXs, upperMostYs);
-        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate.rows(), exam.cols(), exam.rows());
+        Map<Point, Integer> answersMap = findQuestions(exam, scaledTemplate, leftMostXs, upperMostYs);
+        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, scaledTemplate.cols(), scaledTemplate.rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
 
-        if(bitmap == null || amountOfQuestions <= 0 || consumer == null)
+        if (bitmap == null || amountOfQuestions <= 0 || consumer == null)
             throw new NullPointerException("invalid input");
 
         Mat exam = matFromBitmap(bitmap);
@@ -838,7 +872,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
 
-        if(bitmap == null || consumer == null)
+        if (bitmap == null || consumer == null)
             throw new NullPointerException("given input is null");
 
         Mat exam = matFromBitmap(bitmap);
@@ -862,9 +896,18 @@ public class ImageProcessor implements ImageProcessingFacade {
         int numOfQuestions = leftMostXs.length;
         int unIdentifiedThreshold = (int) Math.ceil(numOfQuestions * 0.2);
         Map<Point, Integer> answersMap = new HashMap<>();
+        FineAdjustment[] forDebugging_ADJUSTMENTS = new FineAdjustment[numOfQuestions];
         for (int i = 0; i < numOfQuestions; i++) {
+
             Point matchLoc = new Point(leftMostXs[i], upperMostYs[i]);
-            Rect rect = new Rect((int) matchLoc.x, (int) matchLoc.y, img_template.cols(), img_template.rows());
+            Rect rect = null;
+            if(param_USE_FINE_AJDUSTMENT){
+                FineAdjustment adjustment = FineAdjustment.create(img_exam, leftMostXs[i], upperMostYs[i], img_template.cols(), img_template.rows());
+                rect = new Rect((int) matchLoc.x +adjustment.getXAdj(), (int) matchLoc.y+adjustment.getYAdj(), (img_template.cols() ) , (img_template.rows() ) );
+                forDebugging_ADJUSTMENTS[i] = adjustment;
+            }else{
+                rect = new Rect((int) matchLoc.x, (int) matchLoc.y, (img_template.cols() ) , (img_template.rows() ) );
+            }
             Mat currAns = img_exam.submat(rect);
             List<Mat> imgChunks = splitImage2(currAns, 5);
             int correctAns = markedAnswer2(imgChunks);
@@ -879,6 +922,26 @@ public class ImageProcessor implements ImageProcessingFacade {
         return answersMap;
     }
 
+    private static Bitmap showRedRectanglesWithAdj(int[] xs, int[]ys, Mat mat, int tempW, int tempH, FineAdjustment[] adj){
+        for(int i=0; i < xs.length; i++){
+            Imgproc.rectangle(mat, new Point(xs[i]+adj[i].getXAdj(), ys[i]+adj[i].getYAdj()), new Point(xs[i]+adj[i].getXAdj() + tempW,
+                    ys[i] +adj[i].getYAdj() + tempH), new Scalar(0, 0, 255), -1);
+        }
+        Bitmap bm = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(mat, bm);
+        return bm;
+    }
+
+    private static Bitmap showRedRectangles(int[] xs, int[]ys, Mat mat, int tempW, int tempH){
+        for(int i=0; i < xs.length; i++){
+            Imgproc.rectangle(mat, new Point(xs[i], ys[i]), new Point(xs[i] + tempW,
+                    ys[i] + tempH), new Scalar(0, 0, 255), -1);
+        }
+        Bitmap bm = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(mat, bm);
+        return bm;
+    }
+
     private int markedAnswer2(List<Mat> imgChunks) {
         int maxBlack = 0;
         int maxImg = 0;
@@ -886,6 +949,9 @@ public class ImageProcessor implements ImageProcessingFacade {
             Mat currMat = imgChunks.get(i);
             //CONVERT IMAGE TO B&W AND DETERMINE IF IT HAS MORE BLACK OR WHITE
             Imgproc.cvtColor(currMat, currMat, Imgproc.COLOR_BGR2GRAY);
+            Mat cloneONLYFORTESTING = currMat.clone();
+            Core.inRange(currMat, param_LOW_BOUND_BLACKS_COUNTING, param_UPPER_BOUND_BLACKS_COUNTING, currMat);
+            Core.bitwise_not(currMat, currMat);
             int non_black_pixels = Core.countNonZero(currMat);
             int black_pixels = currMat.rows() * currMat.cols() - non_black_pixels;
             if (maxBlack < black_pixels) {
@@ -909,15 +975,28 @@ public class ImageProcessor implements ImageProcessingFacade {
         return chunkedImages;
     }
 
+    public static Bitmap helper(Mat result) {
+        Bitmap bm = Bitmap.createBitmap(result.cols(), result.rows(), Bitmap.Config.ARGB_8888);
+        Imgproc.cvtColor(result, result, Imgproc.COLOR_GRAY2RGB);
+        Utils.matToBitmap(result, bm);
+        return bm;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int numOfQuestions) {
+
+        Size scaleSize = new Size(2550, 3300);
+        Imgproc.resize(img_exam, img_exam, scaleSize);
 
         int result_cols = img_exam.cols() - img_template.cols() + 1;
         int result_rows = img_exam.rows() - img_template.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1); //CV_32FC1 means 32 bit floating point signed depth in one channel
 
+        Imgproc.cvtColor(img_exam, img_exam, Imgproc.COLOR_BGR2GRAY);
+
         // / Do the Matching and Normalize
         Imgproc.matchTemplate(img_exam, img_template, result, Imgproc.TM_CCOEFF_NORMED);
-        //     Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+        Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
 
 
         Core.MinMaxLocResult mmr;
@@ -932,22 +1011,31 @@ public class ImageProcessor implements ImageProcessingFacade {
             // x + -> right direction
             // y + -> down direction
             matchLoc = mmr.maxLoc;
-            // threshold chosen empirically
+            Mat img_result = img_exam.clone();
+
             if (i <= numOfQuestions) {
-                Mat img_result = img_exam.clone();
-                Imgproc.rectangle(img_exam, matchLoc, new Point(matchLoc.x + img_template.cols(),
-                        matchLoc.y + img_template.rows()), new Scalar(0, 0, 255), -1);
-                // find the answer
-                // part the matching image into 5
-                Bitmap img_bitmap = Bitmap.createBitmap(img_result.cols(), img_result.rows(), Bitmap.Config.ARGB_8888);
-                Utils.matToBitmap(img_result, img_bitmap);
-                Bitmap bm = Bitmap.createBitmap(img_bitmap, (int) matchLoc.x, (int) matchLoc.y, img_template.cols(), img_template.rows());
-                ArrayList<Bitmap> imgChunks = splitImage(bm, 5);
-                int correctAns = markedAnswer(imgChunks);
-                answersMap.put(matchLoc, correctAns + 1);
-                // erase this matching to prevent infinite loop
-                Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + img_template.cols(),
-                        matchLoc.y + img_template.rows()), new Scalar(0, 0, 0), -1);
+//                if(!checkOverlapping(answersMap, matchLoc)) {
+                if (true) {
+                    Imgproc.rectangle(img_exam, matchLoc, new Point(matchLoc.x + img_template.cols(),
+                            matchLoc.y + img_template.rows()), new Scalar(0, 0, 255), -1);
+                    // find the answer
+                    // part the matching image into 5
+                    Bitmap img_bitmap = Bitmap.createBitmap(img_result.cols(), img_result.rows(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(img_result, img_bitmap);
+                    Bitmap bm = Bitmap.createBitmap(img_bitmap, (int) matchLoc.x, (int) matchLoc.y, img_template.cols(), img_template.rows());
+                    ArrayList<Bitmap> imgChunks = splitImage(bm, 5);
+                    int correctAns = markedAnswer(imgChunks);
+                    answersMap.put(matchLoc, correctAns + 1);
+                    // erase this matching to prevent infinite loop
+//                    Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + img_template.cols(),
+//                            matchLoc.y + img_template.rows()), new Scalar(0, 0, 0), -1);
+                    Imgproc.rectangle(result, new Point(matchLoc.x - 70, matchLoc.y - 25), new Point(matchLoc.x + img_template.cols(),
+                            matchLoc.y + img_template.rows()), new Scalar(0, 0, 0), -1);
+                } else {
+                    Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + img_template.cols(),
+                            matchLoc.y + img_template.rows()), new Scalar(0, 0, 0), -1);
+                    i--;
+                }
             } else {
                 break; // No more results within tolerance, break search
             }
@@ -957,15 +1045,50 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     }
 
+    private static Bitmap helperMatToBitmap(Mat m){
+        Bitmap bm  = Bitmap.createBitmap(m.width(), m.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(m , bm);
+        return bm;
+    }
+    private static List<Bitmap> helperMatListToBitmapList(List<Mat> ms){
+        List<Bitmap> ans = new ArrayList<>();
+        for(Mat m :ms){
+            ans.add(helperMatToBitmap(m));
+        }
+        return ans;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private boolean checkOverlapping(Map<Point, Integer> answersMap, Point matchLoc) {
+        boolean temp = answersMap.keySet().stream().anyMatch(p -> p.x == matchLoc.x && Math.abs(p.y - matchLoc.y) < 70);
+        temp = temp || answersMap.keySet().stream().anyMatch(p -> Math.abs(p.x - matchLoc.x) < 70 && p.x != matchLoc.x);
+        return temp;
+    }
+
 
     Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template) {
+
+        Size scaleSize = new Size(2550, 3300);
+        Imgproc.resize(img_exam, img_exam, scaleSize);
+
         int result_cols = img_exam.cols() - img_template.cols() + 1;
         int result_rows = img_exam.rows() - img_template.rows() + 1;
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1); //CV_32FC1 means 32 bit floating point signed depth in one channel
 
+
+        Imgproc.blur(img_exam, img_exam, new Size(3, 3));
+        Imgproc.blur(img_template, img_template, new Size(3, 3));
+
+        Imgproc.cvtColor(img_exam, img_exam, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(img_template, img_template, Imgproc.COLOR_BGR2GRAY);
+
+        Imgproc.Canny(img_exam, img_exam, 50, 200);
+        Imgproc.Canny(img_template, img_template, 50, 200);
+
+
         // / Do the Matching and Normalize
         Imgproc.matchTemplate(img_exam, img_template, result, Imgproc.TM_CCOEFF_NORMED);
-        //     Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+        Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
 
 
         Core.MinMaxLocResult mmr;
@@ -1015,7 +1138,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
 
-    private void sortQuestions(Map<Point, Integer> answersMap, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, int delta_x, int delta_y, int img_cols, int img_rows) {
+    void sortQuestions(Map<Point, Integer> answersMap, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, int delta_x, int delta_y, int img_cols, int img_rows) {
         // sort points:
         // x value is the most significant
         class PointComparator implements Comparator {
@@ -1038,22 +1161,58 @@ public class ImageProcessor implements ImageProcessingFacade {
         Set<Point> keys = answersMap.keySet();
         ArrayList<Point> keysList = new ArrayList<>(keys);
         Collections.sort(keysList, pointComp);
-        Map<Integer, Integer> ret = new HashMap<>();
         int q_num = 0;
         for (Point p : keysList) {
             answersIds[q_num] = q_num + 1;
             selections[q_num] = answersMap.get(p);
-            lefts[q_num] = (float) (p.x / img_rows);
-            tops[q_num] = (float) (p.y / img_cols);
-            rights[q_num] = (float) ((p.x + delta_x) / img_rows);
-            bottoms[q_num] = (float) ((p.y + delta_y) / img_cols);
+            lefts[q_num] = ((float) p.x / (float) img_cols);
+            tops[q_num] = ((float) p.y / (float) img_rows);
+            rights[q_num] = ((float) (p.x + delta_x) / (float) img_cols);
+            bottoms[q_num] = ((float) (p.y + delta_y) / (float) img_rows);
             q_num++;
         }
     }
 
+    // JUST FOR TEST
+
+    void sortiQuestions(Map<Point, Integer> answersMap, int[] answersIds, double[] lefts, double[] tops, double[] rights, double[] bottoms, int[] selections, int delta_x, int delta_y) {
+        // sort points:
+        // x value is the most significant
+        class PointComparator implements Comparator {
+            public int compare(Object o1, Object o2) {
+                Point p1 = (Point) o1;
+                Point p2 = (Point) o2;
+
+                if (p1.x == p2.x && p1.y == p2.y)
+                    return 0;
+                else if (p1.x > p2.x)
+                    return 1;
+                else if (p1.x == p2.x && p1.y > p2.y)
+                    return 1;
+                else
+                    return -1;
+            }
+        }
+
+        Comparator pointComp = new PointComparator();
+        Set<Point> keys = answersMap.keySet();
+        ArrayList<Point> keysList = new ArrayList<>(keys);
+        Collections.sort(keysList, pointComp);
+        int q_num = 0;
+        for (Point p : keysList) {
+            answersIds[q_num] = q_num + 1;
+            selections[q_num] = answersMap.get(p);
+            lefts[q_num] = (p.x);
+            tops[q_num] = (p.y);
+            rights[q_num] = ((p.x + delta_x));
+            bottoms[q_num] = ((p.y + delta_y));
+            q_num++;
+        }
+    }
 
     // find out which answer was marked by determining which sub-image in imagesArr
     // has the bigget number of colored pixeles
+
     private int markedAnswer(ArrayList<Bitmap> imgChunks) {
 
 //        let maxBlack = 0;
@@ -1091,12 +1250,12 @@ public class ImageProcessor implements ImageProcessingFacade {
         return maxImg;
     }
 
-
     // split source image into chunksNum smaller images
     // split is done according to the image width
+
     private static ArrayList<Bitmap> splitImage(Bitmap bitmap, int chunkNumbers) {
 
-        if(bitmap == null) return new ArrayList<>();
+        if (bitmap == null) return new ArrayList<>();
         ArrayList<Bitmap> chunkedImages = new ArrayList<Bitmap>(chunkNumbers);
         int sizeOfPart = bitmap.getWidth() / chunkNumbers;
         for (int i = 0; i < chunkNumbers; i++) {
@@ -1105,8 +1264,8 @@ public class ImageProcessor implements ImageProcessingFacade {
         }
         return chunkedImages;
     }
-
     // Detect corners in the given image
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected List<Point> cornerDetection(Mat inputImg) {
 
@@ -1124,5 +1283,135 @@ public class ImageProcessor implements ImageProcessingFacade {
 //        Features2d.drawKeypoints(mRgba, pointsMat, mRgba, redColor);
         List<Point> points = pointsMat.toList().stream().map(p -> p.pt).collect(Collectors.toList());
         return points;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<Point> detectCorners(Mat image_input) {
+
+        Mat image = image_input.clone();
+        List<MatOfPoint> squares = new ArrayList<>();
+
+//        Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2HSV);
+        Mat smallerImg = new Mat(new Size(image.width() / 2, image.height() / 2), image.type());
+
+        Mat gray = new Mat(image.size(), image.type());
+
+        Mat gray0 = new Mat(image.size(), CvType.CV_8U);
+
+        // down-scale and upscale the image to filter out the noise
+        Imgproc.pyrDown(image, smallerImg, smallerImg.size());
+        Imgproc.pyrUp(smallerImg, image, image.size());
+
+        // find squares in every color plane of the image
+        for (int c = 0; c < 3; c++) {
+
+            extractChannel(image, gray, c);
+
+            // try several threshold levels
+            for (int l = 1; l < N; l++) {
+                //Cany removed... Didn't work so well
+
+
+                Imgproc.threshold(gray, gray0, (l + 1) * 255 / N, 255, THRESH_BINARY);
+                List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+                // find contours and store them all as a list
+                Imgproc.findContours(gray0, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+
+                MatOfPoint approx = new MatOfPoint();
+
+                // test each contour
+                for (int i = 0; i < contours.size(); i++) {
+                    // approximate contour with accuracy proportional
+                    // to the contour perimeter
+                    approx = approxPolyDP(contours.get(i), Imgproc.arcLength(new MatOfPoint2f(contours.get(i).toArray()), true) * 0.02, true);
+                    // square contours should have 4 vertices after approximation
+                    // relatively large area (to filter out noisy contours)
+                    // and be convex.
+                    // Note: absolute value of an area is used because
+                    // area may be positive or negative - in accordance with the
+                    // contour orientation
+
+                    if (approx.toArray().length == 4 &&
+                            Math.abs(Imgproc.contourArea(approx)) > 1000 &&
+                            Imgproc.isContourConvex(approx)) {
+                        double maxCosine = 0;
+
+                        for (int j = 2; j < 5; j++) {
+                            // find the maximum cosine of the angle between joint edges
+                            double cosine = Math.abs(angle(approx.toArray()[j % 4], approx.toArray()[j - 2], approx.toArray()[j - 1]));
+                            maxCosine = Math.max(maxCosine, cosine);
+                        }
+
+                        // if cosines of all angles are small
+                        // (all angles are ~90 degree) then write quandrange
+                        // vertices to resultant sequence
+                        if (maxCosine < 0.3)
+                            squares.add(approx);
+                    }
+                }
+            }
+        }
+
+        List<List<Point>> listOfPoints = squares.stream().map(m -> m.toList()).collect(Collectors.toList());
+        LinkedHashSet<List<Point>> hashSet = new LinkedHashSet<>(listOfPoints);
+        ArrayList<List<Point>> lstWithoutDuplicates = new ArrayList<>(hashSet);
+
+        // the largest rectangle is the whole image - remove it
+        lstWithoutDuplicates.removeIf(l ->
+                l.contains(new Point(0, 0)) && l.contains(new Point(0, image.rows() - 1)) &&
+                        l.contains(new Point(image.cols() - 1, 0)) && l.contains(new Point(image.cols() - 1, image.rows() - 1)));
+
+        List<MatOfPoint> mats = lstWithoutDuplicates.stream().map(l -> new MatOfPoint(l.get(0), l.get(1), l.get(2), l.get(3))).collect(Collectors.toList());
+        // search for next largest rect area
+        MatOfPoint max = mats.stream().max(Comparator.comparing(m -> Imgproc.contourArea((Mat) m))).orElseThrow(NoSuchElementException::new);
+        // pts are the points of the largest rectangle
+        List<Point> pts = max.toList();
+        return pts;
+
+    }
+
+
+    void extractChannel(Mat source, Mat out, int channelNum) {
+        List<Mat> sourceChannels = new ArrayList<Mat>();
+        List<Mat> outChannel = new ArrayList<Mat>();
+
+        Core.split(source, sourceChannels);
+
+        outChannel.add(new Mat(sourceChannels.get(0).size(), sourceChannels.get(0).type()));
+
+        Core.mixChannels(sourceChannels, outChannel, new MatOfInt(channelNum, 0));
+
+        Core.merge(outChannel, out);
+    }
+
+    MatOfPoint approxPolyDP(MatOfPoint curve, double epsilon, boolean closed) {
+        MatOfPoint2f tempMat = new MatOfPoint2f();
+
+        Imgproc.approxPolyDP(new MatOfPoint2f(curve.toArray()), tempMat, epsilon, closed);
+
+        return new MatOfPoint(tempMat.toArray());
+    }
+
+    double angle(Point pt1, Point pt2, Point pt0) {
+        double dx1 = pt1.x - pt0.x;
+        double dy1 = pt1.y - pt0.y;
+        double dx2 = pt2.x - pt0.x;
+        double dy2 = pt2.y - pt0.y;
+        return (dx1 * dx2 + dy1 * dy2) / Math.sqrt((dx1 * dx1 + dy1 * dy1) * (dx2 * dx2 + dy2 * dy2) + 1e-10);
+    }
+
+    @Override
+    public Bitmap align(Bitmap toBeAligned, Bitmap alignmentReference) {
+        Mat mToBeAligned = matFromBitmap(toBeAligned);
+        Mat mAlignmentReference = matFromBitmap(alignmentReference);
+        AlignmentHandler ah = new AlignmentHandler();
+        ah.align1(
+                mToBeAligned,
+                mAlignmentReference,
+                null,
+                "Series"//HAVE NO IDEA WHAT IT DOES
+        );
+        final Bitmap bitmap = bitmapFromMat(ah.align);
+        return bitmap;
     }
 }
