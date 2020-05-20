@@ -17,8 +17,9 @@ import com.example.examscanner.repositories.corner_detected_capture.CDCRepositor
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
+import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
-import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
+import com.example.examscanner.repositories.session.SESessionProviderFactory;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -51,6 +52,7 @@ public class CornerDetectionContext2Setuper {
         imageProcessor = new ImageProcessingFactory().create();
         ceModelView  = new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
+                new GraderRepoFactory().create(),
                 imageProcessor,
                 StateFactory.get(),
                 0
@@ -73,7 +75,7 @@ public class CornerDetectionContext2Setuper {
         scRepo = SCEmptyRepositoryFactory.create();
      //   ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
         cdcRepo = new CDCRepositoryFacrory().create();
-        scanExamSession = new ScanExamSessionProviderFactory().create().provide(e.getId());
+        scanExamSession = new SESessionProviderFactory().create().provide(e.getId());
         if(theCDCBitmap==null){
             theCDCBitmap = BitmapsInstancesFactoryAndroidTest.getComp191_V1_PDF_Auth_No_Flash();
         }

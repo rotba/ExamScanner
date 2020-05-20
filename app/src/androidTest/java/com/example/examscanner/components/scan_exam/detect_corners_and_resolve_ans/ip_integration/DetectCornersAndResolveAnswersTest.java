@@ -17,7 +17,7 @@ import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
-import com.example.examscanner.repositories.session.ScanExamSessionProviderFactory;
+import com.example.examscanner.repositories.session.SESessionProviderFactory;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
 
@@ -60,7 +60,7 @@ public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveA
                 ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
                 imageProcessor = new ImageProcessingFactory().create();
                 cdcRepo = new CDCRepositoryFacrory().create();
-                scanExamSession = new ScanExamSessionProviderFactory().create().provide(e.getId());
+                scanExamSession = new SESessionProviderFactory().create().provide(e.getId());
                 imageProcessor.detectCorners(BitmapsInstancesFactoryAndroidTest.getTestAuthPic1Marked(), new DetectCornersConsumer() {
                     @Override
                     public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
