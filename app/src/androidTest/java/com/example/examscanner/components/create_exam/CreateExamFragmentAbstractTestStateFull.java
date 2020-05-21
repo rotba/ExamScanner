@@ -33,6 +33,7 @@ import static org.hamcrest.Matchers.not;
 
 public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullTest {
 
+    private static final String NUM_OF_QUESTIONS_QAD = "50";
     Fragment f;
     public static final String BOB_ID = "QR6JunUJDvaZr1kSOWEq3iiCToQ2";
 
@@ -72,6 +73,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
         onView(withId(R.id.button_create_exam_add_version)).perform(click());
         Utils.sleepScanAnswersTime();
         onView(withId(R.id.editText_create_exam_grader_address)).perform(replaceText(aGraderAdress));
+        onView(withId(R.id.editText_create_exam_num_of_questions)).perform(replaceText(NUM_OF_QUESTIONS_QAD));
         onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("1")));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText("20"));

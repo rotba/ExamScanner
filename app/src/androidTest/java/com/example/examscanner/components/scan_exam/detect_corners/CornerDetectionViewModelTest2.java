@@ -24,7 +24,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CornerDetectionViewModelTest2 extends AbstractComponentInstrumentedTest {
+public abstract class CornerDetectionViewModelTest2 extends AbstractComponentInstrumentedTest {
 
     private CornerDetectionContext2Setuper useCaseContext;
     private CornerDetectionViewModel out;
