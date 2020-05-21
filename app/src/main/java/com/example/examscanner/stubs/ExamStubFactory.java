@@ -1,6 +1,8 @@
 package com.example.examscanner.stubs;
 
 
+import android.graphics.Bitmap;
+
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.Version;
 
@@ -49,8 +51,8 @@ public class ExamStubFactory {
             @Override
             public List<Version> get() throws ExecutionException, InterruptedException {
                 return new ArrayList<Version>(){{
-                    add(new Version(-1,instance1_dinaBarzilayVersion, e, Version.theEmptyFutureQuestionsList()));
-                    add(new Version(-1,instance1_theDevilVersion, e, Version.theEmptyFutureQuestionsList()));
+                    add(new Version(-1,instance1_dinaBarzilayVersion, e, Version.theEmptyFutureQuestionsList(),null));
+                    add(new Version(-1,instance1_theDevilVersion, e, Version.theEmptyFutureQuestionsList(),null));
                 }};
             }
 

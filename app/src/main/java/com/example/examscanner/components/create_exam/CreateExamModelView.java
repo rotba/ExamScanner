@@ -77,7 +77,7 @@ public class CreateExamModelView extends ViewModel {
                 ScannedCapture scannedCapture = new ScannedCapture(-1,null,numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections);
                 if(versionScanningWentWell(scannedCapture))
                     throw new VersionScanningDidntGoWell();
-                Version v = new Version(-1,currentVersionNumber,examCreated, Version.theEmptyFutureQuestionsList());
+                Version v = new Version(-1,currentVersionNumber,examCreated, Version.theEmptyFutureQuestionsList(),currentVersionBitmap);
                 examCreated.addVersion(v);
                 for (ResolvedAnswer ans: scannedCapture.getResolvedAnswers()) {
                     v.addQuestion(

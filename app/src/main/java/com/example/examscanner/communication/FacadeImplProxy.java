@@ -133,8 +133,8 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public long insertVersionReplaceOnConflict(long examId, int num) {
-        return realImpl.insertVersionReplaceOnConflict(examId, num);
+    public long insertVersionReplaceOnConflict(long examId, int num, Bitmap perfectImage) {
+        return realImpl.insertVersionReplaceOnConflict(examId, num, perfectImage);
     }
 
     @Override
@@ -158,8 +158,8 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public long addVersion(long examId, int versionNumber) {
-        return realImpl.addVersion(examId,versionNumber);
+    public long addVersion(long examId, int versionNumber, Bitmap bm) {
+        return realImpl.addVersion(examId,versionNumber, bm);
     }
 
 

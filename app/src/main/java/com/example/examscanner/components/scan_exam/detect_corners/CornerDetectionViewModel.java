@@ -55,11 +55,11 @@ public class CornerDetectionViewModel extends ViewModel {
         return mNumberOfAnswersScannedCaptures;
     }
 
-    public void align(CornerDetectedCapture cdc, Bitmap perfectExamImg) {
+    public void align(CornerDetectedCapture cdc) {
         cdc.setBitmap(
                 imageProcessor.align(
                         cdc.getBitmap(),
-                        perfectExamImg
+                        cdc.getVersion().getPerfectImage()
                 )
         );
     }

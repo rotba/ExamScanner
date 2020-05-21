@@ -76,7 +76,7 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
             lazy = new ArrayList<>();
             for (long vId : vIds) {
                 VersionEntityInterface vei = communicationFacade.getVersionById(vId);
-                Version v = new Version(vei.getId(),vei.getNumber(), exam, Version.theErrorFutureQuestionsList());
+                Version v = new Version(vei.getId(),vei.getNumber(), exam, Version.theErrorFutureQuestionsList(),vei.getBitmap());
                 v.setQuestionsFuture(new QuestionsFuture(v));
                 lazy.add(v);
             }

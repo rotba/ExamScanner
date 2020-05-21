@@ -40,7 +40,7 @@ public class ImageProcessorsGenerator {
 
             @Override
             public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
-                return null;
+                return bitmap;
             }
         };
     }
@@ -98,7 +98,7 @@ public class ImageProcessorsGenerator {
 
             @Override
             public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
-                return null;
+                return bitmap;
             }
         };
     }
@@ -165,7 +165,7 @@ public class ImageProcessorsGenerator {
 
             @Override
             public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
-                return null;
+                return bitmap;
             }
         };
     }

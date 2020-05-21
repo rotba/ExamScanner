@@ -149,7 +149,7 @@ public class CornerDetectionFragment extends Fragment {
     }
 
     private void onViewModelCreatedFail(Throwable throwable) {
-        Log.d(TAG, MSG_PREF);
+        Log.d(TAG, MSG_PREF, throwable);
         throwable.printStackTrace();
     }
 
@@ -166,7 +166,7 @@ public class CornerDetectionFragment extends Fragment {
     @NotNull
     private DisposableCompletableObserver generateCaptureScanningCompletable(CornerDetectedCapture cdc) {
         return Completable.fromCallable(() -> {
-            cornerDetectionViewModel.transformToRectangle(cdc);
+            cornerDetectionViewModel.align(cdc);
             /* TODO : replace -1 with version num */
             cornerDetectionViewModel.scanAnswers(cdc);
             return "Done";

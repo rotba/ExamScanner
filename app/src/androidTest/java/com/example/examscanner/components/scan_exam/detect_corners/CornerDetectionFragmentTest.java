@@ -30,7 +30,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.OpenCVLoader;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -38,6 +40,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.ImageProcessorsGenerator.slowIP;
 import static com.example.examscanner.Utils.loadOpenCV;
@@ -65,6 +68,8 @@ public class CornerDetectionFragmentTest {
         imageProcessor = fakeIP();
         repo = new CDCRepositoryFacrory().create();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
+        ImageProcessingFactory.setTestMode(getApplicationContext());
+        OpenCVLoader.initDebug();
     }
 
     @After

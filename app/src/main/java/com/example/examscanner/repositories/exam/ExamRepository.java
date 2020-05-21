@@ -83,7 +83,7 @@ public class ExamRepository implements Repository<Exam> {
 
     private void insertVersions(Exam exam) {
         for (Version v: exam.getVersions()) {
-            long versionId = comFacade.insertVersionReplaceOnConflict(exam.getId(),v.getNum());
+            long versionId = comFacade.insertVersionReplaceOnConflict(exam.getId(),v.getNum(), v.getPerfectImage());
             v.setId(versionId);
             insertQuestions(v);
         }
@@ -114,7 +114,7 @@ public class ExamRepository implements Repository<Exam> {
 
     private void updateVersions(List<Version> versions) {
         for (Version v:versions) {
-            long maybeNewId = comFacade.insertVersionReplaceOnConflict(v.getExam().getId(),v.getNum());
+            long maybeNewId = comFacade.insertVersionReplaceOnConflict(v.getExam().getId(),v.getNum(), v.getPerfectImage());
             v.setId(maybeNewId);
             //TODO update questions
         }

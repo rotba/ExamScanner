@@ -43,5 +43,4 @@ public class CornerDetectionViewModelTest extends AbstractComponentInstrumentedT
                 out.getVersionNumbers()
         );
     }
-
 }

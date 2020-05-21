@@ -9,7 +9,6 @@ import com.example.examscanner.communication.entities_interfaces.QuestionEntityI
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
-import com.example.examscanner.repositories.grader.Grader;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public interface CommunicationFacade {
     public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, Bitmap bm);
     public long createNewScanExamSession(long examId);
     public long addExamineeAnswer(long solutionId, long questionId ,int ans, int leftX, int upY, int rightX, int botY);
-    public long addVersion(long examId, int versionNumber);
+    public long addVersion(long examId, int versionNumber, Bitmap bm);
     public long addQuestion(long vId, int qNum, int correctAnswer, int leftX, int upY, int rightX, int bottomY);
     public long createExamineeSolution(long sId, Bitmap bm, long examineeId);
     public long[] getSemiScannedCaptureBySession(long sId);
@@ -40,7 +39,7 @@ public interface CommunicationFacade {
     public long createVersion(long examId, int num);
     public VersionEntityInterface getVersionById(long vId);
     public QuestionEntityInterface getQuestionById(long qId);
-    public long insertVersionReplaceOnConflict(long examId, int num);
+    public long insertVersionReplaceOnConflict(long examId, int num, Bitmap perfectImage);
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom);
     public List<GraderEntityInterface> getGraders();
     public void createGrader(String userName, String userId);

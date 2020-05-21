@@ -1,5 +1,6 @@
 package com.example.examscanner.repositories.exam;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -20,14 +21,16 @@ public class Version {
     private int num;
     private Future<List<Question>> fQuestions;
     private List<Question> newQuestions;
+    private Bitmap perfectImage;
 
 
-    public Version(long id,int num, Exam e, Future<List<Question>> fQuestions) {
+    public Version(long id,int num, Exam e, Future<List<Question>> fQuestions, Bitmap perfectImage) {
         this.id=id;
         this.num = num;
         this.exam = e;
         newQuestions = new ArrayList<>();
         this.fQuestions = fQuestions;
+        this.perfectImage = perfectImage;
     }
 
     public Question getQuestionByNumber(int i){
@@ -157,5 +160,10 @@ public class Version {
         }
         return ans;
     }
+
+    public Bitmap getPerfectImage() {
+        return perfectImage;
+    }
+
     public class NoSuchQuestion extends RuntimeException {}
 }

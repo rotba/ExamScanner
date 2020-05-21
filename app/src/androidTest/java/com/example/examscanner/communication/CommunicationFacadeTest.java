@@ -29,6 +29,7 @@ public class CommunicationFacadeTest {
     CommunicationFacade oot;
     AppDatabase db;
     private String currentUserId;
+    private static Bitmap DEFAULT_VERSION_BITMAP =null;
 
     @Before
     public void setUp() throws Exception {
@@ -63,13 +64,13 @@ public class CommunicationFacadeTest {
     private VersionContext setUpVersionContext() {
         ExamContext context = setUpExamContext();
         final int versionNumber = 1;
-        return new VersionContext(oot.addVersion(context.eId, versionNumber),  context.eId, versionNumber);
+        return new VersionContext(oot.addVersion(context.eId, versionNumber,DEFAULT_VERSION_BITMAP),  context.eId, versionNumber);
     }
 
     private VersionContext setUpVersionNonEmptyContext() {
         ExamContext context = setUpExamContext();
         final int versionNumber = 1;
-        VersionContext ans = new VersionContext(oot.addVersion(context.eId, versionNumber),context.eId,versionNumber);
+        VersionContext ans = new VersionContext(oot.addVersion(context.eId, versionNumber,DEFAULT_VERSION_BITMAP),context.eId,versionNumber);
         oot.addQuestion(ans.vId, 1, 1,0,0,0,0);
         oot.addQuestion(ans.vId, 2, 400,0,0,0,0);
         oot.addQuestion(ans.vId, 3, 5,0,0,0,0);
@@ -103,7 +104,7 @@ public class CommunicationFacadeTest {
     public void testAddVersionNotNull() {
         long examId = setUpExamContext().eId;
         final int versionNumber = 1;
-        long vId = oot.addVersion(examId, versionNumber);
+        long vId = oot.addVersion(examId, versionNumber, DEFAULT_VERSION_BITMAP);
         assertNotNull(oot.getVersionByExamIdAndNumber(examId, versionNumber));
     }
 
@@ -111,7 +112,7 @@ public class CommunicationFacadeTest {
     public void testAddVersionDataIsCorrect() {
         long examId = setUpExamContext().eId;
         final int versionNumber = 6;
-        long vId = oot.addVersion(examId, versionNumber);
+        long vId = oot.addVersion(examId, versionNumber ,DEFAULT_VERSION_BITMAP);
         VersionEntityInterface vEI = oot.getVersionByExamIdAndNumber(examId, versionNumber);
         assertEquals(vEI.getExamId(), examId);
         assertEquals(vEI.getNumber(), versionNumber);
@@ -233,7 +234,7 @@ public class CommunicationFacadeTest {
     public void testVersionEntityInterface() {
         ExamContext examContext = setUpExamContext();
         final int versionNumber = 1;
-        oot.addVersion(examContext.eId, versionNumber);
+        oot.addVersion(examContext.eId, versionNumber, DEFAULT_VERSION_BITMAP);
         VersionEntityInterface ei = oot.getVersionByExamIdAndNumber(examContext.eId,versionNumber);
         assertEquals(ei.getNumber(),versionNumber);
         assertEquals(ei.getExamId(),examContext.eId);

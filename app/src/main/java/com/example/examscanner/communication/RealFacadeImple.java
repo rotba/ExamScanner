@@ -31,10 +31,13 @@ import com.example.examscanner.persistence.remote.entities.Grader;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RealFacadeImple implements CommunicationFacade {
+    private static final long DONT_SAVE_BITMAP = -1;
     private static RealFacadeImple instance;
     private AppDatabase db;
     private FilesManager fm;
@@ -54,6 +57,7 @@ public class RealFacadeImple implements CommunicationFacade {
     }
     static void tearDown(){
         instance =null;
+        FilesManagerFactory.tearDown();
     }
 
 
@@ -80,7 +84,13 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId,  Bitmap bm) {
-        long bmId = fm.store(bm);
+        String bmId = null;
+        try {
+            bmId =fm.genId();
+            fm.store(bm, bmId);
+        } catch (IOException e) {
+            throw new CommunicationException(e);
+        }
         return db.getSemiScannedCaptureDao().insert(
                 new SemiScannedCapture(
                         leftMostX,
@@ -101,6 +111,8 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public SemiScannedCaptureEntityInterface getSemiScannedCapture(long id) {
         SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(id);
+//        final Bitmap bitmap = fm.get(String.valueOf(ssc.getBitmapId()));
+        final Bitmap bitmap = null;
         return new SemiScannedCaptureEntityInterface() {
             @Override
             public int getLeftMostX() {
@@ -130,7 +142,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
             @Override
             public Bitmap getBitmap() {
-                return fm.get(ssc.getBitmapId());
+                return bitmap;
             }
 
             @Override
@@ -349,6 +361,16 @@ public class RealFacadeImple implements CommunicationFacade {
     public VersionEntityInterface getVersionById(long vId) {
         Version theVersion =db.getVersionDao().getById(vId);
         if(theVersion==null) throw new NoSuchElementInLocalDbException(String.format("version with id: %d",vId ));
+        try {
+            return versionEntityToInterface(vId, theVersion);
+        } catch (FileNotFoundException e) {
+            throw new CommunicationException(e);
+        }
+    }
+
+    @NotNull
+    protected VersionEntityInterface versionEntityToInterface(long vId, Version theVersion) throws FileNotFoundException {
+        Bitmap theBitmap =fm.get(generateVersionBitmapPath(theVersion.getId()));
         return new VersionEntityInterface() {
             @Override
             public long getId() {
@@ -369,6 +391,11 @@ public class RealFacadeImple implements CommunicationFacade {
             @Override
             public int getNumber() {
                 return theVersion.getVerNum();
+            }
+
+            @Override
+            public Bitmap getBitmap() {
+                return theBitmap;
             }
         };
     }
@@ -420,10 +447,16 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
-    public long insertVersionReplaceOnConflict(long examId, int num) {
+    public long insertVersionReplaceOnConflict(long examId, int num, Bitmap perfectImage) {
         Version maybeVersion = db.getVersionDao().getByExamIdAndNumber(examId, num);
         if(maybeVersion==null){
-            return createVersion(examId,num);
+            final long version = createVersion(examId, num);
+            try {
+                fm.store(perfectImage, generateVersionBitmapPath(version));
+                return version;
+            } catch (IOException e) {
+                throw new CommunicationException(e);
+            }
         }else{
             db.getVersionDao().update(maybeVersion);
             return maybeVersion.getId();
@@ -472,42 +505,31 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         Version theVersion = db.getVersionDao().getByExamIdAndNumber(eId, num);
-        return new VersionEntityInterface() {
-            @Override
-            public long getId() {
-                return theVersion.getId();
-            }
-
-            @Override
-            public long getExamId() {
-                return theVersion.getExamId();
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public long[] getQuestions() {
-                return db.getVersionDao().getVersionWithQuestions(theVersion.getId()).getQuestions().stream()
-                        .mapToLong(Question::getId).toArray();
-            }
-
-            @Override
-            public int getNumber() {
-                return theVersion.getVerNum();
-            }
-        };
+        try {
+            return versionEntityToInterface(theVersion.getId(),theVersion);
+        } catch (FileNotFoundException e) {
+            throw new CommunicationException(e);
+        }
     }
 
     @Override
-    public long addVersion(long examId, int versionNumber) {
+    public long addVersion(long examId, int versionNumber, Bitmap bm) {
         String remoteExamId = db.getExamDao().getById(examId).getRemoteId();
         try{
             String remoteVersionId = remoteDb.addVersion(remoteExamId, versionNumber).blockingFirst();
             long ans =  db.getVersionDao().insert(new Version(versionNumber, examId, remoteVersionId));
+            fm.store(bm, generateVersionBitmapPath(ans));//storeBitmap(generateVersionBitmapPath(ans), bm);
             return ans;
         }catch (Throwable e){
             /*TODO - handle*/
             throw new CommunicationException(e);
         }
+    }
+
+
+
+    private static String generateVersionBitmapPath(long ans) {
+        return "VERSION_"+String.valueOf(ans);
     }
 
     @Override
@@ -517,7 +539,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long createExamineeSolution(long sId, Bitmap bm, long examineeId) {
-        return db.getExamineeSolutionDao().insert(new ExamineeSolution(examineeId,fm.store(bm),sId));
+        return db.getExamineeSolutionDao().insert(new ExamineeSolution(examineeId,DONT_SAVE_BITMAP,sId));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

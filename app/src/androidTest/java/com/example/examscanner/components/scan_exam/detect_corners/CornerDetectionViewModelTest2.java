@@ -57,7 +57,7 @@ public abstract class CornerDetectionViewModelTest2 extends AbstractComponentIns
     //    @Test
     public void scanAnswersByPositions() {
         //out.transformToRectangle(useCaseContext.getCDC());
-        out.align(useCaseContext.getCDC(), useCaseContext.getOrigVersionImage());
+        out.align(useCaseContext.getCDC());
         useCaseContext.getCDC().setBitmap(Bitmap.createScaledBitmap(useCaseContext.getCDC().getBitmap(), useCaseContext.getOrigVersionImage().getWidth(), useCaseContext.getOrigVersionImage().getHeight(), false));
         out.scanAnswers(useCaseContext.getCDC());
         ArrayList<Integer> realAnswers = new ArrayList<Integer>(
