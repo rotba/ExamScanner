@@ -69,6 +69,7 @@ public class CornerDetectionContext2Setuper {
         examRepository = new ExamRepositoryFactory().create();
         List<Exam> exams = examRepository.get((e)->true);
         e = exams.get(0);
+        getCDC().setVersion(e.getVersionByNum(dinaBarzilayVersion));
 
 
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());

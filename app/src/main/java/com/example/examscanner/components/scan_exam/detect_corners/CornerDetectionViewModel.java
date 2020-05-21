@@ -77,15 +77,15 @@ public class CornerDetectionViewModel extends ViewModel {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void scanAnswers(CornerDetectedCapture cdc, int versionNum){
+    public void scanAnswers(CornerDetectedCapture cdc){
         ScanAnswersConsumer consumer = new ScanAnswersConsumer() {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 scRepo.create(new ScannedCapture(scRepo.genId(),cdc.getBitmap(),exam.getNumOfQuestions(),numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections));
             }
         };
-        int[] leftMostXs = exam.getVersionByNum(versionNum).getQuestions().stream().mapToInt(q -> q.getLeft()).toArray();
-        int[] upperMostYs = exam.getVersionByNum(versionNum).getQuestions().stream().mapToInt(q -> q.getUp()).toArray();
+        int[] leftMostXs = cdc.getVersion().getQuestions().stream().mapToInt(q -> q.getLeft()).toArray();
+        int[] upperMostYs = cdc.getVersion().getQuestions().stream().mapToInt(q -> q.getUp()).toArray();
         imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer, leftMostXs, upperMostYs);
 //        imageProcessor.scanAnswers(cdc.getBitmap(), exam.getNumOfQuestions(), consumer);
     }
@@ -114,7 +114,7 @@ public class CornerDetectionViewModel extends ViewModel {
 
     public void setVersion(long captureId, int verNum){
         CornerDetectedCapture cdc = getCDCById(captureId).getValue();
-        cdc.setVersionId(exam.getVersionByNum(verNum).getId());
+        cdc.setVersion(exam.getVersionByNum(verNum));
         getCDCById(captureId).setValue(cdc);
     }
 

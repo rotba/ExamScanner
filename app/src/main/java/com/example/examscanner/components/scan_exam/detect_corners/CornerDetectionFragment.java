@@ -48,6 +48,7 @@ public class CornerDetectionFragment extends Fragment {
     private ViewPager2 viewPager;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class CornerDetectionFragment extends Fragment {
         });
         final Button approveAndScannButton = (Button) view.findViewById(R.id.button_cd_approve_and_scan_answers);
         approveAndScannButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 int adapterBasedOPosition = cornerDetectionCapturesAdapter.getPosition().getValue();
@@ -138,15 +140,6 @@ public class CornerDetectionFragment extends Fragment {
                         .setVisibility(inScanning > 0 && integer>0 ? VISIBLE : View.INVISIBLE);
             }
         });
-//        for (MutableLiveData<CornerDetectedCapture> cdc:cornerDetectionViewModel.getCDCs()) {
-//            cdc.observe(getActivity(), new Observer<CornerDetectedCapture>() {
-//                @Override
-//                public void onChanged(CornerDetectedCapture cdc) {
-//                    ((Button) getActivity().findViewById(R.id.button_cd_approve_and_scan_answers))
-//                            .setEnabled(currentCardIsReadyForProcessing(cdc));
-//                }
-//            });
-//        }
         ((ProgressBar)getActivity().findViewById(R.id.progressBar_detect_corners)).setVisibility(View.INVISIBLE);
 
     }
@@ -175,7 +168,7 @@ public class CornerDetectionFragment extends Fragment {
         return Completable.fromCallable(() -> {
             cornerDetectionViewModel.transformToRectangle(cdc);
             /* TODO : replace -1 with version num */
-            cornerDetectionViewModel.scanAnswers(cdc, -1);
+            cornerDetectionViewModel.scanAnswers(cdc);
             return "Done";
         })
                 .subscribeOn(Schedulers.io())
@@ -189,7 +182,7 @@ public class CornerDetectionFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "generateCaptureScanningCompletable",e);
+                        Log.d(TAG, MSG_PREF+"::generateCaptureScanningCompletable",e);
                         e.printStackTrace();
                     }
                 });

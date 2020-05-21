@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
 
+import com.example.examscanner.repositories.exam.Version;
+
 public class CornerDetectedCapture {
     private long id;
     private Bitmap bm;
@@ -12,11 +14,11 @@ public class CornerDetectedCapture {
     private int upperMostY;
     private int rightMostX;
     private int bottomMosty;
-    private Long versionId;
     private Point upperLeft;
     private Point upperRight;
     private Point bottomRight;
     private Point bottomLeft;
+    private Version version;
 
     public Point getUpperLeft() {
         return upperLeft;
@@ -102,12 +104,13 @@ public class CornerDetectedCapture {
         return sessionId;
     }
 
-    public void setVersionId(long id) {
-        versionId = id;
+
+    public void setVersion(Version version) {
+        this.version = version;
     }
 
     public boolean hasVersion() {
-        return versionId!=null;
+        return version!=null;
     }
 
     public void setUpperLeft(Point point) {
@@ -124,5 +127,9 @@ public class CornerDetectedCapture {
 
     public void setBottomLeft(Point point) {
         bottomLeft = point;
+    }
+
+    public Version getVersion() {
+        return version;
     }
 }
