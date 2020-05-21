@@ -16,9 +16,11 @@ import java.util.concurrent.TimeoutException;
 public class ExamStubFactory {
     public static final int instance1_dinaBarzilayVersion = 496351;
     public static final int instance1_theDevilVersion = 666;
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
     private static long instance1Id = -800;
     public static String instance1_courseName = "TEST_courseName";
     private static long sessionId = -900;
+
 
     public static Exam instance1() {
         Exam e = new Exam(
@@ -30,7 +32,8 @@ public class ExamStubFactory {
                 0,
                 1,
                 sessionId,
-                "2020"
+                "2020",
+                QAD_NUM_OF_QUESTIONS
         );
         Future<List<Version>> fv = new Future<List<Version>>() {
             @Override

@@ -29,7 +29,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
 
             }
 
@@ -77,7 +77,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
@@ -120,7 +120,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
 
             }
 
@@ -154,7 +154,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
                 ScannedCapturesInstancesFactory.instance1(consumer);
             }
 

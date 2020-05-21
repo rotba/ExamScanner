@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 import static android.view.View.VISIBLE;
 
 public class CornerDetectionFragment extends Fragment {
+    private static boolean DEBUG = true;
     private static final String TAG = "ExamScanner";
     private static final String MSG_PREF = "CornerDetectionFragment::";
     private CornerDetectionViewModel cornerDetectionViewModel;
@@ -178,6 +180,13 @@ public class CornerDetectionFragment extends Fragment {
                     public void onComplete() {
                         cornerDetectionViewModel.postProcessTransformAndScanAnswers(cdc.getId());
                         cornerDetectionCapturesAdapter.handleProcessFinish(cdc.getId());
+                        if(DEBUG){;
+                            Toast.makeText(
+                                    getActivity(),
+                                    cornerDetectionViewModel.getFOR_DEBUGGING_resultOfScanAnswers(),
+                                    10*Toast.LENGTH_LONG
+                            ).show();
+                        }
                     }
 
                     @Override

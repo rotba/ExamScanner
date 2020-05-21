@@ -6,7 +6,7 @@ public interface ImageProcessingFacade {
     public void detectCorners(Bitmap bm, DetectCornersConsumer consumer);
     public Bitmap transformToRectangle(Bitmap bitmap, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft);
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer);
-    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs);
+    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs);
     public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer);
     public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg);
 }

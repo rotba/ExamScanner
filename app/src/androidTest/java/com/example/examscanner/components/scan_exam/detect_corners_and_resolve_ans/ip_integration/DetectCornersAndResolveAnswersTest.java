@@ -36,6 +36,8 @@ import static org.hamcrest.Matchers.containsString;
 
 public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveAnswersAbstractTest {
 
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
+
     @Before
     @Override
     public void setUp() {
@@ -48,7 +50,7 @@ public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveA
         return new CornerDetectionContext1Setuper(){
             @Override
             public void setup() {
-                e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020");
+                e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020",QAD_NUM_OF_QUESTIONS);
                 examRepository = new ExamRepositoryFactory().create();
                 dinaBarzilayVersion = 496351;
                 e.addVersion(new Version(-1, dinaBarzilayVersion,e,Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getTestJpg1()));

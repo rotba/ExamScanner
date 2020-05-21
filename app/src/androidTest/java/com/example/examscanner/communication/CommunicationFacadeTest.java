@@ -26,6 +26,7 @@ import io.reactivex.observers.TestObserver;
 import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class CommunicationFacadeTest {
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
     CommunicationFacade oot;
     AppDatabase db;
     private String currentUserId;
@@ -57,7 +58,7 @@ public class CommunicationFacadeTest {
     private ExamContext setUpExamContext() {
         long examCreationContext = oot.createNewCreateExamSession();
         return new ExamContext(
-                oot.createExam("COMP", "walla.co.il", "2020", 1, 1, currentUserId,new String[0],examCreationContext)
+                oot.createExam("COMP", "walla.co.il", "2020", 1, 1, currentUserId,new String[0],examCreationContext,QAD_NUM_OF_QUESTIONS)
         );
     }
 
@@ -96,7 +97,7 @@ public class CommunicationFacadeTest {
     @Test
     public void testCreateAndGetExamNotNull() {
         String[] graders = new String[]{};
-        long id = oot.createExam("COMP", "walla.co.il", "2020", 1, 1,currentUserId, graders,-1);
+        long id = oot.createExam("COMP", "walla.co.il", "2020", 1, 1,currentUserId, graders,-1,QAD_NUM_OF_QUESTIONS);
         assertNotNull(oot.getExamById(id));
     }
 
@@ -248,7 +249,7 @@ public class CommunicationFacadeTest {
         final int term = 1;
         final int semester = 1;
         final int sessionId = -1;
-        long id = oot.createExam(comp, url, year, term, semester,currentUserId,new String[0], sessionId);
+        long id = oot.createExam(comp, url, year, term, semester,currentUserId,new String[0], sessionId,QAD_NUM_OF_QUESTIONS);
         ExamEntityInterface ei = oot.getExamById(id);
         assertEquals(ei.getCourseName(), comp);
         assertEquals(ei.getUrl(), url);

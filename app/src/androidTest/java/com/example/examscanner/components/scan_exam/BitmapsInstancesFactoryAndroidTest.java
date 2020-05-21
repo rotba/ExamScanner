@@ -45,6 +45,8 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String comp191_V1_ins_6= "instances/comp191_v1/_6.jpg";
     private static String comp191_V1_ins_7= "instances/comp191_v1/_7.jpg";
     private static String comp191_V1_ins_8= "instances/comp191_v1/_8.jpg";
+    private static String comp191_V1_ins_9 ="instances/comp191_v1/_9.jpg";
+    private static String comp191_V1_ins_in1 = "instances/comp191_v1/in_1.jpg";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -178,6 +180,14 @@ public class BitmapsInstancesFactoryAndroidTest {
 
     public static Bitmap getComp191_V1_ins_8() {
         return transform90D(getBitmapFromAssets(comp191_V1_ins_8));
+    }
+
+    public static Bitmap getComp191_V1_ins_9() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_9));
+    }
+
+    public static Bitmap getComp191_V1_ins_in1() {
+        return getBitmapFromAssets(comp191_V1_ins_in1);
     }
 
     private static Bitmap transform90D(Bitmap bitmapFromAssets) {

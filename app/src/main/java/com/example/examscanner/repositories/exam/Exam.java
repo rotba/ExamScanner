@@ -29,7 +29,7 @@ public class Exam {
     private Future<List<Version>> fVersions;
     private int numOfQuestions;
 
-    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year) {
+    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions) {
         this.id = id;
         this.courseName = courseName;
         this.term = moed;
@@ -39,6 +39,7 @@ public class Exam {
         this.year = year;
         this.fVersions = fVersions;
         newVersions = new ArrayList<>();
+        this.numOfQuestions = numOfQuestions;
     }
 
     public void setFutureVersions(Future<List<Version>> fVersions) {

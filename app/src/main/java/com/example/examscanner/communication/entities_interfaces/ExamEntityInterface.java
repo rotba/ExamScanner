@@ -9,4 +9,5 @@ public interface ExamEntityInterface {
     public int getTerm();
     public long getSessionId();
     public int getSemester();
+    public int getNumOfQuestions();
 }

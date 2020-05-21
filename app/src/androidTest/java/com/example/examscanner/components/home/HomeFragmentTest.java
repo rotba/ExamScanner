@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.containsString;
 
 public class HomeFragmentTest extends StateFullTest {
 
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
     private String comp;
     private String caspl;
 
@@ -27,9 +28,9 @@ public class HomeFragmentTest extends StateFullTest {
     public void setUp() {
         dbCallback = db -> {
             comp = "COMP";
-            db.getExamDao().insert(new Exam(comp, 0,"2020","THE_EMPTY_URL",0,0, null));
+            db.getExamDao().insert(new Exam(comp, 0,"2020","THE_EMPTY_URL",0,0, null,QAD_NUM_OF_QUESTIONS));
             caspl = "CASPL";
-            db.getExamDao().insert(new Exam(caspl, 1,"2020","THE_EMPTY_URL",0,0, null));
+            db.getExamDao().insert(new Exam(caspl, 1,"2020","THE_EMPTY_URL",0,0, null,QAD_NUM_OF_QUESTIONS));
         };
         super.setUp();
     }

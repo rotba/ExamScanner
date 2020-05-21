@@ -43,7 +43,8 @@ public class ExamInCreation extends Exam {
                 -1,
                 -1,
                 sessionId,
-                "THE_EMPTY_YEAR"
+                "THE_EMPTY_YEAR",
+                -1
         );
     }
 

@@ -18,8 +18,10 @@ public class Exam {
     @ForeignKey(entity = ExamCreationSession.class, parentColumns = ExamCreationSession.pkName , childColumns ="examCreationSessionId" )
     private long examCreationSessionId;
     private String remoteId;
+    private int numberOfQuestions;
 
-    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId) {
+
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
@@ -27,6 +29,7 @@ public class Exam {
         this.semester = semester;
         this.examCreationSessionId = examCreationSessionId;
         this.remoteId = remoteId;
+        this.numberOfQuestions = numberOfQuestions;
     }
 
     public String getUrl() {
@@ -87,5 +90,13 @@ public class Exam {
 
     public String getRemoteId() {
         return remoteId;
+    }
+
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
+    public void setNumberOfQuestions(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
     }
 }

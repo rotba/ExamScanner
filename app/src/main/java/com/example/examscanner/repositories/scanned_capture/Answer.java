@@ -1,5 +1,7 @@
 package com.example.examscanner.repositories.scanned_capture;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public abstract class Answer {
@@ -24,5 +26,6 @@ public abstract class Answer {
     }
     public Answer commitResolution(){return this;};
     public void addMe(List<ConflictedAnswer> l){return;};
+
 
 }

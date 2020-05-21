@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class ExamInstancesGenerator {
 
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
+
     public static Exam getInstance1() {
         Exam e = new Exam(
                 "FAKE_MANAGER",
@@ -16,7 +18,8 @@ public class ExamInstancesGenerator {
                 0,
                 0,
                 0,
-                "1984"
+                "1984",
+                QAD_NUM_OF_QUESTIONS
         );
         final Version v = new Version(
                 -1,

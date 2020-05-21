@@ -63,7 +63,6 @@ public class CaptureViewModel extends ViewModel {
                     }
                 }
         );
-
     }
 
     public void postProcessCapture() {

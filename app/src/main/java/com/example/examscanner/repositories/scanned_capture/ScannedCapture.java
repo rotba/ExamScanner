@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class ScannedCapture {
     private int id;
 
 
-    public ScannedCapture(int id, Bitmap bm,int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
+    public ScannedCapture(int id, Bitmap bm, int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
         this.bm=bm;
         this.answers = new ArrayList<>();
         for (int i = 0; i <numOfAnswersDetected ; i++) {
@@ -54,13 +55,13 @@ public class ScannedCapture {
     private Answer getZeroBasedAnswer(int index){
         return answers.get(index);
     }
+
     private Answer getNaturalBasedAnswer(int id) throws NoSuchAnswerException {
         for (Answer a:answers) {
             if (a.getAnsNum()==id) return a;
         }
         throw new NoSuchAnswerException("Asked for: "+ id+" but there are only "+answers.size()+" answers");
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public int amountOf(Predicate<Answer> pred){
@@ -69,11 +70,11 @@ public class ScannedCapture {
             if(pred.test(a))ans++;
         return ans;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public int getCheckedAmount() {
         return amountOf(a -> a.isResolved());
     }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     public int getConflictedAmount() {
         return amountOf(a -> a.isConflicted());
@@ -134,8 +135,20 @@ public class ScannedCapture {
 
 
     private class NoSuchAnswerException extends Exception{
+
         public NoSuchAnswerException(String message) {
             super(message);
         }
+    }
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder sBuilder = new StringBuilder();
+        for (int i = 0; i < answers.size(); i++) {
+            Answer a = getAnswerByNum(i+1);
+            sBuilder.append(a.toString());
+            sBuilder.append(", ");
+        }
+        return sBuilder.toString();
     }
 }

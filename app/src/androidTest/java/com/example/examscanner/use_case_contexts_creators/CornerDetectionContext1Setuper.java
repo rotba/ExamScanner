@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 
 public class CornerDetectionContext1Setuper {
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
     protected Repository<Exam> examRepository;
     protected ImageProcessingFacade imageProcessor;
     protected Repository<CornerDetectedCapture> cdcRepo;
@@ -34,7 +35,7 @@ public class CornerDetectionContext1Setuper {
 //    private String uId;
 
     public void setup(){
-        e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020");
+        e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020",QAD_NUM_OF_QUESTIONS);
         examRepository = new ExamRepositoryFactory().create();
         dinaBarzilayVersion = 496351;
         e.addVersion(new Version(-1, dinaBarzilayVersion,e,Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getTestJpg1()));

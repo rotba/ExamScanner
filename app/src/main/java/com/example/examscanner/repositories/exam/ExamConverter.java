@@ -32,7 +32,8 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
                 examEntityInterface.getTerm(),
                 examEntityInterface.getSemester(),
                 examEntityInterface.getSessionId(),
-                examEntityInterface.getYear()
+                examEntityInterface.getYear(),
+                examEntityInterface.getNumOfQuestions()
         );
         e.setFutureVersions(new VersionsFuture(e, examEntityInterface.getVersionsIds()));
         return e;

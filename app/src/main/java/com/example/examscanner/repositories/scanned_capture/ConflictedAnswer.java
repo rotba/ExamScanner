@@ -2,6 +2,8 @@ package com.example.examscanner.repositories.scanned_capture;
 
 import android.graphics.PointF;
 
+import androidx.annotation.NonNull;
+
 import com.example.examscanner.components.scan_exam.reslove_answers.resolve_conflicted_answers.Choice;
 
 import java.util.List;
@@ -37,5 +39,11 @@ public class ConflictedAnswer extends Answer{
 
     public ResolvedConflictedAnswer resolve(Choice c) {
         return new ResolvedConflictedAnswer(this,c);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "C";
     }
 }

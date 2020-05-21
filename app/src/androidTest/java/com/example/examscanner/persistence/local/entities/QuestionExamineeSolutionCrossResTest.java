@@ -14,6 +14,7 @@ public class QuestionExamineeSolutionCrossResTest extends DaoAbstractTest {
 
 
     private static final String TAG = "QuestionExamineeSolutionCrossResTest";
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
 
     @Before
     @Override
@@ -25,7 +26,7 @@ public class QuestionExamineeSolutionCrossResTest extends DaoAbstractTest {
     public void testGettingExamineeAnswers() {
         int bmId =0;
         long creationSessionId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
-        long examId = db.getExamDao().insert(new Exam("COMP A",0,"2020", "url", 0,creationSessionId, null));
+        long examId = db.getExamDao().insert(new Exam("COMP A",0,"2020", "url", 0,creationSessionId, null,QAD_NUM_OF_QUESTIONS));
         long sid = db.getScanExamSessionDao().insert(new ScanExamSession(examId));
         long esId = db.getExamineeSolutionDao().insert(new ExamineeSolution(examId, bmId,sid));
         long verId = db.getVersionDao().insert(new Version(0, examId, null));

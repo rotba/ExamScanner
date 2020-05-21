@@ -13,7 +13,7 @@ import com.example.examscanner.communication.entities_interfaces.VersionEntityIn
 import java.util.List;
 
 public interface CommunicationFacade {
-    public long createExam(String courseName, String url, String year, int term, int semester,String mangerId, String[] gradersIdentifiers ,long sessionId);
+    public long createExam(String courseName, String url, String year, int term, int semester,String mangerId, String[] gradersIdentifiers ,long sessionId, int numberOfQuestions);
     public long getExamIdByScanExamSession(long sId);
     public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, Bitmap bm);
     public long createNewScanExamSession(long examId);

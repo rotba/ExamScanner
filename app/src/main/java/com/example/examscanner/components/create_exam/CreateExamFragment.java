@@ -1,8 +1,10 @@
 package com.example.examscanner.components.create_exam;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -44,6 +47,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CreateExamFragment extends Fragment {
     public static final int PICKFILE_REQUEST_CODE = 0;
+    private static final int MY_PERMISSIONS_REQUEST_READ_WRITE_FILES =1 ;
     private static String MSG_PREF = "CreateExamFragment::";
     private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
@@ -89,6 +93,36 @@ public class CreateExamFragment extends Fragment {
         });
         ((Button) view.findViewById(R.id.button_create_exam_add_version)).setOnClickListener(this::onAddVersion);
         ((Button) view.findViewById(R.id.button_create_exam_add_greader)).setOnClickListener(this::onAddGrader);
+        askPemissionsLoop();
+    }
+
+    private void askPemissionsLoop() {
+        if (!allPermissionsGranted()) {
+            requestPermissions(
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_WRITE_FILES
+            );
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_WRITE_FILES: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+
+                }
+                return;
+            }
+        }
+    }
+
+    private boolean allPermissionsGranted() {
+        return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void refreshCreateExamButton() {
@@ -121,9 +155,10 @@ public class CreateExamFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onVersionAdded, this::onVersionAddedFailed);
     }
+
     private void onAddGrader(View view) {
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
-        viewModel.holdGraderUsername(((EditText)getActivity().findViewById(R.id.editText_create_exam_grader_address)).getText().toString());
+        viewModel.holdGraderUsername(((EditText) getActivity().findViewById(R.id.editText_create_exam_grader_address)).getText().toString());
         Completable.fromAction(() -> viewModel.addGrader())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -169,7 +204,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onGraderAddedFailed(Throwable throwable) {
-        Log.d(TAG, MSG_PREF,throwable);
+        Log.d(TAG, MSG_PREF, throwable);
         CharSequence text = String.format("Failed adding grader, are you sure %s is a correct username?", viewModel.getCurrentGrader());
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(getActivity(), text, duration).show();
@@ -212,7 +247,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF + "onError",throwable);
+        Log.d(TAG, MSG_PREF + "onError", throwable);
         throwable.printStackTrace();
     }
 

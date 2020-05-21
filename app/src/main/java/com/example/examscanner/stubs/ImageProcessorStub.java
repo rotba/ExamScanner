@@ -24,7 +24,7 @@ public class ImageProcessorStub implements ImageProcessingFacade {
     }
 
     @Override
-    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
 
     }
 

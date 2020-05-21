@@ -5,6 +5,10 @@ import androidx.room.Room;
 
 import com.example.examscanner.communication.ContextProvider;
 
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 import static androidx.test.core.app.ApplicationProvider.*;
 
 

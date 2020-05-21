@@ -16,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.examscanner.communication.ContextProvider;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.stubs.StubImageProcessingFactory;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.navigation.NavigationView;
@@ -28,14 +29,14 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 0;
     private AppBarConfiguration mAppBarConfiguration;
     private MainActivityViewModel viewModel;
-    private static boolean stubsMode = false;
+    private static boolean stubsMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
+        if(stubsMode)StubsSetupManager.setup(getBaseContext());
         OpenCVLoader.initDebug();
-        if(stubsMode) ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(StubImageProcessingFactory.create(this));
         ContextProvider.set(this.getApplicationContext());
         MainActivityViewModelFactory factory = new MainActivityViewModelFactory();
         viewModel = new ViewModelProvider(this,factory).get(MainActivityViewModel.class);

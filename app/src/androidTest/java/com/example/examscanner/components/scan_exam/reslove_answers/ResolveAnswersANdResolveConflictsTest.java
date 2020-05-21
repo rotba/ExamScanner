@@ -33,6 +33,7 @@ import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static org.hamcrest.Matchers.containsString;
 
 public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
     private final int dinaBarzilayVersionNumber = 496351;
     private ImageProcessingFacade imageProcessor;
     private Repository<ScannedCapture> repo;
@@ -47,7 +48,7 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
     public void setUp() {
         dbCallback = db ->{
             long creationId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
-            examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId, null));
+            examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId, null,QAD_NUM_OF_QUESTIONS));
             db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(dinaBarzilayVersionNumber, examId, null));
             db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(theDevilVersionNumber, examId, null));
 

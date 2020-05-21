@@ -99,4 +99,14 @@ public class CornerDetectionViewModelTest3 extends CornerDetectionViewModelTest2
         super.scanAnswersByPositions();
     }
 
+    @Test
+    public void scanAnswersByPositionsInsatnce9() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(
+                BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_9(),
+                BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()
+        );
+        lateSetup();
+        super.scanAnswersByPositions();
+    }
+
 }

@@ -2,6 +2,8 @@ package com.example.examscanner.repositories.scanned_capture;
 
 import android.graphics.PointF;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class ResolvedAnswer extends Answer{
@@ -33,5 +35,11 @@ public class ResolvedAnswer extends Answer{
 
     public int getSelection() {
         return selection;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.valueOf(selection);
     }
 }

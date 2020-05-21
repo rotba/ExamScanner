@@ -38,6 +38,7 @@ import java.util.List;
 
 public class RealFacadeImple implements CommunicationFacade {
     private static final long DONT_SAVE_BITMAP = -1;
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
     private static RealFacadeImple instance;
     private AppDatabase db;
     private FilesManager fm;
@@ -70,11 +71,11 @@ public class RealFacadeImple implements CommunicationFacade {
     
 
     @Override
-    public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId) {
+    public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId, int numberOfQuestions) {
         try{
             String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false,sessionId)
             .blockingFirst();
-            long ans =db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId));
+            long ans =db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions));
             return ans;
         }catch (Throwable e){
             /*TODO - delete exam*/
@@ -271,7 +272,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
 
     private void importRemoteExam(com.example.examscanner.persistence.remote.entities.Exam re) {
-        long eId = db.getExamDao().insert(new Exam(re.courseName, re.term,re.year,re.url,re.semester,-1,re._getId()));
+        long eId = db.getExamDao().insert(new Exam(re.courseName, re.term,re.year,re.url,re.semester,-1,re._getId(), QAD_NUM_OF_QUESTIONS));
         List<com.example.examscanner.persistence.remote.entities.Version> remoteVersions = new ArrayList<>();
         remoteDb.getVersions().blockingSubscribe(rvs -> remoteVersions.addAll(rvs));
         for (com.example.examscanner.persistence.remote.entities.Version rv :
@@ -314,7 +315,7 @@ public class RealFacadeImple implements CommunicationFacade {
         }catch (Throwable e){
             throw new MyAssertionError("assert updateExam::db.getExamDao().getById(id).getRemoteId()!=null violated", e);
         }
-        Exam e = new Exam(courseName,term,year,"THE_EMPTY_URL",semester,sessionId, remoteId);
+        Exam e = new Exam(courseName,term,year,"THE_EMPTY_URL",semester,sessionId, remoteId, QAD_NUM_OF_QUESTIONS);
         e.setId(id);
         db.getExamDao().update(e);
     }
@@ -593,6 +594,11 @@ public class RealFacadeImple implements CommunicationFacade {
             @Override
             public int getSemester() {
                 return theExam.getSemester();
+            }
+
+            @Override
+            public int getNumOfQuestions() {
+                return theExam.getNumberOfQuestions();
             }
         };
     }

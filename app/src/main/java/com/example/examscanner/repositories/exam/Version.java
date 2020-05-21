@@ -165,5 +165,27 @@ public class Version {
         return perfectImage;
     }
 
+    public float[] getRealtiveLefts() {
+        float[] ans = new float[getQuestions().size()];
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] = scale(getQuestionByNumber(i+1).getLeft(), getPerfectImage().getWidth());
+        }
+        return ans;
+    }
+
+    public float[] getRealtiveUps() {
+        float[] ans = new float[getQuestions().size()];
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] = scale(getQuestionByNumber(i+1).getUp(), getPerfectImage().getHeight());
+        }
+        return ans;
+    }
+
+    private float scale(int orig, int dim) {
+        float fOrig = orig;
+        float fDim = dim;
+        return fOrig/fDim;
+    }
+
     public class NoSuchQuestion extends RuntimeException {}
 }

@@ -1,21 +1,8 @@
 package com.example.examscanner.image_processing;
 
-import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.os.Environment;
-
-import androidx.core.content.ContextCompat;
-
-import com.example.examscanner.MainActivity;
-
-import java.io.File;
-import java.io.IOException;
-
-import static android.os.Environment.DIRECTORY_PICTURES;
 
 
 public class NullImageProcessingProvider implements ImageProcessingFacade {
@@ -32,7 +19,7 @@ public class NullImageProcessingProvider implements ImageProcessingFacade {
     }
 
     @Override
-    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
 
     }
 

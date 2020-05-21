@@ -579,6 +579,10 @@ public class ImageProcessor implements ImageProcessingFacade {
     final static Scalar param_LOW_BOUND_BLACKS_COUNTING  = new Scalar(20,20,20);
     final static Scalar param_UPPER_BOUND_BLACKS_COUNTING  = new Scalar(110,110,110);
     final static boolean param_USE_FINE_AJDUSTMENT  = true;
+    private static final int ORIGINAL_WIDTH = 2550;
+    private static final int ORIGINAL_HEIGHT = 3300;
+    private static final float F_ORIGINAL_WIDTH = 2550;
+    private static final float F_ORIGINAL_HEIGHT = 3300;
 
     private Bitmap bitmapFromMat(Mat mat) {
         Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
@@ -823,20 +827,28 @@ public class ImageProcessor implements ImageProcessingFacade {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, int[] leftMostXs, int[] upperMostYs) {
+    public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
 
         if (bitmap == null || leftMostXs == null || upperMostYs == null || consumer == null)
             throw new NullPointerException("given input is null");
 
         Mat scaledTemplate = questionTemplate.clone();
+        final float xScaleConcreteToOrig = (float) bitmap.getWidth() / (float) ORIGINAL_WIDTH;
+        final float yScaleConcreteToOrig = (float) bitmap.getHeight() / (float) ORIGINAL_HEIGHT;
         Imgproc.resize(
                 scaledTemplate,
                 scaledTemplate,
                 new Size(
-                        (scaledTemplate.width() * ((float)bitmap.getWidth() / (float)2550)) ,
-                        scaledTemplate.height() * ((float)bitmap.getHeight() / (float)3300)
+                        (scaledTemplate.width() * xScaleConcreteToOrig) ,
+                        scaledTemplate.height() * yScaleConcreteToOrig
                 )
         );
+        int[] scaledLefts = new int[leftMostXs.length];
+        int[] scaledUps = new int[upperMostYs.length];
+        for (int i = 0; i<leftMostXs.length; i++){
+            scaledLefts[i] = (int)(leftMostXs[i]*bitmap.getWidth());
+            scaledUps[i] = (int)(upperMostYs[i]*bitmap.getHeight());
+        }
         Mat exam = matFromBitmap(bitmap);
         int answersIds[] = new int[amountOfQuestions];
         float lefts[] = new float[amountOfQuestions];
@@ -844,7 +856,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         float rights[] = new float[amountOfQuestions];
         float bottoms[] = new float[amountOfQuestions];
         int selections[] = new int[amountOfQuestions];
-        Map<Point, Integer> answersMap = findQuestions(exam, scaledTemplate, leftMostXs, upperMostYs);
+        Map<Point, Integer> answersMap = findQuestions(exam, scaledTemplate, scaledLefts, scaledUps);
         sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, scaledTemplate.cols(), scaledTemplate.rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
     }
@@ -1415,3 +1427,4 @@ public class ImageProcessor implements ImageProcessingFacade {
         return bitmap;
     }
 }
+

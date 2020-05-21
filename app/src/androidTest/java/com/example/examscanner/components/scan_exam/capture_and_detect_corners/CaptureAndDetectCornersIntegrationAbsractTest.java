@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.containsString;
 @RunWith(AndroidJUnit4.class)
 public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends StateFullTest {
 
+    private static final int QAD_NUM_OF_QUESTIONS = 50;
     private String test_course_name;
 
     @Before
@@ -45,7 +46,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         dbCallback = db ->{
             test_course_name = "TEST_course_name";
             long examCreationSessionId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
-            long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId, null));
+            long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId, null,QAD_NUM_OF_QUESTIONS));
         };
         super.setUp();
         Context2Setuper context = getContext();

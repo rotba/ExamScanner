@@ -44,6 +44,10 @@ public class CornerDetectionContext2Setuper {
     public CornerDetectionContext2Setuper(Bitmap cdcBitmap) {
         this.theCDCBitmap=cdcBitmap;
     }
+    public CornerDetectionContext2Setuper(Bitmap cdcBitmap, Bitmap examBitmap) {
+        this.theCDCBitmap=cdcBitmap;
+        createExamBitmap =examBitmap;
+    }
     public CornerDetectionContext2Setuper() {}
 
     public void setup(){
@@ -61,7 +65,9 @@ public class CornerDetectionContext2Setuper {
         dinaBarzilayVersion = 496351;
         ceModelView.holdNumOfQuestions("50");
         int numOfQuestions = ceModelView.getExam().getNumOfQuestions();
-        createExamBitmap =BitmapsInstancesFactoryAndroidTest.getComp191_v1_JPG_ANS_2();
+        if(createExamBitmap==null){
+            createExamBitmap =BitmapsInstancesFactoryAndroidTest.getComp191_v1_JPG_ANS_2();
+        }
         ceModelView.holdVersionBitmap(createExamBitmap);
         ceModelView.holdVersionNumber(dinaBarzilayVersion);
         ceModelView.addVersion();
@@ -69,7 +75,6 @@ public class CornerDetectionContext2Setuper {
         examRepository = new ExamRepositoryFactory().create();
         List<Exam> exams = examRepository.get((e)->true);
         e = exams.get(0);
-        getCDC().setVersion(e.getVersionByNum(dinaBarzilayVersion));
 
 
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
@@ -88,6 +93,7 @@ public class CornerDetectionContext2Setuper {
             }
         });
         e.setNumOfQuestions(50);
+        getCDC().setVersion(e.getVersionByNum(dinaBarzilayVersion));
     }
 
     public ImageProcessingFacade getImageProcessor() {
