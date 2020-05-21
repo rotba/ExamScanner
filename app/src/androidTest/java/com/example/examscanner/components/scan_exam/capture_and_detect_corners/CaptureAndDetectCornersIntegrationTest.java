@@ -1,4 +1,4 @@
-package com.example.examscanner.components.scan_exam;
+package com.example.examscanner.components.scan_exam.capture_and_detect_corners;
 
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
