@@ -133,7 +133,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.31" />
+        app:layout_constraintGuide_percent="0.33" />
 
     <TextView
         android:id="@+id/textView_semester"
@@ -177,7 +177,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.44" />
 
     <TextView
         android:id="@+id/textView_create_exam_year"
@@ -193,8 +193,8 @@
 
     <EditText
         android:id="@+id/editText_create_exam_year"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="77dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
@@ -203,16 +203,17 @@
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline7"
-        app:layout_constraintVertical_bias="0.47000003" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.7" />
 
     <TextView
         android:id="@+id/textView_create_exam_add_version"
@@ -300,12 +301,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.83" />
+        app:layout_constraintGuide_percent="0.85" />
 
     <EditText
         android:id="@+id/editText_create_exam_grader_address"
-        android:layout_width="239dp"
-        android:layout_height="42dp"
+        android:layout_width="139dp"
+        android:layout_height="35dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
@@ -314,6 +315,7 @@
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/button_create_exam_add_greader"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
@@ -400,11 +402,12 @@
 
     <EditText
         android:id="@+id/editText_create_exam_num_of_questions"
-        android:layout_width="128dp"
-        android:layout_height="36dp"
+        android:layout_width="65dp"
+        android:layout_height="52dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:inputType="number"
+        android:background="@drawable/edit_text_background"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

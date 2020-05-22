@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 0;
     private AppBarConfiguration mAppBarConfiguration;
     private MainActivityViewModel viewModel;
-    private static boolean stubsMode = true;
+    private static boolean stubsMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
