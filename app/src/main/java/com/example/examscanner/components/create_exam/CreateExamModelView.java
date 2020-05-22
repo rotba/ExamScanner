@@ -48,6 +48,7 @@ public class CreateExamModelView extends ViewModel {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void create(String courseName, String term, String semester, String year){
+        String accessToken = state.getToken();
         eRepo.create(
                 examCreated.commit(
                         state.getId(),

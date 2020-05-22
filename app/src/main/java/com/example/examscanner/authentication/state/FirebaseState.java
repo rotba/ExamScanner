@@ -34,4 +34,9 @@ class FirebaseState implements State<FirebaseAuth> {
     public FirebaseAuth getContent() {
         return null;
     }
+
+    @Override
+    public String getToken() {
+        return stateContent.getAccessToken(false).getResult().getToken();
+    }
 }

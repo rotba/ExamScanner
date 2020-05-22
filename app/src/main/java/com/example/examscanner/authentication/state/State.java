@@ -6,4 +6,5 @@ public interface State<T> {
     public boolean isAuthenticated();
     public String getId();
     T getContent();
+    public String getToken();
 }

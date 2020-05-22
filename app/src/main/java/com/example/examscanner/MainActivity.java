@@ -83,6 +83,24 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+
+                //                    final FirebaseUser account = FirebaseAuth.getInstance().getCurrentUser();
+//
+//                    Runnable runnable = () -> {
+//                        try {
+//                            String scope = "oauth2:"+ Scopes.EMAIL+" "+ Scopes.PROFILE;
+//                            String accessToken = GoogleAuthUtil.getToken(getApplicationContext(), account.getUid(), scope, new Bundle());
+//                            Log.d(TAG, "accessToken:"+accessToken); //accessToken:ya29.Gl...
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        } catch (GoogleAuthException e) {
+//                            e.printStackTrace();
+//                        }
+//                    };
+//                    AsyncTask.execute(runnable);
+
+                
                 viewModel.authenticate();
                 createHome();
             } else {
