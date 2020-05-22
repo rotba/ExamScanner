@@ -30,7 +30,7 @@ public class CommunicationFacadeTest {
     CommunicationFacade oot;
     AppDatabase db;
     private String currentUserId;
-    private static Bitmap DEFAULT_VERSION_BITMAP =null;
+    private static Bitmap DEFAULT_VERSION_BITMAP;
 
     @Before
     public void setUp() throws Exception {
@@ -47,6 +47,7 @@ public class CommunicationFacadeTest {
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
         observer.awaitCount(1);
         observer.assertComplete();
+        DEFAULT_VERSION_BITMAP = BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1();
     }
 
     @After
