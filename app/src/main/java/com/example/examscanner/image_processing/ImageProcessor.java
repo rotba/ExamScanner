@@ -878,6 +878,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         Map<Point, Integer> answersMap = findQuestions(exam, questionTemplate, amountOfQuestions);
         sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate.rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
+        //FOR_DEBUGGING: use in evalutaor showRedRectangles(lefts,rights,exam,questionTemplate.width(),questionTemplate.height())
 
     }
 
@@ -899,6 +900,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         int selections[] = new int[amountOfQuestions];
         sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, questionTemplate.cols(), questionTemplate.rows(), exam.cols(), exam.rows());
         consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
+
     }
 
 
@@ -925,7 +927,8 @@ public class ImageProcessor implements ImageProcessingFacade {
             int correctAns = markedAnswer2(imgChunks);
             answersMap.put(matchLoc, correctAns);
         }
-
+        //DEBUGGING_HACK: use in the evaluator showRedRectanglesWithAdj(leftMostXs,upperMostYs,img_exam,img_template.width(),img_template.height(),forDebugging_ADJUSTMENTS)
+        //DEBUGGING_HACK: use in the evalutaor showRedRectangles(leftMostXs,upperMostYs,img_exam,img_template.width(),img_template.height())
         List<Integer> unidentified = answersMap.values().stream().filter(x -> x == -1).collect(Collectors.toList());
         if (unidentified.size() > unIdentifiedThreshold) {
             answersMap = findQuestions(img_exam, img_template, numOfQuestions);
@@ -952,6 +955,16 @@ public class ImageProcessor implements ImageProcessingFacade {
         Bitmap bm = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(mat, bm);
         return bm;
+    }
+
+    private static Bitmap showRedRectangles(float[] xs, float[]ys, Mat mat, int tempW, int tempH){
+        int[] sXs = new int[xs.length];
+        int[] sYs = new int[ys.length];
+        for (int i = 0; i < sXs.length; i++) {
+            sXs[i] = (int)(mat.width()*xs[i]);
+            sYs[i] = (int)(mat.height()*ys[i]);
+        }
+        return showRedRectangles(sXs,sXs,mat,  tempW, tempH);
     }
 
     private int markedAnswer2(List<Mat> imgChunks) {
@@ -997,7 +1010,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     @RequiresApi(api = Build.VERSION_CODES.N)
     Map<Point, Integer> findQuestions(Mat img_exam, Mat img_template, int numOfQuestions) {
 
-        Size scaleSize = new Size(2550, 3300);
+        Size scaleSize = new Size(ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
         Imgproc.resize(img_exam, img_exam, scaleSize);
 
         int result_cols = img_exam.cols() - img_template.cols() + 1;

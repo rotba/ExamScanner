@@ -498,7 +498,7 @@ public class RealFacadeImple implements CommunicationFacade {
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
         Question maybeQuestion = db.getQuestionDao().getQuestionByVerIdAndQNum(vId, qNum);
         if (maybeQuestion == null) {
-            return createQuestion(vId, qNum, qAns, left, right, up, bottom);
+            return createQuestion(vId, qNum, qAns, left, up, right , bottom);
         } else {
             db.getQuestionDao().update(maybeQuestion);
             return maybeQuestion.getId();
