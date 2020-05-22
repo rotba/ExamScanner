@@ -81,7 +81,7 @@ public class CreateExamUpdatesGraderTest {
         out.addVersion();
         out.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
-        assertEquals(1,exams.size());
+        assert 1 == exams.size();
         theExpectedExam = exams.get(0);
 //        tearDown();
         AppDatabaseFactory.tearDownDb();
