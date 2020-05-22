@@ -22,6 +22,7 @@ public class Version {
     private Future<List<Question>> fQuestions;
     private List<Question> newQuestions;
     private Bitmap perfectImage;
+//    private boolean doResolveFutures;
 
 
     public Version(long id,int num, Exam e, Future<List<Question>> fQuestions, Bitmap perfectImage) {
@@ -31,6 +32,7 @@ public class Version {
         newQuestions = new ArrayList<>();
         this.fQuestions = fQuestions;
         this.perfectImage = perfectImage;
+//        doResolveFutures = true;
     }
 
     public Question getQuestionByNumber(int i){
@@ -69,6 +71,9 @@ public class Version {
     }
 
     private List<Question> accessFQuestions() {
+//        if(!doResolveFutures){
+//            return new ArrayList<>();
+//        }
         try {
             return fQuestions.get();
         } catch (ExecutionException e) {
@@ -144,23 +149,6 @@ public class Version {
         this.fQuestions = questionsFuture;
     }
 
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if(!(obj instanceof Version)){
-            return false;
-        }
-        Version other = (Version) obj;
-        boolean ans = true;
-        ans&= getNum()==other.getNum();
-        List<Question> otherQuestions = other.getQuestions();
-        ans&= otherQuestions.size()==getQuestions().size();
-        for (Question q:
-             getQuestions()) {
-            ans&= otherQuestions.contains(q);
-        }
-        return ans;
-    }
-
     public Bitmap getPerfectImage() {
         return perfectImage;
     }
@@ -188,4 +176,27 @@ public class Version {
     }
 
     public class NoSuchQuestion extends RuntimeException {}
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof Version)){
+            return false;
+        }
+        Version other = (Version) obj;
+        boolean ans = true;
+        ans&= getNum()==other.getNum();
+        List<Question> otherQuestions = other.getQuestions();
+        ans&= otherQuestions.size()==getQuestions().size();
+        for (Question q:
+                getQuestions()) {
+            ans&= otherQuestions.contains(q);
+        }
+        return ans;
+    }
+
+    public void quziEagerLoad() {
+        for(Question question: getQuestions()){}
+    }
+
+
 }

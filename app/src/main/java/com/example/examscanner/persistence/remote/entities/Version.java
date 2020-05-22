@@ -5,6 +5,7 @@ public class Version {
     public static String metaVersionNumber = "versionNumber";
     public String examId;
     public int versionNumber;
+    private String id;
 
     public Version() {
     }
@@ -15,6 +16,9 @@ public class Version {
     }
 
     public String _getId() {
-        return null;
+        return id;
+    }
+    public void  _getId(String theId) {
+        id= theId;
     }
 }

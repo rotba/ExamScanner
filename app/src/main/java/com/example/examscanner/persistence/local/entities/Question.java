@@ -19,8 +19,9 @@ public class Question {
     private int upY;
     private int rightX;
     private int borromY;
+    private String remoteId;
 
-    public Question(int questionNum, long verId, int correctAns, int leftX, int upY, int rightX, int borromY) {
+    public Question(int questionNum, long verId, int correctAns, int leftX, int upY, int rightX, int borromY, String remoteId) {
         this.questionNum = questionNum;
         this.verId = verId;
         this.correctAns = correctAns;
@@ -28,6 +29,7 @@ public class Question {
         this.upY = upY;
         this.rightX = rightX;
         this.borromY = borromY;
+        this.remoteId = remoteId;
     }
 
     public int getLeftX() {
@@ -92,5 +94,9 @@ public class Question {
 
     public void setCorrectAns(int correctAns) {
         this.correctAns = correctAns;
+    }
+
+    public String getRemoteId() {
+        return remoteId;
     }
 }

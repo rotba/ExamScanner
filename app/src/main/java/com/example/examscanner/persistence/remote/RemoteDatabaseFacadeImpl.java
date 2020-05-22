@@ -1,5 +1,6 @@
 package com.example.examscanner.persistence.remote;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -26,6 +27,10 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 
 class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
+    private void storeVersionBitmap(Bitmap verBm) {
+
+    }
+
     @Override
     public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId) {
         return storeChildInPath(
@@ -39,6 +44,34 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         year,
                         seal,
                         url
+                )
+        );
+    }
+
+    @Override
+    public Observable<String> createVersion(int num, String remoteExamId, Bitmap verBm) {
+        storeVersionBitmap(verBm);
+        return storeChildInPath(
+                Paths.toVersions,
+                new Version(
+                        remoteExamId,
+                        num
+                )
+        );
+    }
+
+    @Override
+    public Observable<String> createQuestion(String remoteVersionId, int num, int ans, int left, int up, int right, int bottom) {
+        return storeChildInPath(
+                Paths.toQuestions,
+                new Question(
+                        num,
+                        ans,
+                        left,
+                        up,
+                        right,
+                        remoteVersionId,
+                        bottom
                 )
         );
     }
@@ -79,7 +112,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                     };
                     @Override
                     public Exam convert(DataSnapshot ds) {
-                        return new Exam(
+                        Exam exam = new Exam(
                                 ds.child(Exam.metaManager).getValue(String.class),
                                 graderListConverter.convert(ds.child(Exam.metaGraders).getChildren()),
                                 ds.child(Exam.metaCourseName).getValue(String.class),
@@ -89,6 +122,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                                 ds.child(Exam.metaSeal).getValue(Boolean.class),
                                 ds.child(Exam.metaUrl).getValue(String.class)
                         );
+                        exam._setId(ds.getKey());
+                        return exam;
                     }
                 }
         );
@@ -102,10 +137,12 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 new DataSnapshot2Obj<Version>() {
                     @Override
                     public Version convert(DataSnapshot ds) {
-                        return new Version(
+                        Version version = new Version(
                                 ds.child(Version.metaExamId).getValue(String.class),
                                 ds.child(Version.metaVersionNumber).getValue(Integer.class)
                         );
+                        version._getId(ds.getKey());
+                        return version;
                     }
                 }
         );
@@ -118,7 +155,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 new DataSnapshot2Obj<Question>() {
                     @Override
                     public Question convert(DataSnapshot ds) {
-                        return new Question(
+                        Question question = new Question(
                                 ds.child(Question.metaNum).getValue(Integer.class),
                                 ds.child(Question.metaAns).getValue(Integer.class),
                                 ds.child(Question.metaLeft).getValue(Integer.class),
@@ -127,6 +164,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                                 ds.child(Question.metaVersionId).getValue(String.class),
                                 ds.child(Question.metaBottom).getValue(Integer.class)
                         );
+                        question._setId(ds.getKey());
+                        return question;
                     }
                 }
         );
@@ -165,6 +204,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 new Grader(userId, userName)
         );
     }
+
 
     private static Observable<String> storeChildInPath(String parent, Object obj) {
         return storeObject(() -> FirebaseDatabaseFactory.get().getReference(parent).push(), obj);

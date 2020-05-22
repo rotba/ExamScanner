@@ -23,6 +23,7 @@ public class Exam {
     public String year;
     public boolean seal = false;
     public String url;
+    private String id;
 
     public Exam() {
     }
@@ -39,6 +40,9 @@ public class Exam {
     }
 
     public String _getId() {
-        return null;
+        return id;
+    }
+    public void  _setId(String theId) {
+        id= theId;
     }
 }

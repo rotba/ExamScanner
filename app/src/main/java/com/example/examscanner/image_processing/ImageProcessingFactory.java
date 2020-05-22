@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
+import org.opencv.android.OpenCVLoader;
+
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 public class ImageProcessingFactory {
@@ -17,6 +19,7 @@ public class ImageProcessingFactory {
     }
 
     public static void setTestMode(Context context) {
+        OpenCVLoader.initDebug();
         inTestMode = true;
         testContext =context;
     }

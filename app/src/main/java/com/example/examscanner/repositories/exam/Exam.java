@@ -26,8 +26,10 @@ public class Exam {
     protected String year;
     private long sessionId;
     private List<Version> newVersions;
+//    private List<Version> cachedVersions;
     private Future<List<Version>> fVersions;
     private int numOfQuestions;
+//    private boolean doResolveFutures;
 
     public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions) {
         this.id = id;
@@ -39,7 +41,9 @@ public class Exam {
         this.year = year;
         this.fVersions = fVersions;
         newVersions = new ArrayList<>();
+//        cachedVersions = new ArrayList<>();
         this.numOfQuestions = numOfQuestions;
+//        doResolveFutures =true;
     }
 
     public void setFutureVersions(Future<List<Version>> fVersions) {
@@ -118,14 +122,17 @@ public class Exam {
     }
 
     private List<Version> accessVersionFuture() {
+//        if(!doResolveFutures){
+//            return new ArrayList<>();
+//        }
         try {
             return fVersions.get();
         } catch (ExecutionException e) {
-            Log.d(TAG, MSG_PREF + " getVersionByNum");
+            Log.d(TAG, MSG_PREF + " getVersionByNum",e);
             e.printStackTrace();
             throw new RuntimeException("Problem with furure");
         } catch (InterruptedException e) {
-            Log.d(TAG, MSG_PREF + " getVersionByNum");
+            Log.d(TAG, MSG_PREF + " getVersionByNum",e);
             e.printStackTrace();
             throw new RuntimeException("Problem with furure");
         }
@@ -156,6 +163,8 @@ public class Exam {
     }
 
     public class NuSuchVerion extends RuntimeException {
+
+
 
 
     }
@@ -215,7 +224,6 @@ public class Exam {
             }
         };
     }
-
     @Override
     public boolean equals(@Nullable Object obj) {
         if (!(obj instanceof Exam))
@@ -232,5 +240,17 @@ public class Exam {
             ans&= otherVersions.contains(ver);
         };
         return ans;
+    }
+    public void dontResoveFutures() {
+//        doResolveFutures = false;
+//        for (Version v:getVersions()) {
+//            v.dontResolveFutures();
+//        }
+    }
+
+    public void quziEagerLoad() {
+        for (Version v:getVersions()) {
+            v.quziEagerLoad();
+        }
     }
 }

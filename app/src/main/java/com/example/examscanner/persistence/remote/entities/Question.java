@@ -15,6 +15,7 @@ public class Question {
     public int right;
     public String versionId;
     public int bottom;
+    private String id;
 
     public Question(int num, int ans, int left, int up, int right, String versionId, int bottom) {
         this.num = num;
@@ -24,5 +25,13 @@ public class Question {
         this.right = right;
         this.versionId = versionId;
         this.bottom = bottom;
+    }
+
+    public String _getId() {
+        return id;
+    }
+
+    public void _setId(String id) {
+        this.id = id;
     }
 }

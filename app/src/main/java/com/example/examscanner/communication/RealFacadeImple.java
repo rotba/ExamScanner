@@ -283,7 +283,7 @@ public class RealFacadeImple implements CommunicationFacade {
         }
     }
     private void importRemoteVersion(com.example.examscanner.persistence.remote.entities.Version rv, long examId) {
-        long vId = db.getVersionDao().insert(new Version(rv.versionNumber, examId,rv.examId));
+        long vId = db.getVersionDao().insert(new Version(rv.versionNumber, examId,rv._getId()));
         List<com.example.examscanner.persistence.remote.entities.Question> remoteQuestions = new ArrayList<>();
         remoteDb.getQuestions().blockingSubscribe(rqs -> remoteQuestions.addAll(rqs));
         for (com.example.examscanner.persistence.remote.entities.Question q :
@@ -294,7 +294,7 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     private void importRemoteQuestion(com.example.examscanner.persistence.remote.entities.Question rq, long verionId) {
-        db.getQuestionDao().insert(new Question(rq.num, verionId, rq.ans,rq.left,rq.up,rq.right,rq.bottom));
+        db.getQuestionDao().insert(new Question(rq.num, verionId, rq.ans,rq.left,rq.up,rq.right,rq.bottom,rq._getId()));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -349,13 +349,36 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long createQuestion(long versionId, int num, int ans, int left, int up, int right, int bottom) {
-        return db.getQuestionDao().insert(new Question(num,versionId,ans,left,up,right,bottom));
+
+        Version v = db.getVersionDao().getById(versionId);
+        if(v==null) throw new CommunicationException("Triyng to create a question associated with a version that does not exist");
+        try{
+            String remoteId = remoteDb.createQuestion(v.getRemoteVersionId(), num, ans,  left,  up,  right,  bottom)
+                    .blockingFirst();
+            return db.getQuestionDao().insert(new Question(num,versionId,ans,left,up,right,bottom, remoteId));
+        }catch (Throwable t){
+            /*TODO - delete exam*/
+            throw new CommunicationException(t);
+        }
     }
 
     @Override
-    public long createVersion(long examId, int num) {
-        String remoteVerionId = db.getExamDao().getById(examId).getRemoteId();
-        return db.getVersionDao().insert(new Version(num,examId,remoteVerionId));
+    public long createVersion(long examId, int num, Bitmap verBm) {
+        Exam e = db.getExamDao().getById(examId);
+        if(e==null) throw new CommunicationException("Triyng to craete version associated with a version the does not exist");
+        try{
+            String remoteId = remoteDb.createVersion(num,e.getRemoteId(),verBm)
+                    .blockingFirst();
+            return db.getVersionDao().insert(new Version(num,examId,remoteId));
+        }catch (Throwable t){
+            /*TODO - delete exam*/
+            throw new CommunicationException(t);
+        }
+
+
+
+
+
     }
 
     @Override
@@ -451,7 +474,7 @@ public class RealFacadeImple implements CommunicationFacade {
     public long insertVersionReplaceOnConflict(long examId, int num, Bitmap perfectImage) {
         Version maybeVersion = db.getVersionDao().getByExamIdAndNumber(examId, num);
         if(maybeVersion==null){
-            final long version = createVersion(examId, num);
+            final long version = createVersion(examId, num,perfectImage);
             try {
                 fm.store(perfectImage, generateVersionBitmapPath(version));
                 return version;
@@ -467,9 +490,9 @@ public class RealFacadeImple implements CommunicationFacade {
     @SuppressLint("CheckResult")
     @Override
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
-        Question maybeQuestion = db.getQuestionDao().getQuestionByVerIdAndQNum(right, up);
+        Question maybeQuestion = db.getQuestionDao().getQuestionByVerIdAndQNum(vId, qNum);
         if(maybeQuestion==null){
-            return db.getQuestionDao().insert(new Question(qNum,vId,qAns,left,up,right,bottom));
+            return createQuestion(vId, qNum, qAns, left, right, up, bottom);
         }else {
             db.getQuestionDao().update(maybeQuestion);
             return maybeQuestion.getId();
@@ -535,7 +558,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long addQuestion(long vId, int qNum, int correctAnswer, int leftX, int upY, int rightX, int bottomY) {
-        return db.getQuestionDao().insert(new Question(qNum,vId,correctAnswer,leftX, upY, rightX, bottomY));
+        return createQuestion(vId, qNum, correctAnswer, leftX, upY, rightX, bottomY);
     }
 
     @Override

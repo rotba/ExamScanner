@@ -1,5 +1,7 @@
 package com.example.examscanner.stubs;
 
+import android.graphics.Bitmap;
+
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.entities.Exam;
 import com.example.examscanner.persistence.remote.entities.Grader;
@@ -46,6 +48,16 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     @Override
     public Observable<String> createGrader(String userName, String userId) {
+        return Observable.fromCallable(()->{return "";});
+    }
+
+    @Override
+    public Observable<String> createVersion(int num, String remoteExamId, Bitmap verBm) {
+        return Observable.fromCallable(()->{return "";});
+    }
+
+    @Override
+    public Observable<String> createQuestion(String remoteVersionId, int num, int ans, int left, int up, int right, int bottom) {
         return Observable.fromCallable(()->{return "";});
     }
 }

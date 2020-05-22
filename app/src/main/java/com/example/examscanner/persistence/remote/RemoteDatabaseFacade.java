@@ -1,5 +1,7 @@
 package com.example.examscanner.persistence.remote;
 
+import android.graphics.Bitmap;
+
 import com.example.examscanner.communication.entities_interfaces.GraderEntityInterface;
 import com.example.examscanner.persistence.remote.entities.Exam;
 import com.example.examscanner.persistence.remote.entities.Grader;
@@ -9,6 +11,7 @@ import com.example.examscanner.persistence.remote.entities.Version;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 public interface RemoteDatabaseFacade {
@@ -19,4 +22,6 @@ public interface RemoteDatabaseFacade {
     public Observable<List<Version>> getVersions();
     public Observable<List<Question>> getQuestions();
     public Observable<String> createGrader(String userName, String userId);
+    public Observable<String> createVersion(int num, String remoteExamId, Bitmap verBm);
+    public Observable<String> createQuestion(String remoteVersionId, int num, int ans, int left, int up, int right, int bottom);
 }

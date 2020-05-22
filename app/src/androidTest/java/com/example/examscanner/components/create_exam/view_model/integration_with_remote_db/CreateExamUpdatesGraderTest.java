@@ -8,6 +8,8 @@ import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.components.create_exam.CreateExamModelView;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
+import com.example.examscanner.image_processing.ImageProcessingFacade;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
@@ -28,6 +30,8 @@ import java.util.List;
 
 import io.reactivex.observers.TestObserver;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.BOB_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -37,7 +41,7 @@ public class CreateExamUpdatesGraderTest {
     private CreateExamModelView out;
     private Repository<Exam> examRepository;
     private Repository<Grader> graderRepository;
-    private ImageProcessorStub imageProcessor;
+    private ImageProcessingFacade imageProcessor;
     private Exam theExpectedExam;
 
     @Before
@@ -52,7 +56,8 @@ public class CreateExamUpdatesGraderTest {
         };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
         to.awaitCount(1);
-        imageProcessor = new ImageProcessorStub();
+        ImageProcessingFactory.setTestMode(getApplicationContext());
+        imageProcessor = new ImageProcessingFactory().create();
         out  = new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
                 new GraderRepoFactory().create(),
@@ -63,26 +68,18 @@ public class CreateExamUpdatesGraderTest {
         examRepository = new ExamRepositoryFactory().create();
         graderRepository = new GraderRepoFactory().create();
         graderRepository.create(new Grader("bob", BOB_ID));
-        final int[] expectedNumOfAnswers = new int[1];
-        imageProcessor.scanAnswers(null, new ScanAnswersConsumer() {
-            @Override
-            public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                expectedNumOfAnswers[0] = numOfAnswersDetected;
-                for (int i = 0; i <selections.length ; i++) {
-                    if (selections[i]==-1)
-                        expectedNumOfAnswers[0]--;
-                }
-            }
-        });
-        out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
+        out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1());
         out.holdVersionNumber(3);
         out.holdGraderUsername("bob");
         out.addGrader();
+        out.holdNumOfQuestions("50");
         out.addVersion();
         out.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
         assert 1 == exams.size();
         theExpectedExam = exams.get(0);
+        theExpectedExam.quziEagerLoad();
+//        theExpectedExam.dontResoveFutures();
 //        tearDown();
         AppDatabaseFactory.tearDownDb();
         ExamRepositoryFactory.tearDown();
@@ -105,8 +102,9 @@ public class CreateExamUpdatesGraderTest {
     @Test
     public void CreateExamUpdatesGraderTest() {
         final List<Exam> exams = examRepository.get(e -> true);
-        assertTrue(exams.size()>0);
-        assertTrue(theExpectedExam.getVersions().size()>0);
-        assertTrue(exams.contains(theExpectedExam));
+        assertEquals(1,exams.size());
+        Exam theActualExam = exams.get(0);
+        assertTrue(theActualExam.getVersions().size()>0);
+        assertEquals(theExpectedExam, theActualExam);
     }
 }
