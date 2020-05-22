@@ -200,6 +200,15 @@ public class GoogleSheetsAPI implements SheetsAPI {
         return spreadSheetId;
     }
 
+    @Override
+    public boolean updateGrade(String spreadSheetID, int studentID1, int studentID2, int version, int[] markedAnswers, double grade) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteGrade(String spreadSheetID, int studentID1, int studentID2, int version, int[] markedAnswers, double grade) {
+        return false;
+    }
 
 
 }
