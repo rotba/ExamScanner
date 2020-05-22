@@ -15,10 +15,10 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
         {
-                com.example.examscanner.components.create_exam.view_model.unit.CreateExamModelViewTest.class,
-                CreateExamModelViewTest.class,
-                CornerDetectionViewModelTest.class,
-                CornerDetectionViewModelTest3.class
+//                com.example.examscanner.components.create_exam.view_model.unit.CreateExamModelViewTest.class,
+//                CreateExamModelViewTest.class,
+//                CornerDetectionViewModelTest.class,
+//                CornerDetectionViewModelTest3.class
         }
 )
 public class ViewModelsTestSuite {
