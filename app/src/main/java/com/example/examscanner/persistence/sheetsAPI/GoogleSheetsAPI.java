@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GoogleSheetsAPI implements sheetsAPIFacade{
+public class GoogleSheetsAPI implements SheetsAPIFacade {
 
     private static Sheets sheetsService;
     private static String APPLICATION_NAME = "Google Sheets Example";
@@ -36,8 +36,12 @@ public class GoogleSheetsAPI implements sheetsAPIFacade{
     private static final Integer SHEET_ID = 0;
 
 
-    public GoogleSheetsAPI() throws IOException, GeneralSecurityException {
-        sheetsService = getSheetsService();
+    public GoogleSheetsAPI() {
+        try {
+            sheetsService = getSheetsService();
+        }
+        catch (IOException e){ }
+        catch(GeneralSecurityException e){}
     }
 
     private static com.google.api.client.auth.oauth2.Credential authorize() throws IOException, GeneralSecurityException {

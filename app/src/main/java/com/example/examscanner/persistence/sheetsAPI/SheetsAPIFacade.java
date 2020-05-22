@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 
-public interface sheetsAPIFacade {
+public interface SheetsAPIFacade {
 
     Sheets getSheetsService() throws IOException, GeneralSecurityException;
 
