@@ -22,7 +22,7 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> addVersion(String examId, int versionNumber) {
+    public Observable<String> addVersion(int versionNumber , String examId, String bitmap ) {
         return Observable.fromCallable(()->{return "null";});
     }
 
@@ -52,7 +52,7 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> createVersion(int num, String remoteExamId, Bitmap verBm) {
+    public Observable<String> createVersion(int num, String remoteExamId, String bitmapPath) {
         return Observable.fromCallable(()->{return "";});
     }
 

@@ -226,3 +226,48 @@
 [debug] [2020-05-21T09:13:28.885Z] [runtime-status] [12672] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"8.11.0","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} 
 [info] +  emulators: All emulators started, it is now safe to connect.
 [debug] [2020-05-21T09:13:28.888Z] [worker-~diagnostic~-75a1d1b5-4f97-41c7-97f5-1dd79ac04936]: IDLE 
+[debug] [2020-05-23T15:01:31.485Z] ----------------------------------------------------------------------
+[debug] [2020-05-23T15:01:31.487Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\rotem\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2020-05-23T15:01:31.487Z] CLI Version:   8.2.0
+[debug] [2020-05-23T15:01:31.488Z] Platform:      win32
+[debug] [2020-05-23T15:01:31.488Z] Node Version:  v10.14.1
+[debug] [2020-05-23T15:01:31.489Z] Time:          Sat May 23 2020 18:01:31 GMT+0300 (Israel Daylight Time)
+[debug] [2020-05-23T15:01:31.489Z] ----------------------------------------------------------------------
+[debug] [2020-05-23T15:01:31.489Z] 
+[debug] [2020-05-23T15:01:31.501Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-23T15:01:31.501Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: functions, database
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project examscanner-de46e. This may result in unexpected behavior.
+[debug] [2020-05-23T15:01:33.552Z] [hub] writing locator at C:\Users\rotem\AppData\Local\Temp\hub-examscanner-de46e.json
+[info] +  hub: emulator hub started at http://localhost:4400
+[warn] !  Your requested "node" version "8" doesn't match your global version "10"
+[info] +  functions: functions emulator started at http://localhost:5001
+[debug] [2020-05-23T15:01:37.587Z] Ignoring unsupported arg: projectId
+[debug] [2020-05-23T15:01:37.588Z] Ignoring unsupported arg: auto_download
+[debug] [2020-05-23T15:01:37.588Z] Ignoring unsupported arg: rules
+[debug] [2020-05-23T15:01:37.588Z] Starting database emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\rotem\\.cache\\firebase\\emulators\\firebase-database-emulator-v4.4.1.jar","--host","localhost","--port",9000,"--functions_emulator_host","localhost","--functions_emulator_port",5001],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host"],"joinArgs":false}
+[info] i  database: database emulator logging to database-debug.log
+[debug] [2020-05-23T15:01:39.752Z] 18:01:39.751 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+
+[debug] [2020-05-23T15:01:40.032Z] 18:01:40.033 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+
+[info] +  database: database emulator started at http://localhost:9000
+[info] i  database: For testing set FIREBASE_DATABASE_EMULATOR_HOST=localhost:9000
+[info] i  functions: Watching "C:\Code\School\proj\app\android\ExamScanner\functions" for Cloud Functions...
+[debug] [2020-05-23T15:01:40.871Z] [worker-pool] addWorker(~diagnostic~) 
+[debug] [2020-05-23T15:01:40.871Z] [worker-pool] Adding worker with key ~diagnostic~, total=1 
+[debug] [2020-05-23T15:01:40.871Z] [worker-pool] submitWork(triggerId=) 
+[debug] [2020-05-23T15:01:40.872Z] [worker-~diagnostic~-867abd26-92e9-4d40-b7fb-2cf2a308b841]: Assigning socketPath: \\?\pipe\C:\Code\School\proj\app\android\ExamScanner\functions\6820 
+[debug] [2020-05-23T15:01:40.872Z] [worker-~diagnostic~-867abd26-92e9-4d40-b7fb-2cf2a308b841]: BUSY 
+[debug] [2020-05-23T15:01:41.268Z] [runtime-status] [6820] Functions runtime initialized. {"cwd":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions","node_version":"10.14.1"} 
+[debug] [2020-05-23T15:01:41.269Z] [runtime-status] [6820] Disabled runtime features: undefined 
+[debug] [2020-05-23T15:01:41.274Z] [runtime-status] [6820] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.11.0","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
+[debug] [2020-05-23T15:01:41.277Z] [runtime-status] [6820] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-23T15:01:41.280Z] [runtime-status] [6820] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] 
+[debug] [2020-05-23T15:01:41.357Z] [runtime-status] [6820] Checked functions.config() {"config":{}} 
+[debug] [2020-05-23T15:01:41.358Z] [runtime-status] [6820] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-23T15:01:41.359Z] [runtime-status] [6820] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.11.0","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
+[debug] [2020-05-23T15:01:41.359Z] [runtime-status] [6820] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-23T15:01:41.359Z] [runtime-status] [6820] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"8.11.0","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} 
+[info] +  emulators: All emulators started, it is now safe to connect.
+[debug] [2020-05-23T15:01:41.362Z] [worker-~diagnostic~-867abd26-92e9-4d40-b7fb-2cf2a308b841]: IDLE 

@@ -2,6 +2,7 @@ package com.example.examscanner.communication;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -28,6 +29,9 @@ import com.example.examscanner.persistence.local.files_management.FilesManagerFa
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.entities.Grader;
+import com.example.examscanner.persistence.remote.files_management.PathsGenerator;
+import com.example.examscanner.persistence.remote.files_management.RemoteFilesManager;
+import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,12 +40,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.examscanner.persistence.remote.files_management.Utils.toBitmap;
+import static com.example.examscanner.persistence.remote.files_management.Utils.toByteArray;
+
+
 public class RealFacadeImple implements CommunicationFacade {
     private static final long DONT_SAVE_BITMAP = -1;
     private static final int QAD_NUM_OF_QUESTIONS = 50;
     private static RealFacadeImple instance;
     private AppDatabase db;
     private FilesManager fm;
+    private RemoteFilesManager rfm;
     private RemoteDatabaseFacade remoteDb;
 
     public static synchronized RealFacadeImple getInstance() {
@@ -49,6 +58,7 @@ public class RealFacadeImple implements CommunicationFacade {
             instance = new RealFacadeImple(
                     AppDatabaseFactory.getInstance(),
                     FilesManagerFactory.create(),
+                    RemoteFilesManagerFactory.get(),
                     RemoteDatabaseFacadeFactory.get()
             );
             return instance;
@@ -63,9 +73,10 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
 
-    private RealFacadeImple(AppDatabase db, FilesManager fm, RemoteDatabaseFacade remoteDb) {
+    private RealFacadeImple(AppDatabase db, FilesManager fm,RemoteFilesManager rfm , RemoteDatabaseFacade remoteDb) {
         this.db = db;
         this.fm = fm;
+        this.rfm = rfm;
         this.remoteDb = remoteDb;
     }
 
@@ -87,17 +98,18 @@ public class RealFacadeImple implements CommunicationFacade {
     public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, Bitmap bm) {
 
 
+        final SemiScannedCapture sscs = new SemiScannedCapture(
+                leftMostX,
+                upperMostY,
+                rightMostX,
+                rightMostY,
+                sessionId
+        );
         final long id = db.getSemiScannedCaptureDao().insert(
-                new SemiScannedCapture(
-                        leftMostX,
-                        upperMostY,
-                        rightMostX,
-                        rightMostY,
-                        sessionId
-                )
+                sscs
         );
         try {
-            fm.store(bm, generateSSCBitmapPath(id));
+            fm.store(bm, sscs._getBitmapBath());
         } catch (IOException e) {
             throw new CommunicationException(e);
         }
@@ -114,7 +126,7 @@ public class RealFacadeImple implements CommunicationFacade {
         SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(id);
         final Bitmap bitmap;
         try {
-            bitmap = fm.get(generateSSCBitmapPath(ssc.getId()));
+            bitmap = fm.get(ssc._getBitmapBath());
         } catch (FileNotFoundException e) {
             throw new CommunicationException("Cannot find bitmap of semi scanned capture");
         }
@@ -289,7 +301,14 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     private void importRemoteVersion(com.example.examscanner.persistence.remote.entities.Version rv, long examId) {
-        long vId = db.getVersionDao().insert(new Version(rv.versionNumber, examId, rv._getId()));
+        final Version version = new Version(rv.versionNumber, examId, rv._getId());
+        long vId = db.getVersionDao().insert(version);
+        Bitmap bm = toBitmap(rfm.get(rv.bitmapPath).blockingFirst());
+        try {
+            fm.store(bm, version._getBitmapPath());
+        } catch (IOException e) {
+            throw new CommunicationException(e);
+        }
         List<com.example.examscanner.persistence.remote.entities.Question> remoteQuestions = new ArrayList<>();
         remoteDb.getQuestions().blockingSubscribe(rqs -> remoteQuestions.addAll(rqs));
         for (com.example.examscanner.persistence.remote.entities.Question q :
@@ -369,22 +388,7 @@ public class RealFacadeImple implements CommunicationFacade {
         }
     }
 
-    @Override
-    public long createVersion(long examId, int num, Bitmap verBm) {
-        Exam e = db.getExamDao().getById(examId);
-        if (e == null)
-            throw new CommunicationException("Triyng to craete version associated with a version the does not exist");
-        try {
-            String remoteId = remoteDb.createVersion(num, e.getRemoteId(), verBm)
-                    .blockingFirst();
-            return db.getVersionDao().insert(new Version(num, examId, remoteId));
-        } catch (Throwable t) {
-            /*TODO - delete exam*/
-            throw new CommunicationException(t);
-        }
 
-
-    }
 
     @Override
     public VersionEntityInterface getVersionById(long vId) {
@@ -400,7 +404,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @NotNull
     protected VersionEntityInterface versionEntityToInterface(long vId, Version theVersion) throws FileNotFoundException {
-        Bitmap theBitmap = fm.get(generateVersionBitmapPath(theVersion.getId()));
+        Bitmap theBitmap = fm.get(theVersion._getBitmapPath());
         return new VersionEntityInterface() {
             @Override
             public long getId() {
@@ -481,12 +485,7 @@ public class RealFacadeImple implements CommunicationFacade {
         Version maybeVersion = db.getVersionDao().getByExamIdAndNumber(examId, num);
         if (maybeVersion == null) {
             final long version = createVersion(examId, num, perfectImage);
-            try {
-                fm.store(perfectImage, generateVersionBitmapPath(version));
-                return version;
-            } catch (IOException e) {
-                throw new CommunicationException(e);
-            }
+            return version;
         } else {
             db.getVersionDao().update(maybeVersion);
             return maybeVersion.getId();
@@ -544,25 +543,37 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long addVersion(long examId, int versionNumber, Bitmap bm) {
-        String remoteExamId = db.getExamDao().getById(examId).getRemoteId();
+        return createVersion(examId,versionNumber,bm);
+//        String remoteExamId = db.getExamDao().getById(examId).getRemoteId();
+//        try {
+//            String remoteVersionId = remoteDb.addVersion(remoteExamId, versionNumber).blockingFirst();
+//            long ans = db.getVersionDao().insert(new Version(versionNumber, examId, remoteVersionId));
+//            fm.store(bm, generateVersionBitmapPath(ans));//storeBitmap(generateVersionBitmapPath(ans), bm);
+//            return ans;
+//        } catch (Throwable e) {
+//            /*TODO - handle*/
+//            throw new CommunicationException(e);
+//        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public long createVersion(long examId, int num, Bitmap verBm) {
+        Exam e = db.getExamDao().getById(examId);
+        if (e == null)
+            throw new CommunicationException("Triyng to craete version associated with a version the does not exist");
         try {
-            String remoteVersionId = remoteDb.addVersion(remoteExamId, versionNumber).blockingFirst();
-            long ans = db.getVersionDao().insert(new Version(versionNumber, examId, remoteVersionId));
-            fm.store(bm, generateVersionBitmapPath(ans));//storeBitmap(generateVersionBitmapPath(ans), bm);
+            String pathToRemoteBm = PathsGenerator.genVersionPath(e.getRemoteId(), num);
+            String remoteId = remoteDb.createVersion(num, e.getRemoteId(), pathToRemoteBm)
+                    .blockingFirst();
+            final Version version = new Version(num, examId, remoteId);
+            final long ans = db.getVersionDao().insert(version);
+            fm.store(verBm, version._getBitmapPath());
+            rfm.store(pathToRemoteBm , toByteArray(verBm));
             return ans;
-        } catch (Throwable e) {
-            /*TODO - handle*/
-            throw new CommunicationException(e);
+        } catch (Throwable t) {
+            /*TODO - delete exam*/
+            throw new CommunicationException(t);
         }
-    }
-
-
-    private static String generateVersionBitmapPath(long ans) {
-        return "VERSION_" + String.valueOf(ans);
-    }
-
-    private String generateSSCBitmapPath(long sscId) {
-        return "SSC_" + String.valueOf(sscId);
     }
 
     @Override

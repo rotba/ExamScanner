@@ -46,4 +46,8 @@ public class Version {
     public String getRemoteVersionId() {
         return remoteVersionId;
     }
+
+    public String _getBitmapPath(){
+        return "VERISION_"+String.valueOf(id);
+    }
 }

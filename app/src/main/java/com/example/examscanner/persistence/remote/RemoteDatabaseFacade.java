@@ -16,12 +16,12 @@ import io.reactivex.Observable;
 
 public interface RemoteDatabaseFacade {
     public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal , long sessionId);
-    public Observable<String> addVersion(String examId, int versionNumber);
+    public Observable<String> addVersion(int num, String remoteExamId, String bitmapPath);
     public Observable<List<Grader>> getGraders();
     public Observable<List<Exam>> getExams();
     public Observable<List<Version>> getVersions();
     public Observable<List<Question>> getQuestions();
     public Observable<String> createGrader(String userName, String userId);
-    public Observable<String> createVersion(int num, String remoteExamId, Bitmap verBm);
+    public Observable<String> createVersion(int num, String remoteExamId, String bitmapPath);
     public Observable<String> createQuestion(String remoteVersionId, int num, int ans, int left, int up, int right, int bottom);
 }

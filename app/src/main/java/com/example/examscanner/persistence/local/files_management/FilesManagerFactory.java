@@ -1,19 +1,17 @@
 package com.example.examscanner.persistence.local.files_management;
 
+import android.content.Context;
+
 import com.example.examscanner.communication.ContextProvider;
+import com.example.examscanner.communication.RealFacadeImple;
 
 import org.jetbrains.annotations.NotNull;
 
 public class FilesManagerFactory {
-    public static boolean testMode = false;
+    private static boolean testMode = false;
     private static FilesManager instance;
-    private static FilesManager testInstance;
     public static FilesManager create(){
-        if(testMode) {
-            return getTestsInstance();
-        }else{
-            return getRealInstance();
-        }
+        return getRealInstance();
     }
 
     private static FilesManager getRealInstance() {
@@ -23,16 +21,18 @@ public class FilesManagerFactory {
         return instance;
     }
 
-    @NotNull
-    protected static FilesManager getTestsInstance() {
-        if(testInstance == null){
-            testInstance = new StubFilesManager();
-        }
-        return testInstance;
-    }
+
 
     public static void tearDown() {
-        if(testInstance!=null)testInstance.tearDown();
         if(instance!=null)instance.tearDown();
+    }
+
+    public static void setTestMode(Context c) {
+        FilesManagerImpl.setTestMode();
+        instance = new FilesManagerImpl(c);
+    }
+
+    public static void setStubInstance(FilesManager fm){
+        instance=fm;
     }
 }

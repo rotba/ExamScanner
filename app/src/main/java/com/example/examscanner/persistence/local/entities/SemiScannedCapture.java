@@ -13,7 +13,7 @@ public class SemiScannedCapture {
     private int upperMostY;
     private int rightMostX;
     private int bottomMostY;
-//    public static final String fkVersionId = "versionId";
+    //    public static final String fkVersionId = "versionId";
 //    @ForeignKey(entity = Version.class, parentColumns = {Version.pkName}, childColumns = {"versionId"})
 //    private long versionId;
     public static final String fkSessionId = "sessionId";
@@ -70,14 +70,15 @@ public class SemiScannedCapture {
     }
 
 
-
-
-
     public long getSessionId() {
         return sessionId;
     }
 
     public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String _getBitmapBath(){
+        return "SSC_"+String.valueOf(id);
     }
 }

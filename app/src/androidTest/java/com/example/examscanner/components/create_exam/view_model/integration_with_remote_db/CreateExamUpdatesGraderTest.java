@@ -1,5 +1,7 @@
 package com.example.examscanner.components.create_exam.view_model.integration_with_remote_db;
 
+import android.graphics.Bitmap;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
@@ -10,10 +12,11 @@ import com.example.examscanner.components.create_exam.CreateExamModelView;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
-import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
@@ -26,15 +29,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 
 import io.reactivex.observers.TestObserver;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.BOB_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class CreateExamUpdatesGraderTest {
@@ -48,6 +52,8 @@ public class CreateExamUpdatesGraderTest {
     public void setUp() throws Exception {
         FirebaseDatabaseFactory.setTestMode();
         AppDatabaseFactory.setTestMode();
+        FilesManagerFactory.setTestMode(getApplicationContext());
+        RemoteFilesManagerFactory.setTestMode();
         TestObserver to = new TestObserver(){
             @Override
             public void onNext(Object value) {
@@ -95,16 +101,30 @@ public class CreateExamUpdatesGraderTest {
         AppDatabaseFactory.tearDownDb();
         RemoteDatabaseFacadeFactory.tearDown();
         ExamRepositoryFactory.tearDown();
+        FilesManagerFactory.tearDown();
         CommunicationFacadeFactory.tearDown();
         GraderRepoFactory.tearDown();
     }
 
     @Test
-    public void CreateExamUpdatesGraderTest() {
+    public void createExamUpdatesGraderTest() {
         final List<Exam> exams = examRepository.get(e -> true);
         assertEquals(1,exams.size());
         Exam theActualExam = exams.get(0);
         assertTrue(theActualExam.getVersions().size()>0);
         assertEquals(theExpectedExam, theActualExam);
+    }
+
+    @Test
+    public void createExamUpdatesGraderGetsBitmap() {
+        final List<Exam> exams = examRepository.get(e -> true);
+        Bitmap expected = theExpectedExam.getVersions().get(0).getPerfectImage();
+        Bitmap actual = null;
+        try {
+            actual = exams.get(0).getVersions().get(0).getPerfectImage();
+        }catch (Exception e){
+            fail("Probably no such file exception");
+        }
+        assertTrue(expected.sameAs(actual));
     }
 }

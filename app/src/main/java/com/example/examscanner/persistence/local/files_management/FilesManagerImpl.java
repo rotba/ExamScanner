@@ -17,13 +17,20 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 class FilesManagerImpl implements FilesManager {
-    private static final String PICTURES_DIR = "versions";
+    private static String PICTURES_DIR = "pics";
+    private static String PICTURES_DIR_BACKUP = "pics";
     private int counter = 0;
     private Context context;
 
     FilesManagerImpl(Context context){
         this.context = context;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void setTestMode() {
+        PICTURES_DIR = Paths.get("test", "pics").toString();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected File getVersionsPicturesDirectoryFile() {
         String dirPath = Paths.get(
@@ -33,16 +40,18 @@ class FilesManagerImpl implements FilesManager {
         return new File(dirPath);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void tearDown() {
-        String path = Environment.getExternalStorageDirectory().toString()+"/Pictures";
+        String path = getVersionsPicturesDirectoryFile().getPath();
         File directory = new File(path);
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
+        if(files==null)return;
         for (int i = 0; i < files.length; i++)
         {
-            Log.d("Files", "FileName:" + files[i].getName());
+            files[i].delete();
         }
+        PICTURES_DIR = PICTURES_DIR_BACKUP;
     }
 
     @Override

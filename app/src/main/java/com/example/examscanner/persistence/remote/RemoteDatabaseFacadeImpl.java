@@ -49,13 +49,13 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> createVersion(int num, String remoteExamId, Bitmap verBm) {
-        storeVersionBitmap(verBm);
+    public Observable<String> createVersion(int num, String remoteExamId,String pathToBitmap) {
         return storeChildInPath(
                 Paths.toVersions,
                 new Version(
                         remoteExamId,
-                        num
+                        num,
+                        pathToBitmap
                 )
         );
     }
@@ -77,14 +77,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> addVersion(String examId, int versionNumber) {
-        return storeChildInPath(
-                Paths.toVersions,
-                new Version(
-                        examId,
-                        versionNumber
-                )
-        );
+    public Observable<String> addVersion(int num, String remoteExamId,String pathToBitmap) {
+        return createVersion(num,remoteExamId,pathToBitmap);
     }
 
     @Override
@@ -139,7 +133,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                     public Version convert(DataSnapshot ds) {
                         Version version = new Version(
                                 ds.child(Version.metaExamId).getValue(String.class),
-                                ds.child(Version.metaVersionNumber).getValue(Integer.class)
+                                ds.child(Version.metaVersionNumber).getValue(Integer.class),
+                                ds.child(Version.metaBitmapPath).getValue(String.class)
                         );
                         version._getId(ds.getKey());
                         return version;

@@ -37,6 +37,7 @@ public class AppDatabaseFactory {
     }
     public static void setTestMode(){
         isTestMode=true;
+
     }
 
     public static void tearDownDb(){

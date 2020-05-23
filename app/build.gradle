@@ -82,6 +82,8 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:' +rootProject.firebase_ui_auth_version
     implementation 'com.google.firebase:firebase-database:' +rootProject.firebase_db_version
 
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+
     // androidTest
     androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
     androidTestImplementation 'androidx.test:core-ktx:' + rootProject.coreVersion
