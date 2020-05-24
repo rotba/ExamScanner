@@ -8,16 +8,20 @@ import com.example.examscanner.StateFullTest;
 import com.example.examscanner.Utils;
 import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
+import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.persistence.local.entities.Exam;
 import com.example.examscanner.persistence.local.entities.ExamCreationSession;
+import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
+import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.SESessionProviderFactory;
+import com.example.examscanner.stubs.FilesManagerStub;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,14 +50,15 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
     @Before
     @Override
     public void setUp() {
+        FilesManagerFactory.setStubInstance(new FilesManagerStub());
         dbCallback = db ->{
             long creationId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
             examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId, null,QAD_NUM_OF_QUESTIONS));
             db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(dinaBarzilayVersionNumber, examId, null));
             db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(theDevilVersionNumber, examId, null));
-
         };
         super.setUp();
+        RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         scanExamSession =new SESessionProviderFactory().create().provide(examId);
         cdcRepo = new CDCRepositoryFacrory().create();
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());

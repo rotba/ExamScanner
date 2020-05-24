@@ -7,9 +7,11 @@ import androidx.test.espresso.PerformException;
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
 import com.example.examscanner.Utils;
+import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
 
@@ -43,6 +45,7 @@ public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFu
             usecaseContext = createContext();
             usecaseContext.setup();
         };
+        RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         super.setUp();
         navFromHomeToDetecteCornersUnderTestExam();
     }

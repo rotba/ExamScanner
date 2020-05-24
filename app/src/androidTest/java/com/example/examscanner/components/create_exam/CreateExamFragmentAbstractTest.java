@@ -57,6 +57,7 @@ public abstract class CreateExamFragmentAbstractTest extends AbstractComponentIn
         );
         onView(withId(R.id.button_create_exam_add_version)).check(matches(not(isEnabled())));
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText("20"));
+        onView(withId(R.id.editText_create_exam_num_of_questions)).perform(replaceText("50"));
         onView(withId(R.id.button_create_exam_add_version)).perform(click());
         Utils.sleepScanAnswersTime();
         Utils.sleepScanAnswersTime();

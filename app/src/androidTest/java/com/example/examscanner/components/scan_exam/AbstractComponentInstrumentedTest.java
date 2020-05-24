@@ -8,6 +8,7 @@ import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.RealFacadeImple;
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
@@ -52,6 +53,8 @@ public abstract class AbstractComponentInstrumentedTest {
         AppDatabaseFactory.tearDownDb();
         RemoteDatabaseFacadeFactory.tearDown();
         CommunicationFacadeFactory.tearDown();
+        RemoteDatabaseFacadeFactory.tearDown();
+        FilesManagerFactory.tearDown();
         ExamRepositoryFactory.tearDown();
         CDCRepositoryFacrory.tearDown();
         ScannedCaptureRepositoryFactory.tearDown();

@@ -1,5 +1,7 @@
 package com.example.examscanner.persistence.remote.files_management;
 
+
+
 public class RemoteFilesManagerFactory {
     private static RemoteFilesManager instance;
     public static RemoteFilesManager get(){
@@ -14,5 +16,9 @@ public class RemoteFilesManagerFactory {
 
     public static void setTestMode(){
         get().setTestMode();
+    }
+
+    public static void setStubInstabce(RemoteFilesManager remoteFilesManagerStub) {
+        instance = remoteFilesManagerStub;
     }
 }

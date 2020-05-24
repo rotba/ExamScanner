@@ -2,6 +2,7 @@ package com.example.examscanner.components.scan_exam.detect_corners;
 
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
@@ -19,6 +20,7 @@ public class CornerDetectionViewModelTest extends AbstractComponentInstrumentedT
     @Before
     public void setUp() {
         RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
+        RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         super.setUp();
         useCaseContext = new CornerDetectionContext1Setuper();
         useCaseContext.setup();

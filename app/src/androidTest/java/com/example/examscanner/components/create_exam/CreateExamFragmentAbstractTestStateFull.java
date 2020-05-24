@@ -68,6 +68,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
         onView(withId(R.id.radioButton_create_exam_semester_fall)).perform(click());
         onView(withId(R.id.editText_create_exam_year)).perform(replaceText(year));
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText(verNum));
+        onView(withId(R.id.editText_create_exam_num_of_questions)).perform(replaceText("50"));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
         mainActivityScenarioRule.getScenario().onActivity(a -> f.onActivityResult(0, 0, null));
         onView(withId(R.id.button_create_exam_add_version)).perform(click());
@@ -82,7 +83,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
         Utils.sleepAlertPoppingTime();
         onView(withId(R.id.textView_create_exam_added_grader_feedback)).check(matches(withText("added bob")));
         onView(withId(R.id.button_create_exam_create)).perform(click());
-        Utils.sleepAlertPoppingTime();
+        Utils.createExamTime();
         onView(withText(R.string.create_exam_dialog_ok)).perform(click());
     }
 

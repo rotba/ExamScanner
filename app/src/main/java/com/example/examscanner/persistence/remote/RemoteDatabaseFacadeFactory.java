@@ -15,6 +15,7 @@ public class RemoteDatabaseFacadeFactory {
         if(FirebaseDatabaseFactory.inTestMode){
             FirebaseDatabaseFactory.get().getReference().setValue(null);
         }
+        instance=null;
     }
 
     public static void setStubInstance(RemoteDatabaseFacade stubInstance) {

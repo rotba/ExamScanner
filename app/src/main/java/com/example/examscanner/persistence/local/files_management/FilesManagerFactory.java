@@ -25,6 +25,7 @@ public class FilesManagerFactory {
 
     public static void tearDown() {
         if(instance!=null)instance.tearDown();
+        instance= null;
     }
 
     public static void setTestMode(Context c) {

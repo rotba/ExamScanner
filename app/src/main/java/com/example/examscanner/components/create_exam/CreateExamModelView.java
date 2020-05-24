@@ -139,4 +139,8 @@ public class CreateExamModelView extends ViewModel {
     public String getCurrentGrader() {
         return currentGraderUsername;
     }
+
+    public Integer getNumOfQuestions() {
+        return examCreated.getNumOfQuestions();
+    }
 }

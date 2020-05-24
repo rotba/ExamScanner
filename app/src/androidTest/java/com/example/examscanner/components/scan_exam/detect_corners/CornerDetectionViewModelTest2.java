@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.Answer;
@@ -32,6 +33,7 @@ public abstract class CornerDetectionViewModelTest2 extends AbstractComponentIns
     @Before
     public void setUp() {
         RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
+        RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         super.setUp();
         useCaseContext = getUseCaseContext();
         useCaseContext.setup();

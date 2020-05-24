@@ -15,7 +15,7 @@ public class ImageProcessorsGenerator {
         return new ImageProcessingFacade() {
             @Override
             public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
-                consumer.consume(new PointF(),null,null,new PointF());
+                consumer.consume(new PointF(),new PointF(),new PointF(),new PointF());
             }
 
             @Override

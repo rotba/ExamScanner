@@ -175,7 +175,7 @@ public class CornerDetectionCardFragment extends Fragment {
     }
 
     private void onVersionNumbersRetrivedError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF + " onVersionNumbersRetrivedError");
+        Log.d(TAG, MSG_PREF + " onVersionNumbersRetrivedError", throwable);
         throwable.printStackTrace();
     }
 

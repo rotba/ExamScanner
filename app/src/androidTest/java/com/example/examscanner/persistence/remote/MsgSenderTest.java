@@ -1,12 +1,14 @@
 package com.example.examscanner.persistence.remote;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.observers.TestObserver;
 
+@Ignore("These are just examples of fire base database usage")
 public class MsgSenderTest {
 
     public static final String TEST_SUCCESS_REF = "TEST_SUCCESS_REF";

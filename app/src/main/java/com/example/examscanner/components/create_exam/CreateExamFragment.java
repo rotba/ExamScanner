@@ -138,7 +138,8 @@ public class CreateExamFragment extends Fragment {
 
     private void refreshAddVersionButton() {
         ((Button) getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(
-                viewModel.getCurrentVersionNumber() != null && viewModel.getCurrentVersionBitmap() != null
+                viewModel.getCurrentVersionNumber() != null && viewModel.getCurrentVersionBitmap() != null &&
+                viewModel.getNumOfQuestions() != 0
         );
     }
 
@@ -180,7 +181,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onVersionAddedFailed(Throwable throwable) {
-        Log.d(TAG, MSG_PREF);
+        Log.d(TAG, MSG_PREF,throwable);
         throwable.printStackTrace();
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
     }
