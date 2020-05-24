@@ -7,6 +7,8 @@ import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
@@ -16,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
@@ -91,12 +95,13 @@ class RemoteFilesManagerImpl implements RemoteFilesManager {
     @Override
     public Completable store(String path, byte[] data) {
         StorageReference ref = storage.getReference(toPathString(path));
-        UploadTask uploadTask = ref.putBytes(data);
         return Completable.fromAction(() -> {
-            uploadTask.addOnFailureListener(new OnFailureListener() {
+            UploadTask uploadTask = ref.putBytes(data);
+            Task t = uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     Completable.error(exception);
+                    Completable.complete();
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -106,6 +111,7 @@ class RemoteFilesManagerImpl implements RemoteFilesManager {
                     // ...
                 }
             });
+            Tasks.await(t);
         });
     }
 

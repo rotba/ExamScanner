@@ -39,6 +39,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import io.reactivex.Completable;
 
 import static com.example.examscanner.persistence.remote.files_management.Utils.toBitmap;
 import static com.example.examscanner.persistence.remote.files_management.Utils.toByteArray;
@@ -108,6 +111,7 @@ public class RealFacadeImple implements CommunicationFacade {
         final long id = db.getSemiScannedCaptureDao().insert(
                 sscs
         );
+        sscs.setId(id);
         try {
             fm.store(bm, sscs._getBitmapBath());
         } catch (IOException e) {
@@ -303,7 +307,11 @@ public class RealFacadeImple implements CommunicationFacade {
     private void importRemoteVersion(com.example.examscanner.persistence.remote.entities.Version rv, long examId) {
         final Version version = new Version(rv.versionNumber, examId, rv._getId());
         long vId = db.getVersionDao().insert(version);
-        Bitmap bm = toBitmap(rfm.get(rv.bitmapPath).blockingFirst());
+        version.setId(vId);
+        final Bitmap[] bmBox = {null};
+        rfm.get(rv.bitmapPath).blockingSubscribe(bytes -> bmBox[0] = toBitmap(bytes));
+        assert  bmBox[0]!=null;
+        Bitmap bm = bmBox[0];
         try {
             fm.store(bm, version._getBitmapPath());
         } catch (IOException e) {
@@ -567,8 +575,10 @@ public class RealFacadeImple implements CommunicationFacade {
                     .blockingFirst();
             final Version version = new Version(num, examId, remoteId);
             final long ans = db.getVersionDao().insert(version);
+            version.setId(ans);
             fm.store(verBm, version._getBitmapPath());
-            rfm.store(pathToRemoteBm , toByteArray(verBm));
+            Completable comp = rfm.store(pathToRemoteBm , toByteArray(verBm));
+            comp.blockingAwait();
             return ans;
         } catch (Throwable t) {
             /*TODO - delete exam*/

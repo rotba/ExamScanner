@@ -117,14 +117,17 @@ public class CreateExamUpdatesGraderTest {
 
     @Test
     public void createExamUpdatesGraderGetsBitmap() {
-        final List<Exam> exams = examRepository.get(e -> true);
-        Bitmap expected = theExpectedExam.getVersions().get(0).getPerfectImage();
-        Bitmap actual = null;
+        List<Exam> exams = null;
         try {
-            actual = exams.get(0).getVersions().get(0).getPerfectImage();
+            exams = examRepository.get(e -> true);
         }catch (Exception e){
-            fail("Probably no such file exception");
+            throw  e;
+//            e.printStackTrace();
+//            fail("Probably no such file exception");
         }
+        Bitmap expected = theExpectedExam.getVersions().get(0).getPerfectImage();
+        Bitmap actual = exams.get(0).getVersions().get(0).getPerfectImage();
+
         assertTrue(expected.sameAs(actual));
     }
 }
