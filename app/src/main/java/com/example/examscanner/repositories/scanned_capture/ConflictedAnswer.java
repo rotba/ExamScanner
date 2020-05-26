@@ -28,6 +28,11 @@ public class ConflictedAnswer extends Answer{
         l.add(this);
     }
 
+    @Override
+    public int getSelection() {
+        return CONFLICTED;
+    }
+
     public PointF getUpperLeft() {
         return upperLeft;
     }
@@ -45,5 +50,25 @@ public class ConflictedAnswer extends Answer{
     @Override
     public String toString() {
         return "C";
+    }
+
+    @Override
+    public float getLeft() {
+        return upperLeft.x;
+    }
+
+    @Override
+    public float getUp() {
+        return upperLeft.y;
+    }
+
+    @Override
+    public float getRight() {
+        return bottomRight.x;
+    }
+
+    @Override
+    public float getBottom() {
+        return bottomRight.y;
     }
 }

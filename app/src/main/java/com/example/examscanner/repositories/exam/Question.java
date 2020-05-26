@@ -4,9 +4,12 @@ import androidx.annotation.Nullable;
 
 import com.example.examscanner.repositories.exam.Version;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 public class Question {
     private long id;
-    private Version version;
+    private Future<Version> version;
     private int num;
     private int ans;
     private int left;
@@ -14,7 +17,8 @@ public class Question {
     private int bottom;
     private int right;
 
-    public Question(long qId, Version v, int ansNum, int selection, int left, int up, int right, int bottom) {
+    public Question(long qId, Future<Version> v, int ansNum, int selection, int left, int up, int right, int bottom) {
+        id = qId;
         this.version = v;
         this.num = ansNum;
         this.ans = selection;
@@ -58,7 +62,16 @@ public class Question {
     }
 
     public long getVersionId() {
-        return version.getId();
+        return getVersion().getId();
+    }
+
+    private Version getVersion() {
+        try {
+            return version.get();
+        } catch (ExecutionException |InterruptedException  e) {
+            e.printStackTrace();
+            throw new MyAssersionError("Future version shouls be accesible");
+        }
     }
 
     public void setVersionId(long versionId) {
@@ -97,4 +110,9 @@ public class Question {
     }
 
 
+    private class MyAssersionError extends RuntimeException {
+        public MyAssersionError(String msg) {
+            super(msg);
+        }
+    }
 }

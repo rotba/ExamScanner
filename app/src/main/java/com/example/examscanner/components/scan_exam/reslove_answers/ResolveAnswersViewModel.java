@@ -31,34 +31,6 @@ public class ResolveAnswersViewModel extends ViewModel {
         mNumOfAnswersScannedAnswers = new MutableLiveData<>(scannedCaptures.size());
     }
 
-//    private int i =0;
-//    public LiveData<Integer> getNumOfIdentified() {
-//        if(scannedCaptures.size()>0){
-//            mNumOfIdentified.setValue(scannedCaptures.size());
-//        }
-//        return mNumOfIdentified;
-//    }
-
-//    public void scanAnswers(Bitmap bitmap) {
-//        IScannedCapture iScannedCapture = imageProcessor.scanAnswers(bitmap);
-//        scannedCaptures.add(
-//                new ScannedCapture(
-//                        iScannedCapture.getIdentified(),
-//                        iScannedCapture.getUnidentified(),
-//                        iScannedCapture.getAnswers()
-//                )
-//        );
-//    }
-
-//    public void postProcessScanAnswers(){
-//        mNumOfIdentified.setValue(scannedCaptures.get(0).getIdentified());
-//        mNumOfUnidentified.setValue(scannedCaptures.get(0).getUnidentified());
-//        mNumOfAnswersScannedAnswers.setValue(mNumOfAnswersScannedAnswers.getValue()+1);
-//    }
-
-//    public LiveData<Integer> getNumberOfAnswersScannedCaptures() {
-//        return mNumOfAnswersScannedAnswers;
-//    }
 
     public List<MutableLiveData<ScannedCapture>> getScannedCaptures() {
         return scannedCaptures;

@@ -33,8 +33,29 @@ public class ResolvedAnswer extends Answer{
     }
 
 
+    @Override
     public int getSelection() {
         return selection;
+    }
+
+    @Override
+    public float getLeft() {
+        return 0;
+    }
+
+    @Override
+    public float getUp() {
+        return 0;
+    }
+
+    @Override
+    public float getRight() {
+        return 0;
+    }
+
+    @Override
+    public float getBottom() {
+        return 0;
     }
 
     @NonNull

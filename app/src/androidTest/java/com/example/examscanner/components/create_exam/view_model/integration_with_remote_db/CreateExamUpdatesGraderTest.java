@@ -93,7 +93,6 @@ public class CreateExamUpdatesGraderTest {
         GraderRepoFactory.tearDown();
         AuthenticationHandlerFactory.getTest().authenticate("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
         imageProcessor = new ImageProcessorStub();
-        imageProcessor = new ImageProcessorStub();
     }
 
     @After

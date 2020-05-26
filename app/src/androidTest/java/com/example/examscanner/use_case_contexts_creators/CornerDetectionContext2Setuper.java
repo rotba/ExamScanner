@@ -17,6 +17,7 @@ import com.example.examscanner.repositories.corner_detected_capture.CDCRepositor
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
+import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.session.SESessionProviderFactory;
@@ -126,6 +127,10 @@ public class CornerDetectionContext2Setuper {
 
     public int getVersionNum() {
         return dinaBarzilayVersion;
+    }
+
+    public Version getVersion(){
+        return getTheExam().getVersionByNum(getVersionNum());
     }
 
     public Bitmap getOrigVersionImage() {

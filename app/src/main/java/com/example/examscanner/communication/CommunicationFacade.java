@@ -9,6 +9,7 @@ import com.example.examscanner.communication.entities_interfaces.QuestionEntityI
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
+import com.example.examscanner.repositories.scanned_capture.Answer;
 
 import java.util.List;
 
@@ -43,4 +44,5 @@ public interface CommunicationFacade {
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom);
     public List<GraderEntityInterface> getGraders();
     public void createGrader(String userName, String userId);
+    public ExamineeAnswerEntityInterface getAnswerById(long examineeAnswersId);
 }

@@ -268,7 +268,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public ExamineeAnswerEntityInterface getExamineeAnswerByExamIdVerNumAndQNumAndExamineeId(long examId, int verNum, int qNum, long examineeId) {
-        return null;
+        throw new NotImplentedException();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -540,6 +540,54 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
+    public ExamineeAnswerEntityInterface getAnswerById(long examineeAnswersId) {
+        ExamineeAnswer answer = db.getExamineeAnswerDao().getById(examineeAnswersId);
+        Question q = db.getQuestionDao().get(answer.getQuestionId());
+        if (answer==null){
+            throw new MyAssertionError(String.format("No answer with id:%d",examineeAnswersId));
+        }
+        if (q==null){
+            throw new MyAssertionError(String.format("No question with id:%d",answer.getQuestionId()));
+        }
+        return new ExamineeAnswerEntityInterface() {
+            @Override
+            public long getId() {
+                return answer.getId();
+            }
+
+            @Override
+            public int getAns() {
+                return answer.getAns();
+            }
+
+            @Override
+            public int getNum() {
+                return q.getQuestionNum();
+            }
+
+            @Override
+            public int getLeftX() {
+                return answer.getLeftX();
+            }
+
+            @Override
+            public int getUpY() {
+                return answer.getUpY();
+            }
+
+            @Override
+            public int getRightX() {
+                return answer.getRightX();
+            }
+
+            @Override
+            public int getBottomY() {
+                return answer.getBottomY();
+            }
+        };
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         Version theVersion = db.getVersionDao().getByExamIdAndNumber(eId, num);
         try {
@@ -660,5 +708,11 @@ public class RealFacadeImple implements CommunicationFacade {
         public MyAssertionError(String s, Throwable e) {
             super(e);
         }
+        public MyAssertionError(String s) {
+            super(s);
+        }
+    }
+
+    public class NotImplentedException extends RuntimeException {
     }
 }

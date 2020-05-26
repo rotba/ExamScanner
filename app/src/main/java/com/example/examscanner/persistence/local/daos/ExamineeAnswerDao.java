@@ -15,4 +15,7 @@ public interface ExamineeAnswerDao {
 
     @Query("SELECT * FROM EXAMINEESOLUTION WHERE id IS :esId LIMIT 1")
     ExamineeSolutionWithExamineeAnswers getExamineeSolutionWithExamineeAnswers(long esId);
+
+    @Query("SELECT * FROM ExamineeAnswer WHERE id IS :id LIMIT 1")
+    ExamineeAnswer getById(long id);
 }

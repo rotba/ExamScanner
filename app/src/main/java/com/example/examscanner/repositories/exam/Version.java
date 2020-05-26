@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 public class Version {
     private static final String TAG = "ExamScanner";
     private static final String MSG_PREF = "Version";
-    private Exam exam;
+    private Future<Exam> exam;
     private long id;
     private int num;
     private Future<List<Question>> fQuestions;
@@ -25,7 +25,7 @@ public class Version {
 //    private boolean doResolveFutures;
 
 
-    public Version(long id,int num, Exam e, Future<List<Question>> fQuestions, Bitmap perfectImage) {
+    public Version(long id,int num, Future<Exam> e, Future<List<Question>> fQuestions, Bitmap perfectImage) {
         this.id=id;
         this.num = num;
         this.exam = e;
@@ -56,7 +56,12 @@ public class Version {
     }
 
     public Exam getExam() {
-        return exam;
+        try {
+            return exam.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            throw new MyAsserstionError("Exam future should be accessible");
+        }
     }
 
     public void addQuestion(Question question) {
@@ -199,4 +204,9 @@ public class Version {
     }
 
 
+    private class MyAsserstionError extends RuntimeException {
+        public MyAsserstionError(String msg) {
+            super(msg);
+        }
+    }
 }
