@@ -96,10 +96,10 @@ public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFu
         onView(withText(Integer.toString(usecaseContext.getDinaBarzilayVersion()))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         Utils.sleepSwipingTime();
-        clickOnTheVersionSpinner();
-        onView(withText(Integer.toString(usecaseContext.getTheDevilVersion()))).perform(click());
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
-        Utils.sleepScanAnswersTime();
+//        clickOnTheVersionSpinner();
+//        onView(withText(Integer.toString(usecaseContext.getTheDevilVersion()))).perform(click());
+//        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+//        Utils.sleepScanAnswersTime();
         onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
         onView(withContentDescription("Navigate up")).perform(click());
         Utils.sleepScanAnswersTime();

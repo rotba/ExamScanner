@@ -62,10 +62,6 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
         scanExamSession =new SESessionProviderFactory().create().provide(examId);
         cdcRepo = new CDCRepositoryFacrory().create();
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
-//        VersionRepoFactory.setStub(VersionRepoStubFactory.createStubThatReturns(new ArrayList<Version>(){{
-//            add(new Version(dinaBarzilayVersionNumber,0,null));
-//            add(new Version(theDevilVersionNumber,0,null));
-//        }}));
         imageProcessor = nullIP();
         repo = new ScannedCaptureRepositoryFactory().create();
         repo.create(ScannedCapturesInstancesFactory.instance1(repo));

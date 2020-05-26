@@ -145,9 +145,13 @@ public class ScannedCapture {
     public String toString() {
         StringBuilder sBuilder = new StringBuilder();
         for (int i = 0; i < answers.size(); i++) {
-            Answer a = getAnswerByNum(i+1);
-            sBuilder.append(a.toString());
-            sBuilder.append(", ");
+            try{
+                Answer a = getAnswerByNum(i+1);
+                sBuilder.append(a.toString());
+                sBuilder.append(", ");
+            }catch (NoAnswerWithTheGivenNum e){
+                sBuilder.append(String.format("?, "));
+            }
         }
         return sBuilder.toString();
     }
