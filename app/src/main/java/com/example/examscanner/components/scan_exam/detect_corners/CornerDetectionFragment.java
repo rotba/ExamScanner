@@ -42,7 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 import static android.view.View.VISIBLE;
 
 public class CornerDetectionFragment extends Fragment {
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
     private static final String TAG = "ExamScanner";
     private static final String MSG_PREF = "CornerDetectionFragment::";
     private CornerDetectionViewModel cornerDetectionViewModel;
