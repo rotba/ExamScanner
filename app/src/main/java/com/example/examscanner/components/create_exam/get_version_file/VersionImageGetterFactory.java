@@ -6,7 +6,7 @@ public class VersionImageGetterFactory {
         if(stubInstance!=null){
             return stubInstance;
         }
-        return new VersionImageImpl();
+        return new PDFVersionImageImpl();
     }
     public static void setStubInstance(VersionImageGetter theStubInstance){
         stubInstance = theStubInstance;

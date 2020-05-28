@@ -83,6 +83,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:' +rootProject.firebase_db_version
 
     implementation 'com.google.firebase:firebase-storage:19.1.1'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.0.3'
 
     // androidTest
     androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion

@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import java.io.IOException;
 
-class VersionImageImpl implements VersionImageGetter {
+class JPGVersionImageImpl implements VersionImageGetter {
 
     private static final String TAG = "ExamScanner";
     private static final String MSG_PREF = "VersionImageImpl::";
