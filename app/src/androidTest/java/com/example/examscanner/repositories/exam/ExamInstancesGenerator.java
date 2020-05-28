@@ -24,7 +24,7 @@ public class ExamInstancesGenerator {
         final Version v = new Version(
                 -1,
                 1,
-                e,
+                Version.toFuture(e),
                 Version.theEmptyFutureQuestionsList(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_v1_JPG_ANS_2()
         );
@@ -33,7 +33,7 @@ public class ExamInstancesGenerator {
         );
         Question q = new Question(
                 -1,
-                v,
+                Question.toFuture(v),
                 4,
                 4,
                 1,

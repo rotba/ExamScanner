@@ -26,4 +26,7 @@ public interface ExamineeSolutionDao {
     @Transaction
     @Query("SELECT *  FROM ScanExamSession WHERE id IS :sId LIMIT 1")
     SESessionWithExamineeSolutions getSessionWithExamineeSolutions(long sId);
+
+    @Query("SELECT * FROM ExamineeSolution WHERE id IS :sId LIMIT 1")
+    ExamineeSolution getById(long sId);
 }

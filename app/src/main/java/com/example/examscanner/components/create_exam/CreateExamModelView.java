@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateExamModelView extends ViewModel {
+    private static final String NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS = "NOT_SUPPORTING_EXAMINEE_IDS_EXTRACTIONS";
     private MutableLiveData<Integer> addedVersions;
     private Repository<Grader> gRepo;
     private ImageProcessingFacade imageProcessor;
@@ -74,16 +75,18 @@ public class CreateExamModelView extends ViewModel {
         imageProcessor.scanAnswers(currentVersionBitmap, examCreated.getNumOfQuestions(), new ScanAnswersConsumer() {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                ScannedCapture scannedCapture = new ScannedCapture(-1,null,numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections);
-                if(versionScanningWentWell(scannedCapture))
+                Version v = new Version(-1,currentVersionNumber,Version.toFuture(examCreated), Version.theEmptyFutureQuestionsList(),currentVersionBitmap);
+                ScannedCapture scannedCapture = new ScannedCapture(-1,null,numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections,v, NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS);
+                if(versionScanningWentWell(scannedCapture)) {
                     throw new VersionScanningDidntGoWell();
-                Version v = new Version(-1,currentVersionNumber,examCreated, Version.theEmptyFutureQuestionsList(),currentVersionBitmap);
+                }
                 examCreated.addVersion(v);
                 for (ResolvedAnswer ans: scannedCapture.getResolvedAnswers()) {
                     v.addQuestion(
                             new Question(
                                     -1,
-                                    v,ans.getAnsNum(),
+                                    Question.toFuture(v),
+                                    ans.getAnsNum(),
                                     ans.getSelection(),
                                     (int)(ans.getUpperLeft().x*currentVersionBitmap.getWidth()),
                                     (int)(ans.getUpperLeft().y*currentVersionBitmap.getHeight()),

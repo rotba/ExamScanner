@@ -1,33 +1,38 @@
-package com.example.examscanner.components.scan_exam.reslove_answers;
+package com.example.examscanner.components.integrations;
 
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
 import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
+import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
-import com.example.examscanner.repositories.grader.GraderRepoFactory;
+import com.example.examscanner.repositories.scanned_capture.Answer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext3Setuper;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.observers.TestObserver;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@Ignore("ignore")
-public class ResolveAnswersViewModelTest extends AbstractComponentInstrumentedTest {
-
+public class ScannedCaptureInserted_ExamineeSolutionIsStored extends AbstractComponentInstrumentedTest {
     private CornerDetectionContext3Setuper usecaseContext;
-    private ResolveAnswersViewModel out;
+    private RemoteDatabaseFacade out;
+
 
     @Override
     @Before
@@ -42,22 +47,26 @@ public class ResolveAnswersViewModelTest extends AbstractComponentInstrumentedTe
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
         usecaseContext = new CornerDetectionContext3Setuper();
         usecaseContext.setup();
-        out = new ResolveAnswersViewModel(
-                new ImageProcessingFactory().create(),
-                new ScannedCaptureRepositoryFactory().create()
-        );
-
-        AppDatabaseFactory.tearDownDb();
-        ExamRepositoryFactory.tearDown();
-        CommunicationFacadeFactory.tearDown();
-        ScannedCaptureRepositoryFactory.tearDown();
-        //TODO - bob need to be admin. probably down the road it won't be possible to just read the DB
-        AuthenticationHandlerFactory.getTest().authenticate("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
+        out = RemoteDatabaseFacadeFactory.get();
     }
 
     @Test
     public void theSolutionIsStoredInTheDB() {
-        final List<ScannedCapture> scannedCaptures = new ScannedCaptureRepositoryFactory().create().get(s -> true);
-        assertTrue(scannedCaptures.contains(usecaseContext.getSc()));
+        List<ExamineeSolution> es = new ArrayList<>();
+        out.getExamineeSolutions().blockingSubscribe(_es->es.addAll(_es));
+        ExamineeSolution actual = null;
+        final ScannedCapture expected = usecaseContext.getSc();
+        for (ExamineeSolution currEs:es) {
+            if(currEs._getId().equals(expected.getExamineeId())){
+                actual = currEs;
+            }
+        }
+        assertNotNull(actual);
+        assertTrue(actual.answers.size() == expected.getAnswers().size());
+        for (Answer a : expected.getAnswers()) {
+            Integer actualAns = actual.answers.get(String.valueOf(a.getAnsNum()));
+            Integer expectedAns = new Integer(a.getSelection());
+            assertEquals(actualAns , expectedAns);
+        }
     }
 }

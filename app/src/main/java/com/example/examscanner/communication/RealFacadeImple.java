@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.GraderEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
@@ -24,6 +25,7 @@ import com.example.examscanner.persistence.local.entities.Question;
 import com.example.examscanner.persistence.local.entities.SemiScannedCapture;
 import com.example.examscanner.persistence.local.entities.ScanExamSession;
 import com.example.examscanner.persistence.local.entities.Version;
+import com.example.examscanner.persistence.local.entities.relations.ExamineeSolutionWithExamineeAnswers;
 import com.example.examscanner.persistence.local.files_management.FilesManager;
 import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
@@ -191,6 +193,15 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long addExamineeAnswer(long solutionId, long questionId, int ans, int leftX, int upY, int rightX, int botY) {
+        ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
+        Question q = db.getQuestionDao().get(questionId);
+        if(es ==null){
+            throw new MyAssertionError("ExamineeSolution shpuld exist in db");
+        }
+        if(q ==null){
+            throw new MyAssertionError("Question shpuld exist in db");
+        }
+        remoteDb.offlineInsertAnswerIntoExamineeSolution(es.getExamineeId(), q.getQuestionNum(), ans);
         return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
     }
 
@@ -588,6 +599,63 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
+    public ExamineeSolutionsEntityInterface[] getExamineeSoultions() {
+        final List<ExamineeSolution> all = db.getExamineeSolutionDao().getAll();
+        ExamineeSolutionsEntityInterface[] ans = new ExamineeSolutionsEntityInterface[all.size()];
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] = toEntityInterface(all.get(i));
+        }
+        return ans;
+    }
+
+    private ExamineeSolutionsEntityInterface toEntityInterface(ExamineeSolution examineeSolution) {
+        SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(examineeSolution.getScannedCaptureId());
+        final List<ExamineeSolutionWithExamineeAnswers> examineeSolutionWithExamineeAnswers = db.getExamineeSolutionDao().getExamineeSolutionWithExamineeAnswers();
+        List<ExamineeAnswer> answers = null;
+        for (ExamineeSolutionWithExamineeAnswers eWithAs: examineeSolutionWithExamineeAnswers){
+            if(eWithAs.getExamineeSolution().getId()==examineeSolution.getId()){
+                answers = eWithAs.getExamineeAnswers();
+            }
+        }
+        if(answers==null){
+            throw new MyAssertionError("ExamineeSolution should exist in db");
+        }
+        List<ExamineeAnswer> finalAnswers = answers;
+        return new ExamineeSolutionsEntityInterface() {
+            @Override
+            public String getExaimneeId() {
+                return examineeSolution.getExamineeId();
+            }
+
+            @Override
+            public long getId() {
+                return examineeSolution.getId();
+            }
+
+            @Override
+            public Bitmap getBitmap() {
+                return null;//BY DESIGN
+            }
+
+            @Override
+            public long getSessionId() {
+                return examineeSolution.getSessionId();
+            }
+
+            @Override
+            public long getVersionId() {
+                return examineeSolution.getVersionId();
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public long[] getExamineeAnswersIds() {
+                return finalAnswers.stream().mapToLong(ExamineeAnswer::getId).toArray();
+            }
+        };
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         Version theVersion = db.getVersionDao().getByExamIdAndNumber(eId, num);
         try {
@@ -640,8 +708,9 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     @Override
-    public long createExamineeSolution(long sId, Bitmap bm, long examineeId) {
-        return db.getExamineeSolutionDao().insert(new ExamineeSolution(examineeId, DONT_SAVE_BITMAP, sId));
+    public long createExamineeSolution(long session, Bitmap bm, String examineeId, long versionId) {
+        remoteDb.offlineInsertExamineeSolution(examineeId, versionId);
+        return db.getExamineeSolutionDao().insert(new ExamineeSolution(examineeId, DONT_SAVE_BITMAP, session,versionId));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

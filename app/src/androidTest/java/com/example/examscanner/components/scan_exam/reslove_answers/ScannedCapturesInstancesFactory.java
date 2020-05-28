@@ -3,6 +3,7 @@ package com.example.examscanner.components.scan_exam.reslove_answers;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 public class ScannedCapturesInstancesFactory {
@@ -44,7 +45,7 @@ public class ScannedCapturesInstancesFactory {
         assert rights.length == bottoms.length;
         assert bottoms.length == selections.length;
         assert selections.length == answersIds.length;
-        return new ScannedCapture(repo.genId(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 53, answersIds.length, answersIds, lefts, tops, rights, bottoms, selections);
+        return new ScannedCapture(repo.genId(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 53, answersIds.length, answersIds, lefts, tops, rights, bottoms, selections, null, null);
     }
 
     /**

@@ -27,6 +27,7 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class CommunicationFacadeTest {
     private static final int QAD_NUM_OF_QUESTIONS = 50;
+    private static final String DONT_KNOW_EXAMINEE_ID = "DONT_KNOW_EXAMINEE_ID";
     CommunicationFacade oot;
     AppDatabase db;
     private String currentUserId;
@@ -86,7 +87,7 @@ public class CommunicationFacadeTest {
         long scanExamSessionId= setUpScanExamSessionContext(versionContext.eId);
         return new ExamineeSolutionContext(
                 0,
-                oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0),
+                oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), DONT_KNOW_EXAMINEE_ID, versionContext.vId),
                 versionContext.vId
         );
     }
@@ -174,7 +175,7 @@ public class CommunicationFacadeTest {
     public void testGetAndCreateExamineeSolutionsBySessionNotEmpty() {
         VersionContext vContext = setUpVersionContext();
         long scanExamSessionId = setUpScanExamSessionContext(vContext.eId);
-        long esId = oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0);
+        long esId = oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), DONT_KNOW_EXAMINEE_ID, vContext.vId);
         assertTrue(oot.getExamineeSolutionsBySession(scanExamSessionId).length > 0);
     }
 
@@ -182,7 +183,7 @@ public class CommunicationFacadeTest {
     public void testGetAndCreateExamineeSolutionsBySessionUpdates() {
         VersionContext vContext = setUpVersionContext();
         long scanExamSessionId = setUpScanExamSessionContext(vContext.eId);
-        long esId = oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), 0);
+        long esId = oot.createExamineeSolution(scanExamSessionId, BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked(), DONT_KNOW_EXAMINEE_ID, vContext.vId);
         boolean assertion = false;
         long[] ess = oot.getExamineeSolutionsBySession(scanExamSessionId);
         for (int i = 0; i < ess.length; i++) {

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.entities.Exam;
+import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
 import com.example.examscanner.persistence.remote.entities.Grader;
 import com.example.examscanner.persistence.remote.entities.Question;
 import com.example.examscanner.persistence.remote.entities.Version;
@@ -59,5 +60,20 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     @Override
     public Observable<String> createQuestion(String remoteVersionId, int num, int ans, int left, int up, int right, int bottom) {
         return Observable.fromCallable(()->{return "";});
+    }
+
+    @Override
+    public Observable<List<ExamineeSolution>> getExamineeSolutions() {
+        return Observable.fromCallable(()->{return new ArrayList<>();});
+    }
+
+    @Override
+    public void offlineInsertExamineeSolution(String examineeId, long versionId) {
+
+    }
+
+    @Override
+    public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans) {
+
     }
 }

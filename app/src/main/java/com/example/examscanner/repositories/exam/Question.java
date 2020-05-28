@@ -6,6 +6,8 @@ import com.example.examscanner.repositories.exam.Version;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class Question {
     private long id;
@@ -111,8 +113,37 @@ public class Question {
 
 
     private class MyAssersionError extends RuntimeException {
+
         public MyAssersionError(String msg) {
             super(msg);
         }
+    }
+    public static Future<Version> toFuture(Version v) {
+        return new Future<Version>() {
+            @Override
+            public boolean cancel(boolean mayInterruptIfRunning) {
+                return false;
+            }
+
+            @Override
+            public boolean isCancelled() {
+                return false;
+            }
+
+            @Override
+            public boolean isDone() {
+                return true;
+            }
+
+            @Override
+            public Version get() throws ExecutionException, InterruptedException {
+                return v;
+            }
+
+            @Override
+            public Version get(long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+                return null;
+            }
+        };
     }
 }

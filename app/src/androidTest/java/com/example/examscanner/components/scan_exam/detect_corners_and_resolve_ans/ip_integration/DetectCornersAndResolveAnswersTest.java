@@ -56,9 +56,9 @@ public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveA
                 e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020",QAD_NUM_OF_QUESTIONS);
                 examRepository = new ExamRepositoryFactory().create();
                 dinaBarzilayVersion = 496351;
-                e.addVersion(new Version(-1, dinaBarzilayVersion,e,Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getTestJpg1()));
+                e.addVersion(new Version(-1, dinaBarzilayVersion,Version.toFuture(e),Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getTestJpg1()));
                 theDevilVersion = 666;
-                e.addVersion(new Version(-1, theDevilVersion,e,Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getTestJpg1()));
+                e.addVersion(new Version(-1, theDevilVersion,Version.toFuture(e),Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getTestJpg1()));
                 examRepository.create(e);
                 CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
                 scRepo = SCEmptyRepositoryFactory.create();

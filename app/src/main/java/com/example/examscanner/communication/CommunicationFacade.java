@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.GraderEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
@@ -21,7 +22,7 @@ public interface CommunicationFacade {
     public long addExamineeAnswer(long solutionId, long questionId ,int ans, int leftX, int upY, int rightX, int botY);
     public long addVersion(long examId, int versionNumber, Bitmap bm);
     public long addQuestion(long vId, int qNum, int correctAnswer, int leftX, int upY, int rightX, int bottomY);
-    public long createExamineeSolution(long sId, Bitmap bm, long examineeId);
+    public long createExamineeSolution(long sId, Bitmap bm, String examineeId, long versionId);
     public long[] getSemiScannedCaptureBySession(long sId);
     public long[] getExamineeSolutionsBySession(long sId);
     public long[] getExamineeAnswersIdsByExamineeSolutionId(long esId);
@@ -45,4 +46,5 @@ public interface CommunicationFacade {
     public List<GraderEntityInterface> getGraders();
     public void createGrader(String userName, String userId);
     public ExamineeAnswerEntityInterface getAnswerById(long examineeAnswersId);
+    public ExamineeSolutionsEntityInterface[] getExamineeSoultions();
 }

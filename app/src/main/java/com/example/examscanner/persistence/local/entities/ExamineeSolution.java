@@ -10,16 +10,20 @@ public class ExamineeSolution {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)
     private long id;
-    private long examineeId;
+    private String examineeId;
     private long scannedCaptureId;
     public static final String fkSession = "sessionId";
+    public static final String fkVersion = "versionId";
     @ForeignKey(entity = ScanExamSession.class, parentColumns = ScanExamSession.pkName, childColumns = fkSession)
     private long sessionId;
+    @ForeignKey(entity = Version.class, parentColumns = Version.pkName, childColumns = fkVersion)
+    private long versionId;
 
-    public ExamineeSolution(long examineeId, long scannedCaptureId, long sessionId) {
+    public ExamineeSolution(String examineeId, long scannedCaptureId, long sessionId, long versionId) {
         this.examineeId = examineeId;
         this.scannedCaptureId = scannedCaptureId;
         this.sessionId = sessionId;
+        this.versionId = versionId;
     }
 
     public long getSessionId() {
@@ -34,11 +38,11 @@ public class ExamineeSolution {
         return id;
     }
 
-    public long getExamineeId() {
+    public String getExamineeId() {
         return examineeId;
     }
 
-    public void setExamineeId(long examineeId) {
+    public void setExamineeId(String examineeId) {
         this.examineeId = examineeId;
     }
 
@@ -52,5 +56,13 @@ public class ExamineeSolution {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getVersionId() {
+        return versionId;
+    }
+
+    public void setVersionId(long versionId) {
+        this.versionId = versionId;
     }
 }

@@ -1,5 +1,9 @@
 package com.example.examscanner.repositories.scanned_capture;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
@@ -48,12 +52,17 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public List<ScannedCapture> get(Predicate<ScannedCapture> criteria) {
         List<ScannedCapture> ans = new ArrayList<>();
-        for (ExamineeSolutionsEntityInterface ei: comFacade.getExa) {
-
+        for (ExamineeSolutionsEntityInterface ei: comFacade.getExamineeSoultions()) {
+            final ScannedCapture convert = converter.convert(ei);
+            if(criteria.test(convert)){
+                ans.add(convert);
+            }
         }
+        return ans;
     }
 
     @Override
@@ -61,7 +70,8 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
         final long id = comFacade.createExamineeSolution(
                 -1,
                 scannedCapture.getBm(),
-                scannedCapture.getExamineeId()
+                scannedCapture.getExamineeId(),
+                scannedCapture.getVersion().getId()
         );
         for (Answer a:scannedCapture.getAnswers()) {
             comFacade.addExamineeAnswer(

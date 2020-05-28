@@ -205,8 +205,37 @@ public class Version {
 
 
     private class MyAsserstionError extends RuntimeException {
+
         public MyAsserstionError(String msg) {
             super(msg);
         }
+    }
+    public static Future<Exam> toFuture(Exam examCreated) {
+        return new Future<Exam>() {
+            @Override
+            public boolean cancel(boolean mayInterruptIfRunning) {
+                return false;
+            }
+
+            @Override
+            public boolean isCancelled() {
+                return false;
+            }
+
+            @Override
+            public boolean isDone() {
+                return true;
+            }
+
+            @Override
+            public Exam get() throws ExecutionException, InterruptedException {
+                return examCreated;
+            }
+
+            @Override
+            public Exam get(long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+                return null;
+            }
+        };
     }
 }

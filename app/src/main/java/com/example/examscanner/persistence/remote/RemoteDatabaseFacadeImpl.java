@@ -2,13 +2,18 @@ package com.example.examscanner.persistence.remote;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.persistence.remote.entities.Exam;
+import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
 import com.example.examscanner.persistence.remote.entities.Grader;
 import com.example.examscanner.persistence.remote.entities.Question;
 import com.example.examscanner.persistence.remote.entities.Version;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
@@ -20,13 +25,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
 class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
+
+    private static final String TAG = "ExamScanner";
+    private static final String MSG_PREF = "RemoteDatabaseFacadeImpl";
+
     private void storeVersionBitmap(Bitmap verBm) {
 
     }
@@ -44,7 +55,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         year,
                         seal,
                         url
-                )
+                ),
+                StoreTaskPostprocessor.getOnline()
         );
     }
 
@@ -56,7 +68,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         remoteExamId,
                         num,
                         pathToBitmap
-                )
+                ),
+                StoreTaskPostprocessor.getOnline()
         );
     }
 
@@ -72,8 +85,50 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         right,
                         remoteVersionId,
                         bottom
-                )
+                ),
+                StoreTaskPostprocessor.getOnline()
         );
+    }
+
+    @Override
+    public Observable<List<ExamineeSolution>> getExamineeSolutions() {
+        return getChildrenOfRoot(
+                Paths.toSolutions,
+                ds -> {
+                    List<Long> value = (ArrayList<Long>)ds.child(ExamineeSolution.metaAnswers).getValue();
+                    Map<String, Integer> answers = new HashMap<>();
+                    for(int i =1; i< value.size(); i++){
+                        answers.put(String.valueOf(i) , value.get(i).intValue());
+                    }
+                    ExamineeSolution examineeSolution = new ExamineeSolution(
+                            ds.child(ExamineeSolution.metaVersionId).getValue(Integer.class),
+                            answers
+                    );
+                    examineeSolution._setId(ds.getKey());
+                    return examineeSolution;
+                }
+        );
+    }
+
+    @Override
+    public void offlineInsertExamineeSolution(String examineeId, long versionId) {
+        storeObjectInLocationInPath(
+                String.format("%s/%s",Paths.toSolutions,examineeId),
+                new ExamineeSolution(
+                        versionId,
+                        new HashMap<>()
+                ),
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+    }
+
+    @Override
+    public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans) {
+        storeObjectInLocationInPath(
+                String.format("%s/%s/%s/%d", Paths.toSolutions,examineeId,ExamineeSolution.metaAnswers ,questionNum),
+                new Integer(ans),
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
     }
 
     @Override
@@ -196,31 +251,35 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     public Observable<String> createGrader(String userName, String userId) {
         return storeObjectInLocationInPath(
                 String.format("%s/%s", Paths.toGraders, userName),
-                new Grader(userId, userName)
+                new Grader(userId, userName),
+                StoreTaskPostprocessor.getOnline()
         );
     }
 
 
-    private static Observable<String> storeChildInPath(String parent, Object obj) {
-        return storeObject(() -> FirebaseDatabaseFactory.get().getReference(parent).push(), obj);
+    private static Observable<String> storeChildInPath(String parent, Object obj, StoreTaskPostprocessor taskPostprocessor) {
+        return storeObject(() -> FirebaseDatabaseFactory.get().getReference(parent).push(), obj,taskPostprocessor);
     }
 
-    private Observable<String> storeObjectInLocationInPath(String location, Object obj) {
-        return storeObject(() -> FirebaseDatabaseFactory.get().getReference(location), obj);
+    private Observable<String> storeObjectInLocationInPath(String location, Object obj, StoreTaskPostprocessor taskPostprocessor) {
+        return storeObject(() -> FirebaseDatabaseFactory.get().getReference(location), obj,taskPostprocessor);
     }
 
-    private static Observable<String> storeObject(ReferenceLocationAllocator allocator, Object obj) {
-        return Observable.fromCallable(() -> {
-            DatabaseReference myRef = allocator.allocate();
-            final Task<Void> task = myRef.setValue(obj);
-            Tasks.await(task);
-            if (task.isSuccessful()) {
-                return myRef.getKey();
-            } else {
-                throw new IllegalStateException("Task not successful", task.getException());
-            }
-        });
+    private static Observable<String> storeObject(ReferenceLocationAllocator allocator, Object obj, StoreTaskPostprocessor postProcessor) {
+        DatabaseReference myRef = allocator.allocate();
+        final Task<Void> task = myRef.setValue(obj);
+        return postProcessor.postProcess(task, myRef);
+//        return Observable.fromCallable(() -> {
+//            Tasks.await(task);
+//            if (task.isSuccessful()) {
+//                return myRef.getKey();
+//            } else {
+//                throw new IllegalStateException("Task not successful", task.getException());
+//            }
+//        });
     }
+
+
 
     private interface ReferenceLocationAllocator {
         DatabaseReference allocate();
@@ -234,5 +293,44 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         List<T> convert(Iterable<DataSnapshot> ds);
     }
 
+    private interface StoreTaskPostprocessor{
+        Observable<String> postProcess(Task t, DatabaseReference ref);
+        static StoreTaskPostprocessor getOnline(){
+            return new StoreTaskPostprocessor() {
+                @Override
+                public Observable<String> postProcess(Task t, DatabaseReference ref) {
+                    return Observable.fromCallable(() -> {
+                        Tasks.await(t);
+                        if (t.isSuccessful()) {
+                            return ref.getKey();
+                        } else {
+                            throw new IllegalStateException("Task not successful", t.getException());
+                        }
+                    });
+                }
+            };
+        }
 
+        static StoreTaskPostprocessor getOffline(){
+            return new StoreTaskPostprocessor() {
+                @Override
+                public Observable<String> postProcess(Task t, DatabaseReference ref) {
+                    return Observable.fromCallable(() -> {
+                        t.addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, MSG_PREF+"::offlineStoreObject SUCCESS");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, MSG_PREF+"::offlineStoreObject FAILURE", e);
+                            }
+                        });
+                        return "return";
+                    });
+                }
+            };
+        }
+    }
 }

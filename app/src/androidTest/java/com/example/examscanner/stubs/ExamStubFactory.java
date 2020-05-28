@@ -55,8 +55,8 @@ public class ExamStubFactory {
             @Override
             public List<Version> get() throws ExecutionException, InterruptedException {
                 return new ArrayList<Version>(){{
-                    add(new Version(-1,instance1_dinaBarzilayVersion, e, Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()));
-                    add(new Version(-1,instance1_theDevilVersion, e, Version.theEmptyFutureQuestionsList(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()));
+                    add(new Version(-1,instance1_dinaBarzilayVersion, Version.toFuture(e), Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()));
+                    add(new Version(-1,instance1_theDevilVersion, Version.toFuture(e), Version.theEmptyFutureQuestionsList(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()));
                 }};
             }
 

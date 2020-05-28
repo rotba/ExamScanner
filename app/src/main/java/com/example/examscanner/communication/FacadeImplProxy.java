@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.GraderEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ScanExamSessionEntityInterface;
@@ -156,6 +157,11 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
+    public ExamineeSolutionsEntityInterface[] getExamineeSoultions() {
+        return realImpl.getExamineeSoultions();
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         return realImpl.getVersionByExamIdAndNumber(eId, num);
     }
@@ -173,8 +179,8 @@ public class FacadeImplProxy implements CommunicationFacade {
 
 
     @Override
-    public long createExamineeSolution(long sId, Bitmap bm, long examineeId) {
-        return realImpl.createExamineeSolution(sId, bm, examineeId);
+    public long createExamineeSolution(long sId, Bitmap bm, String examineeId, long versionId) {
+        return realImpl.createExamineeSolution(sId, bm, examineeId,  versionId);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
