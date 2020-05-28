@@ -44,7 +44,7 @@
     <string name="answers_is_3">3</string>
     <string name="answers_is_4">4</string>
     <string name="course_name">Course name:</string>
-    <string name="term">Term:</string>
+    <string name="term">Exam:</string>
     <string name="term_a">A</string>
     <string name="term_b">B</string>
     <string name="term_c">C</string>
@@ -74,4 +74,7 @@
     <string name="menu_logout">Logout</string>
     <string name="button_main_activity_logout">Logout</string>
     <string name="nums_questions">Number of questions:</string>
+    <string name="create_exam_dialog_version_scanned_succesffuly">Version scanned succefuly</string>
+    <string name="create_exam_version_scanned_dialog_confirm">Confirm</string>
+    <string name="create_exam_version_scanned_dialog_try_again">Try again</string>
 </resources>

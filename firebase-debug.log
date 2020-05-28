@@ -1,71 +1,16 @@
-[debug] [2020-05-24T10:28:05.102Z] ----------------------------------------------------------------------
-[debug] [2020-05-24T10:28:05.104Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\rotem\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
-[debug] [2020-05-24T10:28:05.105Z] CLI Version:   8.2.0
-[debug] [2020-05-24T10:28:05.105Z] Platform:      win32
-[debug] [2020-05-24T10:28:05.105Z] Node Version:  v10.14.1
-[debug] [2020-05-24T10:28:05.106Z] Time:          Sun May 24 2020 13:28:05 GMT+0300 (Israel Daylight Time)
-[debug] [2020-05-24T10:28:05.106Z] ----------------------------------------------------------------------
-[debug] [2020-05-24T10:28:05.106Z] 
-[debug] [2020-05-24T10:28:05.112Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2020-05-24T10:28:05.112Z] > authorizing via signed-in user
-[info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
-
-You're about to initialize a Firebase project in this directory:
-
-  C:\Code\School\proj\app\android\ExamScanner
-
-Before we get started, keep in mind:
-
-  * You are currently outside your home directory
-  * You are initializing in an existing Firebase project directory
-
-[debug] [2020-05-24T10:28:25.460Z] ----------------------------------------------------------------------
-[debug] [2020-05-24T10:28:25.462Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\rotem\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
-[debug] [2020-05-24T10:28:25.462Z] CLI Version:   8.2.0
-[debug] [2020-05-24T10:28:25.462Z] Platform:      win32
-[debug] [2020-05-24T10:28:25.462Z] Node Version:  v10.14.1
-[debug] [2020-05-24T10:28:25.463Z] Time:          Sun May 24 2020 13:28:25 GMT+0300 (Israel Daylight Time)
-[debug] [2020-05-24T10:28:25.463Z] ----------------------------------------------------------------------
-[debug] [2020-05-24T10:28:25.463Z] 
-[debug] [2020-05-24T10:28:25.469Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2020-05-24T10:28:25.469Z] > authorizing via signed-in user
-[info] i  emulators: Starting emulators: functions, database
-[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project examscanner-de46e. This may result in unexpected behavior.
-[debug] [2020-05-24T10:28:27.523Z] [hub] writing locator at C:\Users\rotem\AppData\Local\Temp\hub-examscanner-de46e.json
-[info] +  hub: emulator hub started at http://localhost:4400
-[warn] !  Your requested "node" version "8" doesn't match your global version "10"
-[info] +  functions: functions emulator started at http://localhost:5001
-[debug] [2020-05-24T10:28:31.580Z] Ignoring unsupported arg: projectId
-[debug] [2020-05-24T10:28:31.580Z] Ignoring unsupported arg: auto_download
-[debug] [2020-05-24T10:28:31.580Z] Ignoring unsupported arg: rules
-[debug] [2020-05-24T10:28:31.580Z] Starting database emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\rotem\\.cache\\firebase\\emulators\\firebase-database-emulator-v4.4.1.jar","--host","localhost","--port",9000,"--functions_emulator_host","localhost","--functions_emulator_port",5001],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host"],"joinArgs":false}
-[info] i  database: database emulator logging to database-debug.log
-[debug] [2020-05-24T10:28:33.725Z] 13:28:33.724 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-
-[debug] [2020-05-24T10:28:33.945Z] 13:28:33.945 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
-
-[info] +  database: database emulator started at http://localhost:9000
-[info] i  database: For testing set FIREBASE_DATABASE_EMULATOR_HOST=localhost:9000
-[info] i  functions: Watching "C:\Code\School\proj\app\android\ExamScanner\functions" for Cloud Functions...
-[debug] [2020-05-24T10:28:34.355Z] [worker-pool] addWorker(~diagnostic~) 
-[debug] [2020-05-24T10:28:34.355Z] [worker-pool] Adding worker with key ~diagnostic~, total=1 
-[debug] [2020-05-24T10:28:34.355Z] [worker-pool] submitWork(triggerId=) 
-[debug] [2020-05-24T10:28:34.356Z] [worker-~diagnostic~-8332ced9-b5a0-4c1b-865a-cd44d8c723db]: Assigning socketPath: \\?\pipe\C:\Code\School\proj\app\android\ExamScanner\functions\13076 
-[debug] [2020-05-24T10:28:34.356Z] [worker-~diagnostic~-8332ced9-b5a0-4c1b-865a-cd44d8c723db]: BUSY 
-[debug] [2020-05-24T10:28:34.948Z] [runtime-status] [13076] Functions runtime initialized. {"cwd":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions","node_version":"10.14.1"} 
-[debug] [2020-05-24T10:28:34.950Z] [runtime-status] [13076] Disabled runtime features: undefined 
-[debug] [2020-05-24T10:28:34.958Z] [runtime-status] [13076] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.11.0","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
-[debug] [2020-05-24T10:28:34.961Z] [runtime-status] [13076] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
-[debug] [2020-05-24T10:28:34.966Z] [runtime-status] [13076] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] 
-[debug] [2020-05-24T10:28:35.146Z] [runtime-status] [13076] Checked functions.config() {"config":{}} 
-[debug] [2020-05-24T10:28:35.148Z] [runtime-status] [13076] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
-[debug] [2020-05-24T10:28:35.149Z] [runtime-status] [13076] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.11.0","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
-[debug] [2020-05-24T10:28:35.150Z] [runtime-status] [13076] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
-[debug] [2020-05-24T10:28:35.150Z] [runtime-status] [13076] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"8.11.0","resolution":"C:\\Code\\School\\proj\\app\\android\\ExamScanner\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} 
-[info] +  emulators: All emulators started, it is now safe to connect.
-[debug] [2020-05-24T10:28:35.155Z] [worker-~diagnostic~-8332ced9-b5a0-4c1b-865a-cd44d8c723db]: IDLE 
+[debug] [2020-05-28T12:41:20.470Z] ----------------------------------------------------------------------
+[debug] [2020-05-28T12:41:20.472Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\rotem\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2020-05-28T12:41:20.472Z] CLI Version:   8.4.0
+[debug] [2020-05-28T12:41:20.472Z] Platform:      win32
+[debug] [2020-05-28T12:41:20.472Z] Node Version:  v10.14.1
+[debug] [2020-05-28T12:41:20.473Z] Time:          Thu May 28 2020 15:41:20 GMT+0300 (Israel Daylight Time)
+[debug] [2020-05-28T12:41:20.473Z] ----------------------------------------------------------------------
+[debug] [2020-05-28T12:41:20.473Z] 
+[debug] [2020-05-28T12:41:20.480Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-28T12:41:20.480Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: functions, database {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, database"}}
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project examscanner-de46e. This may result in unexpected behavior. 
+[debug] [2020-05-28T12:41:22.516Z] [hub] writing locator at C:\Users\rotem\AppData\Local\Temp\hub-examscanner-de46e.json
+[warn] !  Your requested "node" version "8" doesn't match your global version "10" {"metadata":{"emulator":{"name":"functions"},"message":"Your requested \"node\" version \"8\" doesn't match your global version \"10\""}}
+[debug] [2020-05-28T12:41:26.548Z] database rules config:  [{"rules":"database.rules.json"}]
+[info] i  database: downloading firebase-database-emulator-v4.5.0.jar... {"metadata":{"emulator":{"name":"database"},"message":"downloading firebase-database-emulator-v4.5.0.jar..."}}

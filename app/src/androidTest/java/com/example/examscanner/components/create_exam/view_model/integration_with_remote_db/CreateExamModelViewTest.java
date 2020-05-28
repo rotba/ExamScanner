@@ -20,6 +20,6 @@ public class CreateExamModelViewTest extends CreateExamModelViewAbstractTest {
     public void setUp() throws Exception {
         FirebaseDatabaseFactory.setTestMode();
         super.setUp();
-        new GraderRepoFactory().create().create(new Grader("bob",BOB_ID));
+        new GraderRepoFactory().create().create(new Grader("bobexamscanner80@gmail.com",BOB_ID));
     }
 }

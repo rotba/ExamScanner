@@ -52,7 +52,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
                 return BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked();
             }
         });
-        new GraderRepoFactory().create().create(new Grader("bob",BOB_ID));
+        new GraderRepoFactory().create().create(new Grader("bobexamscanner80@gmail.com",BOB_ID));
     }
 
     @Override
@@ -71,20 +71,28 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
         onView(withId(R.id.editText_create_exam_num_of_questions)).perform(replaceText("50"));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
         mainActivityScenarioRule.getScenario().onActivity(a -> f.onActivityResult(0, 0, null));
-        onView(withId(R.id.button_create_exam_add_version)).perform(click());
+        clickAddVersionAndConfirm();
         Utils.sleepScanAnswersTime();
         onView(withId(R.id.editText_create_exam_grader_address)).perform(replaceText(aGraderAdress));
         onView(withId(R.id.editText_create_exam_num_of_questions)).perform(replaceText(NUM_OF_QUESTIONS_QAD));
         onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("1")));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
+        mainActivityScenarioRule.getScenario().onActivity(a -> f.onActivityResult(0, 0, null));
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText("20"));
-        onView(withId(R.id.button_create_exam_add_version)).perform(click());
+        clickAddVersionAndConfirm();
         onView(withId(R.id.button_create_exam_add_greader)).perform(click());
         Utils.sleepAlertPoppingTime();
-        onView(withId(R.id.textView_create_exam_added_grader_feedback)).check(matches(withText("added bob")));
+        onView(withId(R.id.textView_create_exam_added_grader_feedback)).check(matches(withText("added bobexamscanner80@gmail.com")));
         onView(withId(R.id.button_create_exam_create)).perform(click());
         Utils.createExamTime();
         onView(withText(R.string.create_exam_dialog_ok)).perform(click());
+    }
+
+    private static void clickAddVersionAndConfirm() {
+        onView(withId(R.id.button_create_exam_add_version)).perform(click());
+        Utils.sleepAlertPoppingTime();
+        onView(withText(R.string.create_exam_dialog_version_scanned_succesffuly)).check(matches(isDisplayed()));
+        onView(withText(R.string.create_exam_version_scanned_dialog_confirm)).perform(click());
     }
 
     private void checkExamExists(String comp, String year) {
@@ -99,7 +107,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
 
     private void testCreateCourse(String courseName, String year, String term) {
         final String verNum = "3";
-        final String aGraderAdress = "bob";
+        final String aGraderAdress = "bobexamscanner80@gmail.com";
         testCreateOneExam(courseName, year, verNum, term, aGraderAdress);
     }
 

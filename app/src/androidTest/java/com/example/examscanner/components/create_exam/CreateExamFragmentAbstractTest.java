@@ -26,8 +26,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
-import static com.example.examscanner.Utils.loadOpenCV;
 import static org.hamcrest.core.IsNot.not;
 
 public abstract class CreateExamFragmentAbstractTest extends AbstractComponentInstrumentedTest {

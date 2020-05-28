@@ -40,6 +40,8 @@ import com.example.examscanner.components.create_exam.get_version_file.VersionIm
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -47,7 +49,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CreateExamFragment extends Fragment {
     public static final int PICKFILE_REQUEST_CODE = 0;
-    private static final int MY_PERMISSIONS_REQUEST_READ_WRITE_FILES =1 ;
+    private static final int MY_PERMISSIONS_REQUEST_READ_WRITE_FILES = 1;
     private static String MSG_PREF = "CreateExamFragment::";
     private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
@@ -104,6 +106,7 @@ public class CreateExamFragment extends Fragment {
             );
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
@@ -139,7 +142,7 @@ public class CreateExamFragment extends Fragment {
     private void refreshAddVersionButton() {
         ((Button) getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(
                 viewModel.getCurrentVersionNumber() != null && viewModel.getCurrentVersionBitmap() != null &&
-                viewModel.getNumOfQuestions() != 0
+                        viewModel.getNumOfQuestions() != 0
         );
     }
 
@@ -181,27 +184,56 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onVersionAddedFailed(Throwable throwable) {
-        Log.d(TAG, MSG_PREF,throwable);
+        Log.d(TAG, MSG_PREF, throwable);
         throwable.printStackTrace();
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
     }
 
+    private interface Continuation { void cont();}
     private void onVersionAdded() {
-        ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).clearAnimation();
-        ((TextView) getActivity().findViewById(R.id.textView_create_exam_version_num)).clearComposingText();
-        viewModel.holdVersionNumber(null);
-        viewModel.holdVersionBitmap(null);
-        ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageResource(0);
-        refreshAddVersionButton();
-        ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
-        viewModel.incNumOfVersions();
-        refreshCreateExamButton();
+        Continuation successCont = ()->{
+            ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).clearAnimation();
+            ((TextView) getActivity().findViewById(R.id.textView_create_exam_version_num)).clearComposingText();
+            viewModel.holdVersionNumber(null);
+            viewModel.holdVersionBitmap(null);
+            ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageResource(0);
+            refreshAddVersionButton();
+            viewModel.incNumOfVersions();
+            refreshCreateExamButton();
+        };
+        ((ProgressBar) this.getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.create_exam_dialog_version_scanned_succesffuly)
+                .setPositiveButton(R.string.create_exam_version_scanned_dialog_confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        successCont.cont();
+                    }
+                })
+                .setNegativeButton(R.string.create_exam_version_scanned_dialog_try_again, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((TextView) getActivity().findViewById(R.id.textView_create_exam_version_num)).clearComposingText();
+                        viewModel.holdVersionBitmap(null);
+                        refreshAddVersionButton();
+                        versionImageGetter.get(CreateExamFragment.this, PICKFILE_REQUEST_CODE);
+                    }
+                })
+        ;
+        try {
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }catch (Exception e){
+            Log.d(TAG, "PROBABLY espresso wtupid stuff "+MSG_PREF, e);
+            successCont.cont();
+        }
     }
 
     private void onGraderAdded() {
         ((TextView) getActivity().findViewById(R.id.editText_create_exam_grader_address)).setText("");
         ((TextView) getActivity().findViewById(R.id.textView_create_exam_added_grader_feedback)).setText(String.format("added %s", viewModel.getCurrentGrader()));
         viewModel.holdGraderIdentifier(null);
+        ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
     }
 
     private void onGraderAddedFailed(Throwable throwable) {

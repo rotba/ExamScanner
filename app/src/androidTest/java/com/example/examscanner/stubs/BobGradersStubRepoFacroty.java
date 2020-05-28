@@ -15,7 +15,7 @@ public class BobGradersStubRepoFacroty {
     public static Repository<Grader> get() {
         return new Repository<Grader>() {
             private List<Grader> graders = new ArrayList<Grader>(){{
-                add(new Grader("bob", BOB_ID));
+                add(new Grader("bobexamscanner80@gmail.com", BOB_ID));
             }};
             @Override
             public int getId() {
