@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.nio.file.NoSuchFileException;
 import java.util.List;
 
 import io.reactivex.observers.TestObserver;
@@ -73,10 +72,10 @@ public class CreateExamUpdatesGraderTest {
         );
         examRepository = new ExamRepositoryFactory().create();
         graderRepository = new GraderRepoFactory().create();
-        graderRepository.create(new Grader("bob", BOB_ID));
+        graderRepository.create(new Grader("bobexamscanner80@gmail.com", BOB_ID));
         out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1());
         out.holdVersionNumber(3);
-        out.holdGraderUsername("bob");
+        out.holdGraderIdentifier("bobexamscanner80@gmail.com");
         out.addGrader();
         out.holdNumOfQuestions("50");
         out.addVersion();

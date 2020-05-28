@@ -6,6 +6,6 @@ import com.example.examscanner.repositories.Converter;
 class GraderConverter implements Converter<GraderEntityInterface, Grader> {
     @Override
     public Grader convert(GraderEntityInterface graderEntityInterface) {
-        return new Grader(graderEntityInterface.getUserName(),graderEntityInterface.getId());
+        return new Grader(graderEntityInterface.getEmail(),graderEntityInterface.getId());
     }
 }

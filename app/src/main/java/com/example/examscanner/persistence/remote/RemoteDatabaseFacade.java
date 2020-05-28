@@ -22,7 +22,7 @@ public interface RemoteDatabaseFacade {
     public Observable<List<Exam>> getExams();
     public Observable<List<Version>> getVersions();
     public Observable<List<Question>> getQuestions();
-    public Observable<String> createGrader(String userName, String userId);
+    public Observable<String> createGrader(String email, String userId);
     public Observable<String> createVersion(int num, String remoteExamId, String bitmapPath);
     public Observable<String> createQuestion(String remoteVersionId, int num, int ans, int left, int up, int right, int bottom);
     public Observable<List<ExamineeSolution>> getExamineeSolutions();

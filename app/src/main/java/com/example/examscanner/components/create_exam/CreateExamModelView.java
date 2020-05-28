@@ -2,7 +2,6 @@ package com.example.examscanner.components.create_exam;
 
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.text.Editable;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
@@ -32,7 +31,7 @@ public class CreateExamModelView extends ViewModel {
     private ExamInCreation examCreated;
     private Repository<Exam> eRepo;
     private Bitmap currentVersionBitmap;
-    private String currentGraderUsername;
+    private String currentGraderIdentifier;
     private Integer currentVersionNumber;
     private List<Grader> graders;
 
@@ -123,15 +122,15 @@ public class CreateExamModelView extends ViewModel {
         return currentVersionNumber;
     }
 
-    public void holdGraderUsername(String graderUsername) {
-        this.currentGraderUsername = graderUsername;
+    public void holdGraderIdentifier(String graderIdentifier) {
+        this.currentGraderIdentifier = graderIdentifier;
     }
     public void holdNumOfQuestions(String text) {
         examCreated.setNumOfQuestions(Integer.parseInt(text));
     }
 
     public void addGrader() {
-        final List<Grader> gradersWithCurrentUsername = gRepo.get(grader -> grader.getUserName().equals(currentGraderUsername));
+        final List<Grader> gradersWithCurrentUsername = gRepo.get(grader -> grader.getIdentifier().equals(currentGraderIdentifier));
         if(
                 gradersWithCurrentUsername
                 .size() ==0
@@ -140,7 +139,7 @@ public class CreateExamModelView extends ViewModel {
     }
 
     public String getCurrentGrader() {
-        return currentGraderUsername;
+        return currentGraderIdentifier;
     }
 
     public Integer getNumOfQuestions() {

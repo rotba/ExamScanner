@@ -532,8 +532,8 @@ public class RealFacadeImple implements CommunicationFacade {
                 graders) {
             eis.add(new GraderEntityInterface() {
                 @Override
-                public String getUserName() {
-                    return g._getUserName();
+                public String getEmail() {
+                    return g.email;
                 }
 
                 @Override

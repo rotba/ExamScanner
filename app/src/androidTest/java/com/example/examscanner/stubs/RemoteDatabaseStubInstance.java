@@ -48,7 +48,7 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> createGrader(String userName, String userId) {
+    public Observable<String> createGrader(String email, String userId) {
         return Observable.fromCallable(()->{return "";});
     }
 

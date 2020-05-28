@@ -96,7 +96,7 @@ public abstract class CreateExamModelViewAbstractTest {
         });
         out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
         out.holdVersionNumber(3);
-        out.holdGraderUsername("bob");
+        out.holdGraderIdentifier("bob");
         out.addGrader();
         out.addVersion();
         out.create("testAddVersion()_courseName","A","Fall","2020");

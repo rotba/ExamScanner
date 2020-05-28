@@ -307,13 +307,13 @@
 
     <EditText
         android:id="@+id/editText_create_exam_grader_address"
-        android:layout_width="139dp"
-        android:layout_height="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
         android:hint="@string/hint_username"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/button_create_exam_add_greader"
         app:layout_constraintEnd_toEndOf="parent"

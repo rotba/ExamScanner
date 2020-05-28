@@ -1,20 +1,24 @@
 package com.example.examscanner.repositories.grader;
 
 public class Grader {
-    private String userName;
+    private String userEmail;
     private String userId;
 
-    public Grader(String userName, String userId) {
-        this.userName = userName;
+    public Grader(String userEmail, String userId) {
+        this.userEmail = userEmail;
         this.userId  =userId;
     }
 
 
-    public String getUserName() {
-        return userName;
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getId(){
+        return userId;
     }
 
     public String getIdentifier(){
-        return userId;
+        return userEmail;
     }
 }

@@ -159,7 +159,7 @@ public class CreateExamFragment extends Fragment {
 
     private void onAddGrader(View view) {
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
-        viewModel.holdGraderUsername(((EditText) getActivity().findViewById(R.id.editText_create_exam_grader_address)).getText().toString());
+        viewModel.holdGraderIdentifier(((EditText) getActivity().findViewById(R.id.editText_create_exam_grader_address)).getText().toString());
         Completable.fromAction(() -> viewModel.addGrader())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -201,7 +201,7 @@ public class CreateExamFragment extends Fragment {
     private void onGraderAdded() {
         ((TextView) getActivity().findViewById(R.id.editText_create_exam_grader_address)).setText("");
         ((TextView) getActivity().findViewById(R.id.textView_create_exam_added_grader_feedback)).setText(String.format("added %s", viewModel.getCurrentGrader()));
-        viewModel.holdGraderUsername(null);
+        viewModel.holdGraderIdentifier(null);
     }
 
     private void onGraderAddedFailed(Throwable throwable) {

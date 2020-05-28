@@ -11,10 +11,7 @@ import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.Repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
 class GraderRepository implements Repository<Grader> {
@@ -74,7 +71,7 @@ class GraderRepository implements Repository<Grader> {
 
     @Override
     public void create(Grader grader) {
-        comFacade.createGrader(grader.getUserName(), grader.getIdentifier());
+        comFacade.createGrader(grader.getUserEmail(), grader.getId());
     }
 
     @Override

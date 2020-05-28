@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
@@ -44,7 +43,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId) {
-        return storeChildInPath(
+        return pushChildInPath(
                 Paths.toExams,
                 new Exam(
                         mangerId,
@@ -62,7 +61,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public Observable<String> createVersion(int num, String remoteExamId,String pathToBitmap) {
-        return storeChildInPath(
+        return pushChildInPath(
                 Paths.toVersions,
                 new Version(
                         remoteExamId,
@@ -75,7 +74,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public Observable<String> createQuestion(String remoteVersionId, int num, int ans, int left, int up, int right, int bottom) {
-        return storeChildInPath(
+        return pushChildInPath(
                 Paths.toQuestions,
                 new Question(
                         num,
@@ -112,7 +111,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public void offlineInsertExamineeSolution(String examineeId, long versionId) {
-        storeObjectInLocationInPath(
+        putObjectInLocation(
                 String.format("%s/%s",Paths.toSolutions,examineeId),
                 new ExamineeSolution(
                         versionId,
@@ -124,7 +123,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans) {
-        storeObjectInLocationInPath(
+        putObjectInLocation(
                 String.format("%s/%s/%s/%d", Paths.toSolutions,examineeId,ExamineeSolution.metaAnswers ,questionNum),
                 new Integer(ans),
                 StoreTaskPostprocessor.getOffline()
@@ -142,8 +141,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 Paths.toGraders,
                 ds -> {
                     return new Grader(
-                            ds.child(Paths.gId).getValue(String.class),
-                            ds.getKey() //The grader id is it's user name
+                            ds.child(Grader.metaEmail).getValue(String.class),
+                            ds.child(Grader.metaUserId).getValue(String.class)
                     );
                 }
         );
@@ -248,20 +247,20 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> createGrader(String userName, String userId) {
-        return storeObjectInLocationInPath(
-                String.format("%s/%s", Paths.toGraders, userName),
-                new Grader(userId, userName),
+    public Observable<String> createGrader(String email, String userId) {
+        return pushChildInPath(
+                String.format("%s", Paths.toGraders),
+                new Grader(email, userId),
                 StoreTaskPostprocessor.getOnline()
         );
     }
 
 
-    private static Observable<String> storeChildInPath(String parent, Object obj, StoreTaskPostprocessor taskPostprocessor) {
+    private static Observable<String> pushChildInPath(String parent, Object obj, StoreTaskPostprocessor taskPostprocessor) {
         return storeObject(() -> FirebaseDatabaseFactory.get().getReference(parent).push(), obj,taskPostprocessor);
     }
 
-    private Observable<String> storeObjectInLocationInPath(String location, Object obj, StoreTaskPostprocessor taskPostprocessor) {
+    private Observable<String> putObjectInLocation(String location, Object obj, StoreTaskPostprocessor taskPostprocessor) {
         return storeObject(() -> FirebaseDatabaseFactory.get().getReference(location), obj,taskPostprocessor);
     }
 

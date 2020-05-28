@@ -149,7 +149,7 @@ public class Exam {
     public String[] getGradersIdentifiers() {
         String[] ans = new String[graders.size()];
         for (int i = 0; i <ans.length ; i++) {
-            ans[i] = graders.get(i).getIdentifier();
+            ans[i] = graders.get(i).getId();
         }
         return ans;
     }
