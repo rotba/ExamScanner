@@ -6,16 +6,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.pdf.PdfRenderer;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.example.examscanner.components.create_exam.get_version_file.PDFVersionImageImpl;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class BitmapsInstancesFactoryAndroidTest {
@@ -47,6 +53,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String comp191_V1_ins_8= "instances/comp191_v1/_8.jpg";
     private static String comp191_V1_ins_9 ="instances/comp191_v1/_9.jpg";
     private static String comp191_V1_ins_in1 = "instances/comp191_v1/in_1.jpg";
+    private static String comp191_V1_pdf_ins_in1 ="instances/comp191_v1/in_1.pdf";
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -188,6 +195,42 @@ public class BitmapsInstancesFactoryAndroidTest {
 
     public static Bitmap getComp191_V1_ins_in1() {
         return getBitmapFromAssets(comp191_V1_ins_in1);
+    }
+
+    public static Bitmap getComp191_V1_pdf_ins_in1() {
+        return getBitmapFromPdfAsset(comp191_V1_pdf_ins_in1);
+    }
+
+    private static Bitmap getBitmapFromPdfAsset(String path) {
+        Context context = InstrumentationRegistry.getInstrumentation().getContext();
+        AssetManager assetManager = context.getAssets();
+        InputStream istr;
+        Bitmap bitmap = null;
+        try {
+            istr = assetManager.open(path);
+            try {
+                String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                File file = new File( absolutePath, "cacheFileAppeal.pdf");
+                try (OutputStream output = new FileOutputStream(file)) {
+                    byte[] buffer = new byte[1024 * 1024]; // or other buffer size
+                    int read;
+                    int i = 0;
+                    while ((read = istr.read(buffer)) != -1) {
+                        output.write(buffer, 0, read);
+                        i++;
+                    }
+                    output.close();
+                    ParcelFileDescriptor parcelFileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+                    Bitmap ans = new PDFVersionImageImpl.PDF2BitmapConverter().convert(parcelFileDescriptor, context);
+                    return ans;
+
+                }
+            } finally {
+            }
+        } catch (IOException | PDFVersionImageImpl.InvalidVersionFileExcpetion e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static Bitmap transform90D(Bitmap bitmapFromAssets) {

@@ -33,6 +33,7 @@ import static org.hamcrest.Matchers.not;
 
 public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullTest {
 
+    protected boolean MANUAL = false;
     private static final String NUM_OF_QUESTIONS_QAD = "50";
     Fragment f;
     public static final String BOB_ID = "QR6JunUJDvaZr1kSOWEq3iiCToQ2";
@@ -70,14 +71,14 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText(verNum));
         onView(withId(R.id.editText_create_exam_num_of_questions)).perform(replaceText("50"));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
-        mainActivityScenarioRule.getScenario().onActivity(a -> f.onActivityResult(0, 0, null));
+        if(!MANUAL)mainActivityScenarioRule.getScenario().onActivity(a -> f.onActivityResult(0, 0, null));
         clickAddVersionAndConfirm();
         Utils.sleepScanAnswersTime();
         onView(withId(R.id.editText_create_exam_grader_address)).perform(replaceText(aGraderAdress));
         onView(withId(R.id.editText_create_exam_num_of_questions)).perform(replaceText(NUM_OF_QUESTIONS_QAD));
         onView(withId(R.id.textView_number_of_versions_added)).check(matches(withText("1")));
         onView(withId(R.id.button_create_exam_upload_version_image)).perform(click());
-        mainActivityScenarioRule.getScenario().onActivity(a -> f.onActivityResult(0, 0, null));
+        if(!MANUAL)mainActivityScenarioRule.getScenario().onActivity(a -> f.onActivityResult(0, 0, null));
         onView(withId(R.id.editText_create_exam_version_number)).perform(replaceText("20"));
         clickAddVersionAndConfirm();
         onView(withId(R.id.button_create_exam_add_greader)).perform(click());

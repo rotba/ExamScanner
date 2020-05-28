@@ -1,6 +1,9 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
+import android.Manifest;
 import android.graphics.Bitmap;
+
+import androidx.test.rule.GrantPermissionRule;
 
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
@@ -15,6 +18,7 @@ import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -27,6 +31,10 @@ import static org.junit.Assert.assertTrue;
 
 public abstract class CornerDetectionViewModelTest2 extends AbstractComponentInstrumentedTest {
 
+    @Rule
+    public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    @Rule
+    public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
     private CornerDetectionContext2Setuper useCaseContext;
     private CornerDetectionViewModel out;
 

@@ -11,4 +11,6 @@ public class VersionImageGetterFactory {
     public static void setStubInstance(VersionImageGetter theStubInstance){
         stubInstance = theStubInstance;
     }
+
+
 }

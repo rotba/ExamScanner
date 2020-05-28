@@ -30,6 +30,10 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.junit.Assert.assertEquals;
 
 public class CornerDetectionContext2Setuper {
+    public void setPDF(boolean PDF) {
+        this.PDF = PDF;
+    }
+    private boolean PDF = false;
     protected Repository<Exam> examRepository;
     protected ImageProcessingFacade imageProcessor;
     protected Repository<CornerDetectedCapture> cdcRepo;
@@ -67,7 +71,7 @@ public class CornerDetectionContext2Setuper {
         ceModelView.holdNumOfQuestions("50");
         int numOfQuestions = ceModelView.getExam().getNumOfQuestions();
         if(createExamBitmap==null){
-            createExamBitmap =BitmapsInstancesFactoryAndroidTest.getComp191_v1_JPG_ANS_2();
+            createExamBitmap = getOriginalVersionBitmap();
         }
         ceModelView.holdVersionBitmap(createExamBitmap);
         ceModelView.holdVersionNumber(dinaBarzilayVersion);
@@ -95,6 +99,14 @@ public class CornerDetectionContext2Setuper {
         });
         e.setNumOfQuestions(50);
         getCDC().setVersion(e.getVersionByNum(dinaBarzilayVersion));
+    }
+
+    private Bitmap getOriginalVersionBitmap() {
+        if(PDF){
+            return BitmapsInstancesFactoryAndroidTest.getComp191_V1_pdf_ins_in1();
+        }else{
+            return BitmapsInstancesFactoryAndroidTest.getComp191_v1_JPG_ANS_2();
+        }
     }
 
     public ImageProcessingFacade getImageProcessor() {
