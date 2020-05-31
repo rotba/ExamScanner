@@ -1,20 +1,16 @@
-package com.example.examscanner.components.scan_exam.detect_corners;
-
-import android.Manifest;
-
-import androidx.test.rule.GrantPermissionRule;
+package com.example.examscanner.core_algorithm;
 
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
-public class CornerDetectionViewModelTest4 extends CornerDetectionViewModelTest2 {
+import static org.junit.Assert.assertEquals;
 
-
+public class CoreAlgorithmJPGTest extends CoreAlgorithmAbstractTest {
 
     private interface SetUpCallback{CornerDetectionContext2Setuper createContext();}
     private SetUpCallback setupCallback;
@@ -32,9 +28,7 @@ public class CornerDetectionViewModelTest4 extends CornerDetectionViewModelTest2
     @NotNull
     @Override
     protected CornerDetectionContext2Setuper getUseCaseContext() {
-        CornerDetectionContext2Setuper context = setupCallback.createContext();
-        context.setPDF(true);
-        return context;
+        return setupCallback.createContext();
     }
 
     @Test

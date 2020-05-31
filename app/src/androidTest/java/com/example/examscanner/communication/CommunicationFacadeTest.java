@@ -1,8 +1,10 @@
 package com.example.examscanner.communication;
 
+import android.Manifest;
 import android.graphics.Bitmap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamEntityInterface;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,6 +36,10 @@ public class CommunicationFacadeTest {
     private String currentUserId;
     private static Bitmap DEFAULT_VERSION_BITMAP;
 
+    @Rule
+    public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    @Rule
+    public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
     @Before
     public void setUp() throws Exception {
         AppDatabaseFactory.setTestMode();

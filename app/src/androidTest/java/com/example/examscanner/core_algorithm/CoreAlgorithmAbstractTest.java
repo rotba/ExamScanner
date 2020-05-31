@@ -1,4 +1,4 @@
-package com.example.examscanner.components.scan_exam.detect_corners;
+package com.example.examscanner.core_algorithm;
 
 import android.Manifest;
 import android.graphics.Bitmap;
@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
+import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.exam.Exam;
@@ -29,7 +31,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public abstract class CornerDetectionViewModelTest2 extends AbstractComponentInstrumentedTest {
+public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrumentedTest {
 
     @Rule
     public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);

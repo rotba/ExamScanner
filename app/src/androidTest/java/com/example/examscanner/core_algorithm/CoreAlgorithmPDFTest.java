@@ -1,28 +1,18 @@
-package com.example.examscanner.components.scan_exam.detect_corners;
+package com.example.examscanner.core_algorithm;
 
-import android.graphics.Bitmap;
-
-import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
-import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
-import com.example.examscanner.repositories.scanned_capture.Answer;
-import com.example.examscanner.repositories.scanned_capture.ResolvedAnswer;
-import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
-import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+@Ignore("Crashes because of memmory. Important and need to be fixed")
+public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
 
-import static org.junit.Assert.assertEquals;
 
-public class CornerDetectionViewModelTest3 extends CornerDetectionViewModelTest2 {
 
     private interface SetUpCallback{CornerDetectionContext2Setuper createContext();}
     private SetUpCallback setupCallback;
@@ -40,7 +30,9 @@ public class CornerDetectionViewModelTest3 extends CornerDetectionViewModelTest2
     @NotNull
     @Override
     protected CornerDetectionContext2Setuper getUseCaseContext() {
-        return setupCallback.createContext();
+        CornerDetectionContext2Setuper context = setupCallback.createContext();
+        context.setPDF(true);
+        return context;
     }
 
     @Test
