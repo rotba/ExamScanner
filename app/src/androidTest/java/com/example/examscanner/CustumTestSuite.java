@@ -33,13 +33,13 @@ import org.junit.runners.Suite;
 //                com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModelTest.class,
 //                com.example.examscanner.components.scan_exam.reslove_answers.resolve_conflicted_answers.ResolveConflictedAnswersFragmentTest.class,
 //                com.example.examscanner.core_algorithm.CoreAlgorithmJPGTest.class,
-                com.example.examscanner.core_algorithm.CoreAlgorithmPDFTest.class,
-//                com.example.examscanner.image_processing.ImageProcessorTest.class,
-//                com.example.examscanner.persistence.local.daos.ScanExamScanExammSessionDaoTest.class,
-//                com.example.examscanner.persistence.local.daos.SemiScannedCaptureDaoTest.class,
-//                com.example.examscanner.persistence.local.entities.QuestionExamineeSolutionCrossResTest.class,
-//                com.example.examscanner.repositories.exam.ExamIsCreatedTest.class,
-//                com.example.examscanner.repositories.exam.ExamRepositoryTest.class
+//                com.example.examscanner.core_algorithm.CoreAlgorithmPDFTest.class,
+                com.example.examscanner.image_processing.ImageProcessorTest.class,
+                com.example.examscanner.persistence.local.daos.ScanExamScanExammSessionDaoTest.class,
+                com.example.examscanner.persistence.local.daos.SemiScannedCaptureDaoTest.class,
+                com.example.examscanner.persistence.local.entities.QuestionExamineeSolutionCrossResTest.class,
+                com.example.examscanner.repositories.exam.ExamIsCreatedTest.class,
+                com.example.examscanner.repositories.exam.ExamRepositoryTest.class
         }
 )
 
