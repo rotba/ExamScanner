@@ -18,9 +18,12 @@ import com.example.examscanner.repositories.exam.Version;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.icu.lang.UProperty.MATH;
+
 
 public class CornerDetectionViewModel extends ViewModel {
     private static final String NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET = "NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET";
+    private static int QAD_counter = (int)(Math.random()*1000);
     private List<MutableLiveData<CornerDetectedCapture>> cornerDetectedCaptures;
     private MutableLiveData<Integer> mNumberOfCornerDetectedCaptures;
     private MutableLiveData<Integer> mNumberOfAnswersScannedCaptures;
@@ -80,7 +83,7 @@ public class CornerDetectionViewModel extends ViewModel {
         ScanAnswersConsumer consumer = new ScanAnswersConsumer() {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                final ScannedCapture t = new ScannedCapture(scRepo.genId(), cdc.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections,cdc.getVersion(), NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET);
+                final ScannedCapture t = new ScannedCapture(scRepo.genId(), cdc.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections,cdc.getVersion(), NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET+String.valueOf(QAD_counter++));
                 FOR_DEBUGGING_resultOfScanAnswers = t.toString();
                 scRepo.create(t);
             }
@@ -96,7 +99,7 @@ public class CornerDetectionViewModel extends ViewModel {
 
     public void postProcessTransformAndScanAnswers(long captureId) {
         thisSessionProcessedCaptures.add(captureId);
-        mNumberOfAnswersScannedCaptures.setValue(scRepo.get(sc -> true).size());
+        mNumberOfAnswersScannedCaptures.setValue(mNumberOfAnswersScannedCaptures.getValue()+1);
     }
 
     public List<MutableLiveData<CornerDetectedCapture>> getPreProcessedCDCs() {

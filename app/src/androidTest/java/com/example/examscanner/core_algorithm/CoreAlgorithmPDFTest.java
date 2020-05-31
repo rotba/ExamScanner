@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("Crashes because of memmory. Important and need to be fixed")
+
 public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
 
 

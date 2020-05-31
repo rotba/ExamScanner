@@ -3,6 +3,8 @@ package com.example.examscanner.communication;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -608,6 +610,7 @@ public class RealFacadeImple implements CommunicationFacade {
         return ans;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private ExamineeSolutionsEntityInterface toEntityInterface(ExamineeSolution examineeSolution) {
         SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(examineeSolution.getScannedCaptureId());
         final List<ExamineeSolutionWithExamineeAnswers> examineeSolutionWithExamineeAnswers = db.getExamineeSolutionDao().getExamineeSolutionWithExamineeAnswers();
@@ -621,6 +624,7 @@ public class RealFacadeImple implements CommunicationFacade {
             throw new MyAssertionError("ExamineeSolution should exist in db");
         }
         List<ExamineeAnswer> finalAnswers = answers;
+        Bitmap bitmap = createEmprtBitmap();
         return new ExamineeSolutionsEntityInterface() {
             @Override
             public String getExaimneeId() {
@@ -634,7 +638,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
             @Override
             public Bitmap getBitmap() {
-                return null;//BY DESIGN
+                return bitmap;//BY DESIGN
             }
 
             @Override
@@ -653,6 +657,14 @@ public class RealFacadeImple implements CommunicationFacade {
                 return finalAnswers.stream().mapToLong(ExamineeAnswer::getId).toArray();
             }
         };
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Bitmap createEmprtBitmap(){
+        Bitmap ans= Bitmap.createBitmap(2550, 3600, Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(ans);
+        canvas.drawColor(Color.WHITE);
+        canvas.drawBitmap(ans, 0, 0, null);
+        return ans;
     }
 
     @Override
