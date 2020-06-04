@@ -17,7 +17,12 @@ import com.example.examscanner.communication.entities_interfaces.VersionEntityIn
 import java.util.List;
 
 public class FacadeImplProxy implements CommunicationFacade {
+    private static StatisticsSourceStub sss;
     private RealFacadeImple realImpl  = RealFacadeImple.getInstance();
+
+    public static void setStatisticsProxy(StatisticsSourceStub sss) {
+        FacadeImplProxy.sss = sss;
+    }
 
     @Override
     public long createExam(String courseName, String url, String year, int term, int semester,String managerId, String[] graders, long sessionId,int numberOfQuestions) {
@@ -159,6 +164,30 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public ExamineeSolutionsEntityInterface[] getExamineeSoultions() {
         return realImpl.getExamineeSoultions();
+    }
+
+    @Override
+    public double getAvg(long examId) {
+        if(sss!=null){
+            return sss.getAvg();
+        }
+        return 0;
+    }
+
+    @Override
+    public double getVar(long examId) {
+        if(sss!=null){
+            return sss.getVar();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getNumOfCheckedSolutions(long examId) {
+        if(sss!=null){
+            return sss.getNumOfCheckedSolutions();
+        }
+        return 0;
     }
 
     @Override

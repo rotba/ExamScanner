@@ -610,6 +610,21 @@ public class RealFacadeImple implements CommunicationFacade {
         return ans;
     }
 
+    @Override
+    public double getAvg(long examId) {
+        return 0;
+    }
+
+    @Override
+    public double getVar(long examId) {
+        return 0;
+    }
+
+    @Override
+    public int getNumOfCheckedSolutions(long examId) {
+        return 0;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private ExamineeSolutionsEntityInterface toEntityInterface(ExamineeSolution examineeSolution) {
         SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(examineeSolution.getScannedCaptureId());

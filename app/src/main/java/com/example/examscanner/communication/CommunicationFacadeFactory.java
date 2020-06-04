@@ -5,6 +5,10 @@ public class CommunicationFacadeFactory {
         RealFacadeImple.tearDown();
     }
 
+    public static void setStatisticsProxy(StatisticsSourceStub sss) {
+        FacadeImplProxy.setStatisticsProxy(sss);
+    }
+
 
 //    public static void tearDownTestMode() {
 //    }

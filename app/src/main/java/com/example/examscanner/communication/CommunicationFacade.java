@@ -47,4 +47,8 @@ public interface CommunicationFacade {
     public void createGrader(String userName, String userId);
     public ExamineeAnswerEntityInterface getAnswerById(long examineeAnswersId);
     public ExamineeSolutionsEntityInterface[] getExamineeSoultions();
+    public double getAvg(long examId);
+    public double getVar(long examId);
+    public int getNumOfCheckedSolutions(long examId);
+
 }

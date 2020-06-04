@@ -28,10 +28,13 @@ public class Exam {
     private List<Version> newVersions;
 //    private List<Version> cachedVersions;
     private Future<List<Version>> fVersions;
+    private final Future<Double> avg;
+    private final Future<Double> var;
+    private final Future<Integer> numOfSolutions;
     private int numOfQuestions;
 //    private boolean doResolveFutures;
 
-    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions) {
+    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions, Future<Double> avg, Future<Double> var, Future<Integer> numOfSolutions) {
         this.id = id;
         this.courseName = courseName;
         this.term = moed;
@@ -40,6 +43,9 @@ public class Exam {
         this.sessionId = sessionId;
         this.year = year;
         this.fVersions = fVersions;
+        this.avg = avg;
+        this.var = var;
+        this.numOfSolutions = numOfSolutions;
         newVersions = new ArrayList<>();
 //        cachedVersions = new ArrayList<>();
         this.numOfQuestions = numOfQuestions;
@@ -160,6 +166,18 @@ public class Exam {
 
     public int getNumOfQuestions() {
         return numOfQuestions;
+    }
+
+    public double getAvg() throws ExecutionException, InterruptedException {
+        return avg.get();
+    }
+
+    public double getVar() throws ExecutionException, InterruptedException {
+        return var.get();
+    }
+
+    public int getCheckedSoltuions() throws ExecutionException, InterruptedException {
+        return numOfSolutions.get();
     }
 
     public class NuSuchVerion extends RuntimeException {
