@@ -24,7 +24,12 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
 
     @Override
     public View.OnClickListener handleBitmap(Bitmap bm) {
-        captureViewModel.consumeCapture(new Capture(bm));
+        captureViewModel.consumeCapture(
+                new Capture(bm,
+                        captureViewModel.getCurrentExamineeId().getValue(),
+                        captureViewModel.getCurrentVersion().getValue()
+                )
+        );
         processRequestDisposableContainer.add(
                 Completable.fromAction(this::processCapture)
                         .subscribeOn(Schedulers.io())
@@ -34,7 +39,7 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
         return null;
     }
 
-    private void processCapture(){
+    private void processCapture() {
         captureViewModel.processCapture();
     }
 

@@ -92,7 +92,7 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
         Utils.sleepAlertPoppingTime();
         onView(withText(R.string.home_dialog_yes)).perform().perform(click());
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
-        onView(withId(R.id.spinner_detect_corners_version_num)).perform(click());
+//        onView(withId(R.id.spinner_detect_corners_version_num)).perform(click());
         Utils.sleepSwipingTime();
         onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());

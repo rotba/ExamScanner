@@ -5,13 +5,19 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,8 +34,10 @@ import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
+import com.example.examscanner.repositories.exam.Version;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -49,7 +57,8 @@ public class CaptureFragment extends Fragment {
     private CameraOutputHander outputHander;
     private ProgressBar pb;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
-//    private Msg2BitmapMapper m2bmMapper;
+    private View.OnClickListener captureClickListener;
+    //    private Msg2BitmapMapper m2bmMapper;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -94,6 +103,7 @@ public class CaptureFragment extends Fragment {
         throwable.printStackTrace();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onViewModelCreated() {
         captureViewModel.getNumOfTotalCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
@@ -116,9 +126,43 @@ public class CaptureFragment extends Fragment {
             }
         });
         outputHander = new CameraOutputHandlerImpl(captureViewModel, processRequestDisposableContainer);
-        ((ImageButton) getActivity().findViewById(R.id.capture_image_button))
-                .setOnClickListener(cameraManager.createCaptureClickListener(outputHander));
+        captureClickListener = cameraManager.createCaptureClickListener(outputHander);
+        ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.capture_image_button);
+        imageButton.setOnClickListener(captureClickListener);
+        imageButton.setEnabled(isValidExamineeIdAndVersion());
+        captureViewModel.getCurrentExamineeId().observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                imageButton.setEnabled(isValidExamineeIdAndVersion());
+            }
+        });
+        captureViewModel.getCurrentVersion().observe(getActivity(), new Observer<Version>() {
+            @Override
+            public void onChanged(Version v) {
+                imageButton.setEnabled(isValidExamineeIdAndVersion());
+            }
+        });
+        Observable.fromCallable(() -> captureViewModel.getVersionNumbers())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
+        ((EditText)getActivity().findViewById(R.id.editText_capture_examineeId)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                captureViewModel.setExamineeId(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
         ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture)).setVisibility(View.INVISIBLE);
+    }
+
+    private boolean isValidExamineeIdAndVersion() {
+        return captureViewModel.isValidVersion() &&captureViewModel.isValidExamineeId();
     }
 
     private void createViewModel() {
@@ -131,27 +175,16 @@ public class CaptureFragment extends Fragment {
     }
 
     private void requestCamera() {
-        // Permission is not granted
-        // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Permission is not granted
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.CAMERA)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
             } else {
-                // No explanation needed; request the permission
                 requestPermissions(new String[]{Manifest.permission.CAMERA},
                         MY_PERMISSIONS_REQUEST_CAMERA);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         } else {
             cameraManager.setUp();
@@ -194,5 +227,37 @@ public class CaptureFragment extends Fragment {
         public void onClick(View v) {
             complicatedCalculation.onClick(v);
         }
+    }
+
+    private void onVersionNumbersRetrived(int[] versionNumbers) {
+        String[] versionStrings = new String[versionNumbers.length + 1];
+        String theEmptyChoice = getActivity().getString(R.string.capture_the_empty_version_choice);
+        versionStrings[0] = theEmptyChoice;
+        for (int i = 1; i < versionNumbers.length + 1; i++) {
+            versionStrings[i] = new String(Integer.toString(versionNumbers[i - 1]));
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, versionStrings);
+
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner_capture_version_num);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String choice = (String) parent.getSelectedItem();
+                if (choice.equals(theEmptyChoice))
+                    return;
+                Integer intChoice = Integer.parseInt(choice);
+                captureViewModel.setVersion(intChoice);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    private void onVersionNumbersRetrivedError(Throwable throwable) {
+        Log.d(TAG, MSG_PREF + " onVersionNumbersRetrivedError", throwable);
+        throwable.printStackTrace();
     }
 }

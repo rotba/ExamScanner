@@ -83,9 +83,9 @@ public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFu
 
     private void clickOnTheVersionSpinner() {
         try {
-            onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+//            onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
         } catch (PerformException e){
-            onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 1)).perform(click());
+//            onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 1)).perform(click());
         }
     }
 

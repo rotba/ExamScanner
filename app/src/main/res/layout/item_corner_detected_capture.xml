@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/spinner_detect_corners_version_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="@string/detect_corners_version_number_hint"
-        android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayout7"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout7"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7"
-        app:layout_constraintVertical_bias="0.008"/>
+<!--    <Spinner-->
+<!--        android:id="@+id/spinner_detect_corners_version_num"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:gravity="center"-->
+<!--        android:hint="@string/detect_corners_version_number_hint"-->
+<!--        android:inputType="number"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/constraintLayout7"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/constraintLayout7"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7"-->
+<!--        app:layout_constraintVertical_bias="0.008"/>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout7"

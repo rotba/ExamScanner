@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/for_testing_fragment_capture_root"
         android:layout_width="411dp"
-        android:layout_height="130dp"
+        android:layout_height="0dp"
         android:background="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,8 +79,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/constraintLayout6"
+            android:layout_width="0dp"
+            android:layout_height="491dp"
+            app:layout_constraintBottom_toTopOf="@+id/spinner_capture_version_num"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.camera.view.PreviewView
                 android:id="@+id/preview_view"
@@ -89,6 +94,33 @@
 
             </androidx.camera.view.PreviewView>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/editText_capture_examineeId"
+            android:layout_width="179dp"
+            android:layout_height="88dp"
+            android:ems="10"
+            android:hint="@string/capture_examinee_id"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/spinner_capture_version_num"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/spinner_capture_version_num" />
+
+        <Spinner
+            android:id="@+id/spinner_capture_version_num"
+            android:layout_width="133dp"
+            android:layout_height="88dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="@string/detect_corners_version_number_hint"
+
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/editText_capture_examineeId" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

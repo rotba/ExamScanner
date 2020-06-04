@@ -140,44 +140,44 @@ public class CornerDetectionCardFragment extends Fragment {
             }
         });
 
-        Observable.fromCallable(() -> cornerDetectionViewModel.getVersionNumbers())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
+//        Observable.fromCallable(() -> cornerDetectionViewModel.getVersionNumbers())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
     }
 
-    private void onVersionNumbersRetrived(int[] versionNumbers) {
-        String[] versionStrings = new String[versionNumbers.length + 1];
-        String theEmptyChoice = getActivity().getString(R.string.detect_corners_the_empty_version_choice);
-        versionStrings[0] = theEmptyChoice;
-        for (int i = 1; i < versionNumbers.length + 1; i++) {
-            versionStrings[i] = new String(Integer.toString(versionNumbers[i - 1]));
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, versionStrings);
-
-        Spinner spinner = (Spinner) root.findViewById(R.id.spinner_detect_corners_version_num);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String choice = (String) parent.getSelectedItem();
-                if (choice.equals(theEmptyChoice))
-                    return;
-                Integer intChoice = Integer.parseInt(choice);
-                cornerDetectionViewModel.setVersion(captureId, intChoice);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    private void onVersionNumbersRetrivedError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF + " onVersionNumbersRetrivedError", throwable);
-        throwable.printStackTrace();
-    }
+//    private void onVersionNumbersRetrived(int[] versionNumbers) {
+//        String[] versionStrings = new String[versionNumbers.length + 1];
+//        String theEmptyChoice = getActivity().getString(R.string.detect_corners_the_empty_version_choice);
+//        versionStrings[0] = theEmptyChoice;
+//        for (int i = 1; i < versionNumbers.length + 1; i++) {
+//            versionStrings[i] = new String(Integer.toString(versionNumbers[i - 1]));
+//        }
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, versionStrings);
+//
+//        Spinner spinner = (Spinner) root.findViewById(R.id.spinner_detect_corners_version_num);
+//        spinner.setAdapter(adapter);
+//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String choice = (String) parent.getSelectedItem();
+//                if (choice.equals(theEmptyChoice))
+//                    return;
+//                Integer intChoice = Integer.parseInt(choice);
+//                cornerDetectionViewModel.setVersion(captureId, intChoice);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//    }
+//
+//    private void onVersionNumbersRetrivedError(Throwable throwable) {
+//        Log.d(TAG, MSG_PREF + " onVersionNumbersRetrivedError", throwable);
+//        throwable.printStackTrace();
+//    }
 
 
     public void onProcessingBegun() {

@@ -8,14 +8,17 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
+import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     FragmentActivity activity;
+    private long examId;
     private long sessionId;
 
     public CaptureViewModelFactory(FragmentActivity activity , long sessionId, long examId) {
         this.activity=activity;
+        this.examId = examId;
         if(sessionId == -1){
             this.sessionId = new CommunicationFacadeFactory().create().createNewScanExamSession(examId);
         }else{
@@ -30,7 +33,8 @@ public class CaptureViewModelFactory implements ViewModelProvider.Factory {
         return (T) new CaptureViewModel(
                 new CDCRepositoryFacrory().create(),
                 new ImageProcessingFactory().create(),
-                sessionId
+                sessionId,
+                new ExamRepositoryFactory().create().get(examId)
         );
     }
 }

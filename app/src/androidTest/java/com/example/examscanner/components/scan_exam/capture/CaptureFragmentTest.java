@@ -10,11 +10,18 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 
 import com.example.examscanner.R;
+import com.example.examscanner.Utils;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
+import com.example.examscanner.repositories.exam.Exam;
+import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
+import com.example.examscanner.stubs.ExamRepositoryStub;
+import com.example.examscanner.stubs.ExamStubFactory;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,6 +29,7 @@ import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -44,14 +52,37 @@ public class CaptureFragmentTest{
         CameraMangerFactory.setStubInstance(new CameraManagerStub());
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
         Bundle b = new Bundle();
-        b.putInt("examId", 0);
-        b.putInt("sessionId", 0);
+        Repository<Exam> stubERepo  = new ExamRepositoryStub();
+        Exam e = ExamStubFactory.instance1();
+        stubERepo.create(
+                e
+        );
+        ExamRepositoryFactory.setStubInstance(stubERepo);
+        b.putLong("examId", e.getId());
+        b.putLong("sessionId", 0);
         scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
         sleepCameraPreviewSetupTime();
     }
 
-    private void theNumberOfUnprocessedCapturesUpdates() {
+    @After
+    public void tearDown() throws Exception {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
+        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(null);
+        ExamRepositoryFactory.setStubInstance(null);
+        CameraMangerFactory.setStubInstance(null);
+        ExamRepositoryFactory.tearDown();
+
+    }
+
+    private void captureASolution() {
+        onView(withId(R.id.spinner_capture_version_num)).perform(click());
+        onView(withText(Integer.toString(ExamStubFactory.instance1_dinaBarzilayVersion))).perform(click());
+        onView(withId(R.id.editText_capture_examineeId)).perform(replaceText("123456"));
         onView(withId(R.id.capture_image_button)).perform(click());
+    }
+
+    private void theNumberOfUnprocessedCapturesUpdates() {
+        captureASolution();
         sleepSingleCaptureTakingTime();
         try {
             assertUserSeeProgress(0,1);
@@ -79,7 +110,7 @@ public class CaptureFragmentTest{
     @Test
     public void testTheNumberOfProcessedAndUnprocessedCapturesUpdates() {
         sleepCameraPreviewSetupTime();
-        onView(withId(R.id.capture_image_button)).perform(click());
+        captureASolution();
         sleepSingleCaptureProcessingTime();
         assertUserSeeProgress(1,1);
     }
@@ -88,7 +119,7 @@ public class CaptureFragmentTest{
     public void testTheNumberOfProcessedAndUnprocessedCapturesUpdatesRealCamera() {
         CameraMangerFactory.setStubInstance(null);
         sleepCameraPreviewSetupTime();
-        onView(withId(R.id.capture_image_button)).perform(click());
+        captureASolution();
         sleepSingleCaptureProcessingTime();
         assertUserSeeProgress(1,1);
     }
@@ -98,7 +129,7 @@ public class CaptureFragmentTest{
     public void testDataSurvivesRotation() {
         device = UiDevice.getInstance(getInstrumentation());
         sleepCameraPreviewSetupTime();
-        onView(withId(R.id.capture_image_button)).perform(click());
+        captureASolution();
         sleepSingleCaptureProcessingTime();
         try {
             device.setOrientationLeft();

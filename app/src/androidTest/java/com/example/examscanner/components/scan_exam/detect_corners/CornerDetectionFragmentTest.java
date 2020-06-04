@@ -141,7 +141,7 @@ public class CornerDetectionFragmentTest {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(slowIP());
         launchCornerDetectionFragment();
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
-        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+//        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
         onView(withText(Integer.toString(ExamStubFactory.instance1_dinaBarzilayVersion))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
         sleepSwipingTime();
@@ -285,14 +285,14 @@ public class CornerDetectionFragmentTest {
     public void versionEditTextIsVisible() {
         produceCDCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         launchCornerDetectionFragment();
-        onView(withId(R.id.spinner_detect_corners_version_num)).check(matches(isDisplayed()));
+//        onView(withId(R.id.spinner_detect_corners_version_num)).check(matches(isDisplayed()));
     }
 
     @Test
     public void versionEditTextOnlyAvailableVersionsOptions() {
         produceCDCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         launchCornerDetectionFragment();
-        onView(withId(R.id.spinner_detect_corners_version_num)).perform(click());
+//        onView(withId(R.id.spinner_detect_corners_version_num)).perform(click());
         onView(withText(Integer.toString(ExamStubFactory.instance1_dinaBarzilayVersion))).check(matches(isDisplayed()));
         onView(withText(Integer.toString(ExamStubFactory.instance1_theDevilVersion))).check(matches(isDisplayed()));
     }
@@ -309,7 +309,7 @@ public class CornerDetectionFragmentTest {
         onView(withText(R.string.detect_corners_please_choose_version)).check(doesNotExist());
     }
     private void selectVersionAndScanAnswers() {
-        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
+//        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
         onView(withText(Integer.toString(ExamStubFactory.instance1_dinaBarzilayVersion))).perform(click());
         onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
     }
