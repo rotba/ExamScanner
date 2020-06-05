@@ -1,7 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.graphics.Bitmap;
-import android.graphics.PointF;
 import android.os.Bundle;
 
 import androidx.fragment.app.testing.FragmentScenario;
@@ -11,13 +10,11 @@ import com.example.examscanner.R;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
-import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
@@ -113,7 +110,7 @@ public class CornerDetectionFragmentTest {
     }
 
     private void resolveAnswersAndSwipeLeft() {
-        selectVersionAndScanAnswers();
+        approve();
 //        onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
         sleepSwipingTime();
     }
@@ -164,16 +161,15 @@ public class CornerDetectionFragmentTest {
         setUp3MarkedCaptures();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(slowIP());
         launchCornerDetectionFragment();
-        selectVersionAndScanAnswers();
+        approve();
         sleepSwipingTime();
-        onView(withId(R.id.textView_cd_current_position)).check(matches(withText("2/3")));
+        onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/2")));
     }
 
     @Test
     public void testCorrentPositionPointer() {
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
-        produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
-        produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
+        produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg2Marked());
         launchCornerDetectionFragment();
         onView(withText("1/2")).check(matches(isDisplayed()));
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
@@ -218,7 +214,7 @@ public class CornerDetectionFragmentTest {
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
         launchCornerDetectionFragment();
-        selectVersionAndScanAnswers();
+        approve();
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeRight());
         onView(withId(R.id.progressBar2_scanning_answers)).check(matches(isDisplayed()));
         sleepRectangleTransformationTime();
@@ -227,6 +223,7 @@ public class CornerDetectionFragmentTest {
     }
 
     @Test
+    @Ignore("maybe need to migrate to capture")
     public void testOnFinishProcessFragmentIsDiscarded2CapturesSlowIP() {
         testOnFinishProcessFragmentIsDiscarded2Captures(slowIP());
     }
@@ -242,9 +239,8 @@ public class CornerDetectionFragmentTest {
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg2());
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(ip);
         launchCornerDetectionFragment();
-        selectVersionAndScanAnswers();
-        sleepRectangleTransformationTime();
-        sleepScanAnswersTime();
+        approve();
+        approve();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));
     }
 
@@ -265,7 +261,7 @@ public class CornerDetectionFragmentTest {
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg3());
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(ip);
         launchCornerDetectionFragment();
-        selectVersionAndScanAnswers();
+        approve();
         sleepScanAnswersTime();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/2")));
     }
@@ -278,6 +274,7 @@ public class CornerDetectionFragmentTest {
     }
 
     @Test
+    @Ignore("need to migrate to capture")
     public void versionEditTextOnlyAvailableVersionsOptions() {
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         launchCornerDetectionFragment();
@@ -297,9 +294,7 @@ public class CornerDetectionFragmentTest {
 //        selectVersionAndScanAnswers();
 //        onView(withText(R.string.detect_corners_please_choose_version)).check(doesNotExist());
 //    }
-    private void selectVersionAndScanAnswers() {
-//        onView(Utils.withIndex(withId(R.id.spinner_detect_corners_version_num), 0)).perform(click());
-//        onView(withText(Integer.toString(ExamStubFactory.instance1_dinaBarzilayVersion))).perform(click());
+    private void approve() {
         onView(withId(R.id.button_cd_approve)).perform(click());
     }
 }
