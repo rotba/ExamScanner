@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
+import com.example.examscanner.components.scan_exam.capture.Capture;
+import com.example.examscanner.components.scan_exam.capture.CaptureViewModel;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
@@ -38,7 +40,7 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
     @Rule
     public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
     private CornerDetectionContext2Setuper useCaseContext;
-    private CornerDetectionViewModel out;
+    private CaptureViewModel cvm;
 
     @Before
     public void setUp() {
@@ -47,10 +49,11 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
         super.setUp();
         useCaseContext = getUseCaseContext();
         useCaseContext.setup();
-        out = new CornerDetectionViewModel(
+        cvm = new CaptureViewModel(
+                useCaseContext.getSCRepo(),
                 useCaseContext.getImageProcessor(),
 //                useCaseContext.getCDCRepo(),
-                useCaseContext.getSCRepo(),
+                -1,
                 useCaseContext.getTheExam()
         );
     }
@@ -68,10 +71,10 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
 
     //    @Test
     public void scanAnswersByPositions() {
-        //out.transformToRectangle(useCaseContext.getCDC());
-        if(true)throw new RuntimeException("need to migrate");
-//        out.align(useCaseContext.getCDC());
-        useCaseContext.getCDC().setBitmap(Bitmap.createScaledBitmap(useCaseContext.getCDC().getBitmap(), useCaseContext.getOrigVersionImage().getWidth(), useCaseContext.getOrigVersionImage().getHeight(), false));
+
+        cvm.consumeCapture(useCaseContext.getCapture());
+        cvm.processCapture();
+//        useCaseContext.getCDC().setBitmap(Bitmap.createScaledBitmap(useCaseContext.getCDC().getBitmap(), useCaseContext.getOrigVersionImage().getWidth(), useCaseContext.getOrigVersionImage().getHeight(), false));
 //        out.scanAnswers(useCaseContext.getCDC());
         ArrayList<Integer> realAnswers = new ArrayList<Integer>(
                 Arrays.asList(5, 4, 3, 3, 3, 3, 5, 2, 4, 1, 1, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3,

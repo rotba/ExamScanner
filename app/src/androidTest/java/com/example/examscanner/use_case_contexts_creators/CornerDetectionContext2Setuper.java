@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.components.create_exam.CreateExamModelView;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
+import com.example.examscanner.components.scan_exam.capture.Capture;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
@@ -31,14 +32,16 @@ import static org.junit.Assert.assertEquals;
 
 public class CornerDetectionContext2Setuper {
     private int someExamineeId = 123456;
+    private Capture capture;
 
     public void setPDF(boolean PDF) {
         this.PDF = PDF;
     }
+
     private boolean PDF = false;
     protected Repository<Exam> examRepository;
     protected ImageProcessingFacade imageProcessor;
-    protected Repository<CornerDetectedCapture> cdcRepo;
+    //    protected Repository<CornerDetectedCapture> cdcRepo;
     protected Repository<ScannedCapture> scRepo;
     protected long scanExamSession;
     protected Exam e;
@@ -49,19 +52,22 @@ public class CornerDetectionContext2Setuper {
     private Bitmap theCDCBitmap;
 
     public CornerDetectionContext2Setuper(Bitmap cdcBitmap) {
-        this.theCDCBitmap=cdcBitmap;
+        this.theCDCBitmap = cdcBitmap;
     }
-    public CornerDetectionContext2Setuper(Bitmap cdcBitmap, Bitmap examBitmap) {
-        this.theCDCBitmap=cdcBitmap;
-        createExamBitmap =examBitmap;
-    }
-    public CornerDetectionContext2Setuper() {}
 
-    public void setup(){
+    public CornerDetectionContext2Setuper(Bitmap cdcBitmap, Bitmap examBitmap) {
+        this.theCDCBitmap = cdcBitmap;
+        createExamBitmap = examBitmap;
+    }
+
+    public CornerDetectionContext2Setuper() {
+    }
+
+    public void setup() {
         OpenCVLoader.initDebug();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(new ImageProcessor(getApplicationContext()));
         imageProcessor = new ImageProcessingFactory().create();
-        ceModelView  = new CreateExamModelView(
+        ceModelView = new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
                 new GraderRepoFactory().create(),
                 imageProcessor,
@@ -72,41 +78,46 @@ public class CornerDetectionContext2Setuper {
         dinaBarzilayVersion = 496351;
         ceModelView.holdNumOfQuestions("50");
         int numOfQuestions = ceModelView.getExam().getNumOfQuestions();
-        if(createExamBitmap==null){
+        if (createExamBitmap == null) {
             createExamBitmap = getOriginalVersionBitmap();
         }
         ceModelView.holdVersionBitmap(createExamBitmap);
         ceModelView.holdVersionNumber(dinaBarzilayVersion);
         ceModelView.addVersion();
-        ceModelView.create("testAddVersion()_courseName","A","Fall","2020");
+        ceModelView.create("testAddVersion()_courseName", "A", "Fall", "2020");
         examRepository = new ExamRepositoryFactory().create();
-        List<Exam> exams = examRepository.get((e)->true);
+        List<Exam> exams = examRepository.get((e) -> true);
         e = exams.get(0);
 
 
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
         scRepo = SCEmptyRepositoryFactory.create();
-     //   ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
-        cdcRepo = new CDCRepositoryFacrory().create();
+        //   ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
+//        cdcRepo = new CDCRepositoryFacrory().create();
         scanExamSession = new SESessionProviderFactory().create().provide(e.getId());
-        if(theCDCBitmap==null){
+        if (theCDCBitmap == null) {
             theCDCBitmap = BitmapsInstancesFactoryAndroidTest.getComp191_V1_PDF_Auth_No_Flash();
         }
-        imageProcessor.detectCorners(theCDCBitmap, new DetectCornersConsumer() {
-            @Override
-            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
-                cdCaptures[0] = new CornerDetectedCapture(theCDCBitmap, upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession);
-                cdcRepo.create(cdCaptures[0]);
-            }
-        });
+//        imageProcessor.detectCorners(theCDCBitmap, new DetectCornersConsumer() {
+//            @Override
+//            public void consume(PointF upperLeft, PointF upperRight, PointF bottomLeft, PointF bottomRight) {
+//                cdCaptures[0] = new CornerDetectedCapture(theCDCBitmap, upperLeft, upperRight,bottomRight,bottomLeft, scanExamSession);
+//                cdcRepo.create(cdCaptures[0]);
+//            }
+//        });
         e.setNumOfQuestions(50);
-        getCDC().setVersion(e.getVersionByNum(dinaBarzilayVersion));
+//        getCDC().setVersion(e.getVersionByNum(dinaBarzilayVersion));
+        capture = new Capture(
+                BitmapsInstancesFactoryAndroidTest.getComp191_V1_PDF_Auth_No_Flash(),
+                getSomeExamineeId(),
+                getVersion()
+        );
     }
 
     private Bitmap getOriginalVersionBitmap() {
-        if(PDF){
+        if (PDF) {
             return BitmapsInstancesFactoryAndroidTest.getComp191_V1_pdf_ins_in1();
-        }else{
+        } else {
             return BitmapsInstancesFactoryAndroidTest.getComp191_v1_JPG_ANS_2();
         }
     }
@@ -115,9 +126,9 @@ public class CornerDetectionContext2Setuper {
         return imageProcessor;
     }
 
-    public Repository<CornerDetectedCapture> getCDCRepo() {
-        return cdcRepo;
-    }
+//    public Repository<CornerDetectedCapture> getCDCRepo() {
+//        return cdcRepo;
+//    }
 
     public Repository<ScannedCapture> getSCRepo() {
         return scRepo;
@@ -135,15 +146,15 @@ public class CornerDetectionContext2Setuper {
 //        ((ExamRepositoryStub)examRepository).tearDown();
     }
 
-    public CornerDetectedCapture getCDC() {
-        return cdCaptures[0];
-    }
+//    public CornerDetectedCapture getCDC() {
+//        return cdCaptures[0];
+//    }
 
     public int getVersionNum() {
         return dinaBarzilayVersion;
     }
 
-    public Version getVersion(){
+    public Version getVersion() {
         return getTheExam().getVersionByNum(getVersionNum());
     }
 
@@ -158,5 +169,12 @@ public class CornerDetectionContext2Setuper {
 
     public String getSomeExamineeId() {
         return String.valueOf(someExamineeId++);
+    }
+
+    //    public Bitmap getAuthBitmap() {
+//        return BitmapsInstancesFactoryAndroidTest.getComp191_V1_PDF_Auth_No_Flash();
+//    }
+    public Capture getCapture() {
+        return capture;
     }
 }

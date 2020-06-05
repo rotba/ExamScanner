@@ -13,19 +13,19 @@ public class CornerDetectionContext3Setuper extends CornerDetectionContext2Setup
         super.setup();
         ScannedCaptureRepositoryFactory.tearDown();
         scRepo = new ScannedCaptureRepositoryFactory().create();
-        getCDC().setBitmap(
+        getCapture().setBitmap(
                 imageProcessor.align(
-                        getCDC().getBitmap(),
+                        getCapture().getBitmap(),
                         getVersion().getPerfectImage()
                 )
         );
         imageProcessor.scanAnswers(
-                getCDC().getBitmap(),
+                getCapture().getBitmap(),
                 getTheExam().getNumOfQuestions(),
                 new ScanAnswersConsumer() {
                     @Override
                     public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                        sc = new ScannedCapture(-1, getCDC().getBitmap(), getTheExam().getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, getCDC().getVersion(), DONT_KNOW_EAMINEE_ID);
+                        sc = new ScannedCapture(-1, getCapture().getBitmap(), getTheExam().getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, getCapture().getVersion(), DONT_KNOW_EAMINEE_ID);
                         getSCRepo().create(sc);
                     }
                 },

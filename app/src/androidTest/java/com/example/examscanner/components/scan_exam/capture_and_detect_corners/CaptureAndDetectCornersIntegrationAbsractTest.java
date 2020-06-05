@@ -93,7 +93,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         onView(withText(R.string.home_dialog_yes)).perform().perform(click());
     }
 
-    @Test
+
     public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
         navToCapture();
         resumeYourLastSession();

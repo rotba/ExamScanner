@@ -56,12 +56,12 @@ public class CaptureViewModel extends ViewModel {
 
     public void consumeCapture(Capture capture) {
         unProcessedCaptures.add(capture);
-        mNumOfTotalCaptures.setValue(mNumOfTotalCaptures.getValue() + 1);
+        mNumOfTotalCaptures.postValue(mNumOfTotalCaptures.getValue() + 1);
     }
 
     public void processCapture() {
         Capture capture = unProcessedCaptures.remove();
-        final Version version = getCurrentVersion().getValue();
+        final Version version = capture.getVersion();
         capture.setBitmap(imageProcessor.align(capture.getBitmap(), version.getPerfectImage()));
         imageProcessor.scanAnswers(
                 capture.getBitmap(),
@@ -70,7 +70,7 @@ public class CaptureViewModel extends ViewModel {
                     @Override
                     public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                         scRepo.create(new ScannedCapture(
-                                scRepo.genId(), capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, getCurrentExamineeId().getValue()
+                                scRepo.genId(), capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
 
                         ));
                     }

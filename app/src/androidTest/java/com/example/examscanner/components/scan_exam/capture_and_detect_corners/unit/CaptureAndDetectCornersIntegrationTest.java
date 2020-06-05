@@ -3,6 +3,7 @@ package com.example.examscanner.components.scan_exam.capture_and_detect_corners.
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture_and_detect_corners.CaptureAndDetectCornersIntegrationAbsractTest;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
@@ -11,6 +12,7 @@ import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
@@ -29,5 +31,16 @@ public class CaptureAndDetectCornersIntegrationTest extends CaptureAndDetectCorn
     @Override
     protected CornerDetectionContext2Setuper getContext() {
         return new CornerDetectionContext2Setuper();
+    }
+
+    @Test
+    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
+        super.testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture();
+    }
+
+    @Test
+    public void Manual_testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
+        CameraMangerFactory.setStubInstance(null);
+        super.testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture();
     }
 }

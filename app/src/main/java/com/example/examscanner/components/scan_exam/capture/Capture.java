@@ -31,4 +31,12 @@ public class Capture {
     public void setBitmap(Bitmap align) {
         bitmap = align;
     }
+
+    public Version getVersion() {
+        return version;
+    }
+
+    public String getExamineeId() {
+        return examineeId;
+    }
 }
