@@ -5,14 +5,21 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
+import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
+import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.local.entities.Exam;
 import com.example.examscanner.persistence.local.entities.ExamCreationSession;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
+import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
+import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.Context2Setuper;
+import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,6 +27,7 @@ import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -34,33 +42,46 @@ import static org.hamcrest.Matchers.containsString;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends StateFullTest {
+    private CornerDetectionContext2Setuper context;
 
-    private static final int QAD_NUM_OF_QUESTIONS = 50;
-    private String test_course_name;
+//    private static final int QAD_NUM_OF_QUESTIONS = 50;
+//    private String test_course_name;
 
     @Before
     @Override
     public void setUp() {
-        dbCallback = db ->{
-            test_course_name = "TEST_course_name";
-            long examCreationSessionId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
-            long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId, null,QAD_NUM_OF_QUESTIONS));
+//        dbCallback = db ->{
+//            test_course_name = "TEST_course_name";
+//            long examCreationSessionId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
+//            long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId, null,QAD_NUM_OF_QUESTIONS));
+//        };
+        RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
+        RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
+        CameraMangerFactory.setStubInstance(new CameraManagerStub());
+        setupCallback = ()->{
+            context = getContext();
+            context.setup();
         };
         super.setUp();
-        Context2Setuper context = getContext();
-        context.setup();
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
     }
 
     @NotNull
-    protected abstract Context2Setuper getContext();
+    protected abstract CornerDetectionContext2Setuper getContext();
 
     public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe() {
         navToCapture();
+        resumeYourLastSession();
         sleepCameraPreviewSetupTime();
         sleepCameraPreviewSetupTime();
         int numOfCaptures = 2;
         for (int i = 0; i <numOfCaptures ; i++) {
-            onView(withId(R.id.capture_image_button)).perform(click());
+            captureASolution();
             sleepSingleCaptureProcessingTime();
         }
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
@@ -68,13 +89,18 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         onView(withText("1/2")).check(matches(isDisplayed()));
     }
 
+    private void resumeYourLastSession() {
+        onView(withText(R.string.home_dialog_yes)).perform().perform(click());
+    }
+
     @Test
     public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
         navToCapture();
+        resumeYourLastSession();
         sleepCameraPreviewSetupTime();
         int numOfCaptures = 2;
         for (int i = 0; i <numOfCaptures ; i++) {
-            onView(withId(R.id.capture_image_button)).perform(click());
+            captureASolution();
             sleepSingleCaptureProcessingTime();
         }
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
@@ -88,10 +114,11 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
     @Test
     public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
         navToCapture();
+        resumeYourLastSession();
         sleepCameraPreviewSetupTime();
         int numOfCaptures = 2;
         for (int i = 0; i <numOfCaptures ; i++) {
-            onView(withId(R.id.capture_image_button)).perform(click());
+            captureASolution();
             sleepSingleCaptureProcessingTime();
         }
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
@@ -109,7 +136,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         navToCapture();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(quickIP());
         sleepCameraPreviewSetupTime();
-        onView(withId(R.id.capture_image_button)).perform(click());
+        captureASolution();
         sleepSingleCaptureProcessingTime();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
         sleepMovingFromCaptureToDetectCorners();
@@ -117,7 +144,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         sleepSwipingTime();
         sleepSwipingTime();
         onView(withContentDescription("Navigate up")).perform(click());
-        onView(withId(R.id.capture_image_button)).perform(click());
+        captureASolution();
         sleepSwipingTime();
         sleepSwipingTime();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
@@ -143,8 +170,15 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
 
     protected void navToCapture() {
 //        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
-        onView(withText(containsString(test_course_name))).perform(click());
+        onView(withText(containsString(context.getTheExam().getCourseName()))).perform(click());
 //        onView(withText(R.string.start_scan_exam)).perform(click());
 
+    }
+
+    private void captureASolution() {
+        onView(withId(R.id.spinner_capture_version_num)).perform(click());
+        onView(withText(Integer.toString(context.getSomeVersion()))).perform(click());
+        onView(withId(R.id.editText_capture_examineeId)).perform(replaceText(context.getSomeExamineeId()));
+        onView(withId(R.id.capture_image_button)).perform(click());
     }
 }

@@ -81,4 +81,5 @@
     <string name="capture_the_empty_version_choice">version#</string>
     <string name="approve_scan">Approve</string>
     <string name="retake_scan">Retake</string>
+    <string name="resume_your_last_session_yes">YES</string>
 </resources>

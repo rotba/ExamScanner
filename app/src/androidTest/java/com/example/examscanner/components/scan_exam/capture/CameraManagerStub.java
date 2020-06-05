@@ -17,7 +17,7 @@ public class CameraManagerStub implements CameraManager {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handler.handleBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
+                handler.handleBitmap(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_1());
             }
         };
 

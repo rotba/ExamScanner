@@ -9,6 +9,7 @@ import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
+import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.stubs.BitmapInstancesFactory;
 
 public class CaptureViewModelFactory implements ViewModelProvider.Factory {
@@ -31,7 +32,7 @@ public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T) new CaptureViewModel(
-                new CDCRepositoryFacrory().create(),
+                new ScannedCaptureRepositoryFactory().create(),
                 new ImageProcessingFactory().create(),
                 sessionId,
                 new ExamRepositoryFactory().create().get(examId)

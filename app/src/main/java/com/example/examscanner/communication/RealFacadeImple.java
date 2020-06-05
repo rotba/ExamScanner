@@ -198,10 +198,10 @@ public class RealFacadeImple implements CommunicationFacade {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
         Question q = db.getQuestionDao().get(questionId);
         if(es ==null){
-            throw new MyAssertionError("ExamineeSolution shpuld exist in db");
+            throw new MyAssertionError("ExamineeSolution should exist in db");
         }
         if(q ==null){
-            throw new MyAssertionError("Question shpuld exist in db");
+            throw new MyAssertionError("Question should exist in db");
         }
         remoteDb.offlineInsertAnswerIntoExamineeSolution(es.getExamineeId(), q.getQuestionNum(), ans);
         return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));

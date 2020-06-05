@@ -7,6 +7,7 @@ import com.example.examscanner.components.scan_exam.capture_and_detect_corners.C
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.Context2Setuper;
+import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class CaptureAndDetectCornersIntegrationTest extends CaptureAndDetectCorn
 
     @NotNull
     @Override
-    protected Context2Setuper getContext() {
-        return new Context2Setuper();
+    protected CornerDetectionContext2Setuper getContext() {
+        return new CornerDetectionContext2Setuper();
     }
 }

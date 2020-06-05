@@ -48,6 +48,10 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
     }
 
     private void onCaptureProcessed() {
-        captureViewModel.postProcessCapture();
+        Completable.fromAction(
+                () -> captureViewModel.postProcessCapture()
+        ).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(()->{}, t->Log.d(TAG, MSG_PREF,t ));
     }
 }

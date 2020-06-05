@@ -30,6 +30,8 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.junit.Assert.assertEquals;
 
 public class CornerDetectionContext2Setuper {
+    private int someExamineeId = 123456;
+
     public void setPDF(boolean PDF) {
         this.PDF = PDF;
     }
@@ -147,5 +149,14 @@ public class CornerDetectionContext2Setuper {
 
     public Bitmap getOrigVersionImage() {
         return createExamBitmap;
+    }
+
+
+    public int getSomeVersion() {
+        return getDinaBarzilayVersion();
+    }
+
+    public String getSomeExamineeId() {
+        return String.valueOf(someExamineeId++);
     }
 }

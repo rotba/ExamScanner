@@ -27,4 +27,8 @@ public class Capture {
     public Bitmap getBitmap() {
         return bitmap;
     }
+
+    public void setBitmap(Bitmap align) {
+        bitmap = align;
+    }
 }
