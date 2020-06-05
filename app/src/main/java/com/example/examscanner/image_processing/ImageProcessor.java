@@ -576,9 +576,9 @@ public class ImageProcessor implements ImageProcessingFacade {
     Mat questionTemplate;
     final int thresh = 50;
     final int N = 11;
-    final static Scalar param_LOW_BOUND_BLACKS_COUNTING  = new Scalar(20,20,20);
-    final static Scalar param_UPPER_BOUND_BLACKS_COUNTING  = new Scalar(110,110,110);
-    final static boolean param_USE_FINE_AJDUSTMENT  = true;
+    final static Scalar param_LOW_BOUND_BLACKS_COUNTING = new Scalar(20, 20, 20);
+    final static Scalar param_UPPER_BOUND_BLACKS_COUNTING = new Scalar(110, 110, 110);
+    final static boolean param_USE_FINE_AJDUSTMENT = true;
     private static final int ORIGINAL_WIDTH = 2550;
     private static final int ORIGINAL_HEIGHT = 3300;
     private static final float F_ORIGINAL_WIDTH = 2550;
@@ -839,15 +839,15 @@ public class ImageProcessor implements ImageProcessingFacade {
                 scaledTemplate,
                 scaledTemplate,
                 new Size(
-                        (scaledTemplate.width() * xScaleConcreteToOrig) ,
+                        (scaledTemplate.width() * xScaleConcreteToOrig),
                         scaledTemplate.height() * yScaleConcreteToOrig
                 )
         );
         int[] scaledLefts = new int[leftMostXs.length];
         int[] scaledUps = new int[upperMostYs.length];
-        for (int i = 0; i<leftMostXs.length; i++){
-            scaledLefts[i] = (int)(leftMostXs[i]*bitmap.getWidth());
-            scaledUps[i] = (int)(upperMostYs[i]*bitmap.getHeight());
+        for (int i = 0; i < leftMostXs.length; i++) {
+            scaledLefts[i] = (int) (leftMostXs[i] * bitmap.getWidth());
+            scaledUps[i] = (int) (upperMostYs[i] * bitmap.getHeight());
         }
         Mat exam = matFromBitmap(bitmap);
         int answersIds[] = new int[amountOfQuestions];
@@ -915,12 +915,12 @@ public class ImageProcessor implements ImageProcessingFacade {
 
             Point matchLoc = new Point(leftMostXs[i], upperMostYs[i]);
             Rect rect = null;
-            if(param_USE_FINE_AJDUSTMENT){
+            if (param_USE_FINE_AJDUSTMENT) {
                 FineAdjustment adjustment = FineAdjustment.create(img_exam, leftMostXs[i], upperMostYs[i], img_template.cols(), img_template.rows());
-                rect = new Rect((int) matchLoc.x +adjustment.getXAdj(), (int) matchLoc.y+adjustment.getYAdj(), (img_template.cols() ) , (img_template.rows() ) );
+                rect = new Rect((int) matchLoc.x + adjustment.getXAdj(), (int) matchLoc.y + adjustment.getYAdj(), (img_template.cols()), (img_template.rows()));
                 forDebugging_ADJUSTMENTS[i] = adjustment;
-            }else{
-                rect = new Rect((int) matchLoc.x, (int) matchLoc.y, (img_template.cols() ) , (img_template.rows() ) );
+            } else {
+                rect = new Rect((int) matchLoc.x, (int) matchLoc.y, (img_template.cols()), (img_template.rows()));
             }
             Mat currAns = img_exam.submat(rect);
             List<Mat> imgChunks = splitImage2(currAns, 5);
@@ -937,18 +937,34 @@ public class ImageProcessor implements ImageProcessingFacade {
         return answersMap;
     }
 
-    private static Bitmap showRedRectanglesWithAdj(int[] xs, int[]ys, Mat mat, int tempW, int tempH, FineAdjustment[] adj){
-        for(int i=0; i < xs.length; i++){
-            Imgproc.rectangle(mat, new Point(xs[i]+adj[i].getXAdj(), ys[i]+adj[i].getYAdj()), new Point(xs[i]+adj[i].getXAdj() + tempW,
-                    ys[i] +adj[i].getYAdj() + tempH), new Scalar(0, 0, 255), -1);
+    private Bitmap showRedRectanglesWithAdj(int[] xs, int[] ys, Mat mat, int tempW, int tempH, FineAdjustment[] adj) {
+        for (int i = 0; i < xs.length; i++) {
+            Imgproc.rectangle(mat, new Point(xs[i] + adj[i].getXAdj(), ys[i] + adj[i].getYAdj()), new Point(xs[i] + adj[i].getXAdj() + tempW,
+                    ys[i] + adj[i].getYAdj() + tempH), new Scalar(0, 0, 255), -1);
         }
         Bitmap bm = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(mat, bm);
         return bm;
     }
 
-    private static Bitmap showRedRectangles(int[] xs, int[]ys, Mat mat, int tempW, int tempH){
-        for(int i=0; i < xs.length; i++){
+    private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, Bitmap bm, int tempW, int tempH) {
+        Mat mat = matFromBitmap(bm);
+        for (int i = 0; i < xs.length; i++) {
+            Imgproc.rectangle(
+                    mat,
+                    new Point(xs[i], ys[i]),
+                    new Point(xs[i] + tempW,ys[i] + tempH),
+                    new Scalar(0, 0, 255),
+                    5
+            );
+        }
+        Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(mat, ans);
+        return ans;
+    }
+
+    private static Bitmap showRedRectangles(int[] xs, int[] ys, Mat mat, int tempW, int tempH) {
+        for (int i = 0; i < xs.length; i++) {
             Imgproc.rectangle(mat, new Point(xs[i], ys[i]), new Point(xs[i] + tempW,
                     ys[i] + tempH), new Scalar(0, 0, 255), -1);
         }
@@ -957,14 +973,14 @@ public class ImageProcessor implements ImageProcessingFacade {
         return bm;
     }
 
-    private static Bitmap showRedRectangles(float[] xs, float[]ys, Mat mat, int tempW, int tempH){
+    private static Bitmap showRedRectangles(float[] xs, float[] ys, Mat mat, int tempW, int tempH) {
         int[] sXs = new int[xs.length];
         int[] sYs = new int[ys.length];
         for (int i = 0; i < sXs.length; i++) {
-            sXs[i] = (int)(mat.width()*xs[i]);
-            sYs[i] = (int)(mat.height()*ys[i]);
+            sXs[i] = (int) (mat.width() * xs[i]);
+            sYs[i] = (int) (mat.height() * ys[i]);
         }
-        return showRedRectangles(sXs,sXs,mat,  tempW, tempH);
+        return showRedRectangles(sXs, sXs, mat, tempW, tempH);
     }
 
     private int markedAnswer2(List<Mat> imgChunks) {
@@ -1070,14 +1086,15 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     }
 
-    private static Bitmap helperMatToBitmap(Mat m){
-        Bitmap bm  = Bitmap.createBitmap(m.width(), m.height(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(m , bm);
+    private static Bitmap helperMatToBitmap(Mat m) {
+        Bitmap bm = Bitmap.createBitmap(m.width(), m.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(m, bm);
         return bm;
     }
-    private static List<Bitmap> helperMatListToBitmapList(List<Mat> ms){
+
+    private static List<Bitmap> helperMatListToBitmapList(List<Mat> ms) {
         List<Bitmap> ans = new ArrayList<>();
-        for(Mat m :ms){
+        for (Mat m : ms) {
             ans.add(helperMatToBitmap(m));
         }
         return ans;
@@ -1438,6 +1455,19 @@ public class ImageProcessor implements ImageProcessingFacade {
         );
         final Bitmap bitmap = bitmapFromMat(ah.align);
         return bitmap;
+    }
+
+    @Override
+    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops) {
+        int[] leftsI = new int[lefts.length];
+        int[] topsI = new int[tops.length];
+        for (int i = 0; i < lefts.length; i++) {
+            leftsI[i] = (int) (lefts[i] * bitmap.getWidth());
+            topsI[i] = (int) (tops[i] * bitmap.getHeight());
+        }
+        return generateFeedbackBitmap(
+                leftsI,topsI, bitmap, questionTemplate.width(), questionTemplate.height()
+        );
     }
 }
 

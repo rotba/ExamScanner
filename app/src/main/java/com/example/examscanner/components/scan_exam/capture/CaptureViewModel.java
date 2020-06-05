@@ -1,5 +1,6 @@
 package com.example.examscanner.components.scan_exam.capture;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -69,8 +70,9 @@ public class CaptureViewModel extends ViewModel {
                 new ScanAnswersConsumer() {
                     @Override
                     public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
+                        final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops);
                         scRepo.create(new ScannedCapture(
-                                scRepo.genId(), capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
+                                scRepo.genId(), bitmap, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
 
                         ));
                     }

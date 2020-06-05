@@ -63,6 +63,11 @@ public class StubImageProcessingFactory {
             public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
                 return null;
             }
+
+            @Override
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops) {
+                return bmFact.getRandom();
+            }
         };
     }
 }

@@ -21,6 +21,7 @@ import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
+import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.SESessionProviderFactory;
 
 import org.opencv.android.OpenCVLoader;
@@ -90,8 +91,9 @@ public class CornerDetectionContext2Setuper {
         e = exams.get(0);
 
 
-        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
+//        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
         scRepo = SCEmptyRepositoryFactory.create();
+        ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
         //   ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
 //        cdcRepo = new CDCRepositoryFacrory().create();
         scanExamSession = new SESessionProviderFactory().create().provide(e.getId());

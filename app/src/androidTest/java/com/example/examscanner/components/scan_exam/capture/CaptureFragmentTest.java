@@ -37,6 +37,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
@@ -49,6 +50,7 @@ import static com.example.examscanner.components.scan_exam.capture.CaptureUtils.
 public class CaptureFragmentTest{
     private FragmentScenario<CaptureFragment> scenario;
     private UiDevice device;
+    private Bundle b;
 
     @Before
     public void setUp() {
@@ -57,7 +59,7 @@ public class CaptureFragmentTest{
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
         CameraMangerFactory.setStubInstance(new CameraManagerStub());
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
-        Bundle b = new Bundle();
+        b = new Bundle();
         Repository<Exam> stubERepo  = new ExamRepositoryStub();
         Exam e = ExamStubFactory.instance1();
         stubERepo.create(
@@ -66,8 +68,6 @@ public class CaptureFragmentTest{
         ExamRepositoryFactory.setStubInstance(stubERepo);
         b.putLong("examId", e.getId());
         b.putLong("sessionId", 0);
-        scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
-        sleepCameraPreviewSetupTime();
     }
 
     @After
@@ -100,22 +100,31 @@ public class CaptureFragmentTest{
 
     @Test
     public void testTheNumberOfUnprocessedCapturesUpdates() {
+        scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
+        sleepCameraPreviewSetupTime();
         theNumberOfUnprocessedCapturesUpdates();
     }
     @Test
     public void testTheNumberOfUnprocessedCapturesUpdatesRealCamera() {
+        scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
+        sleepCameraPreviewSetupTime();
         CameraMangerFactory.setStubInstance(null);
         theNumberOfUnprocessedCapturesUpdates();
     }
 
     @Test
     public void testTheNumberOfUnprocessedCapturesUpdatesRealIP() {
+        ImageProcessingFactory.setTestMode(getInstrumentation().getContext());
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
+        scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
+        sleepCameraPreviewSetupTime();
         theNumberOfUnprocessedCapturesUpdates();
     }
 
     @Test
     public void testTheNumberOfProcessedAndUnprocessedCapturesUpdates() {
+        scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
+        sleepCameraPreviewSetupTime();
         sleepCameraPreviewSetupTime();
         captureASolution();
         sleepSingleCaptureProcessingTime();
@@ -124,6 +133,8 @@ public class CaptureFragmentTest{
 
     @Test
     public void testTheNumberOfProcessedAndUnprocessedCapturesUpdatesRealCamera() {
+        scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
+        sleepCameraPreviewSetupTime();
         CameraMangerFactory.setStubInstance(null);
         sleepCameraPreviewSetupTime();
         captureASolution();

@@ -42,6 +42,11 @@ public class ImageProcessorsGenerator {
             public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
                 return bitmap;
             }
+
+            @Override
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops) {
+                return bitmap;
+            }
         };
     }
     public static ImageProcessingFacade slowIP(){
@@ -100,6 +105,11 @@ public class ImageProcessorsGenerator {
             public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
                 return bitmap;
             }
+
+            @Override
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops) {
+                return bitmap;
+            }
         };
     }
     public static ImageProcessingFacade quickIP(){
@@ -133,6 +143,11 @@ public class ImageProcessorsGenerator {
             public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
                 return null;
             }
+
+            @Override
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops) {
+                return bitmap;
+            }
         };
     }
 
@@ -165,6 +180,11 @@ public class ImageProcessorsGenerator {
 
             @Override
             public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+                return bitmap;
+            }
+
+            @Override
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops) {
                 return bitmap;
             }
         };
