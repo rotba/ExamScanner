@@ -160,7 +160,7 @@ public class Utils {
     }
     public static void sleepSingleCaptureProcessingTime() {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

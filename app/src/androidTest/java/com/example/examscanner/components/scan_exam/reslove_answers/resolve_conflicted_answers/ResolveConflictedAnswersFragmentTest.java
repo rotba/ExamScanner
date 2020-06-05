@@ -30,6 +30,7 @@ import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static com.example.examscanner.Utils.currentVisChild;
 import static org.hamcrest.Matchers.allOf;
 
+@Ignore("NOT USING")
 public class ResolveConflictedAnswersFragmentTest {
     private ImageProcessingFacade imageProcessor;
     private Repository<ScannedCapture> repo;

@@ -40,7 +40,7 @@ import static com.example.examscanner.Utils.sleepSingleCaptureProcessingTime;
 import static com.example.examscanner.Utils.sleepSwipingTime;
 import static org.hamcrest.Matchers.containsString;
 
-@RunWith(AndroidJUnit4.class)
+
 public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends StateFullTest {
     private CornerDetectionContext2Setuper context;
 
@@ -111,7 +111,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
     }
 
 
-    @Test
+
     public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
         navToCapture();
         resumeYourLastSession();
@@ -154,7 +154,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         sleepSwipingTime();
     }
 
-    @Test
+
     public void testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHeNoRepoStub() {
         CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(null);
         testWhenTheGraderStartCornerDetectionHeSeesHowManyCapturesThereAreANdWhereIsHe();

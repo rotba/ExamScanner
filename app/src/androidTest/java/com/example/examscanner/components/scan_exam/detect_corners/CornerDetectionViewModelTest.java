@@ -8,11 +8,13 @@ import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext1Setuper;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+@Ignore("NOT USING")
 public class CornerDetectionViewModelTest extends AbstractComponentInstrumentedTest {
     private CornerDetectionContext1Setuper useCaseContext;
     private CornerDetectionViewModel out;

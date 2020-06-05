@@ -13,11 +13,15 @@ import com.example.examscanner.R;
 import com.example.examscanner.Utils;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.detect_corners.DCEmptyRepositoryFactory;
+import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
+import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepository;
+import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.stubs.ExamRepositoryStub;
 import com.example.examscanner.stubs.ExamStubFactory;
 
@@ -48,7 +52,9 @@ public class CaptureFragmentTest{
 
     @Before
     public void setUp() {
-        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
+//        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
+//        AppDatabaseFactory.setTestMode();
+        ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
         CameraMangerFactory.setStubInstance(new CameraManagerStub());
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
         Bundle b = new Bundle();
@@ -67,10 +73,11 @@ public class CaptureFragmentTest{
     @After
     public void tearDown() throws Exception {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
-        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(null);
+        ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(null);
         ExamRepositoryFactory.setStubInstance(null);
         CameraMangerFactory.setStubInstance(null);
         ExamRepositoryFactory.tearDown();
+//        AppDatabaseFactory.tearDownDb();
 
     }
 

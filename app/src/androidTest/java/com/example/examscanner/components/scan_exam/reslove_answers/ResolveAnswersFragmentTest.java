@@ -11,6 +11,7 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,6 +22,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 
+@Ignore("NOT USING")
 @RunWith(AndroidJUnit4.class)
 public class ResolveAnswersFragmentTest extends StateFullTest {
     private ImageProcessingFacade imageProcessor;

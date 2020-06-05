@@ -24,6 +24,7 @@ import com.example.examscanner.repositories.session.SESessionProviderFactory;
 import com.example.examscanner.stubs.FilesManagerStub;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -36,6 +37,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static org.hamcrest.Matchers.containsString;
 
+@Ignore("NOT USING")
 public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
     private static final int QAD_NUM_OF_QUESTIONS = 50;
     private final int dinaBarzilayVersionNumber = 496351;
