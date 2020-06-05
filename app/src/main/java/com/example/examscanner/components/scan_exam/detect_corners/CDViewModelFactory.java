@@ -29,7 +29,6 @@ public class CDViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T)new CornerDetectionViewModel(
                 new ImageProcessingFactory().create(),
-                new CDCRepositoryFacrory().create(),
                 new ScannedCaptureRepositoryFactory().create(),
                 exam
         );

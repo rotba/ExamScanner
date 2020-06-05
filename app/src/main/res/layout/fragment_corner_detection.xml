@@ -78,41 +78,55 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button_cd_approve_and_scan_answers"
-            android:layout_width="78dp"
-            android:layout_height="74dp"
+            android:id="@+id/button_cd_retake"
+            android:layout_width="107dp"
+            android:layout_height="73dp"
             android:background="@drawable/scan_exam_button"
+            android:text="@string/retake_scan"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_cd_approve"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.492" />
-
+            app:layout_constraintVertical_bias="0.509" />
 
         <Button
-            android:id="@+id/button_cd_nav_to_resolve_answers"
-            android:layout_width="67dp"
-            android:layout_height="62dp"
-            android:layout_gravity="bottom"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/button_next_step"
-            app:layout_constraintBottom_toBottomOf="@+id/button_cd_approve_and_scan_answers"
+            android:id="@+id/button_cd_approve"
+            android:layout_width="107dp"
+            android:layout_height="73dp"
+            android:background="@drawable/scan_exam_button"
+            android:text="@string/approve_scan"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_cd_approve_and_scan_answers" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_cd_retake"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.509" />
 
-        <TextView
-            android:id="@+id/textView_cd_processing_progress"
-            android:layout_width="53dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/badge_circle"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/button_cd_nav_to_resolve_answers"
-            app:layout_constraintEnd_toEndOf="@+id/button_cd_nav_to_resolve_answers"
-            app:layout_constraintStart_toStartOf="@+id/button_cd_nav_to_resolve_answers" />
+
+        <!--        <Button-->
+        <!--            android:id="@+id/button_cd_nav_to_resolve_answers"-->
+        <!--            android:layout_width="67dp"-->
+        <!--            android:layout_height="62dp"-->
+        <!--            android:layout_gravity="bottom"-->
+        <!--            android:layout_marginEnd="8dp"-->
+        <!--            android:background="@drawable/button_next_step"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@+id/button_cd_approve_and_scan_answers"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/button_cd_approve_and_scan_answers" />-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/textView_cd_processing_progress"-->
+        <!--            android:layout_width="53dp"-->
+        <!--            android:layout_height="25dp"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:layout_marginBottom="2dp"-->
+        <!--            android:background="@drawable/badge_circle"-->
+        <!--            android:gravity="center"-->
+        <!--            android:textColor="@android:color/white"-->
+        <!--            android:textStyle="bold"-->
+        <!--            app:layout_constraintBottom_toTopOf="@+id/button_cd_nav_to_resolve_answers"-->
+        <!--            app:layout_constraintEnd_toEndOf="@+id/button_cd_nav_to_resolve_answers"-->
+        <!--            app:layout_constraintStart_toStartOf="@+id/button_cd_nav_to_resolve_answers" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

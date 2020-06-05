@@ -9,9 +9,7 @@ import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerF
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.local.entities.Exam;
 import com.example.examscanner.persistence.local.entities.ExamCreationSession;
-import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
-import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.Context2Setuper;
 
 import org.jetbrains.annotations.NotNull;
@@ -115,7 +113,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         sleepSingleCaptureProcessingTime();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
         sleepMovingFromCaptureToDetectCorners();
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve)).perform(click());
         sleepSwipingTime();
         sleepSwipingTime();
         onView(withContentDescription("Navigate up")).perform(click());
@@ -124,7 +122,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         sleepSwipingTime();
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
         sleepMovingFromCaptureToDetectCorners();
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve)).perform(click());
         sleepSwipingTime();
         sleepSwipingTime();
     }

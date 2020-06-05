@@ -90,10 +90,10 @@ public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveA
     }
 
 
-    @Test
-    @Ignore("Need to fix. Not seem terribly usefull")
-    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionRealIP() {
-        testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(null);
-    }
+//    @Test
+//    @Ignore("Need to fix. Not seem terribly usefull")
+//    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionRealIP() {
+//        testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(null);
+//    }
 
 }

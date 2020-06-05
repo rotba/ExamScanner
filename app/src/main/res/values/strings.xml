@@ -78,5 +78,7 @@
     <string name="create_exam_version_scanned_dialog_confirm">Confirm</string>
     <string name="create_exam_version_scanned_dialog_try_again">Try again</string>
     <string name="capture_examinee_id">Examinee Id</string>
-    <string name="capture_the_empty_version_choice">Choose version</string>
+    <string name="capture_the_empty_version_choice">version#</string>
+    <string name="approve_scan">Approve</string>
+    <string name="retake_scan">Retake</string>
 </resources>

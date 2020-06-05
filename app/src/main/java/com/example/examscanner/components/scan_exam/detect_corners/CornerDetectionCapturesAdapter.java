@@ -13,6 +13,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
+import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,14 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
 
 
-    public CornerDetectionCapturesAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, List<MutableLiveData<CornerDetectedCapture>> cornerDetectedCaptures, ViewPager2 viewPager2) {
+    public CornerDetectionCapturesAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, List<MutableLiveData<ScannedCapture>> scannedCaptures, ViewPager2 viewPager2) {
         super(fragmentManager, lifecycle);
         cards = new ArrayList<>();
-        for (MutableLiveData<CornerDetectedCapture> mCdc : cornerDetectedCaptures) {
-            CornerDetectionCardFragment f = new CornerDetectionCardFragment(mCdc.getValue().getId());
+        for (MutableLiveData<ScannedCapture> mSc: scannedCaptures) {
+            CornerDetectionCardFragment f = new CornerDetectionCardFragment(mSc.getValue().getId());
             cards.add(
                     new CornerDetectionCardData(
-                            mCdc.getValue().getId(),
+                            mSc.getValue().getId(),
                             f
                     )
             );

@@ -166,6 +166,10 @@ public class ScannedCapture {
         return examineeId;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     private class NoSuchAnswerException extends Exception{
 

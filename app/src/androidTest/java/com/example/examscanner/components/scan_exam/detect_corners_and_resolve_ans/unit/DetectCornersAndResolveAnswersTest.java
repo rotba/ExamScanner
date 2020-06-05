@@ -44,9 +44,9 @@ public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveA
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
     }
 
-    @Test
-    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionSlowIP() {
-        testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(slowIP());
-    }
+//    @Test
+//    public void testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPositionSlowIP() {
+//        testNotCrashProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionPosition(slowIP());
+//    }
 
 }

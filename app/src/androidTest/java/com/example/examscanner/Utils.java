@@ -131,10 +131,10 @@ public class Utils {
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
     }
 
-    public static void navFromHomeToResolveAnswers() {
-        navFromHomeToDetecteCornersQuickAndDirty();
-        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
-    }
+//    public static void navFromHomeToResolveAnswers() {
+//        navFromHomeToDetecteCornersQuickAndDirty();
+//        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
+//    }
     public static void sleepCameraPreviewSetupTime() {
         try {
             Thread.sleep(1000);

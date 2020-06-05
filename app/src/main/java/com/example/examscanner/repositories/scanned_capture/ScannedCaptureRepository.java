@@ -10,6 +10,7 @@ import com.example.examscanner.communication.entities_interfaces.ExamineeSolutio
 import com.example.examscanner.repositories.Repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -19,6 +20,8 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
     private int currAvailableId = 0;
     private ScannedCaptureConverter converter;
     private CommunicationFacade comFacade;
+    private List<ScannedCapture> cache;
+
 
     public static ScannedCaptureRepository getInstance(){
         if (instance==null){
@@ -40,6 +43,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
     public ScannedCaptureRepository(ScannedCaptureConverter converter, CommunicationFacade comFacade) {
         this.converter = converter;
         this.comFacade = comFacade;
+        cache = new ArrayList<>();
     }
 
     @Override
@@ -57,12 +61,22 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
     public List<ScannedCapture> get(Predicate<ScannedCapture> criteria) {
         List<ScannedCapture> ans = new ArrayList<>();
         for (ExamineeSolutionsEntityInterface ei: comFacade.getExamineeSoultions()) {
-            final ScannedCapture convert = converter.convert(ei);
+            ScannedCapture inCache = inCache(ei.getId());
+            final ScannedCapture convert = inCache!=null? inCache:converter.convert(ei);
             if(criteria.test(convert)){
                 ans.add(convert);
             }
         }
         return ans;
+    }
+
+    private ScannedCapture inCache(long id) {
+        for (ScannedCapture scannedCapture : cache) {
+            if(id== scannedCapture.getId()){
+                return scannedCapture;
+            }
+        }
+        return null;
     }
 
     @Override

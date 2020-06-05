@@ -49,7 +49,7 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
         useCaseContext.setup();
         out = new CornerDetectionViewModel(
                 useCaseContext.getImageProcessor(),
-                useCaseContext.getCDCRepo(),
+//                useCaseContext.getCDCRepo(),
                 useCaseContext.getSCRepo(),
                 useCaseContext.getTheExam()
         );
@@ -69,9 +69,10 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
     //    @Test
     public void scanAnswersByPositions() {
         //out.transformToRectangle(useCaseContext.getCDC());
-        out.align(useCaseContext.getCDC());
+        if(true)throw new RuntimeException("need to migrate");
+//        out.align(useCaseContext.getCDC());
         useCaseContext.getCDC().setBitmap(Bitmap.createScaledBitmap(useCaseContext.getCDC().getBitmap(), useCaseContext.getOrigVersionImage().getWidth(), useCaseContext.getOrigVersionImage().getHeight(), false));
-        out.scanAnswers(useCaseContext.getCDC());
+//        out.scanAnswers(useCaseContext.getCDC());
         ArrayList<Integer> realAnswers = new ArrayList<Integer>(
                 Arrays.asList(5, 4, 3, 3, 3, 3, 5, 2, 4, 1, 1, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3,
                         4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4));

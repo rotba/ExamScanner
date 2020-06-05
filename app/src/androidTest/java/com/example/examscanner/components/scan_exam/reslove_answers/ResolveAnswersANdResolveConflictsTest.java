@@ -95,9 +95,9 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
 //        onView(withId(R.id.spinner_detect_corners_version_num)).perform(click());
         Utils.sleepSwipingTime();
         onView(withText(Integer.toString(dinaBarzilayVersionNumber))).perform(click());
-        onView(withId(R.id.button_cd_approve_and_scan_answers)).perform(click());
+        onView(withId(R.id.button_cd_approve)).perform(click());
         Utils.sleepScanAnswersTime();
-        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
+//        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
     }
 
     @Test

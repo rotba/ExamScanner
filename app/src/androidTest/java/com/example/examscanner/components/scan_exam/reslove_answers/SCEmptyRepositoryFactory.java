@@ -33,7 +33,9 @@ public class SCEmptyRepositoryFactory {
 
             @Override
             public void create(ScannedCapture scannedCapture) {
+
                 data.add(scannedCapture);
+                scannedCapture.setId(currAvialbleId++);
             }
 
             @Override
