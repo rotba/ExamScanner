@@ -33,6 +33,7 @@ public class CreateExamModelView extends ViewModel {
     private Bitmap currentVersionBitmap;
     private String currentGraderIdentifier;
     private Integer currentVersionNumber;
+    private String spreadsheetUrl;
     private List<Grader> graders;
 
 
@@ -144,5 +145,13 @@ public class CreateExamModelView extends ViewModel {
 
     public Integer getNumOfQuestions() {
         return examCreated.getNumOfQuestions();
+    }
+
+    public void holdExamUrl(String accessUrl) {
+        spreadsheetUrl = accessUrl;
+    }
+
+    public boolean hasExamUrl() {
+        return spreadsheetUrl!=null;
     }
 }
