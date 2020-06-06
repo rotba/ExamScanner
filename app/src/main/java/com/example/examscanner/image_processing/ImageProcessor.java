@@ -536,6 +536,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -1473,17 +1474,22 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH) {
+        final float xScaleConcreteToOrig = (float) bm.getWidth() / (float) ORIGINAL_WIDTH;
+        final float yScaleConcreteToOrig = (float) bm.getHeight() / (float) ORIGINAL_HEIGHT;
         Mat mat = matFromBitmap(bm);
         for (int i = 0; i < xs.length; i++) {
-            Selection selection = new Selection(selecetions[i],xs[i], ys[i],tempW,  tempH);
+            final int scaledTempW = (int) (tempW * xScaleConcreteToOrig);
+            final int scaledTempH = (int) (tempH * yScaleConcreteToOrig);
+            Selection selection = new Selection(selecetions[i],xs[i], ys[i], scaledTempW, scaledTempH);
             Imgproc.rectangle(
                     mat,
                     new Point(xs[i], ys[i]),
-                    new Point(xs[i] + tempW, ys[i] + tempH),
+                    new Point(xs[i] + scaledTempW, ys[i] + scaledTempH),
                     selection.getColor(),
                     5
             );
             Imgproc.putText(mat, selection.getRep(), selection.getLocation(), selection.getFontSize(), selection.getFontScale(),selection.getColor(), selection.getThickness());
+            Log.d("ExamScannerDebug", selection.getRep());
         }
         Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(mat, ans);

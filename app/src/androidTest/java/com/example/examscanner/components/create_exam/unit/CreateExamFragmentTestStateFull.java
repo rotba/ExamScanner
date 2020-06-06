@@ -56,7 +56,7 @@ public class CreateExamFragmentTestStateFull extends CreateExamFragmentAbstractT
 
             @Override
             public Bitmap accessBitmap(Intent data, FragmentActivity activity) {
-                return BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1();
+                return BitmapsInstancesFactoryAndroidTest.getComp191_V1_pdf_ins_in1();
             }
         });
         testOn2CreatedExamItAddsToTheHomeAdapter();

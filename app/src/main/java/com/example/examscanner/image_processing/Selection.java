@@ -4,12 +4,13 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 
 class Selection {
-    private static final int Y_ANS_PADDING = 30;
+    private static final int Y_ANS_PADDING = 10;
     private static int LOWEST_VALID_ANS = 1;
     private static int HIGHEST_VALID_ANS = 5;
     private static int THICKNESS = 3;
     private static final int X_ANS_PADDING = 10;
     private final Point location;
+    private double FONT_SCALE = 5.0;
 
     public int getThickness() {
         return THICKNESS;
@@ -32,7 +33,7 @@ class Selection {
 
     private String rep;
     public Selection(int selection, int x, int y, int tempW, int tempH) {
-        location = new Point(x+ tempW+X_ANS_PADDING, y +Y_ANS_PADDING);
+        location = new Point(x+ tempW+X_ANS_PADDING, y +tempH- Y_ANS_PADDING);
         if(LOWEST_VALID_ANS<=selection && selection <= HIGHEST_VALID_ANS){
             color = new Scalar(0,0,200);
             rep = String.valueOf(selection);
@@ -43,7 +44,7 @@ class Selection {
     }
 
     public double getFontScale() {
-        return 2.0;
+        return FONT_SCALE;
     }
 
 

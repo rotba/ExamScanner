@@ -312,18 +312,20 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
         static StoreTaskPostprocessor getOffline(){
             return new StoreTaskPostprocessor() {
+                private static final String DEBUG_TAG = "ExamScannerDebug";
+
                 @Override
                 public Observable<String> postProcess(Task t, DatabaseReference ref) {
                     return Observable.fromCallable(() -> {
                         t.addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d(TAG, MSG_PREF+"::offlineStoreObject SUCCESS");
+                                Log.d(DEBUG_TAG, MSG_PREF+"::offlineStoreObject SUCCESS");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, MSG_PREF+"::offlineStoreObject FAILURE", e);
+                                Log.d(DEBUG_TAG, MSG_PREF+"::offlineStoreObject FAILURE", e);
                             }
                         });
                         return "return";

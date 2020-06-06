@@ -196,9 +196,10 @@ public class CreateExamFragment extends Fragment {
     private void onChooseSpreadsheet(View view) {
         Toast.makeText(
                 getActivity(),
-                String.format("url % added succefully", viewModel.getExamUrl()),
+                String.format("url %s added succefully", viewModel.getExamUrl()),
                 Toast.LENGTH_SHORT
         );
+        refreshCreateExamButton();
     }
 
     public void onChooseVersionPdfClick(View v) {

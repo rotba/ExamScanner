@@ -104,7 +104,17 @@ public class Exam {
 
     @Override
     public String toString() {
-        return String.format("%s %d %s", getCourseName(), getTerm(), getYear());
+        return String.format("%s %s %s", getCourseName(), termToString(getTerm()), getYear());
+    }
+
+    private String termToString(int term) {
+        if(term == 0){
+            return "Fall";
+        }else if(term == 1){
+            return "Spring";
+        }else{
+            return "BUG";
+        }
     }
 
     public Version getVersionByNum(int verNum) {

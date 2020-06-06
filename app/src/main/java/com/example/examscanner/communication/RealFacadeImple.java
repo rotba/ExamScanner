@@ -612,7 +612,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private ExamineeSolutionsEntityInterface toEntityInterface(ExamineeSolution examineeSolution) {
-        SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(examineeSolution.getScannedCaptureId());
+//        SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(examineeSolution.getScannedCaptureId());
         final List<ExamineeSolutionWithExamineeAnswers> examineeSolutionWithExamineeAnswers = db.getExamineeSolutionDao().getExamineeSolutionWithExamineeAnswers();
         List<ExamineeAnswer> answers = null;
         for (ExamineeSolutionWithExamineeAnswers eWithAs: examineeSolutionWithExamineeAnswers){
@@ -624,7 +624,12 @@ public class RealFacadeImple implements CommunicationFacade {
             throw new MyAssertionError("ExamineeSolution should exist in db");
         }
         List<ExamineeAnswer> finalAnswers = answers;
-        Bitmap bitmap = createEmprtBitmap();
+        Bitmap[] bitmap = {null};
+        try {
+            bitmap[0] = fm.get(examineeSolution.getBitmapPath());
+        } catch (FileNotFoundException e) {
+            throw new CommunicationException(e);
+        }
         return new ExamineeSolutionsEntityInterface() {
             @Override
             public String getExaimneeId() {
@@ -638,7 +643,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
             @Override
             public Bitmap getBitmap() {
-                return bitmap;//BY DESIGN
+                return bitmap[0];//BY DESIGN
             }
 
             @Override
@@ -722,7 +727,15 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public long createExamineeSolution(long session, Bitmap bm, String examineeId, long versionId) {
         remoteDb.offlineInsertExamineeSolution(examineeId, versionId);
-        return db.getExamineeSolutionDao().insert(new ExamineeSolution(examineeId, DONT_SAVE_BITMAP, session,versionId));
+        final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId);
+        try {
+            final long ans = db.getExamineeSolutionDao().insert(es);
+            es.setId(ans);
+            fm.store(bm, es.getBitmapPath());
+            return ans;
+        } catch (IOException e) {
+            throw new CommunicationException(e);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

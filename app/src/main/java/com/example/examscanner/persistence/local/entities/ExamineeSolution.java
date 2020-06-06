@@ -11,7 +11,6 @@ public class ExamineeSolution {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private String examineeId;
-    private long scannedCaptureId;
     public static final String fkSession = "sessionId";
     public static final String fkVersion = "versionId";
     @ForeignKey(entity = ScanExamSession.class, parentColumns = ScanExamSession.pkName, childColumns = fkSession)
@@ -19,9 +18,8 @@ public class ExamineeSolution {
     @ForeignKey(entity = Version.class, parentColumns = Version.pkName, childColumns = fkVersion)
     private long versionId;
 
-    public ExamineeSolution(String examineeId, long scannedCaptureId, long sessionId, long versionId) {
+    public ExamineeSolution(String examineeId, long sessionId, long versionId) {
         this.examineeId = examineeId;
-        this.scannedCaptureId = scannedCaptureId;
         this.sessionId = sessionId;
         this.versionId = versionId;
     }
@@ -46,14 +44,6 @@ public class ExamineeSolution {
         this.examineeId = examineeId;
     }
 
-    public long getScannedCaptureId() {
-        return scannedCaptureId;
-    }
-
-    public void setScannedCaptureId(long scannedCaptureId) {
-        this.scannedCaptureId = scannedCaptureId;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -64,5 +54,9 @@ public class ExamineeSolution {
 
     public void setVersionId(long versionId) {
         this.versionId = versionId;
+    }
+
+    public String getBitmapPath() {
+        return "SOLUTION_"+String.valueOf(id);
     }
 }
