@@ -54,11 +54,10 @@
     <EditText
         android:id="@+id/editText_create_exam_course_name"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:hint="@string/hint_calculus"
         android:inputType="textPersonName"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
@@ -200,7 +199,6 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:hint="@string/year_2013"
         android:inputType="textPersonName"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
@@ -215,7 +213,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.71" />
+        app:layout_constraintGuide_percent="0.66" />
 
     <TextView
         android:id="@+id/textView_create_exam_add_version"
@@ -303,7 +301,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.89" />
+        app:layout_constraintGuide_percent="0.83" />
 
     <EditText
         android:id="@+id/editText_create_exam_grader_address"
@@ -336,16 +334,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.98" />
+        app:layout_constraintGuide_percent="1.0" />
 
     <Button
         android:id="@+id/button_create_exam_create"
-        android:layout_width="135dp"
-        android:layout_height="61dp"
+        android:layout_width="137dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="8dp"
         android:text="@string/create_the_exam"
         app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -417,5 +416,23 @@
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline13"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="127dp"
+        android:layout_height="45dp"
+        android:text="@string/choose_spreedsheet"
+        app:layout_constraintBottom_toTopOf="@+id/button_create_exam_create"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/guideline10"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button_create_exam_choose_spreadsheet"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="@string/choose_spreed_sheet"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

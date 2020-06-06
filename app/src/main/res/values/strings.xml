@@ -82,4 +82,6 @@
     <string name="approve_scan">Approve</string>
     <string name="retake_scan">Retake</string>
     <string name="resume_your_last_session_yes">YES</string>
+    <string name="choose_spreedsheet">Spreadsheet</string>
+    <string name="choose_spreed_sheet">Choode spreadsheet</string>
 </resources>

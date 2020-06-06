@@ -35,8 +35,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.create_exam.get_spreedsheet_url.SpreedsheetUrlGetter;
+import com.example.examscanner.components.create_exam.get_spreedsheet_url.SpreedsheetUrlGetterFactory;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetter;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetterFactory;
+import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -50,16 +53,19 @@ import io.reactivex.schedulers.Schedulers;
 public class CreateExamFragment extends Fragment {
     public static final int PICKFILE_REQUEST_CODE = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_WRITE_FILES = 1;
+    private static final int PICKSPREADSHEET_REQUEST_CODE = 2;
     private static String MSG_PREF = "CreateExamFragment::";
     private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
     private VersionImageGetter versionImageGetter;
+    private SpreedsheetUrlGetter spreedsheetUrlGetter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_create_exam, container, false);
         versionImageGetter = new VersionImageGetterFactory().create();
+        spreedsheetUrlGetter = SpreedsheetUrlGetterFactory.get();
         return root;
     }
 
@@ -78,6 +84,7 @@ public class CreateExamFragment extends Fragment {
         createExamButton.setEnabled(false);
         createExamButton.setOnClickListener(new CreateClickListener());
         ((Button) view.findViewById(R.id.button_create_exam_upload_version_image)).setOnClickListener(this::onChooseVersionPdfClick);
+        ((Button) view.findViewById(R.id.button_create_exam_choose_spreadsheet)).setOnClickListener(this::onChooseSpreadsheet);
         ((EditText) view.findViewById(R.id.editText_create_exam_version_number)).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -134,6 +141,7 @@ public class CreateExamFragment extends Fragment {
                         ((TextView) getActivity().findViewById(R.id.editText_create_exam_course_name)).getText() != null &&
                         ((TextView) getActivity().findViewById(R.id.editText_create_exam_year)).getText() != null &&
                         ((RadioGroup) getActivity().findViewById(R.id.radioGroup_semester)).getCheckedRadioButtonId() != -1 &&
+                        viewModel.hasExamUrl() &&
                         ((RadioGroup) getActivity().findViewById(R.id.radioGroup_term)).getCheckedRadioButtonId() != -1
 
         );
@@ -144,6 +152,10 @@ public class CreateExamFragment extends Fragment {
                 viewModel.getCurrentVersionNumber() != null && viewModel.getCurrentVersionBitmap() != null &&
                         viewModel.getNumOfQuestions() != 0
         );
+    }
+
+    private void onChooseSpreadsheet(View view) {
+        spreedsheetUrlGetter.get(this, PICKSPREADSHEET_REQUEST_CODE);
     }
 
     public void onChooseVersionPdfClick(View v) {
@@ -180,6 +192,8 @@ public class CreateExamFragment extends Fragment {
             ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageBitmap(bitmap);
             ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
             refreshAddVersionButton();
+        }else if(requestCode == PICKSPREADSHEET_REQUEST_CODE){
+            viewModel.holdExamUrl(spreedsheetUrlGetter.accessUrl(data,getActivity()));
         }
     }
 
