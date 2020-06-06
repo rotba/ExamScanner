@@ -28,7 +28,7 @@ public class Exam {
     private List<Version> newVersions;
 //    private List<Version> cachedVersions;
     private Future<List<Version>> fVersions;
-    private int numOfQuestions;
+    protected int numOfQuestions;
     protected String url = "THE_EMPTY_URL";
 //    private boolean doResolveFutures;
 

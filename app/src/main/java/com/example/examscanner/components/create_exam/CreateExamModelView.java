@@ -63,7 +63,8 @@ public class CreateExamModelView extends ViewModel {
                         Semester.createByViewValue(semester).getValue(),
                         graders,
                         year,
-                        spreadsheetUrl
+                        spreadsheetUrl,
+                        examCreated.getNumOfQuestions()
                 )
         );
     }
