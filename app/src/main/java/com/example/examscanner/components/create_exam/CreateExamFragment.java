@@ -8,17 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,16 +23,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
+
+
 import com.example.examscanner.R;
-import com.example.examscanner.components.create_exam.get_spreedsheet_url.SpreedsheetUrlGetter;
-import com.example.examscanner.components.create_exam.get_spreedsheet_url.SpreedsheetUrlGetterFactory;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetter;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetterFactory;
-import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,14 +53,14 @@ public class CreateExamFragment extends Fragment {
     private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
     private VersionImageGetter versionImageGetter;
-    private SpreedsheetUrlGetter spreedsheetUrlGetter;
+//    private SpreedsheetUrlGetter spreedsheetUrlGetter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_create_exam, container, false);
         versionImageGetter = new VersionImageGetterFactory().create();
-        spreedsheetUrlGetter = SpreedsheetUrlGetterFactory.get();
+//        spreedsheetUrlGetter = SpreedsheetUrlGetterFactory.get();
         return root;
     }
 
@@ -75,6 +70,8 @@ public class CreateExamFragment extends Fragment {
         ProgressBar pb = ((ProgressBar) view.findViewById(R.id.progressBar_create_exam));
         pb.setVisibility(View.VISIBLE);
         ((Button) getActivity().findViewById(R.id.button_create_exam_add_version)).setEnabled(false);
+        ((Button) getActivity().findViewById(R.id.button_create_exam_add_greader)).setEnabled(false);
+        ((Button) getActivity().findViewById(R.id.button_create_exam_choose_spreadsheet)).setEnabled(false);
         Completable.fromAction(this::createModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -100,9 +97,51 @@ public class CreateExamFragment extends Fragment {
             public void afterTextChanged(Editable s) {
             }
         });
+        ((EditText) view.findViewById(R.id.editText_create_exam_spreadsheet_url)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.holdExamUrl(s.toString());
+                refreshSpreadsheetButton();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        ((EditText) view.findViewById(R.id.editText_create_exam_grader_address)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.holdGraderIdentifier(s.toString());
+                refreshAddGraderButton();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         ((Button) view.findViewById(R.id.button_create_exam_add_version)).setOnClickListener(this::onAddVersion);
         ((Button) view.findViewById(R.id.button_create_exam_add_greader)).setOnClickListener(this::onAddGrader);
         askPemissionsLoop();
+    }
+
+    private void refreshSpreadsheetButton() {
+        ((Button) getActivity().findViewById(R.id.button_create_exam_choose_spreadsheet)).setEnabled(
+                viewModel.hasExamUrl()
+        );
+    }
+
+    private void refreshAddGraderButton() {
+        ((Button) getActivity().findViewById(R.id.button_create_exam_add_greader)).setEnabled(
+                viewModel.hasGraderIdnetifier()
+        );
     }
 
     private void askPemissionsLoop() {
@@ -155,7 +194,11 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onChooseSpreadsheet(View view) {
-        spreedsheetUrlGetter.get(this, PICKSPREADSHEET_REQUEST_CODE);
+        Toast.makeText(
+                getActivity(),
+                String.format("url % added succefully", viewModel.getExamUrl()),
+                Toast.LENGTH_SHORT
+        );
     }
 
     public void onChooseVersionPdfClick(View v) {
@@ -174,7 +217,7 @@ public class CreateExamFragment extends Fragment {
 
     private void onAddGrader(View view) {
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.VISIBLE);
-        viewModel.holdGraderIdentifier(((EditText) getActivity().findViewById(R.id.editText_create_exam_grader_address)).getText().toString());
+//        viewModel.holdGraderIdentifier(((EditText) getActivity().findViewById(R.id.editText_create_exam_grader_address)).getText().toString());
         Completable.fromAction(() -> viewModel.addGrader())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -192,8 +235,6 @@ public class CreateExamFragment extends Fragment {
             ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageBitmap(bitmap);
             ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
             refreshAddVersionButton();
-        }else if(requestCode == PICKSPREADSHEET_REQUEST_CODE){
-            viewModel.holdExamUrl(spreedsheetUrlGetter.accessUrl(data,getActivity()));
         }
     }
 
@@ -217,7 +258,10 @@ public class CreateExamFragment extends Fragment {
         };
         ((ProgressBar) this.getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.create_exam_dialog_version_scanned_succesffuly)
+        View customLayout = getActivity().getLayoutInflater().inflate(R.layout.scan_answers_feedback, null);
+        builder.setView(customLayout);
+        ((ImageView)customLayout.findViewById(R.id.imageView_scan_answers_feedback)).setImageBitmap(viewModel.getVersionFeedbackImag());
+        builder.setTitle(R.string.create_exam_dialog_version_scanned_result)
                 .setPositiveButton(R.string.create_exam_version_scanned_dialog_confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -232,8 +276,7 @@ public class CreateExamFragment extends Fragment {
                         refreshAddVersionButton();
                         versionImageGetter.get(CreateExamFragment.this, PICKFILE_REQUEST_CODE);
                     }
-                })
-        ;
+                });
         try {
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -242,6 +285,30 @@ public class CreateExamFragment extends Fragment {
             successCont.cont();
         }
     }
+//    public void showAlertDialogButtonClicked(View view) {
+//        // create an alert builder
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setTitle(R.string.create_exam_dialog_version_scanned_succesffuly);
+//        // set the custom layout
+//        final View customLayout = getLayoutInflater().inflate(R.layout.create_exam_add_version_feedback, null);
+//        builder.setView(customLayout);
+//        // add a button
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // send data from the AlertDialog to the Activity
+//                EditText editText = customLayout.findViewById(R.id.editText);
+//                sendDialogDataToActivity(editText.getText().toString());
+//            }
+//        });
+//        // create and show the alert dialog
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
+//    // do something with the data coming from the AlertDialog
+//    private void sendDialogDataToActivity(String data) {
+//        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+//    }
 
     private void onGraderAdded() {
         ((TextView) getActivity().findViewById(R.id.editText_create_exam_grader_address)).setText("");
@@ -363,4 +430,6 @@ public class CreateExamFragment extends Fragment {
             return ((RadioButton) CreateExamFragment.this.getActivity().findViewById(rg.getCheckedRadioButtonId())).getText().toString();
         }
     }
+
+
 }

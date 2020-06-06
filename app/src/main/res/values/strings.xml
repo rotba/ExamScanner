@@ -74,7 +74,7 @@
     <string name="menu_logout">Logout</string>
     <string name="button_main_activity_logout">Logout</string>
     <string name="nums_questions">Number of questions:</string>
-    <string name="create_exam_dialog_version_scanned_succesffuly">Version scanned succefuly</string>
+    <string name="create_exam_dialog_version_scanned_result">Scanning result</string>
     <string name="create_exam_version_scanned_dialog_confirm">Confirm</string>
     <string name="create_exam_version_scanned_dialog_try_again">Try again</string>
     <string name="capture_examinee_id">Examinee Id</string>
@@ -83,5 +83,5 @@
     <string name="retake_scan">Retake</string>
     <string name="resume_your_last_session_yes">YES</string>
     <string name="choose_spreedsheet">Spreadsheet</string>
-    <string name="choose_spreed_sheet">Choode spreadsheet</string>
+    <string name="choose_spreed_sheet">Add</string>
 </resources>

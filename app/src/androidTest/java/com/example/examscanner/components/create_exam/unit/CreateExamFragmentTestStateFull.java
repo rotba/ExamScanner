@@ -46,6 +46,23 @@ public class CreateExamFragmentTestStateFull extends CreateExamFragmentAbstractT
     }
 
     @Test
+    public void testOn2CreatedExamItAddsToTheHomeAdapterRealIP() {
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
+        VersionImageGetterFactory.setStubInstance(new VersionImageGetter() {
+            @Override
+            public void get(Fragment fragment, int pickfileRequestCode) {
+                f = fragment;
+            }
+
+            @Override
+            public Bitmap accessBitmap(Intent data, FragmentActivity activity) {
+                return BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1();
+            }
+        });
+        testOn2CreatedExamItAddsToTheHomeAdapter();
+    }
+
+    @Test
     public void testOnCreatedExamWithAGraderItAddsToTheGraderHomeapater() {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(fakeIP());
         testOnCreatedExamItAddsToTheHomeAdapter();

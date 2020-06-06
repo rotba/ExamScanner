@@ -29,6 +29,7 @@ public class Exam {
 //    private List<Version> cachedVersions;
     private Future<List<Version>> fVersions;
     private int numOfQuestions;
+    protected String url = "THE_EMPTY_URL";
 //    private boolean doResolveFutures;
 
     public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions) {
@@ -98,7 +99,7 @@ public class Exam {
     }
 
     public String getURL() {
-        return "THE_EMPTY_URL";
+        return url;
     }
 
     @Override

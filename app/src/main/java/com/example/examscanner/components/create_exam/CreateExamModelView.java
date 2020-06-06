@@ -36,6 +36,12 @@ public class CreateExamModelView extends ViewModel {
     private String spreadsheetUrl;
     private List<Grader> graders;
 
+    public void setVersionFeedbackImag(Bitmap versionFeedbackImag) {
+        this.versionFeedbackImag = versionFeedbackImag;
+    }
+
+    private Bitmap versionFeedbackImag;
+
 
     public CreateExamModelView(Repository<Exam> eRepo, Repository<Grader> gRepo, ImageProcessingFacade imageProcessor, State state, long sessionId) {
         this.eRepo = eRepo;
@@ -56,7 +62,8 @@ public class CreateExamModelView extends ViewModel {
                         Term.createByViewValue(term).getValue(),
                         Semester.createByViewValue(semester).getValue(),
                         graders,
-                        year
+                        year,
+                        spreadsheetUrl
                 )
         );
     }
@@ -76,6 +83,7 @@ public class CreateExamModelView extends ViewModel {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 Version v = new Version(-1,currentVersionNumber,Version.toFuture(examCreated), Version.theEmptyFutureQuestionsList(),currentVersionBitmap);
+                versionFeedbackImag = imageProcessor.createFeedbackImage(currentVersionBitmap , lefts, tops,selections);
                 ScannedCapture scannedCapture = new ScannedCapture(-1,null,numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections,v, NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS);
                 if(versionScanningWentWell(scannedCapture)) {
                     throw new VersionScanningDidntGoWell();
@@ -153,5 +161,17 @@ public class CreateExamModelView extends ViewModel {
 
     public boolean hasExamUrl() {
         return spreadsheetUrl!=null;
+    }
+
+    public String getExamUrl() {
+        return spreadsheetUrl;
+    }
+
+    public boolean hasGraderIdnetifier() {
+        return currentGraderIdentifier!=null;
+    }
+
+    public Bitmap getVersionFeedbackImag() {
+        return versionFeedbackImag;
     }
 }

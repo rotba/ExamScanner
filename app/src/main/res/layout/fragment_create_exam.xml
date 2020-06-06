@@ -58,7 +58,6 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:inputType="textPersonName"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -199,7 +198,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="date"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
@@ -410,6 +409,7 @@
         android:background="@drawable/edit_text_background"
         android:ems="10"
         android:inputType="number"
+        android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -432,6 +432,15 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:text="@string/choose_spreed_sheet"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/editText_create_exam_spreadsheet_url" />
+
+    <EditText
+        android:id="@+id/editText_create_exam_spreadsheet_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textUri"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline10" />
 

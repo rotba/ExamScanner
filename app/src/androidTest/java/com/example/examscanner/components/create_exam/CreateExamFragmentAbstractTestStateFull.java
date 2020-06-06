@@ -35,7 +35,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
 
     protected boolean MANUAL = false;
     private static final String NUM_OF_QUESTIONS_QAD = "50";
-    Fragment f;
+    public Fragment f;
     public static final String BOB_ID = "QR6JunUJDvaZr1kSOWEq3iiCToQ2";
 
     @Override
@@ -92,7 +92,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
     private static void clickAddVersionAndConfirm() {
         onView(withId(R.id.button_create_exam_add_version)).perform(click());
         Utils.sleepAlertPoppingTime();
-        onView(withText(R.string.create_exam_dialog_version_scanned_succesffuly)).check(matches(isDisplayed()));
+        onView(withText(R.string.create_exam_dialog_version_scanned_result)).check(matches(isDisplayed()));
         onView(withText(R.string.create_exam_version_scanned_dialog_confirm)).perform(click());
     }
 

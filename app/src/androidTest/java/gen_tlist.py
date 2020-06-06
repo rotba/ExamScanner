@@ -11,7 +11,8 @@ black_list =[
 	'com.example.examscanner.CustumTestSuite',
 	'com.example.examscanner.persistence.remote.MsgSenderTest',
 	'com.example.examscanner.StateFullTest',
-	'com.example.examscanner.ViewModelsTestSuite'
+	'com.example.examscanner.ViewModelsTestSuite',
+	'com.example.examscanner.repositories.exam.ExamRepositoryTest'
 ]
 
 def main():

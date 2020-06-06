@@ -573,6 +573,7 @@ import java.util.stream.Collectors;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 
 public class ImageProcessor implements ImageProcessingFacade {
+
     Mat questionTemplate;
     final int thresh = 50;
     final int N = 11;
@@ -953,8 +954,8 @@ public class ImageProcessor implements ImageProcessingFacade {
             Imgproc.rectangle(
                     mat,
                     new Point(xs[i], ys[i]),
-                    new Point(xs[i] + tempW,ys[i] + tempH),
-                    new Scalar(0, 0, 255),
+                    new Point(xs[i] + tempW, ys[i] + tempH),
+                    new Scalar(120, 120, 0),
                     5
             );
         }
@@ -1215,8 +1216,8 @@ public class ImageProcessor implements ImageProcessingFacade {
         }
     }
 
-    // JUST FOR TEST
 
+    // JUST FOR TEST
     void sortiQuestions(Map<Point, Integer> answersMap, int[] answersIds, double[] lefts, double[] tops, double[] rights, double[] bottoms, int[] selections, int delta_x, int delta_y) {
         // sort points:
         // x value is the most significant
@@ -1252,9 +1253,9 @@ public class ImageProcessor implements ImageProcessingFacade {
         }
     }
 
+
     // find out which answer was marked by determining which sub-image in imagesArr
     // has the bigget number of colored pixeles
-
     private int markedAnswer(ArrayList<Bitmap> imgChunks) {
 
 //        let maxBlack = 0;
@@ -1292,9 +1293,9 @@ public class ImageProcessor implements ImageProcessingFacade {
         return maxImg;
     }
 
+
     // split source image into chunksNum smaller images
     // split is done according to the image width
-
     private static ArrayList<Bitmap> splitImage(Bitmap bitmap, int chunkNumbers) {
 
         if (bitmap == null) return new ArrayList<>();
@@ -1306,8 +1307,8 @@ public class ImageProcessor implements ImageProcessingFacade {
         }
         return chunkedImages;
     }
-    // Detect corners in the given image
 
+    // Detect corners in the given image
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected List<Point> cornerDetection(Mat inputImg) {
 
@@ -1458,16 +1459,35 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     @Override
-    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops) {
+    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops, int[] selections) {
         int[] leftsI = new int[lefts.length];
         int[] topsI = new int[tops.length];
         for (int i = 0; i < lefts.length; i++) {
             leftsI[i] = (int) (lefts[i] * bitmap.getWidth());
             topsI[i] = (int) (tops[i] * bitmap.getHeight());
         }
-        return generateFeedbackBitmap(
-                leftsI,topsI, bitmap, questionTemplate.width(), questionTemplate.height()
-        );
+//        return generateFeedbackBitmap(
+//                leftsI,topsI, bitmap, questionTemplate.width(), questionTemplate.height()
+//        );
+        return generateFeedbackBitmap(leftsI, topsI, selections, bitmap, questionTemplate.width(), questionTemplate.height());
+    }
+
+    private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH) {
+        Mat mat = matFromBitmap(bm);
+        for (int i = 0; i < xs.length; i++) {
+            Selection selection = new Selection(selecetions[i],xs[i], ys[i],tempW,  tempH);
+            Imgproc.rectangle(
+                    mat,
+                    new Point(xs[i], ys[i]),
+                    new Point(xs[i] + tempW, ys[i] + tempH),
+                    selection.getColor(),
+                    5
+            );
+            Imgproc.putText(mat, selection.getRep(), selection.getLocation(), selection.getFontSize(), selection.getFontScale(),selection.getColor(), selection.getThickness());
+        }
+        Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(mat, ans);
+        return ans;
     }
 }
 
