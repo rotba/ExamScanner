@@ -25,7 +25,9 @@ public class AppDatabaseFactory {
     }
     private static AppDatabase getRealInstance(){
         if(instance==null){
-            instance = Room.databaseBuilder(ContextProvider.get(),AppDatabase.class, "database-name").build();
+            instance = Room.databaseBuilder(ContextProvider.get(),AppDatabase.class, "database-name")
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return instance;
     }
