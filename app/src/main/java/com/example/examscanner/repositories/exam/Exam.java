@@ -28,7 +28,7 @@ public class Exam {
     private List<Version> newVersions;
 //    private List<Version> cachedVersions;
     private Future<List<Version>> fVersions;
-    private int numOfQuestions;
+    protected int numOfQuestions;
 //    private boolean doResolveFutures;
 
     public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions) {

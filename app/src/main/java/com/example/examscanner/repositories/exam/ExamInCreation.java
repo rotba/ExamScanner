@@ -48,13 +48,14 @@ public class ExamInCreation extends Exam {
         );
     }
 
-    public Exam commit(String userId, String courseName, int term, int semester, List<Grader>  graders, String year) {
+    public Exam commit(String userId, String courseName, int term, int semester, List<Grader>  graders, String year, int qNum) {
         this.managerId = userId;
         this.courseName = courseName;
         this.term = term;
         this.semester = semester;
         this.year=year;
         this.graders = graders;
+        this.numOfQuestions = qNum;
         return this;
     }
 }

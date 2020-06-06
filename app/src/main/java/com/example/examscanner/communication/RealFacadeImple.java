@@ -91,7 +91,7 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId, int numberOfQuestions) {
         try {
-            String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId)
+            String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId, numberOfQuestions)
                     .blockingFirst();
             long ans = db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions));
             return ans;
@@ -306,7 +306,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
 
     private void importRemoteExam(com.example.examscanner.persistence.remote.entities.Exam re) {
-        long eId = db.getExamDao().insert(new Exam(re.courseName, re.term, re.year, re.url, re.semester, -1, re._getId(), QAD_NUM_OF_QUESTIONS));
+        long eId = db.getExamDao().insert(new Exam(re.courseName, re.term, re.year, re.url, re.semester, -1, re._getId(), re.numberOfQuestions));
         List<com.example.examscanner.persistence.remote.entities.Version> remoteVersions = new ArrayList<>();
         remoteDb.getVersions().blockingSubscribe(rvs -> remoteVersions.addAll(rvs));
         for (com.example.examscanner.persistence.remote.entities.Version rv :
@@ -501,6 +501,7 @@ public class RealFacadeImple implements CommunicationFacade {
         };
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public long insertVersionReplaceOnConflict(long examId, int num, Bitmap perfectImage) {
         Version maybeVersion = db.getVersionDao().getByExamIdAndNumber(examId, num);
@@ -600,6 +601,7 @@ public class RealFacadeImple implements CommunicationFacade {
         };
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public ExamineeSolutionsEntityInterface[] getExamineeSoultions() {
         final List<ExamineeSolution> all = db.getExamineeSolutionDao().getAll();
@@ -677,6 +679,7 @@ public class RealFacadeImple implements CommunicationFacade {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public long addVersion(long examId, int versionNumber, Bitmap bm) {
         return createVersion(examId,versionNumber,bm);

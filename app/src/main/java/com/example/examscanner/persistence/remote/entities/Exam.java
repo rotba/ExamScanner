@@ -15,6 +15,7 @@ public class Exam {
     public static String metaYear = "year";
     public static String metaSeal = "seal";
     public static String metaUrl = "url";
+    public static String metaQNum = "qnum";
     public String manager;
     public List<String> graders;
     public String courseName;
@@ -24,11 +25,12 @@ public class Exam {
     public boolean seal = false;
     public String url;
     private String id;
+    public int numberOfQuestions;
 
     public Exam() {
     }
 
-    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url) {
+    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url, int numberOfQuestions) {
         this.manager = manager;
         this.graders = graders;
         this.courseName = courseName;
@@ -37,6 +39,7 @@ public class Exam {
         this.year = year;
         this.seal = seal;
         this.url = url;
+        this.numberOfQuestions = numberOfQuestions;
     }
 
     public String _getId() {

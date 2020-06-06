@@ -91,6 +91,7 @@ public class FacadeImplProxy implements CommunicationFacade {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public ExamEntityInterface[] getExams() {
         return realImpl.getExams();
@@ -116,6 +117,7 @@ public class FacadeImplProxy implements CommunicationFacade {
         return realImpl.createQuestion(versionId, num, ans, left, up, right, bottom);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public long createVersion(long examId, int num, Bitmap verBm) {
         return realImpl.createVersion(examId, num, verBm);
@@ -131,6 +133,7 @@ public class FacadeImplProxy implements CommunicationFacade {
         return realImpl.getQuestionById(qId);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public long insertVersionReplaceOnConflict(long examId, int num, Bitmap perfectImage) {
         return realImpl.insertVersionReplaceOnConflict(examId, num, perfectImage);
@@ -156,6 +159,7 @@ public class FacadeImplProxy implements CommunicationFacade {
         return realImpl.getAnswerById(examineeAnswersId);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public ExamineeSolutionsEntityInterface[] getExamineeSoultions() {
         return realImpl.getExamineeSoultions();
@@ -166,6 +170,7 @@ public class FacadeImplProxy implements CommunicationFacade {
         return realImpl.getVersionByExamIdAndNumber(eId, num);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public long addVersion(long examId, int versionNumber, Bitmap bm) {
         return realImpl.addVersion(examId,versionNumber, bm);
