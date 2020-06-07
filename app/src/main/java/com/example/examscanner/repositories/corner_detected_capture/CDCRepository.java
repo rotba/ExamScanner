@@ -88,9 +88,14 @@ public class CDCRepository implements Repository<CornerDetectedCapture> {
     }
 
     @Override
-    public int genId() {
-        int ans = currAvailableId;
-        currAvailableId++;
-        return ans;
+    public void removeFromCache(long id) {
+
     }
+
+//    @Override
+//    public int genId() {
+//        int ans = currAvailableId;
+//        currAvailableId++;
+//        return ans;
+//    }
 }

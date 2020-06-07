@@ -48,9 +48,10 @@ public class BobGradersStubRepoFacroty {
             }
 
             @Override
-            public int genId() {
-                throw new NotImplementedException();
+            public void removeFromCache(long id) {
+
             }
+
         };
     }
 

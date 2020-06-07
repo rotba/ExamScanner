@@ -20,8 +20,10 @@ public class CaptureViewModelFactory implements ViewModelProvider.Factory {
     public CaptureViewModelFactory(FragmentActivity activity , long sessionId, long examId) {
         this.activity=activity;
         this.examId = examId;
-        if(sessionId == -1){
-            this.sessionId = new CommunicationFacadeFactory().create().createNewScanExamSession(examId);
+//        if(sessionId == -1){
+        if(true){//sessions disabled
+//            this.sessionId = new CommunicationFacadeFactory().create().createNewScanExamSession(examId);
+            this.sessionId = -1;
         }else{
             this.sessionId = sessionId;
         }

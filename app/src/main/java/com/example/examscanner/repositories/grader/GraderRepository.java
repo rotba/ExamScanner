@@ -85,7 +85,9 @@ public class GraderRepository implements Repository<Grader> {
     }
 
     @Override
-    public int genId() {
-        return -1;
+    public void removeFromCache(long id) {
+        throw new RuntimeException("not impplenented");
     }
+
+
 }

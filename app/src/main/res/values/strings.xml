@@ -84,4 +84,7 @@
     <string name="resume_your_last_session_yes">YES</string>
     <string name="choose_spreedsheet">Spreadsheet</string>
     <string name="choose_spreed_sheet">Add</string>
+    <string name="done_batch">Done scanning batch!</string>
+    <string name="stage_back_to_home">Back to home</string>
+    <string name="stage_start_another_batch">Start another batch</string>
 </resources>

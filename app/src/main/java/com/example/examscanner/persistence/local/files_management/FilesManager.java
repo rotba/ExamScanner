@@ -10,4 +10,5 @@ public interface FilesManager {
     public void store(Bitmap bm, String path) throws IOException;
     void tearDown();
     String genId();
+    public void delete(String bitmapPath);
 }

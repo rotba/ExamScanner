@@ -5,16 +5,22 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(indices = {@Index(value = {"examineeSolutionId", "questionId"},unique = true)})
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(
+        indices = {@Index(value = {"examineeSolutionId", "questionId"}, unique = true)},
+        foreignKeys ={@ForeignKey(onDelete = CASCADE,entity = ExamineeSolution.class,
+                parentColumns = ExamineeSolution.pkName,childColumns = ExamineeAnswer.fkESid)}
+)
 public class ExamineeAnswer {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)
     private long id;
-    @ForeignKey(entity = Question.class, parentColumns =Question.pkName , childColumns ="questionId" )
+    @ForeignKey(entity = Question.class, parentColumns = Question.pkName, childColumns = "questionId")
     public static final String fkQue = "questionId";
     private long questionId;
     public static final String fkESid = "examineeSolutionId";
-    @ForeignKey(entity = ExamineeSolution.class, parentColumns =ExamineeSolution.pkName , childColumns =fkESid )
+    @ForeignKey(entity = ExamineeSolution.class, parentColumns = ExamineeSolution.pkName, childColumns = fkESid)
     private long examineeSolutionId;
     private int ans;
     private int leftX;
@@ -63,6 +69,7 @@ public class ExamineeAnswer {
     public void setAns(int ans) {
         this.ans = ans;
     }
+
     public int getLeftX() {
         return leftX;
     }

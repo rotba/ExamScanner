@@ -162,9 +162,12 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
+<<<<<<< HEAD
     public void addExamineeGrade(long solutionId, long versionId, int[][] answers, float grade) {
         realImpl.addExamineeGrade(solutionId, versionId, answers, grade);
     }
+
+=======
     public void removeExamineeSolutionFromCache(long id) {
         realImpl.removeExamineeSolutionFromCache(id);
     }
@@ -173,6 +176,7 @@ public class FacadeImplProxy implements CommunicationFacade {
     public void deleteExamineeSolution(long id) {
         realImpl.deleteExamineeSolution(id);
     }
+>>>>>>> origin/tmptmptmp
 
     @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {

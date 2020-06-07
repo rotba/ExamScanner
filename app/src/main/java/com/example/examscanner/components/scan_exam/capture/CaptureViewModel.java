@@ -38,12 +38,18 @@ public class CaptureViewModel extends ViewModel {
         this.scRepo = scRepo;
         this.imageProcessor = imageProcessor;
 //        mNumOfProcessedCaptures = new MutableLiveData<>(scRepo.get(sc -> sc.getSession() == sessionId).size());
-        mNumOfProcessedCaptures = new MutableLiveData<>(scRepo.get(sc -> true).size());
+//        mNumOfProcessedCaptures = new MutableLiveData<>(scRepo.get(sc -> sc.isAssocaitedWith(this.exam)).size());
+        mNumOfProcessedCaptures = new MutableLiveData<>(0);
         mNumOfTotalCaptures = new MutableLiveData<>(mNumOfProcessedCaptures.getValue());
         mVersion = new MutableLiveData<>();
         mExamineeId = new MutableLiveData<>();
         this.sessionId = sessionId;
 
+    }
+
+    public void refresh(){
+        mNumOfProcessedCaptures = new MutableLiveData<>(0);
+        mNumOfTotalCaptures = new MutableLiveData<>(mNumOfProcessedCaptures.getValue());
     }
 
 
@@ -72,7 +78,7 @@ public class CaptureViewModel extends ViewModel {
                     public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                         final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections);
                         scRepo.create(new ScannedCapture(
-                                scRepo.genId(), bitmap, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
+                                -1, bitmap, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
 
                         ));
                     }
@@ -97,7 +103,7 @@ public class CaptureViewModel extends ViewModel {
 
     public void postProcessCapture() {
 //        mNumOfProcessedCaptures.setValue(scRepo.get(sc -> sc.getSession() == sessionId).size());
-        mNumOfProcessedCaptures.postValue(scRepo.get(sc -> true).size());
+        mNumOfProcessedCaptures.postValue(mNumOfProcessedCaptures.getValue()+1);
     }
 
     public MutableLiveData<String> getCurrentExamineeId() {

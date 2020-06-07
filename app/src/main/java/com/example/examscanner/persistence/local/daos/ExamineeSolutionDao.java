@@ -1,6 +1,7 @@
 package com.example.examscanner.persistence.local.daos;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -29,4 +30,7 @@ public interface ExamineeSolutionDao {
 
     @Query("SELECT * FROM ExamineeSolution WHERE id IS :sId LIMIT 1")
     ExamineeSolution getById(long sId);
+
+    @Delete
+    public void delete(ExamineeSolution es);
 }

@@ -28,4 +28,9 @@ class StubFilesManager implements FilesManager {
     public String genId() {
         return "GENERATED_"+String.valueOf(counter++);
     }
+
+    @Override
+    public void delete(String bitmapPath) {
+
+    }
 }

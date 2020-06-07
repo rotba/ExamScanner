@@ -38,6 +38,11 @@ public class CaptureAndDetectCornersIntegrationTest extends CaptureAndDetectCorn
         super.testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture();
     }
 
+    @Test
+    public void testRetake() {
+        super.testRetake();
+    }
+
 
     @Test
     public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
