@@ -28,4 +28,6 @@ public interface RemoteDatabaseFacade {
     public Observable<List<ExamineeSolution>> getExamineeSolutions();
     public void offlineInsertExamineeSolution(String examineeId, String versionId);
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans);
+
+    void offlineInsertGradeIntoExamineeSolution(String examineeId, float grade);
 }

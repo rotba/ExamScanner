@@ -162,6 +162,11 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
+    public void addExamineeGrade(long solutionId, float grade) {
+        realImpl.addExamineeGrade(solutionId, grade);
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         return realImpl.getVersionByExamIdAndNumber(eId, num);
     }

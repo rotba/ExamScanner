@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
+import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.repositories.Repository;
 
 import java.util.ArrayList;
@@ -87,7 +88,16 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
                 scannedCapture.getExamineeId(),
                 scannedCapture.getVersion().getId()
         );
+
+        float grade = 0;
+        float questioneScore = (float)100 / (float)scannedCapture.getAnswers().size();
+        long examID = scannedCapture.getVersion().getExam().getId();
+        int versionNum = scannedCapture.getVersion().getNum();
+
         for (Answer a:scannedCapture.getAnswers()) {
+            QuestionEntityInterface origQuestion = comFacade.getQuestionByExamIdVerNumAndQNum(examID, versionNum, a.getAnsNum());
+            if(a.getSelection() == origQuestion.getCorrectAnswer())
+                grade+= questioneScore;
             comFacade.addExamineeAnswer(
                     id,
                     scannedCapture.getVersion().getQuestionByNumber(a.getAnsNum()).getId(),
@@ -98,6 +108,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
                     (int)(a.getBottom()*scannedCapture.getBm().getHeight())
             );
         }
+        comFacade.addExamineeGrade(id, grade);
     }
 
     @Override

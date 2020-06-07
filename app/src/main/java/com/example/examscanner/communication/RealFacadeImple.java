@@ -207,6 +207,17 @@ public class RealFacadeImple implements CommunicationFacade {
         return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
     }
 
+    @Override
+    public void addExamineeGrade(long solutionId, float grade) {
+        ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
+        if(es ==null){
+            throw new MyAssertionError("ExamineeSolution should exist in db");
+        }
+        remoteDb.offlineInsertGradeIntoExamineeSolution(es.getExamineeId(), grade);
+       //return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
+    }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
