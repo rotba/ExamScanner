@@ -726,7 +726,11 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long createExamineeSolution(long session, Bitmap bm, String examineeId, long versionId) {
-        remoteDb.offlineInsertExamineeSolution(examineeId, versionId);
+        Version v = db.getVersionDao().getById(versionId);
+        if(v == null)
+            throw new CommunicationException("This student solution's version is null");
+        String remote_id = v.getRemoteVersionId();
+        remoteDb.offlineInsertExamineeSolution(examineeId, remote_id);
         final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId);
         try {
             final long ans = db.getExamineeSolutionDao().insert(es);

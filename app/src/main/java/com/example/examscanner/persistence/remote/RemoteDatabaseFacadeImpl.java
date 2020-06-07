@@ -101,7 +101,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         answers.put(String.valueOf(i) , value.get(i).intValue());
                     }
                     ExamineeSolution examineeSolution = new ExamineeSolution(
-                            ds.child(ExamineeSolution.metaVersionId).getValue(Integer.class),
+                            ds.child(ExamineeSolution.metaVersionId).getValue(String.class),
                             answers
                     );
                     examineeSolution._setId(ds.getKey());
@@ -111,7 +111,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineInsertExamineeSolution(String examineeId, long versionId) {
+    public void offlineInsertExamineeSolution(String examineeId, String versionId) {
         putObjectInLocation(
                 String.format("%s/%s",Paths.toSolutions,examineeId),
                 new ExamineeSolution(

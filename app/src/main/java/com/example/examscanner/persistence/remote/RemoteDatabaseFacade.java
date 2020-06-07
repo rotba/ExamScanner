@@ -26,6 +26,6 @@ public interface RemoteDatabaseFacade {
     public Observable<String> createVersion(int num, String remoteExamId, String bitmapPath);
     public Observable<String> createQuestion(String remoteVersionId, int num, int ans, int left, int up, int right, int bottom);
     public Observable<List<ExamineeSolution>> getExamineeSolutions();
-    public void offlineInsertExamineeSolution(String examineeId, long versionId);
+    public void offlineInsertExamineeSolution(String examineeId, String versionId);
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans);
 }

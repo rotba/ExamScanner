@@ -7,9 +7,9 @@ public class ExamineeSolution {
     public static String metaAnswers = "answers";
     public static String metaVersionId = "versionId";
     public Map<String, Integer> answers;
-    public long versionId;
+    public String versionId;
     private String id;
-    public ExamineeSolution(long versionId, Map<String, Integer> answers) {
+    public ExamineeSolution(String versionId, Map<String, Integer> answers) {
         this.answers = answers;
         this.versionId = versionId;
     }

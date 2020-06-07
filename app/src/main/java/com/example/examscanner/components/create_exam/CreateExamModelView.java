@@ -57,7 +57,9 @@ public class CreateExamModelView extends ViewModel {
     public void create(String courseName, String term, String semester, String year){
         int startIndex = spreadsheetUrl.indexOf("/d/");
         int endIndex = spreadsheetUrl.indexOf("/", startIndex+4);
-        String spreadsheetID = spreadsheetUrl.substring(startIndex+3, endIndex);
+        String spreadsheetID = (startIndex > 0) ?
+                spreadsheetUrl.substring(startIndex+3, endIndex): spreadsheetUrl;
+
         eRepo.create(
                 examCreated.commit(
                         state.getId(),
