@@ -34,4 +34,10 @@ class FirebaseState implements State<FirebaseAuth> {
     public FirebaseAuth getContent() {
         return null;
     }
+
+    @Override
+    public String getUserEmail() {
+        return stateContent.getCurrentUser().getEmail();
+    }
+
 }

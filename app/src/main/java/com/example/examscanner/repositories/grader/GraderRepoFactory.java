@@ -13,7 +13,7 @@ public class GraderRepoFactory {
 
 
 
-    public Repository<Grader> create(){
+    public static Repository<Grader> create(){
         return GraderRepository.getInstance();
     }
 }

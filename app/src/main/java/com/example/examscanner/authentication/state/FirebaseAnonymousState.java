@@ -28,4 +28,11 @@ class FirebaseAnonymousState implements State<FirebaseAuth> {
     public FirebaseAuth getContent() {
         return null;
     }
+
+    @Override
+    public String getUserEmail() {
+        return null;
+    }
+
+
 }

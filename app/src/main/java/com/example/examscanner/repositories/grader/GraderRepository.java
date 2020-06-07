@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-class GraderRepository implements Repository<Grader> {
+public class GraderRepository implements Repository<Grader> {
     private CommunicationFacade comFacade;
     private static Repository<Grader> instance;
     private static final String TAG = "GraderRepository";
