@@ -101,7 +101,7 @@
             android:layout_height="88dp"
             android:ems="10"
             android:hint="@string/capture_examinee_id"
-            android:inputType="number"
+            android:inputType="date"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/spinner_capture_version_num"
             app:layout_constraintHorizontal_bias="0.5"
