@@ -42,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -203,17 +204,22 @@ public class RealFacadeImple implements CommunicationFacade {
         if(q ==null){
             throw new MyAssertionError("Question should exist in db");
         }
-        remoteDb.offlineInsertAnswerIntoExamineeSolution(es.getExamineeId(), q.getQuestionNum(), ans);
+     //   remoteDb.offlineInsertAnswerIntoExamineeSolution(es.getExamineeId(), q.getQuestionNum(), ans);
         return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
     }
 
     @Override
-    public void addExamineeGrade(long solutionId, float grade) {
+    public void addExamineeGrade(long solutionId, long versionId, int[][] answers, float grade) {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
         if(es ==null){
             throw new MyAssertionError("ExamineeSolution should exist in db");
         }
-        remoteDb.offlineInsertGradeIntoExamineeSolution(es.getExamineeId(), grade);
+        Version v = db.getVersionDao().getById(versionId);
+        if(v == null)
+            throw new CommunicationException("This student solution's version is null");
+        String remoteversionId = v.getRemoteVersionId();
+        remoteDb.offlineInsertExamineeSolutionTransaction(es.getExamineeId(), remoteversionId, answers, grade);
+       // remoteDb.offlineInsertGradeIntoExamineeSolution(es.getExamineeId(), grade);
        //return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
     }
 
@@ -741,7 +747,7 @@ public class RealFacadeImple implements CommunicationFacade {
         if(v == null)
             throw new CommunicationException("This student solution's version is null");
         String remote_id = v.getRemoteVersionId();
-        remoteDb.offlineInsertExamineeSolution(examineeId, remote_id);
+       // remoteDb.offlineInsertExamineeSolution(examineeId, remote_id);
         final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId);
         try {
             final long ans = db.getExamineeSolutionDao().insert(es);

@@ -9,6 +9,7 @@ import com.example.examscanner.persistence.remote.entities.Grader;
 import com.example.examscanner.persistence.remote.entities.Question;
 import com.example.examscanner.persistence.remote.entities.Version;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -30,4 +31,6 @@ public interface RemoteDatabaseFacade {
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans);
 
     void offlineInsertGradeIntoExamineeSolution(String examineeId, float grade);
-}
+    public void offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade);
+
+    }

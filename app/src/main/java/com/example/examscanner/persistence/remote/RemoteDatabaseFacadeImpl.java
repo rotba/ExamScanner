@@ -96,9 +96,9 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 Paths.toSolutions,
                 ds -> {
                     List<Long> value = (ArrayList<Long>)ds.child(ExamineeSolution.metaAnswers).getValue();
-                    Map<String, Integer> answers = new HashMap<>();
+                    Map<Integer, Integer> answers = new HashMap<>();
                     for(int i =1; i< value.size(); i++){
-                        answers.put(String.valueOf(i) , value.get(i).intValue());
+                        answers.put(i , value.get(i).intValue());
                     }
                     ExamineeSolution examineeSolution = new ExamineeSolution(
                             ds.child(ExamineeSolution.metaVersionId).getValue(String.class),
@@ -115,8 +115,27 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         putObjectInLocation(
                 String.format("%s/%s",Paths.toSolutions,examineeId),
                 new ExamineeSolution(
+                        examineeId,
                         versionId,
+                        0,
                         new HashMap<>()
+                ),
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+    }
+
+    @Override
+    public void offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade) {
+        HashMap ans = new HashMap();
+        for(int i = 0; i< answers.length; i++)
+            ans.put(String.valueOf(i+1), answers[i][0]);
+        pushChildInPath(
+                Paths.toSolutions,
+                new ExamineeSolution(
+                        examineeId,
+                        versionId,
+                        grade,
+                        ans
                 ),
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();

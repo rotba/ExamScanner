@@ -93,8 +93,9 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
         float questioneScore = (float)100 / (float)scannedCapture.getAnswers().size();
         long examID = scannedCapture.getVersion().getExam().getId();
         int versionNum = scannedCapture.getVersion().getNum();
-
+        int[][] answersPrim = new int [scannedCapture.getAnswers().size()][1];
         for (Answer a:scannedCapture.getAnswers()) {
+            answersPrim[a.getAnsNum()-1][0] = a.getSelection();
             QuestionEntityInterface origQuestion = comFacade.getQuestionByExamIdVerNumAndQNum(examID, versionNum, a.getAnsNum());
             if(a.getSelection() == origQuestion.getCorrectAnswer())
                 grade+= questioneScore;
@@ -108,7 +109,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
                     (int)(a.getBottom()*scannedCapture.getBm().getHeight())
             );
         }
-        comFacade.addExamineeGrade(id, grade);
+        comFacade.addExamineeGrade(id, scannedCapture.getVersion().getId(), answersPrim , grade);
     }
 
     @Override
