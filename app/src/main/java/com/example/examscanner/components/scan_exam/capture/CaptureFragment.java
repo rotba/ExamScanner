@@ -36,6 +36,8 @@ import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerF
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
 import com.example.examscanner.repositories.exam.Version;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,6 +60,7 @@ public class CaptureFragment extends Fragment {
     private ProgressBar pb;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private View.OnClickListener captureClickListener;
+    private AtomicInteger inProgress;
     //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -70,6 +73,7 @@ public class CaptureFragment extends Fragment {
                 getActivity(),
                 root
         ).create();
+        inProgress = new AtomicInteger(0);
         requestCamera();
         return root;
     }
@@ -80,6 +84,7 @@ public class CaptureFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         pb = (ProgressBar) view.findViewById(R.id.progressBar_capture);
         pb.setVisibility(View.INVISIBLE);
+        ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
         final Button nextStepButton = (Button) view.findViewById(R.id.button_move_to_detect_corners);
         nextStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +130,21 @@ public class CaptureFragment extends Fragment {
                         .setVisibility(processedCaptures>0 ? View.VISIBLE : View.INVISIBLE);
             }
         });
-        outputHander = new CameraOutputHandlerImpl(captureViewModel, processRequestDisposableContainer);
+        outputHander =
+                new CameraOutputHandlerImpl(
+                        captureViewModel,
+                        processRequestDisposableContainer,
+                        ()->{
+                            ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.VISIBLE);
+                            inProgress.set(inProgress.intValue()+1);
+                            ((EditText) getActivity().findViewById(R.id.editText_capture_examineeId)).getText().clear();
+                        },
+                        ()->{
+                            if(inProgress.decrementAndGet()==0){
+                                ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
+                            }
+                        }
+                );
         captureClickListener = cameraManager.createCaptureClickListener(outputHander);
         ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.capture_image_button);
         imageButton.setOnClickListener(captureClickListener);
@@ -146,7 +165,8 @@ public class CaptureFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
-        ((EditText)getActivity().findViewById(R.id.editText_capture_examineeId)).addTextChangedListener(new TextWatcher() {
+        final EditText examineeEditText = (EditText) getActivity().findViewById(R.id.editText_capture_examineeId);
+        examineeEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -172,6 +192,7 @@ public class CaptureFragment extends Fragment {
                 CaptureFragmentArgs.fromBundle(getArguments()).getExamId()
         );
         captureViewModel = ViewModelProviders.of(this, factory).get(CaptureViewModel.class);
+        captureViewModel.refresh();
     }
 
     private void requestCamera() {
@@ -254,6 +275,15 @@ public class CaptureFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        String examineeId =  CaptureFragmentArgs.fromBundle(getArguments()).getExamineeId();
+//        long version =  CaptureFragmentArgs.fromBundle(getArguments()).getVersionId();
+//        spinner.set
+//        if(examineeId!= null && version != -1){
+        if(examineeId!= null){
+            ((EditText)getActivity().findViewById(R.id.editText_capture_examineeId)).
+                    setText(examineeId);
+        }
+
     }
 
     private void onVersionNumbersRetrivedError(Throwable throwable) {

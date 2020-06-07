@@ -126,11 +126,16 @@ public class ExamRepository implements Repository<Exam> {
 
     }
 
-
     @Override
-    public int genId() {
-        int ans = currAvailableId;
-        currAvailableId++;
-        return ans;
+    public void removeFromCache(long id) {
+        throw new RuntimeException("not implemented");
     }
+
+
+//    @Override
+//    public int genId() {
+//        int ans = currAvailableId;
+//        currAvailableId++;
+//        return ans;
+//    }
 }

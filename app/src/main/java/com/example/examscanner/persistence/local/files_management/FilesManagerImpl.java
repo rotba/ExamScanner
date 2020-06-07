@@ -61,6 +61,13 @@ class FilesManagerImpl implements FilesManager {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
+    public void delete(String bitmapPath) {
+        File f=new File(getVersionsPicturesDirectoryFile(), bitmapPath);
+        f.delete();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
     public Bitmap get(String path) throws FileNotFoundException {
         try {
             File f=new File(getVersionsPicturesDirectoryFile(), path);

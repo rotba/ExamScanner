@@ -610,6 +610,25 @@ public class RealFacadeImple implements CommunicationFacade {
         return ans;
     }
 
+    @Override
+    public void removeExamineeSolutionFromCache(long id) {
+        ExamineeSolution es =  db.getExamineeSolutionDao().getById(id);
+        if(es == null){
+            throw new CommunicationException(String.format("ExamineeSolution %d should be in db", id));
+        }
+        fm.delete(es.getBitmapPath());
+        db.getExamineeSolutionDao().delete(es);
+    }
+
+    @Override
+    public void deleteExamineeSolution(long id) {
+        ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
+        String remoteId = es.getExamineeId();
+        removeExamineeSolutionFromCache(id);
+        es = null;
+        remoteDb.offlineDeleteExamineeSolution(remoteId);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private ExamineeSolutionsEntityInterface toEntityInterface(ExamineeSolution examineeSolution) {
 //        SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(examineeSolution.getScannedCaptureId());

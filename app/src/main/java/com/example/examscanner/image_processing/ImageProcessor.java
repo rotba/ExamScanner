@@ -1489,7 +1489,7 @@ public class ImageProcessor implements ImageProcessingFacade {
                     5
             );
             Imgproc.putText(mat, selection.getRep(), selection.getLocation(), selection.getFontSize(), selection.getFontScale(),selection.getColor(), selection.getThickness());
-            Log.d("ExamScannerDebug", selection.getRep());
+//            Log.d("DebugExamScanner", selection.getRep());
         }
         Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(mat, ans);

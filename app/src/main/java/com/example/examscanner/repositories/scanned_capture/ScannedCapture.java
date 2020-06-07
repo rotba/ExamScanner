@@ -7,6 +7,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.Version;
 
 import java.util.ArrayList;
@@ -168,6 +169,15 @@ public class ScannedCapture {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isAssocaitedWith(Exam exam) {
+        boolean ans  = false;
+        for (Version v:
+             exam.getVersions()) {
+            ans|=v.getId() == getVersion().getId();
+        }
+        return ans;
     }
 
 

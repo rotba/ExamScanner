@@ -107,12 +107,18 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
 
     @Override
     public void delete(int id) {
+        comFacade.deleteExamineeSolution(id);
+    }
 
-    }
     @Override
-    public int genId() {
-        int ans = currAvailableId;
-        currAvailableId++;
-        return ans;
+    public void removeFromCache(long id) {
+        comFacade.removeExamineeSolutionFromCache(id);
     }
+
+//    @Override
+//    public int genId() {
+//        int ans = currAvailableId;
+//        currAvailableId++;
+//        return ans;
+//    }
 }

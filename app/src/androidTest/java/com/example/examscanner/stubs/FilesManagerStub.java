@@ -27,4 +27,9 @@ public class FilesManagerStub implements FilesManager {
     public String genId() {
         return null;
     }
+
+    @Override
+    public void delete(String bitmapPath) {
+
+    }
 }

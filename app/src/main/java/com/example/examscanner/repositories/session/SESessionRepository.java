@@ -75,7 +75,8 @@ class SESessionRepository implements Repository<ScanExamSession> {
     }
 
     @Override
-    public int genId() {
-        return 0;
+    public void removeFromCache(long id) {
+        throw new RuntimeException("not implemented");
     }
+
 }

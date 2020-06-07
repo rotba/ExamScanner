@@ -90,7 +90,6 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
                     new ImageCapture.OutputFileOptions.Builder(new File(activity.getFilesDir(),"foo.jpg")).build();
             @Override
             public void onClick(View view) {
-//
                 imageCapture.takePicture(
                         outputFileOptions,
                         executor,

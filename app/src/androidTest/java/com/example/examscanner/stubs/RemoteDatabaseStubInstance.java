@@ -76,4 +76,9 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans) {
 
     }
+
+    @Override
+    public void offlineDeleteExamineeSolution(String remoteId) {
+
+    }
 }

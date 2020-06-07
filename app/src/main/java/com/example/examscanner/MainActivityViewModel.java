@@ -26,6 +26,8 @@ public class MainActivityViewModel<T> extends ViewModel implements StateHolder {
 
     public void authenticate() {
         theState.login(this, tUIAuthenticationHandler.getOnResultContent());
+
+
     }
 
     @Override

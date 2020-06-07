@@ -45,12 +45,20 @@ public class SCEmptyRepositoryFactory {
 
             @Override
             public void delete(int id) {
+                for (ScannedCapture sc:data) {
+                    if(sc.getId()==id){
+                        data.remove(sc);
+                        return;
+                    }
+                }
 
             }
+
             @Override
-            public int genId() {
-                return currAvialbleId++;
+            public void removeFromCache(long id) {
+
             }
+
         };
     }
 }

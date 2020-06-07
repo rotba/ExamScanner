@@ -47,9 +47,11 @@ public class DCEmptyRepositoryFactory {
             }
 
             @Override
-            public int genId() {
-                return -1;
+            public void removeFromCache(long id) {
+
             }
+
+
         };
     }
 }

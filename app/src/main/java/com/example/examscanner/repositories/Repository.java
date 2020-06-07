@@ -10,5 +10,5 @@ public interface Repository<T> {
     public void create(T t);
     public void update(T t);
     public void delete(int id);
-    public int genId();//TODO - need to remove
+    public void removeFromCache(long id);
 }

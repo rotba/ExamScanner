@@ -162,6 +162,16 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
+    public void removeExamineeSolutionFromCache(long id) {
+        realImpl.removeExamineeSolutionFromCache(id);
+    }
+
+    @Override
+    public void deleteExamineeSolution(long id) {
+        realImpl.deleteExamineeSolution(id);
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         return realImpl.getVersionByExamIdAndNumber(eId, num);
     }

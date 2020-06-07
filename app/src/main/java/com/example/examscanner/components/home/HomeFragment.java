@@ -136,7 +136,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void onExamSessionRetrieved(long sessionId, long examId) {
-        if(sessionId<0){
+//        if(sessionId<0){
+        if(true){//sessions disabled
             navigateToCapture(examId, -1);
         }else{
             askIfResumeSession(examId,sessionId);

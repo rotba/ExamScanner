@@ -36,14 +36,21 @@ public class CornerDetectionViewModel extends ViewModel {
 //        this.cdcRepo = cdcRepo;
         this.scRepo = scRepo;
         this.imageProcessor = imageProcessor;
+        this.exam = exam;
         scannedCaptures = new ArrayList<>();
-        for (ScannedCapture sc : this.scRepo.get(c -> true)) {
-            scannedCaptures.add(new MutableLiveData<ScannedCapture>(sc));
-        }
+//        for (ScannedCapture sc : this.scRepo.get(c -> c.isAssocaitedWith(exam))) {
+//            scannedCaptures.add(new MutableLiveData<ScannedCapture>(sc));
+//        }
         mNumberOfCornerDetectedCaptures = new MutableLiveData<>(this.scannedCaptures.size());
         mNumberOfAnswersScannedCaptures = new MutableLiveData<>(0);
-        this.exam = exam;
         thisSessionProcessedCaptures = new ArrayList<Long>();
+    }
+
+    public void refresh(){
+        scannedCaptures = new ArrayList<>();
+        for (ScannedCapture sc : this.scRepo.get(c -> c.isAssocaitedWith(exam))) {
+            scannedCaptures.add(new MutableLiveData<ScannedCapture>(sc));
+        }
     }
 
 //    public LiveData<Integer> getNumberOfCDCaptures() {
@@ -136,5 +143,17 @@ public class CornerDetectionViewModel extends ViewModel {
 
     public void setFOR_DEBUGGING_resultOfScanAnswers(String FOR_DEBUGGING_resultOfScanAnswers) {
         this.FOR_DEBUGGING_resultOfScanAnswers = FOR_DEBUGGING_resultOfScanAnswers;
+    }
+
+    public void remove(ScannedCapture sc) {
+        scRepo.removeFromCache(sc.getId());
+    }
+
+    public void delete(ScannedCapture sc) {
+        scRepo.delete(sc.getId());
+    }
+
+    public long getExamId() {
+        return exam.getId();
     }
 }

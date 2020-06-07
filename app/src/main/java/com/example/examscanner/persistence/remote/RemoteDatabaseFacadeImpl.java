@@ -131,6 +131,15 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
+    public void offlineDeleteExamineeSolution(String remoteId) {
+        putObjectInLocation(
+                String.format("%s/%s",Paths.toSolutions,remoteId),
+                null,
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+    }
+
+    @Override
     public Observable<String> addVersion(int num, String remoteExamId,String pathToBitmap) {
         return createVersion(num,remoteExamId,pathToBitmap);
     }
@@ -312,7 +321,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
         static StoreTaskPostprocessor getOffline(){
             return new StoreTaskPostprocessor() {
-                private static final String DEBUG_TAG = "ExamScannerDebug";
+                private static final String DEBUG_TAG = "DebugExamScanner";
 
                 @Override
                 public Observable<String> postProcess(Task t, DatabaseReference ref) {

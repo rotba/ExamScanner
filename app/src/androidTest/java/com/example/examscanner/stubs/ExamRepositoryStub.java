@@ -48,9 +48,10 @@ public class ExamRepositoryStub implements com.example.examscanner.repositories.
     }
 
     @Override
-    public int genId() {
-        return 0;
+    public void removeFromCache(long id) {
+
     }
+
 
     public void tearDown(){
         exams = new ArrayList<>();

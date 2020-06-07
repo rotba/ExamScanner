@@ -116,10 +116,11 @@ public class CornerDetectionFragmentTest {
     }
 
     @Test
-    public void testProcess5Captures() {
+    public void testProcess5Captures() throws InterruptedException {
         setUp5Captures();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
         launchCornerDetectionFragment();
+        Thread.sleep(1000);
         resolveAnswersAndSwipeLeft();
         resolveAnswersAndSwipeLeft();
         resolveAnswersAndSwipeLeft();
@@ -157,20 +158,22 @@ public class CornerDetectionFragmentTest {
     }
 
     @Test
-    public void testAutoLeftSwipeOnProcess() {
+    public void testAutoLeftSwipeOnProcess() throws InterruptedException {
         setUp3MarkedCaptures();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(slowIP());
         launchCornerDetectionFragment();
+        Thread.sleep(1000);
         approve();
         sleepSwipingTime();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/2")));
     }
 
     @Test
-    public void testCorrentPositionPointer() {
+    public void testCorrentPositionPointer() throws InterruptedException {
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1Marked());
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg2Marked());
         launchCornerDetectionFragment();
+        Thread.sleep(2000);
         onView(withText("1/2")).check(matches(isDisplayed()));
         onView(withId(R.id.viewPager2_corner_detected_captures)).perform(ViewActions.swipeLeft());
         onView(withText("2/2")).check(matches(isDisplayed()));
@@ -224,21 +227,22 @@ public class CornerDetectionFragmentTest {
 
     @Test
     @Ignore("maybe need to migrate to capture")
-    public void testOnFinishProcessFragmentIsDiscarded2CapturesSlowIP() {
+    public void testOnFinishProcessFragmentIsDiscarded2CapturesSlowIP() throws InterruptedException {
         testOnFinishProcessFragmentIsDiscarded2Captures(slowIP());
     }
 
     @Test
-    public void testOnFinishProcessFragmentIsDiscarded2CapturesRealP() {
+    public void testOnFinishProcessFragmentIsDiscarded2CapturesRealP() throws InterruptedException {
         testOnFinishProcessFragmentIsDiscarded2Captures(null);
     }
 
-    private void testOnFinishProcessFragmentIsDiscarded2Captures(ImageProcessingFacade ip) {
+    private void testOnFinishProcessFragmentIsDiscarded2Captures(ImageProcessingFacade ip) throws InterruptedException {
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
         produceSCIntoRepo(BitmapsInstancesFactoryAndroidTest.getTestJpg2());
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(ip);
         launchCornerDetectionFragment();
+        Thread.sleep(1000);
         approve();
         approve();
         onView(withId(R.id.textView_cd_current_position)).check(matches(withText("1/1")));

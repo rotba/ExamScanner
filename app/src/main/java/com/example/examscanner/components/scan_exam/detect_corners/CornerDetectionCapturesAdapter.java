@@ -118,6 +118,9 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
         cards.get(position).getCdcFragCard().onProcessingBegun();
     }
 
+    public boolean noMoreItems() {
+        return cards.size()==0;
+    }
 
 
     private class CornerDetectionCardData {

@@ -58,7 +58,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         CameraMangerFactory.setStubInstance(new CameraManagerStub());
-        setupCallback = ()->{
+        setupCallback = () -> {
             context = getContext();
             context.setup();
         };
@@ -80,7 +80,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         sleepCameraPreviewSetupTime();
         sleepCameraPreviewSetupTime();
         int numOfCaptures = 2;
-        for (int i = 0; i <numOfCaptures ; i++) {
+        for (int i = 0; i < numOfCaptures; i++) {
             captureASolution();
             sleepSingleCaptureProcessingTime();
         }
@@ -90,7 +90,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
     }
 
     private void resumeYourLastSession() {
-        onView(withText(R.string.home_dialog_yes)).perform().perform(click());
+//        onView(withText(R.string.home_dialog_yes)).perform().perform(click());
     }
 
 
@@ -99,7 +99,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         resumeYourLastSession();
         sleepCameraPreviewSetupTime();
         int numOfCaptures = 2;
-        for (int i = 0; i <numOfCaptures ; i++) {
+        for (int i = 0; i < numOfCaptures; i++) {
             captureASolution();
             sleepSingleCaptureProcessingTime();
         }
@@ -111,13 +111,12 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
     }
 
 
-
     public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
         navToCapture();
         resumeYourLastSession();
         sleepCameraPreviewSetupTime();
         int numOfCaptures = 2;
-        for (int i = 0; i <numOfCaptures ; i++) {
+        for (int i = 0; i < numOfCaptures; i++) {
             captureASolution();
             sleepSingleCaptureProcessingTime();
         }
@@ -180,5 +179,86 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         onView(withText(Integer.toString(context.getSomeVersion()))).perform(click());
         onView(withId(R.id.editText_capture_examineeId)).perform(replaceText(context.getSomeExamineeId()));
         onView(withId(R.id.capture_image_button)).perform(click());
+    }
+
+    protected void testRetake() {
+        navToCapture();
+        resumeYourLastSession();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 3;
+        for (int i = 0; i < numOfCaptures; i++) {
+            captureASolution();
+            sleepSingleCaptureProcessingTime();
+        }
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+//        onView(withId(R.id.button_cd_approve)).perform(click());
+//        sleepSwipingTime();
+        onView(withId(R.id.button_cd_retake)).perform(click());
+        sleepMovingFromCaptureToDetectCorners();
+        onView(withId(R.id.for_testing_fragment_capture_root)).check(matches(isDisplayed()));
+        int numOfCaptures2 = 2;
+        for (int i = 0; i < numOfCaptures2; i++) {
+            captureASolution();
+            sleepSingleCaptureProcessingTime();
+        }
+        sleepCameraPreviewSetupTime();
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        sleepMovingFromCaptureToDetectCorners();
+        onView(withText(String.format("%d/%d", 1, numOfCaptures + numOfCaptures2 - 1))).check(matches(isDisplayed()));
+    }
+
+    protected void testFinishBatch() {
+        navToCapture();
+        resumeYourLastSession();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 2;
+        for (int i = 0; i < numOfCaptures; i++) {
+            captureASolution();
+            sleepSingleCaptureProcessingTime();
+        }
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        for (int i = 0; i < numOfCaptures; i++) {
+            onView(withId(R.id.button_cd_approve)).perform(click());
+            sleepSwipingTime();
+        }
+        onView(withText(R.string.done_batch)).check(matches(isDisplayed()));
+    }
+
+    protected void testFinishBatchAndToHome() {
+        navToCapture();
+        resumeYourLastSession();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 1;
+        for (int i = 0; i < numOfCaptures; i++) {
+            captureASolution();
+            sleepSingleCaptureProcessingTime();
+        }
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        for (int i = 0; i < numOfCaptures; i++) {
+            onView(withId(R.id.button_cd_approve)).perform(click());
+            sleepSwipingTime();
+        }
+        sleepSwipingTime();
+        onView(withText(R.string.stage_back_to_home)).perform(click());
+        onView(withId(R.id.exams_recycler_view)).check(matches(isDisplayed()));
+    }
+
+    protected void testFinishBatchAndToCapture() {
+        navToCapture();
+        resumeYourLastSession();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 1;
+        for (int i = 0; i < numOfCaptures; i++) {
+            captureASolution();
+            sleepSingleCaptureProcessingTime();
+        }
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        for (int i = 0; i < numOfCaptures; i++) {
+            onView(withId(R.id.button_cd_approve)).perform(click());
+            sleepSwipingTime();
+        }
+        sleepSwipingTime();
+        onView(withText(R.string.stage_start_another_batch)).perform(click());
+        onView(withId(R.id.for_testing_fragment_capture_root)).check(matches(isDisplayed()));
     }
 }
