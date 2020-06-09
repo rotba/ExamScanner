@@ -10,6 +10,7 @@ import com.example.examscanner.components.scan_exam.capture.Capture;
 import com.example.examscanner.components.scan_exam.capture.CaptureViewModel;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
+import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.exam.Exam;
@@ -17,6 +18,7 @@ import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.Answer;
 import com.example.examscanner.repositories.scanned_capture.ResolvedAnswer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
+import com.example.examscanner.stubs.FilesManagerStub;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 
@@ -46,6 +48,7 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
     public void setUp() {
         RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
+        FilesManagerFactory.setStubInstance(new FilesManagerStub());
         super.setUp();
         useCaseContext = getUseCaseContext();
         useCaseContext.setup();

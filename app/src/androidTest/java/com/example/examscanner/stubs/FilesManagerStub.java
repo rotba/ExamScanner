@@ -7,20 +7,24 @@ import com.example.examscanner.persistence.local.files_management.FilesManager;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FilesManagerStub implements FilesManager {
+    Map<String, Bitmap> map = new HashMap<>();
     @Override
     public Bitmap get(String id) throws FileNotFoundException {
-        return BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1();
+        return map.get(id);
     }
 
     @Override
     public void store(Bitmap bm, String path) throws IOException {
+        map.put(path,bm);
     }
 
     @Override
     public void tearDown() {
-
+        map.clear();
     }
 
     @Override
@@ -30,6 +34,6 @@ public class FilesManagerStub implements FilesManager {
 
     @Override
     public void delete(String bitmapPath) {
-
+        map.remove(bitmapPath);
     }
 }
