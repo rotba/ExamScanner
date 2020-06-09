@@ -85,6 +85,7 @@ public class CornerDetectionContext2Setuper {
         ceModelView.holdVersionBitmap(createExamBitmap);
         ceModelView.holdVersionNumber(dinaBarzilayVersion);
         ceModelView.addVersion();
+        ceModelView.holdExamUrl("https://docs.google.com/spreadsheets/d/1AoTx5aw0t4e_KvjUpHUmvAkd6Ywj9_Mqd5sluJQfcVA/edit?usp=sharing");
         ceModelView.create("testAddVersion()_courseName", "A", "Fall", "2020");
         examRepository = new ExamRepositoryFactory().create();
         List<Exam> exams = examRepository.get((e) -> true);
@@ -110,7 +111,7 @@ public class CornerDetectionContext2Setuper {
         e.setNumOfQuestions(50);
 //        getCDC().setVersion(e.getVersionByNum(dinaBarzilayVersion));
         capture = new Capture(
-                BitmapsInstancesFactoryAndroidTest.getComp191_V1_PDF_Auth_No_Flash(),
+                theCDCBitmap,
                 getSomeExamineeId(),
                 getVersion()
         );

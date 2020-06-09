@@ -31,7 +31,7 @@ import com.example.examscanner.persistence.local.entities.Version;
                 SemiScannedCapture.class,
                 ExamCreationSession.class
         },
-        version = 1
+        version = 2
 )
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ExamDao getExamDao();

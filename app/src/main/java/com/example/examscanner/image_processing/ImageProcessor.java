@@ -536,7 +536,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -585,6 +584,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     private static final int ORIGINAL_HEIGHT = 3300;
     private static final float F_ORIGINAL_WIDTH = 2550;
     private static final float F_ORIGINAL_HEIGHT = 3300;
+    static final int LARGE_X_DISTANCE = 50;
 
     private Bitmap bitmapFromMat(Mat mat) {
         Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
@@ -912,15 +912,24 @@ public class ImageProcessor implements ImageProcessingFacade {
         int numOfQuestions = leftMostXs.length;
         int unIdentifiedThreshold = (int) Math.ceil(numOfQuestions * 0.2);
         Map<Point, Integer> answersMap = new HashMap<>();
-        FineAdjustment[] forDebugging_ADJUSTMENTS = new FineAdjustment[numOfQuestions];
+        FineAdjustment[] adjustments = new FineAdjustment[numOfQuestions];
+        CummulatedAdjustment cummulatedAdjustment = CummulatedAdjustment.get();
         for (int i = 0; i < numOfQuestions; i++) {
-
+            cummulatedAdjustment.getNext(leftMostXs[i], upperMostYs[i]);
+            leftMostXs[i] +=cummulatedAdjustment.getCurrXAdj();
+            upperMostYs[i] +=cummulatedAdjustment.getCurrYAdj();
             Point matchLoc = new Point(leftMostXs[i], upperMostYs[i]);
             Rect rect = null;
             if (param_USE_FINE_AJDUSTMENT) {
                 FineAdjustment adjustment = FineAdjustment.create(img_exam, leftMostXs[i], upperMostYs[i], img_template.cols(), img_template.rows());
-                rect = new Rect((int) matchLoc.x + adjustment.getXAdj(), (int) matchLoc.y + adjustment.getYAdj(), (img_template.cols()), (img_template.rows()));
-                forDebugging_ADJUSTMENTS[i] = adjustment;
+                cummulatedAdjustment.accumulateX(adjustment.getXAdj());
+                cummulatedAdjustment.accumulateY(adjustment.getYAdj());
+                rect = new Rect(
+                        (int) matchLoc.x + adjustment.getXAdj() ,
+                        (int) matchLoc.y + adjustment.getYAdj() ,
+                        (img_template.cols()), (img_template.rows())
+                );
+                adjustments[i] = adjustment;
             } else {
                 rect = new Rect((int) matchLoc.x, (int) matchLoc.y, (img_template.cols()), (img_template.rows()));
             }
@@ -935,7 +944,6 @@ public class ImageProcessor implements ImageProcessingFacade {
         if (unidentified.size() > unIdentifiedThreshold) {
             answersMap = findQuestions(img_exam, img_template, numOfQuestions);
         }
-
         return answersMap;
     }
 
@@ -1185,6 +1193,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     void sortQuestions(Map<Point, Integer> answersMap, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, int delta_x, int delta_y, int img_cols, int img_rows) {
         // sort points:
         // x value is the most significant
+
         class PointComparator implements Comparator {
             public int compare(Object o1, Object o2) {
                 Point p1 = (Point) o1;
@@ -1192,7 +1201,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
                 if (p1.x == p2.x && p1.y == p2.y)
                     return 0;
-                else if (p1.x > p2.x)
+                else if (p1.x - p2.x  > LARGE_X_DISTANCE)
                     return 1;
                 else if (p1.x == p2.x && p1.y > p2.y)
                     return 1;
@@ -1229,7 +1238,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
                 if (p1.x == p2.x && p1.y == p2.y)
                     return 0;
-                else if (p1.x > p2.x)
+                else if (p1.x -p2.x> LARGE_X_DISTANCE)
                     return 1;
                 else if (p1.x == p2.x && p1.y > p2.y)
                     return 1;
@@ -1460,7 +1469,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     @Override
-    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops, int[] selections) {
+    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops, int[] selections, int[] ids) {
         int[] leftsI = new int[lefts.length];
         int[] topsI = new int[tops.length];
         for (int i = 0; i < lefts.length; i++) {
@@ -1470,17 +1479,18 @@ public class ImageProcessor implements ImageProcessingFacade {
 //        return generateFeedbackBitmap(
 //                leftsI,topsI, bitmap, questionTemplate.width(), questionTemplate.height()
 //        );
-        return generateFeedbackBitmap(leftsI, topsI, selections, bitmap, questionTemplate.width(), questionTemplate.height());
+        return generateFeedbackBitmap(leftsI, topsI, selections, bitmap, questionTemplate.width(), questionTemplate.height(),  ids);
     }
 
-    private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH) {
+    private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH,  int[] ids) {
         final float xScaleConcreteToOrig = (float) bm.getWidth() / (float) ORIGINAL_WIDTH;
         final float yScaleConcreteToOrig = (float) bm.getHeight() / (float) ORIGINAL_HEIGHT;
         Mat mat = matFromBitmap(bm);
         for (int i = 0; i < xs.length; i++) {
             final int scaledTempW = (int) (tempW * xScaleConcreteToOrig);
             final int scaledTempH = (int) (tempH * yScaleConcreteToOrig);
-            Selection selection = new Selection(selecetions[i],xs[i], ys[i], scaledTempW, scaledTempH);
+            Selection selection = new Selection(selecetions[i], xs[i], ys[i], scaledTempW, scaledTempH);
+            Id id = new Id(ids[i], xs[i], ys[i], scaledTempW, scaledTempH);
             Imgproc.rectangle(
                     mat,
                     new Point(xs[i], ys[i]),
@@ -1488,7 +1498,8 @@ public class ImageProcessor implements ImageProcessingFacade {
                     selection.getColor(),
                     5
             );
-            Imgproc.putText(mat, selection.getRep(), selection.getLocation(), selection.getFontSize(), selection.getFontScale(),selection.getColor(), selection.getThickness());
+            Imgproc.putText(mat, selection.getRep(), selection.getLocation(), selection.getFontSize(), selection.getFontScale(), selection.getColor(), selection.getThickness());
+            Imgproc.putText(mat, id.getRep(), id.getLocation(), id.getFontSize(), id.getFontScale(), id.getColor(), id.getThickness());
 //            Log.d("DebugExamScanner", selection.getRep());
         }
         Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);

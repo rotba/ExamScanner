@@ -44,7 +44,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return bitmap;
             }
         };
@@ -107,7 +107,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return bitmap;
             }
         };
@@ -145,7 +145,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return bitmap;
             }
         };
@@ -184,7 +184,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return bitmap;
             }
         };

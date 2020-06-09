@@ -54,6 +54,11 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String comp191_V1_ins_9 ="instances/comp191_v1/_9.jpg";
     private static String comp191_V1_ins_in1 = "instances/comp191_v1/in_1.jpg";
     private static String comp191_V1_pdf_ins_in1 ="instances/comp191_v1/in_1.pdf";
+    private static String comp191_V1_pdf_ins_in10 = "instances/comp191_v1/_10.jpg";;
+    private static String comp191_V1_pdf_ins_in11 = "instances/comp191_v1/_11.jpg";;
+    private static String comp191_V1_pdf_ins_in12 = "instances/comp191_v1/_12.jpg";;
+    private static String comp191_V1_pdf_ins_in13 = "instances/comp191_v1/_13.jpg";;
+    private static String comp191_V1_pdf_ins_in14 = "instances/comp191_v1/_14.jpg";;
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -201,6 +206,22 @@ public class BitmapsInstancesFactoryAndroidTest {
         return getBitmapFromPdfAsset(comp191_V1_pdf_ins_in1);
     }
 
+    public static Bitmap getComp191_V1_ins_10() {
+        return transform90D(getBitmapFromAssets(comp191_V1_pdf_ins_in10));
+    }
+    public static Bitmap getComp191_V1_ins_11() {
+        return transform90D(getBitmapFromAssets(comp191_V1_pdf_ins_in11));
+    }
+    public static Bitmap getComp191_V1_ins_12() {
+        return transform90D(getBitmapFromAssets(comp191_V1_pdf_ins_in12));
+    }
+    public static Bitmap getComp191_V1_ins_13() {
+        return transform90D(getBitmapFromAssets(comp191_V1_pdf_ins_in13));
+    }
+    public static Bitmap getComp191_V1_ins_14() {
+        return transform90D(getBitmapFromAssets(comp191_V1_pdf_ins_in14));
+    }
+
     private static Bitmap getBitmapFromPdfAsset(String path) {
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         AssetManager assetManager = context.getAssets();
@@ -287,5 +308,6 @@ public class BitmapsInstancesFactoryAndroidTest {
         if (curr_c % 3 == 2) return getTestJpg3Marked();
         return null;
     }
+
 }
 
