@@ -9,7 +9,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
         {
-
                 com.example.examscanner.MainActivityTest.class,
                 com.example.examscanner.communication.CommunicationFacadeTest.class,
                 com.example.examscanner.components.create_exam.intergration_with_ip.CreateExamFragmentTest.class,

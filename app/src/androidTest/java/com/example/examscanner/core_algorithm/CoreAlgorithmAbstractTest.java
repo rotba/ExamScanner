@@ -5,12 +5,14 @@ import android.graphics.Bitmap;
 
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.examscanner.authentication.AuthenticationHandlerFactory;
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.components.scan_exam.capture.Capture;
 import com.example.examscanner.components.scan_exam.capture.CaptureViewModel;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
+import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.exam.Exam;
@@ -21,6 +23,7 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.stubs.FilesManagerStub;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -30,6 +33,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.observers.TestObserver;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -48,6 +53,15 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
     public void setUp() {
         RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
+        FilesManagerFactory.setStubInstance(new FilesManagerStub());
+//        FirebaseDatabaseFactory.setTestMode();
+//        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
+//            @Override
+//            public void onNext(FirebaseAuth firebaseAuth) {
+////                currentUserId = firebaseAuth.getUid();
+//            }
+//        };
+//        AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
         super.setUp();
         useCaseContext = getUseCaseContext();
         useCaseContext.setup();

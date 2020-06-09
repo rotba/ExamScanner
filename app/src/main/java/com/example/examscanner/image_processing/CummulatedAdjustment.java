@@ -5,13 +5,15 @@ class CummulatedAdjustment {
     private int prevY;
     private int currXAdj;
     private int currYAdj;
-    private static int LARGE_X_DISTANCE = 50;
+    private static double LARGE_X_DISTANCE = 0.1;
+    private int cols;
 
-    public static CummulatedAdjustment get() {
-        return new CummulatedAdjustment();
+    public static CummulatedAdjustment get(int cols) {
+        return new CummulatedAdjustment(cols);
     }
 
-    public CummulatedAdjustment() {
+    public CummulatedAdjustment(int cols) {
+        this.cols = cols;
         prevX = -1;
         prevY = -1;
         currXAdj = 0;
@@ -22,7 +24,7 @@ class CummulatedAdjustment {
         if (upperMostY < prevY) {
             currYAdj = 0;
         }
-        if (Math.abs(leftMostX - prevX) > LARGE_X_DISTANCE) {
+        if (Math.abs(leftMostX - prevX) > (int)(LARGE_X_DISTANCE * cols) ) {
             currXAdj = 0;
         }
         prevY = upperMostY;

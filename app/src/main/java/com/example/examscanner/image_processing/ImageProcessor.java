@@ -584,7 +584,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     private static final int ORIGINAL_HEIGHT = 3300;
     private static final float F_ORIGINAL_WIDTH = 2550;
     private static final float F_ORIGINAL_HEIGHT = 3300;
-    static final int LARGE_X_DISTANCE = 50;
+    static final double LARGE_X_DISTANCE = 0.10;
 
     private Bitmap bitmapFromMat(Mat mat) {
         Bitmap bm = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
@@ -913,7 +913,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         int unIdentifiedThreshold = (int) Math.ceil(numOfQuestions * 0.2);
         Map<Point, Integer> answersMap = new HashMap<>();
         FineAdjustment[] adjustments = new FineAdjustment[numOfQuestions];
-        CummulatedAdjustment cummulatedAdjustment = CummulatedAdjustment.get();
+        CummulatedAdjustment cummulatedAdjustment = CummulatedAdjustment.get(img_exam.cols());
         for (int i = 0; i < numOfQuestions; i++) {
             cummulatedAdjustment.getNext(leftMostXs[i], upperMostYs[i]);
             leftMostXs[i] +=cummulatedAdjustment.getCurrXAdj();
@@ -1193,7 +1193,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     void sortQuestions(Map<Point, Integer> answersMap, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, int delta_x, int delta_y, int img_cols, int img_rows) {
         // sort points:
         // x value is the most significant
-
+        int largeXDistance = (int)(LARGE_X_DISTANCE * img_cols);
         class PointComparator implements Comparator {
             public int compare(Object o1, Object o2) {
                 Point p1 = (Point) o1;
@@ -1201,9 +1201,9 @@ public class ImageProcessor implements ImageProcessingFacade {
 
                 if (p1.x == p2.x && p1.y == p2.y)
                     return 0;
-                else if (p1.x - p2.x  > LARGE_X_DISTANCE)
+                else if (p1.x - p2.x  > largeXDistance)
                     return 1;
-                else if (p1.x == p2.x && p1.y > p2.y)
+                else if (Math.abs(p1.x - p2.x) < largeXDistance  && p1.y > p2.y)
                     return 1;
                 else
                     return -1;
@@ -1226,6 +1226,13 @@ public class ImageProcessor implements ImageProcessingFacade {
         }
     }
 
+    private String helperShowPoints(Map<Point, Integer> answersMap){
+        String res = "";
+        for (Point p:answersMap.keySet()){
+            res += String.format("x:%f , y:%f, sel:%d\n", p.x, p.y, answersMap.get(p));
+        }
+        return res;
+    }
 
     // JUST FOR TEST
     void sortiQuestions(Map<Point, Integer> answersMap, int[] answersIds, double[] lefts, double[] tops, double[] rights, double[] bottoms, int[] selections, int delta_x, int delta_y) {
