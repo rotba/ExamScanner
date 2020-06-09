@@ -48,7 +48,6 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
     public void setUp() {
         RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
-        FilesManagerFactory.setStubInstance(new FilesManagerStub());
         super.setUp();
         useCaseContext = getUseCaseContext();
         useCaseContext.setup();

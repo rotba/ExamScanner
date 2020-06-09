@@ -1,11 +1,16 @@
 package com.example.examscanner.core_algorithm;
 
+import com.example.examscanner.communication.CommunicationFacadeFactory;
+import com.example.examscanner.communication.RealFacadeImple;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
+import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
+import com.example.examscanner.stubs.FilesManagerStub;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -17,8 +22,11 @@ public class CoreAlgorithmJPGTest extends CoreAlgorithmAbstractTest {
     private CornerDetectionViewModel out;
 
 
+
     @Before
-    public void setUp() {}
+    public void setUp() {
+        FilesManagerFactory.setStubInstance(new FilesManagerStub());
+    }
 
     public void lateSetup() {
         super.setUp();
