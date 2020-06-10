@@ -44,6 +44,7 @@ public class Exam {
         newVersions = new ArrayList<>();
 //        cachedVersions = new ArrayList<>();
         this.numOfQuestions = numOfQuestions;
+        this.managerId = managerId;
 //        doResolveFutures =true;
     }
 
@@ -63,6 +64,15 @@ public class Exam {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
     }
 
     public void setSemester(int semester) {
@@ -151,10 +161,6 @@ public class Exam {
 
     public void addVersion(Version v) {
         newVersions.add(v);
-    }
-
-    public String getManagerId() {
-        return managerId;
     }
 
     public String[] getGradersIdentifiers() {

@@ -306,6 +306,36 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         });
     }
 
+    @Override
+    public Observable<List<Exam>> getExamsOfGrader(String userId) {
+        return getChildrenOfRoot(
+                Paths.toExams,
+                new DataSnapshot2Obj<Exam>() {
+                    DataSnapshotList2ObjList<String> graderListConverter = iterable ->{
+                        List<String> ans = new ArrayList<>();
+                        iterable.forEach(ds-> ans.add(ds.getKey()));
+                        return ans;
+                    };
+                    @Override
+                    public Exam convert(DataSnapshot ds) {
+                        Exam exam = new Exam(
+                                ds.child(Exam.metaManager).getValue(String.class),
+                                graderListConverter.convert(ds.child(Exam.metaGraders).getChildren()),
+                                ds.child(Exam.metaCourseName).getValue(String.class),
+                                ds.child(Exam.metaSemester).getValue(Integer.class),
+                                ds.child(Exam.metaTerm).getValue(Integer.class),
+                                ds.child(Exam.metaYear).getValue(String.class),
+                                ds.child(Exam.metaSeal).getValue(Boolean.class),
+                                ds.child(Exam.metaUrl).getValue(String.class),
+                                ds.child(Exam.metaqnum).getValue(Integer.class)
+                        );
+                        exam._setId(ds.getKey());
+                        return exam;
+                    }
+                }
+        );
+    }
+
 
     @Override
     public Observable<String> createGrader(String email, String userId) {

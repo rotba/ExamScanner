@@ -34,4 +34,6 @@ public interface RemoteDatabaseFacade {
     void offlineInsertGradeIntoExamineeSolution(String examineeId, float grade);
     public void offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade);
     public void addGraderIfAbsent(String email, String uId) ;
-    }
+
+    public Observable<List<Exam>> getExamsOfGrader(String userId);
+}
