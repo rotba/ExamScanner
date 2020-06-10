@@ -566,7 +566,8 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public void createGrader(String userName, String uesrId) {
-        remoteDb.createGrader(userName, uesrId).blockingFirst();
+       // remoteDb.createGrader(userName, uesrId).blockingFirst();
+        remoteDb.addGraderIfAbsent(userName, uesrId);
     }
 
     @Override
