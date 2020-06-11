@@ -311,22 +311,44 @@ public class ImageProcessorTest {
     public void cornerDetectionTestImageWithNoBounds(){}
 
     @Test
-    public void markedAnswerTestEmptyArray(){}
+    public void markedAnswerTestWithOnePicture(){
+        Mat ans_one_marking = loadFromResource(R.drawable.answer1marking);
+        List<Mat> chunks = imageProcessor.splitImage2(ans_one_marking, 5);
+        int ans = imageProcessor.markedAnswer2(chunks);
+        assertEquals(ans, 3);
+    }
 
     @Test
-    public void markedAnswerTestWithOnePicture(){}
+    public void markedAnswerTestWithNothingMarked(){
+        Mat ans_no_marking = loadFromResource(R.drawable.template);
+        List<Mat> chunks = imageProcessor.splitImage2(ans_no_marking, 5);
+        int ans = imageProcessor.markedAnswer2(chunks);
+        assertEquals(ans, -1);
+    }
 
     @Test
-    public void markedAnswerTestWithNothingMarked(){}
+    public void markedAnswerTestWithTwoMarking(){
+        Mat ans_2_markings = loadFromResource(R.drawable.answertwomarkings);
+        List<Mat> chunks = imageProcessor.splitImage2(ans_2_markings, 5);
+        int ans = imageProcessor.markedAnswer2(chunks);
+        assertEquals(ans, -1);
+    }
 
     @Test
-    public void markedAnswerTestWithTwoMarking(){}
+    public void markedAnswerTestWithXMarking(){
+        Mat ans_with_X = loadFromResource(R.drawable.answerwithx);
+        List<Mat> chunks = imageProcessor.splitImage2(ans_with_X, 5);
+        int ans = imageProcessor.markedAnswer2(chunks);
+        assertEquals(ans, -1);
+    }
 
     @Test
-    public void markedAnswerTestWithXMarking(){}
-
-    @Test
-    public void markedAnswerTestWithNotFullMarking(){}
+    public void markedAnswerTestWithNotFullMarking(){
+        Mat ans_not_full_marking = loadFromResource(R.drawable.markingnotfull);
+        List<Mat> chunks = imageProcessor.splitImage2(ans_not_full_marking, 5);
+        int ans = imageProcessor.markedAnswer2(chunks);
+        assertEquals(ans, 3);
+    }
 
 
 

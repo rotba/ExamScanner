@@ -18,7 +18,7 @@ import io.reactivex.Observable;
 public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     @Override
-    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId) {
+    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId, int numberOfQuestions) {
         return Observable.fromCallable(()->{return "null";});
     }
 
@@ -68,9 +68,10 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineInsertExamineeSolution(String examineeId, long versionId) {
+    public void offlineInsertExamineeSolution(String examineeId, String versionId) {
 
     }
+
 
     @Override
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans) {
@@ -80,5 +81,25 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     @Override
     public void offlineDeleteExamineeSolution(String remoteId) {
 
+    }
+
+    @Override
+    public void offlineInsertGradeIntoExamineeSolution(String examineeId, float grade) {
+
+    }
+
+    @Override
+    public void offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade) {
+
+    }
+
+    @Override
+    public void addGraderIfAbsent(String email, String uId) {
+
+    }
+
+    @Override
+    public Observable<List<Exam>> getExamsOfGrader(String userId) {
+        return null;
     }
 }
