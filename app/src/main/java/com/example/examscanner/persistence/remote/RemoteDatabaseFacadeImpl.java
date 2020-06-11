@@ -42,7 +42,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId, int numberOfQuestions) {
+    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId, int numberOfQuestions, int uploaded) {
         return pushChildInPath(
                 Paths.toExams,
                 new Exam(
@@ -54,7 +54,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         year,
                         seal,
                         url,
-                        numberOfQuestions
+                        numberOfQuestions,
+                        uploaded
                 ),
                 StoreTaskPostprocessor.getOnline()
         );
@@ -207,7 +208,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                                 ds.child(Exam.metaYear).getValue(String.class),
                                 ds.child(Exam.metaSeal).getValue(Boolean.class),
                                 ds.child(Exam.metaUrl).getValue(String.class),
-                                ds.child(Exam.metaqnum).getValue(Integer.class)
+                                ds.child(Exam.metaqnum).getValue(Integer.class),
+                                ds.child(Exam.metaUploaded).getValue(Integer.class)
                         );
                         exam._setId(ds.getKey());
                         return exam;
@@ -327,7 +329,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                                 ds.child(Exam.metaYear).getValue(String.class),
                                 ds.child(Exam.metaSeal).getValue(Boolean.class),
                                 ds.child(Exam.metaUrl).getValue(String.class),
-                                ds.child(Exam.metaqnum).getValue(Integer.class)
+                                ds.child(Exam.metaqnum).getValue(Integer.class),
+                                ds.child(Exam.metaUploaded).getValue(Integer.class)
                         );
                         exam._setId(ds.getKey());
                         return exam;

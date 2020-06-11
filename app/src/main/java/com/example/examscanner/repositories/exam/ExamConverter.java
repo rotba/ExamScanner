@@ -40,7 +40,8 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
                 examEntityInterface.getSemester(),
                 examEntityInterface.getSessionId(),
                 examEntityInterface.getYear(),
-                examEntityInterface.getNumOfQuestions()
+                examEntityInterface.getNumOfQuestions(),
+                examEntityInterface.getUploaded()
         );
     }
 

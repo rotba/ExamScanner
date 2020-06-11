@@ -17,4 +17,5 @@ public interface ExamEntityInterface {
     public String getManagerId();
     public String[] getGradersIds();
 
+    public int getUploaded();
 }

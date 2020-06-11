@@ -30,9 +30,10 @@ public class Exam {
     private Future<List<Version>> fVersions;
     protected int numOfQuestions;
     protected String url = "THE_EMPTY_URL";
+    protected int uploaded;
 //    private boolean doResolveFutures;
 
-    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions) {
+    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions, int uploaded) {
         this.id = id;
         this.courseName = courseName;
         this.term = moed;
@@ -45,6 +46,7 @@ public class Exam {
 //        cachedVersions = new ArrayList<>();
         this.numOfQuestions = numOfQuestions;
         this.managerId = managerId;
+        this.uploaded = uploaded;
 //        doResolveFutures =true;
     }
 
@@ -93,6 +95,14 @@ public class Exam {
 
     public int getSemester() {
         return semester;
+    }
+
+    public int getUploaded() {
+        return uploaded;
+    }
+
+    public void setUploaded(int uploaded) {
+        this.uploaded = uploaded;
     }
 
 

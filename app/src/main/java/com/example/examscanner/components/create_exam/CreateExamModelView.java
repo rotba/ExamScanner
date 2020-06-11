@@ -69,7 +69,8 @@ public class CreateExamModelView extends ViewModel {
                         graders,
                         year,
                         spreadsheetID,
-                        examCreated.getNumOfQuestions()
+                        examCreated.getNumOfQuestions(),
+                        0 // whether exam finished uploading
                 )
         );
     }

@@ -26,9 +26,10 @@ public class Exam {
     private int numberOfQuestions;
     private String managerId;
     private String[] gradersIds;
+    private int uploaded;
 
 
-    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId, String[] gradersIds) {
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId, String[] gradersIds, int uploaded) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
@@ -39,6 +40,7 @@ public class Exam {
         this.numberOfQuestions = numberOfQuestions;
         this.managerId = managerId;
         this.gradersIds = gradersIds;
+        this.uploaded = uploaded;
     }
 
     public String getUrl() {
@@ -126,4 +128,6 @@ public class Exam {
     }
 
 
+    public int getUploaded() { return uploaded;}
+    public void setUploaded(int uploaded) { this.uploaded = uploaded;}
 }

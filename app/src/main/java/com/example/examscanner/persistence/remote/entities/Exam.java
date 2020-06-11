@@ -16,6 +16,7 @@ public class Exam {
     public static String metaSeal = "seal";
     public static String metaUrl = "url";
     public static String metaqnum = "numberOfQuestions";
+    public static String metaUploaded = "uploaded";
     public String manager;
     public List<String> graders;
     public String courseName;
@@ -26,11 +27,12 @@ public class Exam {
     public String url;
     private String id;
     public int numberOfQuestions;
+    public int uploaded;
 
     public Exam() {
     }
 
-    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url, int numberOfQuestions) {
+    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url, int numberOfQuestions, int uploaded) {
         this.manager = manager;
         this.graders = graders;
         this.courseName = courseName;
@@ -40,6 +42,7 @@ public class Exam {
         this.seal = seal;
         this.url = url;
         this.numberOfQuestions = numberOfQuestions;
+        this.uploaded = uploaded;
     }
 
     public String _getId() {
