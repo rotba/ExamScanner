@@ -163,6 +163,7 @@ public class CornerDetectionViewModel extends ViewModel {
         scannedCapture.setBitmap(
                 imageProcessor.createFeedbackImage(scannedCapture.getBm(), scannedCapture.getRelLefts(), scannedCapture.getRelTops(), scannedCapture.getSelections(), scannedCapture.getIds())
         );
-        getScannedCaptureById(scanId).setValue(scannedCapture);
+        getScannedCaptureById(scanId).postValue(scannedCapture);
+        scRepo.update(scannedCapture);
     }
 }

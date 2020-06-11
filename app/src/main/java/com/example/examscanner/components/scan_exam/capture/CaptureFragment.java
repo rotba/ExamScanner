@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,6 +63,7 @@ public class CaptureFragment extends Fragment {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private View.OnClickListener captureClickListener;
     private AtomicInteger inProgress;
+    private ImageButton imageButton;
     //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -138,29 +141,39 @@ public class CaptureFragment extends Fragment {
                             ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.VISIBLE);
                             inProgress.set(inProgress.intValue()+1);
                             ((EditText) getActivity().findViewById(R.id.editText_capture_examineeId)).getText().clear();
+                            onVersionNumbersRetrived(captureViewModel.getVersionNumbers());
                         },
                         ()->{
                             if(inProgress.decrementAndGet()==0){
                                 ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
                             }
+
                         }
                 );
         captureClickListener = cameraManager.createCaptureClickListener(outputHander);
-        ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.capture_image_button);
-        imageButton.setOnClickListener(captureClickListener);
-        imageButton.setEnabled(isValidExamineeIdAndVersion());
-        captureViewModel.getCurrentExamineeId().observe(getActivity(), new Observer<String>() {
+        imageButton = (ImageButton) getActivity().findViewById(R.id.capture_image_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(String s) {
-                imageButton.setEnabled(isValidExamineeIdAndVersion());
+            public void onClick(View v) {
+                if(isValidExamineeIdAndVersion()){
+                    captureClickListener.onClick(v);
+                }else{
+                    Toast.makeText(getActivity(), "Please enter examinee id and verion number", Toast.LENGTH_LONG).show();
+                }
             }
         });
-        captureViewModel.getCurrentVersion().observe(getActivity(), new Observer<Version>() {
-            @Override
-            public void onChanged(Version v) {
-                imageButton.setEnabled(isValidExamineeIdAndVersion());
-            }
-        });
+//        captureViewModel.getCurrentExamineeId().observe(getActivity(), new Observer<String>() {
+//            @Override
+//            public void onChanged(String s) {
+//                imageButton.setEnabled(isValidExamineeIdAndVersion());
+//            }
+//        });
+//        captureViewModel.getCurrentVersion().observe(getActivity(), new Observer<Version>() {
+//            @Override
+//            public void onChanged(Version v) {
+//                imageButton.setEnabled(isValidExamineeIdAndVersion());
+//            }
+//        });
         Observable.fromCallable(() -> captureViewModel.getVersionNumbers())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -279,7 +292,7 @@ public class CaptureFragment extends Fragment {
 //        long version =  CaptureFragmentArgs.fromBundle(getArguments()).getVersionId();
 //        spinner.set
 //        if(examineeId!= null && version != -1){
-        if(examineeId!= null){
+        if(examineeId!= null && !examineeId.equals("null")){
             ((EditText)getActivity().findViewById(R.id.editText_capture_examineeId)).
                     setText(examineeId);
         }

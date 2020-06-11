@@ -3,6 +3,7 @@ package com.example.examscanner.persistence.local.daos;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.examscanner.persistence.local.entities.ExamineeAnswer;
 import com.example.examscanner.persistence.local.entities.relations.ExamineeSolutionWithExamineeAnswers;
@@ -18,4 +19,10 @@ public interface ExamineeAnswerDao {
 
     @Query("SELECT * FROM ExamineeAnswer WHERE id IS :id LIMIT 1")
     ExamineeAnswer getById(long id);
+
+    @Query("SELECT * FROM ExamineeAnswer WHERE examineeSolutionId IS :solutionId AND questionId IS :questionId LIMIT 1")
+    ExamineeAnswer getBySolutionIdAndQuestionId(long solutionId, long questionId);
+
+    @Update
+    void update(ExamineeAnswer ea);
 }

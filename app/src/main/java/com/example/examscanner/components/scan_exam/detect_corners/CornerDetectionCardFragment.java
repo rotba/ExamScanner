@@ -2,19 +2,11 @@ package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -22,16 +14,11 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersFragmentDirections;
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
-import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 
 public class CornerDetectionCardFragment extends Fragment {

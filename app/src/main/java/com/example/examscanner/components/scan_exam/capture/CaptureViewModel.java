@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.repositories.Repository;
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
@@ -30,6 +29,7 @@ public class CaptureViewModel extends ViewModel {
     private ImageProcessingFacade imageProcessor;
     private long sessionId;
     private Exam exam;
+    private int[] versionNumers;
 
 
     public CaptureViewModel(Repository<ScannedCapture> scRepo, ImageProcessingFacade imageProcessor, long sessionId, Exam exam) {
@@ -103,6 +103,8 @@ public class CaptureViewModel extends ViewModel {
 
     public void postProcessCapture() {
 //        mNumOfProcessedCaptures.setValue(scRepo.get(sc -> sc.getSession() == sessionId).size());
+        mVersion.postValue(null);
+        mExamineeId.postValue(null);
         mNumOfProcessedCaptures.postValue(mNumOfProcessedCaptures.getValue()+1);
     }
 
@@ -124,7 +126,10 @@ public class CaptureViewModel extends ViewModel {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public int[] getVersionNumbers() {
-        return exam.getVersions().stream().mapToInt(Version::getNum).toArray();
+        if(versionNumers == null){
+            versionNumers = exam.getVersions().stream().mapToInt(Version::getNum).toArray();
+        }
+        return versionNumers;
     }
 
     public void setVersion(Integer intChoice) {

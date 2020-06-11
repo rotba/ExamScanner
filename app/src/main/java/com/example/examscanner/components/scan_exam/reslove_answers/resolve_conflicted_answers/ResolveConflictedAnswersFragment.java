@@ -3,10 +3,12 @@ package com.example.examscanner.components.scan_exam.reslove_answers.resolve_con
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,14 +28,18 @@ import com.example.examscanner.components.scan_exam.reslove_answers.RAViewModelF
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class ResolveConflictedAnswersFragment extends Fragment {
+    private static final String TAG = "ExamScanner";
+    private static final String MSH_PREF = "ResolveConflictedAnswersFragment::";
     private CornerDetectionViewModel cdViewModel;
     private int scanId;
+    private ProgressBar pb;
 
     @Nullable
     @Override
@@ -60,6 +66,8 @@ public class ResolveConflictedAnswersFragment extends Fragment {
                 );
             }
         });
+        pb = ((ProgressBar) view.findViewById(R.id.progressBar_ra));
+        pb.setVisibility(View.INVISIBLE);
         for (Button b : getChoiceButtons(view)) {
             b.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -69,8 +77,11 @@ public class ResolveConflictedAnswersFragment extends Fragment {
                     conflictedAnswersAdapter.getCurrentCAResolutionSubscriber().onResolution(c);
                     waitABitAndSwipeLeft(viewPager, conflictedAnswersAdapter);
                     if(!cdViewModel.getScannedCaptureById(scanId).getValue().hasMoreConflictedAnswers()){
-                        cdViewModel.commitResolutions(scanId);
-                        Navigation.findNavController(view).navigateUp();
+                        pb.setVisibility(View.VISIBLE);
+                        Completable.fromAction(()->cdViewModel.commitResolutions(scanId))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(()->Navigation.findNavController(view).navigateUp(), t -> Log.d(TAG, MSH_PREF,t));
                     }
                 }
             });

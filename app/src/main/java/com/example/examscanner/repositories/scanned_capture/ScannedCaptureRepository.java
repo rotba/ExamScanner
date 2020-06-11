@@ -114,7 +114,17 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
 
     @Override
     public void update(ScannedCapture scannedCapture) {
-
+        for (Answer a:scannedCapture.getAnswers()) {
+            comFacade.updateExamineeAnswer(
+                    scannedCapture.getId(),
+                    scannedCapture.getVersion().getQuestionByNumber(a.getAnsNum()).getId(),
+                    a.getSelection(),
+                    (int)(a.getLeft()*scannedCapture.getBm().getWidth()),
+                    (int)(a.getUp()*scannedCapture.getBm().getHeight()),
+                    (int)(a.getRight()*scannedCapture.getBm().getWidth()),
+                    (int)(a.getBottom()*scannedCapture.getBm().getHeight())
+            );
+        }
     }
 
     @Override

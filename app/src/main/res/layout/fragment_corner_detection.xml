@@ -78,7 +78,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button_cd_resolve"
+            android:id="@+id/button_cd_retake"
             android:layout_width="107dp"
             android:layout_height="73dp"
             android:background="@drawable/scan_exam_button"
@@ -98,7 +98,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/button_cd_resolve"
+            app:layout_constraintStart_toEndOf="@+id/button_cd_retake"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.509" />
 

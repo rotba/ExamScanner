@@ -51,4 +51,6 @@ public interface CommunicationFacade {
     public void removeExamineeSolutionFromCache(long id);
 
     public void deleteExamineeSolution(long id);
+
+    public void updateExamineeAnswer(long solutionId, long questionId ,int ans, int leftX, int upY, int rightX, int botY);
 }

@@ -74,7 +74,7 @@ public class CornerDetectionFragment extends Fragment {
 //            }
 //        });
         final Button approveButton = (Button) view.findViewById(R.id.button_cd_approve);
-        final Button retakeButton = (Button) view.findViewById(R.id.button_cd_resolve);
+        final Button retakeButton = (Button) view.findViewById(R.id.button_cd_retake);
         approveButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override

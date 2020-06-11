@@ -646,6 +646,31 @@ public class RealFacadeImple implements CommunicationFacade {
         remoteDb.offlineDeleteExamineeSolution(remoteId);
     }
 
+    @Override
+    public void updateExamineeAnswer(long solutionId, long questionId, int ans, int leftX, int upY, int rightX, int botY) {
+        ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
+        if(es == null){
+            throw new CommunicationException("examinee answer should be associated with an existing solution");
+        }
+
+        Question q = db.getQuestionDao().get(questionId);
+        if(q == null){
+            throw new CommunicationException("question should be associated with an existing solution");
+        }
+        ExamineeAnswer ea = db.getExamineeAnswerDao().getBySolutionIdAndQuestionId(solutionId, questionId);
+        if (ea == null) {
+            throw new CommunicationException("examinee answer should be associated with an existing solution");
+        }
+        ea.setAns(ans);
+        ea.setLeftX(leftX);
+        ea.setUpY(upY);
+        ea.setRightX(rightX);
+        ea.setBottomY(botY);
+        db.getExamineeAnswerDao().update(ea);
+        remoteDb.offlineUpdateAnswerIntoExamineeSolution(es.getExamineeId(), q.getQuestionNum(), ans);
+
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private ExamineeSolutionsEntityInterface toEntityInterface(ExamineeSolution examineeSolution) {
 //        SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(examineeSolution.getScannedCaptureId());
