@@ -40,6 +40,7 @@ public class CornerDetectionContext2Setuper {
     }
 
     private boolean PDF = false;
+
     protected Repository<Exam> examRepository;
     protected ImageProcessingFacade imageProcessor;
     //    protected Repository<CornerDetectedCapture> cdcRepo;
@@ -50,8 +51,9 @@ public class CornerDetectionContext2Setuper {
     protected CreateExamModelView ceModelView;
     protected final CornerDetectedCapture[] cdCaptures = new CornerDetectedCapture[1];
     protected Bitmap createExamBitmap;
+    private int i;
     private Bitmap theCDCBitmap;
-
+    private static ImageProcessingFacade imageProcessingFacadeStub;
     public CornerDetectionContext2Setuper(Bitmap cdcBitmap) {
         this.theCDCBitmap = cdcBitmap;
     }
@@ -64,9 +66,19 @@ public class CornerDetectionContext2Setuper {
     public CornerDetectionContext2Setuper() {
     }
 
+    public CornerDetectionContext2Setuper(Bitmap testJpg1, Bitmap testJpg11, int i) {
+        this.theCDCBitmap = testJpg1;
+        createExamBitmap = testJpg11;
+        this.i = i;
+    }
+
     public void setup() {
         OpenCVLoader.initDebug();
-        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(new ImageProcessor(getApplicationContext()));
+        if(imageProcessingFacadeStub == null){
+            ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(new ImageProcessor(getApplicationContext()));
+        }else{
+            ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(imageProcessingFacadeStub);
+        }
         imageProcessor = new ImageProcessingFactory().create();
         ceModelView = new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
@@ -77,7 +89,11 @@ public class CornerDetectionContext2Setuper {
         );
 
         dinaBarzilayVersion = 496351;
-        ceModelView.holdNumOfQuestions("50");
+        if(i!=0){
+            ceModelView.holdNumOfQuestions(String.valueOf(i));
+        }else{
+            ceModelView.holdNumOfQuestions("50");
+        }
         int numOfQuestions = ceModelView.getExam().getNumOfQuestions();
         if (createExamBitmap == null) {
             createExamBitmap = getOriginalVersionBitmap();
@@ -146,6 +162,7 @@ public class CornerDetectionContext2Setuper {
     }
 
     public void tearDown() {
+        imageProcessingFacadeStub = null;
 //        ((ExamRepositoryStub)examRepository).tearDown();
     }
 
@@ -179,5 +196,9 @@ public class CornerDetectionContext2Setuper {
 //    }
     public Capture getCapture() {
         return capture;
+    }
+
+    public static void setIOStub(ImageProcessingFacade imageProcessingFacade) {
+        imageProcessingFacadeStub = imageProcessingFacade;
     }
 }

@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -23,8 +24,10 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersFragmentDirections;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 
 
@@ -136,6 +139,14 @@ public class CornerDetectionCardFragment extends Fragment {
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
+        ((Button)view.findViewById(R.id.button_cd_resolve)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CornerDetectionFragmentDirections.ActionCornerDetectionFragmentToResolveConflictedAnswersFragment action = CornerDetectionFragmentDirections.actionCornerDetectionFragmentToResolveConflictedAnswersFragment();
+                action.setScanId(cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().getId());
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
     }
 
 //    private void onVersionNumbersRetrived(int[] versionNumbers) {

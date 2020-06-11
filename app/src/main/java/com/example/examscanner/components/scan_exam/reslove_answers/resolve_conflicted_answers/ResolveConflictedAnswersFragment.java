@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
 import com.example.examscanner.components.scan_exam.reslove_answers.RAViewModelFactory;
 
@@ -30,16 +31,16 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class ResolveConflictedAnswersFragment extends Fragment {
-    private ResolveAnswersViewModel resolveAnswersViewModel;
+    private CornerDetectionViewModel cdViewModel;
     private int scanId;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        scanId = ResolveConflictedAnswersFragmentArgs.fromBundle(getArguments()).getScanId();
+//        scanId = ResolveConflictedAnswersFragmentArgs.fromBundle(getArguments()).getScanId();
         RAViewModelFactory factory = new RAViewModelFactory(getActivity());
         View root = inflater.inflate(R.layout.fragment_resolve_one_scane, container, false);
-        resolveAnswersViewModel = new ViewModelProvider(getActivity(), factory).get(ResolveAnswersViewModel.class);
+        cdViewModel = new ViewModelProvider(getActivity(), factory).get(CornerDetectionViewModel.class);
         return root;
     }
 
@@ -47,14 +48,14 @@ public class ResolveConflictedAnswersFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ViewPager2 viewPager = (ViewPager2) view.findViewById(R.id.viewPager2_conflicted_answers);
         ConflictedAnswersAdapter conflictedAnswersAdapter =
-                new ConflictedAnswersAdapter(getActivity(), resolveAnswersViewModel.getScannedCapture(scanId), viewPager);
+                new ConflictedAnswersAdapter(getActivity(), cdViewModel.getScannedCaptureById(scanId), viewPager);
         viewPager.setAdapter(conflictedAnswersAdapter);
         conflictedAnswersAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onChanged(Integer integer) {
                 ((TextView) view.findViewById(R.id.textView_ca_current_position_feedback)).setText(
-                        integer + "/" + resolveAnswersViewModel.getScannedCapture(scanId).getValue().getConflictedAmount()
+                        integer + "/" + cdViewModel.getScannedCaptureById(scanId).getValue().getConflictedAmount()
                 );
             }
         });
@@ -89,7 +90,7 @@ public class ResolveConflictedAnswersFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        resolveAnswersViewModel.commitResolutions(scanId);
+        cdViewModel.commitResolutions(scanId);
         super.onDestroy();
     }
 

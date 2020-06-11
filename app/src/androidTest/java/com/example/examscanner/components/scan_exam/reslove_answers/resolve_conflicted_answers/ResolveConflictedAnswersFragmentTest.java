@@ -9,6 +9,7 @@ import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswe
 import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
 import com.example.examscanner.components.scan_exam.reslove_answers.ScannedCapturesInstancesFactory;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
@@ -30,7 +31,7 @@ import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static com.example.examscanner.Utils.currentVisChild;
 import static org.hamcrest.Matchers.allOf;
 
-@Ignore("NOT USING")
+
 public class ResolveConflictedAnswersFragmentTest {
     private ImageProcessingFacade imageProcessor;
     private Repository<ScannedCapture> repo;
@@ -38,6 +39,7 @@ public class ResolveConflictedAnswersFragmentTest {
     public void setUp() {
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(SCEmptyRepositoryFactory.create());
         imageProcessor = nullIP();
+        ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(imageProcessor);
         repo = new ScannedCaptureRepositoryFactory().create();
     }
 

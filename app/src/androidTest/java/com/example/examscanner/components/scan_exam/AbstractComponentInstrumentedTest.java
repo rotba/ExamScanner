@@ -1,5 +1,7 @@
 package com.example.examscanner.components.scan_exam;
 
+import android.os.Bundle;
+
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -35,9 +37,14 @@ public abstract class AbstractComponentInstrumentedTest {
     protected Runnable setupCallback = ()->{};
 
 
+    public static Bundle getBundle(){
+        MainActivity.testMode=true;
+        Bundle bundle = new Bundle();
+        return bundle;
+    }
     @Rule
     public ActivityScenarioRule<MainActivity> mainActivityScenarioRule =
-            new ActivityScenarioRule<MainActivity>(MainActivity.class);
+            new ActivityScenarioRule<MainActivity>(MainActivity.class,getBundle());
 
     @Before
     public void setUp() {
@@ -50,6 +57,7 @@ public abstract class AbstractComponentInstrumentedTest {
 
     @After
     public void tearDown() throws Exception {
+        MainActivity.testMode=false;
         AppDatabaseFactory.tearDownDb();
         RemoteDatabaseFacadeFactory.tearDown();
         CommunicationFacadeFactory.tearDown();

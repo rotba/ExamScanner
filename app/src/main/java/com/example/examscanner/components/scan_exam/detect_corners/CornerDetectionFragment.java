@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -75,7 +74,7 @@ public class CornerDetectionFragment extends Fragment {
 //            }
 //        });
         final Button approveButton = (Button) view.findViewById(R.id.button_cd_approve);
-        final Button retakeButton = (Button) view.findViewById(R.id.button_cd_retake);
+        final Button retakeButton = (Button) view.findViewById(R.id.button_cd_resolve);
         approveButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override

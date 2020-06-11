@@ -115,6 +115,15 @@
         <action
             android:id="@+id/action_cornerDetectionFragment_to_nav_home"
             app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_cornerDetectionFragment_to_resolveConflictedAnswersFragment"
+            app:destination="@id/resolveConflictedAnswersFragment" >
+            <argument
+                android:name="scanId"
+                android:defaultValue="-1L"
+                app:argType="long" />
+        </action>
+
 
     </fragment>
     <fragment
@@ -127,8 +136,8 @@
             app:destination="@id/resolveConflictedAnswersFragment">
             <argument
                 android:name="scanId"
-                android:defaultValue="-1"
-                app:argType="integer" />
+                android:defaultValue="-1L"
+                app:argType="long" />
         </action>
     </fragment>
     <fragment
@@ -137,7 +146,7 @@
         android:label="Resolve Conflicted Answers">
         <argument
             android:name="scanId"
-            android:defaultValue="-1"
-            app:argType="integer" />
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
 </navigation>

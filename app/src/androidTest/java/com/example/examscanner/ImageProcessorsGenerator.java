@@ -1,5 +1,6 @@
 package com.example.examscanner;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -8,9 +9,13 @@ import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndro
 import com.example.examscanner.components.scan_exam.reslove_answers.ScannedCapturesInstancesFactory;
 import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
+import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.image_processing.ImageProcessor;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 
 public class ImageProcessorsGenerator {
+    private static Context c;
+
     public static ImageProcessingFacade nullIP(){
         return new ImageProcessingFacade() {
             @Override
@@ -186,6 +191,54 @@ public class ImageProcessorsGenerator {
             @Override
             public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return bitmap;
+            }
+        };
+    }
+
+    public static ImageProcessingFacade halfFakeIP(Context c){
+        ImageProcessingFacade real = new ImageProcessor(c);
+        return new ImageProcessingFacade() {
+            @Override
+            public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
+                consumer.consume(new PointF(0,0),new PointF(0,0),new PointF(0,0),new PointF(0,0));
+            }
+
+            @Override
+            public Bitmap transformToRectangle(Bitmap bitmap, Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
+                return bitmap;
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
+                real.scanAnswers(bitmap,amountOfQuestions,consumer);
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
+                ScanAnswersConsumer wConsumer = new ScanAnswersConsumer() {
+                    @Override
+                    public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
+                        selections[5] = -1;
+                        selections[8] = -1;
+                        consumer.consume(numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections);
+                    }
+                };
+                real.scanAnswers(bitmap, amountOfQuestions, wConsumer, leftMostXs, upperMostYs);
+            }
+
+            @Override
+            public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
+                ScannedCapturesInstancesFactory.instance1(consumer);
+            }
+
+            @Override
+            public Bitmap align(Bitmap bitmap, Bitmap perfectExamImg) {
+                return real.align(bitmap, perfectExamImg);
+            }
+
+            @Override
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
+                return real.createFeedbackImage(bitmap, lefts, tops, selections, ids);
             }
         };
     }

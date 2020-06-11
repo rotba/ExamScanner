@@ -1,21 +1,16 @@
 package com.example.examscanner.components.scan_exam.capture_and_detect_corners;
 
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
 import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
-import com.example.examscanner.persistence.local.entities.Exam;
-import com.example.examscanner.persistence.local.entities.ExamCreationSession;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
-import com.example.examscanner.use_case_contexts_creators.Context2Setuper;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +18,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -193,7 +187,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
 //        onView(withId(R.id.button_cd_approve)).perform(click());
 //        sleepSwipingTime();
-        onView(withId(R.id.button_cd_retake)).perform(click());
+        onView(withId(R.id.button_cd_resolve)).perform(click());
         sleepMovingFromCaptureToDetectCorners();
         onView(withId(R.id.for_testing_fragment_capture_root)).check(matches(isDisplayed()));
         int numOfCaptures2 = 2;

@@ -699,7 +699,68 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testAddVersionRealIP</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1&quot;<br/>Got: &quot;TextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@385f6cd, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=927.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;<br/><br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTest.testAddVersion(CreateExamFragmentAbstractTest.java:62)<br/>at com.example.examscanner.components.create_exam.intergration_with_ip.CreateExamFragmentTest.testAddVersionRealIP(CreateExamFragmentTest.java:42)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1&quot;<br/>Got: &quot;TextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@385f6cd, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=927.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;<br/><br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1&quot;
+<br/>Got: &quot;TextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@385f6cd, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=927.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)
+<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTest.testAddVersion(CreateExamFragmentAbstractTest.java:62)
+<br/>at com.example.examscanner.components.create_exam.intergration_with_ip.CreateExamFragmentTest.testAddVersionRealIP(CreateExamFragmentTest.java:42)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)
+<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1&quot;
+<br/>Got: &quot;TextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@385f6cd, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=927.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)
+<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)
+<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -716,7 +777,71 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testOnCreatedExamItAddsToTheHomeAdapterRealIP</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1&quot;<br/>Got: &quot;AppCompatTextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@c80f14, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=913.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;<br/><br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.createExam(CreateExamFragmentAbstractTestStateFull.java:74)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testCreateOneExam(CreateExamFragmentAbstractTestStateFull.java:92)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testCreateCourse(CreateExamFragmentAbstractTestStateFull.java:99)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testOnCreatedExamItAddsToTheHomeAdapter(CreateExamFragmentAbstractTestStateFull.java:104)<br/>at com.example.examscanner.components.create_exam.intergration_with_ip.CreateExamFragmentTestStateFull.testOnCreatedExamItAddsToTheHomeAdapterRealIP(CreateExamFragmentTestStateFull.java:37)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1&quot;<br/>Got: &quot;AppCompatTextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@c80f14, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=913.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;<br/><br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1&quot;
+<br/>Got: &quot;AppCompatTextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@c80f14, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=913.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)
+<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.createExam(CreateExamFragmentAbstractTestStateFull.java:74)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testCreateOneExam(CreateExamFragmentAbstractTestStateFull.java:92)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testCreateCourse(CreateExamFragmentAbstractTestStateFull.java:99)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testOnCreatedExamItAddsToTheHomeAdapter(CreateExamFragmentAbstractTestStateFull.java:104)
+<br/>at com.example.examscanner.components.create_exam.intergration_with_ip.CreateExamFragmentTestStateFull.testOnCreatedExamItAddsToTheHomeAdapterRealIP(CreateExamFragmentTestStateFull.java:37)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)
+<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1&quot;
+<br/>Got: &quot;AppCompatTextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@c80f14, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=913.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)
+<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)
+<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -726,7 +851,71 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testOn2CreatedExamItAddsToTheHomeAdapterRealIP</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1&quot;<br/>Got: &quot;AppCompatTextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@32d77f4, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=913.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;<br/><br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.createExam(CreateExamFragmentAbstractTestStateFull.java:74)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testCreateOneExam(CreateExamFragmentAbstractTestStateFull.java:92)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testCreateCourse(CreateExamFragmentAbstractTestStateFull.java:99)<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testOn2CreatedExamItAddsToTheHomeAdapter(CreateExamFragmentAbstractTestStateFull.java:109)<br/>at com.example.examscanner.components.create_exam.intergration_with_ip.CreateExamFragmentTestStateFull.testOn2CreatedExamItAddsToTheHomeAdapterRealIP(CreateExamFragmentTestStateFull.java:43)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1&quot;<br/>Got: &quot;AppCompatTextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@32d77f4, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=913.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;<br/><br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1&quot;
+<br/>Got: &quot;AppCompatTextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@32d77f4, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=913.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)
+<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.createExam(CreateExamFragmentAbstractTestStateFull.java:74)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testCreateOneExam(CreateExamFragmentAbstractTestStateFull.java:92)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testCreateCourse(CreateExamFragmentAbstractTestStateFull.java:99)
+<br/>at com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.testOn2CreatedExamItAddsToTheHomeAdapter(CreateExamFragmentAbstractTestStateFull.java:109)
+<br/>at com.example.examscanner.components.create_exam.intergration_with_ip.CreateExamFragmentTestStateFull.testOn2CreatedExamItAddsToTheHomeAdapterRealIP(CreateExamFragmentTestStateFull.java:43)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)
+<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1&quot;
+<br/>Got: &quot;AppCompatTextView{id=2131231127, res-name=textView_number_of_versions_added, visibility=VISIBLE, width=74, height=84, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@32d77f4, tag=null, root-is-layout-requested=false, has-input-connection=true, editor-info=[inputType=0x2 imeOptions=0xc000005 privateImeOptions=null actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=null fieldId=0 fieldName=null extras=null hintLocales=null contentMimeTypes=null ], x=824.0, y=913.0, text=0, input-type=2, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)
+<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)
+<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -801,7 +990,137 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>onItemClick</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.NoMatchingViewException: No views in hierarchy found matching: with text: is &quot;Sign in with email&quot;<br/><br/>View Hierarchy:<br/>+&gt;DecorView{id=-1, visibility=VISIBLE, width=1080, height=1920, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=WM.LayoutParams{(0,0)(fillxfill) sim=#20 ty=1 fl=#81810100 pfl=0x20000 wanim=0x10302f6 needsMenuKey=2 colorMode=0}, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2}<br/>|<br/>+-&gt;LinearLayout{id=-1, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@2a493fd, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2}<br/>|<br/>+--&gt;ViewStub{id=16908679, res-name=action_mode_bar_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@7d848f2, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}<br/>|<br/>+--&gt;FrameLayout{id=-1, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@49795c0, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}<br/>|<br/>+---&gt;FitWindowsLinearLayout{id=2131230763, res-name=action_bar_root, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@6ea089f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2}<br/>|<br/>+----&gt;ViewStubCompat{id=2131230777, res-name=action_mode_bar_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@a404dec, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}<br/>|<br/>+----&gt;ContentFrameLayout{id=16908290, res-name=content, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@e74044a, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}<br/>|<br/>+-----&gt;DrawerLayout{id=2131230891, res-name=drawer_layout, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@a538831, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2}<br/>|<br/>+------&gt;CoordinatorLayout{id=-1, visibility=VISIBLE, width=1080, height=1731, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.drawerlayout.widget.DrawerLayout$LayoutParams@ff61b16, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=63.0, child-count=2}<br/>|<br/>+-------&gt;AppBarLayout{id=-1, visibility=VISIBLE, width=1080, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@c046e84, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}<br/>|<br/>+--------&gt;Toolbar{id=2131231148, res-name=toolbar, visibility=VISIBLE, width=1080, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=com.google.android.material.appbar.AppBarLayout$LayoutParams@49beef0, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=3}<br/>|<br/>+---------&gt;AppCompatTextView{id=-1, visibility=VISIBLE, width=142, height=71, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@6d20c69, tag=null, root-is-layout-requested=false, has-input-connection=false, x=189.0, y=38.0, text=Home, input-type=0, ime-target=false, has-links=false}<br/>|<br/>+---------&gt;AppCompatImageButton{id=-1, desc=Open navigation drawer, visibility=VISIBLE, width=147, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@96d76ee, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}<br/>|<br/>+---------&gt;ActionMenuView{id=-1, visibility=VISIBLE, width=105, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@9e90a1c, tag=null, root-is-layout-requested=false, has-input-connection=false, x=975.0, y=0.0, child-count=1}<br/>|<br/>+----------&gt;OverflowMenuButton{id=-1, desc=More options, visibility=VISIBLE, width=105, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.ActionMenuView$LayoutParams@6f60625, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=10.0}<br/>|<br/>+-------&gt;ConstraintLayout{id=-1, visibility=VISIBLE, width=1080, height=1584, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@be0ddab, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=147.0, child-count=1}<br/>|<br/>+--------&gt;FrameLayout{id=2131230995, res-name=nav_host_fragment, visibility=VISIBLE, width=1080, height=1584, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4a5dfa1, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}<br/>|<br/>+---------&gt;ConstraintLayout{id=2131230946, res-name=home, visibility=VISIBLE, width=1080, height=1584, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@b1fd4dd, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=3}<br/>|<br/>+----------&gt;RecyclerView{id=2131230910, res-name=exams_recycler_view, visibility=VISIBLE, width=1080, height=1584, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=true, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@f572852, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=0}<br/>|<br/>+----------&gt;ConstraintLayout{id=-1, visibility=VISIBLE, width=289, height=273, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4c0f420, tag=null, root-is-layout-requested=false, has-input-connection=false, x=791.0, y=1311.0, child-count=1}<br/>|<br/>+-----------&gt;FloatingActionButton{id=2131230919, res-name=floating_button_home_create_exam, visibility=VISIBLE, width=147, height=147, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@149e1d9, tag=null, root-is-layout-requested=false, has-input-connection=false, x=71.0, y=63.0}<br/>|<br/>+----------&gt;ProgressBar{id=2131231030, res-name=progressBar_home, visibility=INVISIBLE, width=126, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@61b779e, tag=null, root-is-layout-requested=false, has-input-connection=false, x=477.0, y=729.0}<br/>|<br/>+------&gt;NavigationView{id=2131230998, res-name=nav_view, visibility=INVISIBLE, width=735, height=1794, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.drawerlayout.widget.DrawerLayout$LayoutParams@911324c, tag=null, root-is-layout-requested=false, has-input-connection=false, x=-735.0, y=0.0, child-count=1}<br/>|<br/>+-------&gt;NavigationMenuView{id=2131230886, res-name=design_navigation_view, visibility=VISIBLE, width=735, height=1794, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@940dc76, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=5}<br/>|<br/>+--------&gt;LinearLayout{id=2131230999, res-name=navigation_header_container, visibility=VISIBLE, width=735, height=483, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@2c17ee4, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}<br/>|<br/>+---------&gt;LinearLayout{id=-1, visibility=VISIBLE, width=735, height=462, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@ad9f349, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=4}<br/>|<br/>+----------&gt;AppCompatImageView{id=2131230954, res-name=imageView, desc=Navigation header, visibility=VISIBLE, width=189, height=142, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@a63044e, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=42.0}<br/>|<br/>+----------&gt;AppCompatTextView{id=-1, visibility=VISIBLE, width=651, height=72, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@9ccc96f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=184.0, text=Android Studio, input-type=0, ime-target=false, has-links=false}<br/>|<br/>+----------&gt;AppCompatTextView{id=2131231111, res-name=textView, visibility=VISIBLE, width=477, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@c6bc67c, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=256.0, text=android.studio@android.com, input-type=0, ime-target=false, has-links=false}<br/>|<br/>+----------&gt;AppCompatButton{id=2131230827, res-name=button_main_activity_logout, visibility=VISIBLE, width=231, height=113, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@457b05, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=307.0, text=Logout, input-type=0, ime-target=false, has-links=false}<br/>|<br/>+--------&gt;NavigationMenuItemView{id=-1, visibility=VISIBLE, width=735, height=126, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@fecce68, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=483.0, child-count=2}<br/>|<br/>+---------&gt;AppCompatCheckedTextView{id=2131230885, res-name=design_menu_item_text, visibility=VISIBLE, width=651, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@b27c281, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=0.0, text=Home, input-type=0, ime-target=false, has-links=false, is-checked=true}<br/>|<br/>+---------&gt;ViewStub{id=2131230884, res-name=design_menu_item_action_area_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@df74f26, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}<br/>|<br/>+--------&gt;NavigationMenuItemView{id=-1, visibility=VISIBLE, width=735, height=126, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@a8d05bd, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=609.0, child-count=2}<br/>|<br/>+---------&gt;AppCompatCheckedTextView{id=2131230885, res-name=design_menu_item_text, visibility=VISIBLE, width=651, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@2f937b2, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=0.0, text=Gallery, input-type=0, ime-target=false, has-links=false, is-checked=false}<br/>|<br/>+---------&gt;ViewStub{id=2131230884, res-name=design_menu_item_action_area_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@8c12303, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}<br/>|<br/>+--------&gt;NavigationMenuItemView{id=-1, visibility=VISIBLE, width=735, height=126, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@5bf1cfe, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=735.0, child-count=2}<br/>|<br/>+---------&gt;AppCompatCheckedTextView{id=2131230885, res-name=design_menu_item_text, visibility=VISIBLE, width=651, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@7a8ec5f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=0.0, text=Slideshow, input-type=0, ime-target=false, has-links=false, is-checked=false}<br/>|<br/>+---------&gt;ViewStub{id=2131230884, res-name=design_menu_item_action_area_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@b6bc6ac, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}<br/>|<br/>+--------&gt;NavigationMenuItemView{id=-1, visibility=VISIBLE, width=735, height=126, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@219ef7b, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=861.0, child-count=2}<br/>|<br/>+---------&gt;AppCompatCheckedTextView{id=2131230885, res-name=design_menu_item_text, visibility=VISIBLE, width=651, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@24a198, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=0.0, text=Tools, input-type=0, ime-target=false, has-links=false, is-checked=false}<br/>|<br/>+---------&gt;ViewStub{id=2131230884, res-name=design_menu_item_action_area_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@c654df1, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}<br/>|<br/>+-&gt;View{id=16908336, res-name=navigationBarBackground, visibility=VISIBLE, width=1080, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@e47cdd6, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=1794.0}<br/>|<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:312)<br/>at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:173)<br/>at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:114)<br/>at com.example.examscanner.StateFullTest.login(StateFullTest.java:40)<br/>at com.example.examscanner.StateFullTest.setUp(StateFullTest.java:34)<br/>at com.example.examscanner.components.home.HomeFragmentTest.setUp(HomeFragmentTest.java:32)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:76)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/></span>
+<span class="stderr">androidx.test.espresso.NoMatchingViewException: No views in hierarchy found matching: with text: is &quot;Sign in with email&quot;
+<br/>
+<br/>View Hierarchy:
+<br/>+&gt;DecorView{id=-1, visibility=VISIBLE, width=1080, height=1920, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=WM.LayoutParams{(0,0)(fillxfill) sim=#20 ty=1 fl=#81810100 pfl=0x20000 wanim=0x10302f6 needsMenuKey=2 colorMode=0}, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2}
+<br/>|
+<br/>+-&gt;LinearLayout{id=-1, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@2a493fd, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2}
+<br/>|
+<br/>+--&gt;ViewStub{id=16908679, res-name=action_mode_bar_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@7d848f2, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}
+<br/>|
+<br/>+--&gt;FrameLayout{id=-1, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@49795c0, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}
+<br/>|
+<br/>+---&gt;FitWindowsLinearLayout{id=2131230763, res-name=action_bar_root, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@6ea089f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2}
+<br/>|
+<br/>+----&gt;ViewStubCompat{id=2131230777, res-name=action_mode_bar_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@a404dec, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}
+<br/>|
+<br/>+----&gt;ContentFrameLayout{id=16908290, res-name=content, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@e74044a, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}
+<br/>|
+<br/>+-----&gt;DrawerLayout{id=2131230891, res-name=drawer_layout, visibility=VISIBLE, width=1080, height=1794, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@a538831, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2}
+<br/>|
+<br/>+------&gt;CoordinatorLayout{id=-1, visibility=VISIBLE, width=1080, height=1731, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.drawerlayout.widget.DrawerLayout$LayoutParams@ff61b16, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=63.0, child-count=2}
+<br/>|
+<br/>+-------&gt;AppBarLayout{id=-1, visibility=VISIBLE, width=1080, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@c046e84, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}
+<br/>|
+<br/>+--------&gt;Toolbar{id=2131231148, res-name=toolbar, visibility=VISIBLE, width=1080, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=com.google.android.material.appbar.AppBarLayout$LayoutParams@49beef0, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=3}
+<br/>|
+<br/>+---------&gt;AppCompatTextView{id=-1, visibility=VISIBLE, width=142, height=71, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@6d20c69, tag=null, root-is-layout-requested=false, has-input-connection=false, x=189.0, y=38.0, text=Home, input-type=0, ime-target=false, has-links=false}
+<br/>|
+<br/>+---------&gt;AppCompatImageButton{id=-1, desc=Open navigation drawer, visibility=VISIBLE, width=147, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@96d76ee, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}
+<br/>|
+<br/>+---------&gt;ActionMenuView{id=-1, visibility=VISIBLE, width=105, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@9e90a1c, tag=null, root-is-layout-requested=false, has-input-connection=false, x=975.0, y=0.0, child-count=1}
+<br/>|
+<br/>+----------&gt;OverflowMenuButton{id=-1, desc=More options, visibility=VISIBLE, width=105, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.ActionMenuView$LayoutParams@6f60625, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=10.0}
+<br/>|
+<br/>+-------&gt;ConstraintLayout{id=-1, visibility=VISIBLE, width=1080, height=1584, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@be0ddab, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=147.0, child-count=1}
+<br/>|
+<br/>+--------&gt;FrameLayout{id=2131230995, res-name=nav_host_fragment, visibility=VISIBLE, width=1080, height=1584, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4a5dfa1, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}
+<br/>|
+<br/>+---------&gt;ConstraintLayout{id=2131230946, res-name=home, visibility=VISIBLE, width=1080, height=1584, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@b1fd4dd, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=3}
+<br/>|
+<br/>+----------&gt;RecyclerView{id=2131230910, res-name=exams_recycler_view, visibility=VISIBLE, width=1080, height=1584, has-focus=true, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=true, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@f572852, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=0}
+<br/>|
+<br/>+----------&gt;ConstraintLayout{id=-1, visibility=VISIBLE, width=289, height=273, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4c0f420, tag=null, root-is-layout-requested=false, has-input-connection=false, x=791.0, y=1311.0, child-count=1}
+<br/>|
+<br/>+-----------&gt;FloatingActionButton{id=2131230919, res-name=floating_button_home_create_exam, visibility=VISIBLE, width=147, height=147, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@149e1d9, tag=null, root-is-layout-requested=false, has-input-connection=false, x=71.0, y=63.0}
+<br/>|
+<br/>+----------&gt;ProgressBar{id=2131231030, res-name=progressBar_home, visibility=INVISIBLE, width=126, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@61b779e, tag=null, root-is-layout-requested=false, has-input-connection=false, x=477.0, y=729.0}
+<br/>|
+<br/>+------&gt;NavigationView{id=2131230998, res-name=nav_view, visibility=INVISIBLE, width=735, height=1794, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.drawerlayout.widget.DrawerLayout$LayoutParams@911324c, tag=null, root-is-layout-requested=false, has-input-connection=false, x=-735.0, y=0.0, child-count=1}
+<br/>|
+<br/>+-------&gt;NavigationMenuView{id=2131230886, res-name=design_navigation_view, visibility=VISIBLE, width=735, height=1794, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@940dc76, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=5}
+<br/>|
+<br/>+--------&gt;LinearLayout{id=2131230999, res-name=navigation_header_container, visibility=VISIBLE, width=735, height=483, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@2c17ee4, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1}
+<br/>|
+<br/>+---------&gt;LinearLayout{id=-1, visibility=VISIBLE, width=735, height=462, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@ad9f349, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=4}
+<br/>|
+<br/>+----------&gt;AppCompatImageView{id=2131230954, res-name=imageView, desc=Navigation header, visibility=VISIBLE, width=189, height=142, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@a63044e, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=42.0}
+<br/>|
+<br/>+----------&gt;AppCompatTextView{id=-1, visibility=VISIBLE, width=651, height=72, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@9ccc96f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=184.0, text=Android Studio, input-type=0, ime-target=false, has-links=false}
+<br/>|
+<br/>+----------&gt;AppCompatTextView{id=2131231111, res-name=textView, visibility=VISIBLE, width=477, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@c6bc67c, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=256.0, text=android.studio@android.com, input-type=0, ime-target=false, has-links=false}
+<br/>|
+<br/>+----------&gt;AppCompatButton{id=2131230827, res-name=button_main_activity_logout, visibility=VISIBLE, width=231, height=113, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@457b05, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=307.0, text=Logout, input-type=0, ime-target=false, has-links=false}
+<br/>|
+<br/>+--------&gt;NavigationMenuItemView{id=-1, visibility=VISIBLE, width=735, height=126, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@fecce68, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=483.0, child-count=2}
+<br/>|
+<br/>+---------&gt;AppCompatCheckedTextView{id=2131230885, res-name=design_menu_item_text, visibility=VISIBLE, width=651, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@b27c281, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=0.0, text=Home, input-type=0, ime-target=false, has-links=false, is-checked=true}
+<br/>|
+<br/>+---------&gt;ViewStub{id=2131230884, res-name=design_menu_item_action_area_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@df74f26, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}
+<br/>|
+<br/>+--------&gt;NavigationMenuItemView{id=-1, visibility=VISIBLE, width=735, height=126, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@a8d05bd, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=609.0, child-count=2}
+<br/>|
+<br/>+---------&gt;AppCompatCheckedTextView{id=2131230885, res-name=design_menu_item_text, visibility=VISIBLE, width=651, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@2f937b2, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=0.0, text=Gallery, input-type=0, ime-target=false, has-links=false, is-checked=false}
+<br/>|
+<br/>+---------&gt;ViewStub{id=2131230884, res-name=design_menu_item_action_area_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@8c12303, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}
+<br/>|
+<br/>+--------&gt;NavigationMenuItemView{id=-1, visibility=VISIBLE, width=735, height=126, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@5bf1cfe, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=735.0, child-count=2}
+<br/>|
+<br/>+---------&gt;AppCompatCheckedTextView{id=2131230885, res-name=design_menu_item_text, visibility=VISIBLE, width=651, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@7a8ec5f, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=0.0, text=Slideshow, input-type=0, ime-target=false, has-links=false, is-checked=false}
+<br/>|
+<br/>+---------&gt;ViewStub{id=2131230884, res-name=design_menu_item_action_area_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@b6bc6ac, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}
+<br/>|
+<br/>+--------&gt;NavigationMenuItemView{id=-1, visibility=VISIBLE, width=735, height=126, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.recyclerview.widget.RecyclerView$LayoutParams@219ef7b, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=861.0, child-count=2}
+<br/>|
+<br/>+---------&gt;AppCompatCheckedTextView{id=2131230885, res-name=design_menu_item_text, visibility=VISIBLE, width=651, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@24a198, tag=null, root-is-layout-requested=false, has-input-connection=false, x=42.0, y=0.0, text=Tools, input-type=0, ime-target=false, has-links=false, is-checked=false}
+<br/>|
+<br/>+---------&gt;ViewStub{id=2131230884, res-name=design_menu_item_action_area_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.LinearLayoutCompat$LayoutParams@c654df1, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0}
+<br/>|
+<br/>+-&gt;View{id=16908336, res-name=navigationBarBackground, visibility=VISIBLE, width=1080, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@e47cdd6, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=1794.0}
+<br/>|
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:312)
+<br/>at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:173)
+<br/>at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:114)
+<br/>at com.example.examscanner.StateFullTest.login(StateFullTest.java:40)
+<br/>at com.example.examscanner.StateFullTest.setUp(StateFullTest.java:34)
+<br/>at com.example.examscanner.components.home.HomeFragmentTest.setUp(HomeFragmentTest.java:32)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:76)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)
+<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -961,7 +1280,65 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testOnFinishProcessFragmentIsDiscarded2CapturesRealP</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1/1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1/1&quot;<br/>Got: &quot;TextView{id=2131231114, res-name=textView_cd_current_position, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@21567cf, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=15.0, text=2/2, input-type=0, ime-target=false, has-links=false}&quot;<br/><br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testOnFinishProcessFragmentIsDiscarded2Captures(CornerDetectionFragmentTest.java:252)<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testOnFinishProcessFragmentIsDiscarded2CapturesRealP(CornerDetectionFragmentTest.java:235)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1/1&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1/1&quot;<br/>Got: &quot;TextView{id=2131231114, res-name=textView_cd_current_position, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@21567cf, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=15.0, text=2/2, input-type=0, ime-target=false, has-links=false}&quot;<br/><br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1/1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1/1&quot;
+<br/>Got: &quot;TextView{id=2131231114, res-name=textView_cd_current_position, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@21567cf, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=15.0, text=2/2, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)
+<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testOnFinishProcessFragmentIsDiscarded2Captures(CornerDetectionFragmentTest.java:252)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testOnFinishProcessFragmentIsDiscarded2CapturesRealP(CornerDetectionFragmentTest.java:235)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1/1&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1/1&quot;
+<br/>Got: &quot;TextView{id=2131231114, res-name=textView_cd_current_position, visibility=VISIBLE, width=57, height=51, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@21567cf, tag=null, root-is-layout-requested=false, has-input-connection=false, x=512.0, y=15.0, text=2/2, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)
+<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)
+<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -996,7 +1373,64 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testProgressIndicator</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;is displayed on the screen to the user&#39; doesn&#39;t match the selected view.<br/>Expected: is displayed on the screen to the user<br/>Got: &quot;ProgressBar{id=2131231026, res-name=progressBar2_scanning_answers, visibility=INVISIBLE, width=126, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4bfa15b, tag=null, root-is-layout-requested=false, has-input-connection=false, x=338.0, y=393.0}&quot;<br/><br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testProgressIndicator(CornerDetectionFragmentTest.java:222)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: junit.framework.AssertionFailedError: &#39;is displayed on the screen to the user&#39; doesn&#39;t match the selected view.<br/>Expected: is displayed on the screen to the user<br/>Got: &quot;ProgressBar{id=2131231026, res-name=progressBar2_scanning_answers, visibility=INVISIBLE, width=126, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4bfa15b, tag=null, root-is-layout-requested=false, has-input-connection=false, x=338.0, y=393.0}&quot;<br/><br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;is displayed on the screen to the user&#39; doesn&#39;t match the selected view.
+<br/>Expected: is displayed on the screen to the user
+<br/>Got: &quot;ProgressBar{id=2131231026, res-name=progressBar2_scanning_answers, visibility=INVISIBLE, width=126, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4bfa15b, tag=null, root-is-layout-requested=false, has-input-connection=false, x=338.0, y=393.0}&quot;
+<br/>
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)
+<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testProgressIndicator(CornerDetectionFragmentTest.java:222)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: junit.framework.AssertionFailedError: &#39;is displayed on the screen to the user&#39; doesn&#39;t match the selected view.
+<br/>Expected: is displayed on the screen to the user
+<br/>Got: &quot;ProgressBar{id=2131231026, res-name=progressBar2_scanning_answers, visibility=INVISIBLE, width=126, height=126, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@4bfa15b, tag=null, root-is-layout-requested=false, has-input-connection=false, x=338.0, y=393.0}&quot;
+<br/>
+<br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)
+<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)
+<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -1011,7 +1445,65 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testProcessingFeedbackRealIP</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1/2&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1/2&quot;<br/>Got: &quot;TextView{id=2131231115, res-name=textView_cd_processing_progress, visibility=VISIBLE, width=139, height=66, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@d1f18ed, tag=null, root-is-layout-requested=false, has-input-connection=false, x=902.0, y=9.0, text=0/2, input-type=0, ime-target=false, has-links=false}&quot;<br/><br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testProcessingFeedback(CornerDetectionFragmentTest.java:206)<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testProcessingFeedbackRealIP(CornerDetectionFragmentTest.java:188)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1/2&quot;&#39; doesn&#39;t match the selected view.<br/>Expected: with text: is &quot;1/2&quot;<br/>Got: &quot;TextView{id=2131231115, res-name=textView_cd_processing_progress, visibility=VISIBLE, width=139, height=66, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@d1f18ed, tag=null, root-is-layout-requested=false, has-input-connection=false, x=902.0, y=9.0, text=0/2, input-type=0, ime-target=false, has-links=false}&quot;<br/><br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.base.DefaultFailureHandler$AssertionFailedWithCauseError: &#39;with text: is &quot;1/2&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1/2&quot;
+<br/>Got: &quot;TextView{id=2131231115, res-name=textView_cd_processing_progress, visibility=VISIBLE, width=139, height=66, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@d1f18ed, tag=null, root-is-layout-requested=false, has-input-connection=false, x=902.0, y=9.0, text=0/2, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at dalvik.system.VMStack.getThreadStackTrace(Native Method)
+<br/>at java.lang.Thread.getStackTrace(Thread.java:1538)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:88)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:314)
+<br/>at androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:297)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testProcessingFeedback(CornerDetectionFragmentTest.java:206)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentTest.testProcessingFeedbackRealIP(CornerDetectionFragmentTest.java:188)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: junit.framework.AssertionFailedError: &#39;with text: is &quot;1/2&quot;&#39; doesn&#39;t match the selected view.
+<br/>Expected: with text: is &quot;1/2&quot;
+<br/>Got: &quot;TextView{id=2131231115, res-name=textView_cd_processing_progress, visibility=VISIBLE, width=139, height=66, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@d1f18ed, tag=null, root-is-layout-requested=false, has-input-connection=false, x=902.0, y=9.0, text=0/2, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>
+<br/>at androidx.test.espresso.matcher.ViewMatchers.assertThat(ViewMatchers.java:539)
+<br/>at androidx.test.espresso.assertion.ViewAssertions$MatchesViewAssertion.check(ViewAssertions.java:103)
+<br/>at androidx.test.espresso.ViewInteraction$SingleExecutionViewAssertion.check(ViewInteraction.java:415)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:279)
+<br/>at androidx.test.espresso.ViewInteraction$2.call(ViewInteraction.java:265)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -1065,7 +1557,62 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionProgress</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.PerformException: Error performing &#39;single click&#39; on view &#39;with id: com.example.examscanner:id/button_cd_nav_to_resolve_answers&#39;.<br/>at androidx.test.espresso.PerformException$Builder.build(PerformException.java:82)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:79)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:312)<br/>at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:173)<br/>at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:114)<br/>at com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.DetectCornersAndResolveAnswersAbstractTest.testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionProgress(DetectCornersAndResolveAnswersAbstractTest.java:142)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: java.lang.RuntimeException: Action will not be performed because the target view does not match one or more of the following constraints:<br/>at least 90 percent of the view&#39;s area is displayed to the user.<br/>Target view: &quot;AppCompatButton{id=2131230817, res-name=button_cd_nav_to_resolve_answers, visibility=INVISIBLE, width=176, height=163, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@dadd3bc, tag=null, root-is-layout-requested=false, has-input-connection=false, x=883.0, y=80.0, text=, input-type=0, ime-target=false, has-links=false}&quot;<br/>at androidx.test.espresso.ViewInteraction.doPerform(ViewInteraction.java:245)<br/>at androidx.test.espresso.ViewInteraction.access$100(ViewInteraction.java:63)<br/>at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:153)<br/>at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:150)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.PerformException: Error performing &#39;single click&#39; on view &#39;with id: com.example.examscanner:id/button_cd_nav_to_resolve_answers&#39;.
+<br/>at androidx.test.espresso.PerformException$Builder.build(PerformException.java:82)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:79)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:312)
+<br/>at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:173)
+<br/>at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:114)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.DetectCornersAndResolveAnswersAbstractTest.testProcessedCornerDetectedCapturesConsistentBetweenFragmentsBackToCornerDetectionProgress(DetectCornersAndResolveAnswersAbstractTest.java:142)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)
+<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: java.lang.RuntimeException: Action will not be performed because the target view does not match one or more of the following constraints:
+<br/>at least 90 percent of the view&#39;s area is displayed to the user.
+<br/>Target view: &quot;AppCompatButton{id=2131230817, res-name=button_cd_nav_to_resolve_answers, visibility=INVISIBLE, width=176, height=163, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@dadd3bc, tag=null, root-is-layout-requested=false, has-input-connection=false, x=883.0, y=80.0, text=, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>at androidx.test.espresso.ViewInteraction.doPerform(ViewInteraction.java:245)
+<br/>at androidx.test.espresso.ViewInteraction.access$100(ViewInteraction.java:63)
+<br/>at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:153)
+<br/>at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:150)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -1075,7 +1622,62 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testProcessedCornerDetectedCapturesConsistentBetweenFragments</span>
 <ul>
 <li class="text">
-<span class="stderr">androidx.test.espresso.PerformException: Error performing &#39;single click&#39; on view &#39;with id: com.example.examscanner:id/button_cd_nav_to_resolve_answers&#39;.<br/>at androidx.test.espresso.PerformException$Builder.build(PerformException.java:82)<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:79)<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:312)<br/>at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:173)<br/>at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:114)<br/>at com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.DetectCornersAndResolveAnswersAbstractTest.testProcessedCornerDetectedCapturesConsistentBetweenFragments(DetectCornersAndResolveAnswersAbstractTest.java:128)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/>Caused by: java.lang.RuntimeException: Action will not be performed because the target view does not match one or more of the following constraints:<br/>at least 90 percent of the view&#39;s area is displayed to the user.<br/>Target view: &quot;AppCompatButton{id=2131230817, res-name=button_cd_nav_to_resolve_answers, visibility=INVISIBLE, width=176, height=163, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@7b57342, tag=null, root-is-layout-requested=false, has-input-connection=false, x=883.0, y=80.0, text=, input-type=0, ime-target=false, has-links=false}&quot;<br/>at androidx.test.espresso.ViewInteraction.doPerform(ViewInteraction.java:245)<br/>at androidx.test.espresso.ViewInteraction.access$100(ViewInteraction.java:63)<br/>at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:153)<br/>at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:150)<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)<br/>at android.os.Handler.handleCallback(Handler.java:790)<br/>at android.os.Handler.dispatchMessage(Handler.java:99)<br/>at android.os.Looper.loop(Looper.java:164)<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)<br/></span>
+<span class="stderr">androidx.test.espresso.PerformException: Error performing &#39;single click&#39; on view &#39;with id: com.example.examscanner:id/button_cd_nav_to_resolve_answers&#39;.
+<br/>at androidx.test.espresso.PerformException$Builder.build(PerformException.java:82)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:79)
+<br/>at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:51)
+<br/>at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:312)
+<br/>at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:173)
+<br/>at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:114)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.DetectCornersAndResolveAnswersAbstractTest.testProcessedCornerDetectedCapturesConsistentBetweenFragments(DetectCornersAndResolveAnswersAbstractTest.java:128)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)
+<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/>Caused by: java.lang.RuntimeException: Action will not be performed because the target view does not match one or more of the following constraints:
+<br/>at least 90 percent of the view&#39;s area is displayed to the user.
+<br/>Target view: &quot;AppCompatButton{id=2131230817, res-name=button_cd_nav_to_resolve_answers, visibility=INVISIBLE, width=176, height=163, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@7b57342, tag=null, root-is-layout-requested=false, has-input-connection=false, x=883.0, y=80.0, text=, input-type=0, ime-target=false, has-links=false}&quot;
+<br/>at androidx.test.espresso.ViewInteraction.doPerform(ViewInteraction.java:245)
+<br/>at androidx.test.espresso.ViewInteraction.access$100(ViewInteraction.java:63)
+<br/>at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:153)
+<br/>at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:150)
+<br/>at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+<br/>at android.os.Handler.handleCallback(Handler.java:790)
+<br/>at android.os.Handler.dispatchMessage(Handler.java:99)
+<br/>at android.os.Looper.loop(Looper.java:164)
+<br/>at android.app.ActivityThread.main(ActivityThread.java:6494)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+<br/>at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -1126,7 +1728,7 @@ jQuery.cookie = function(name, value, options) {
 <li class="level top failed open">
 <span><em class="time">
 <div class="time">6.24 s</div>
-</em>com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersANdResolveConflictsTest</span>
+</em>com.example.examscanner.components.scan_exam.detect_corners.ResolveConflictsTest</span>
 <ul>
 <li class="level test failed open">
 <span><em class="time">
@@ -1134,7 +1736,43 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>testConflictAndCheckedAMountUpdatesUponResolution</span>
 <ul>
 <li class="text">
-<span class="stderr">java.lang.NullPointerException: Attempt to read from field &#39;float android.graphics.PointF.x&#39; on a null object reference<br/>at com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture.&lt;init&gt;(CornerDetectedCapture.java:56)<br/>at com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersANdResolveConflictsTest$1.consume(ResolveAnswersANdResolveConflictsTest.java:70)<br/>at com.example.examscanner.ImageProcessorsGenerator$1.detectCorners(ImageProcessorsGenerator.java:18)<br/>at com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersANdResolveConflictsTest.setUp(ResolveAnswersANdResolveConflictsTest.java:67)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:76)<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/></span>
+<span class="stderr">java.lang.NullPointerException: Attempt to read from field &#39;float android.graphics.PointF.x&#39; on a null object reference
+<br/>at com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture.&lt;init&gt;(CornerDetectedCapture.java:56)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners.ResolveConflictsTest$1.consume(ResolveAnswersANdResolveConflictsTest.java:70)
+<br/>at com.example.examscanner.ImageProcessorsGenerator$1.detectCorners(ImageProcessorsGenerator.java:18)
+<br/>at com.example.examscanner.components.scan_exam.detect_corners.ResolveConflictsTest.setUp(ResolveAnswersANdResolveConflictsTest.java:67)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:76)
+<br/>at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+<br/>at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:48)
+<br/>at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/></span>
 </li>
 </ul>
 </li>
@@ -1230,7 +1868,45 @@ jQuery.cookie = function(name, value, options) {
 </em><em class="status">error</em>cornerDetectionTestWithRectangle</span>
 <ul>
 <li class="text">
-<span class="stderr">java.lang.IllegalArgumentException: Comparison method violates its general contract!<br/>at java.util.TimSort.mergeLo(TimSort.java:777)<br/>at java.util.TimSort.mergeAt(TimSort.java:514)<br/>at java.util.TimSort.mergeCollapse(TimSort.java:441)<br/>at java.util.TimSort.sort(TimSort.java:245)<br/>at java.util.Arrays.sort(Arrays.java:1498)<br/>at java.util.ArrayList.sort(ArrayList.java:1470)<br/>at com.example.examscanner.image_processing.ImageProcessor.orderPoints(ImageProcessor.java:667)<br/>at com.example.examscanner.image_processing.ImageProcessorTest.cornerDetectionTestWithRectangle(ImageProcessorTest.java:283)<br/>at java.lang.reflect.Method.invoke(Native Method)<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)<br/>at org.junit.runners.Suite.runChild(Suite.java:128)<br/>at org.junit.runners.Suite.runChild(Suite.java:27)<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)<br/></span>
+<span class="stderr">java.lang.IllegalArgumentException: Comparison method violates its general contract!
+<br/>at java.util.TimSort.mergeLo(TimSort.java:777)
+<br/>at java.util.TimSort.mergeAt(TimSort.java:514)
+<br/>at java.util.TimSort.mergeCollapse(TimSort.java:441)
+<br/>at java.util.TimSort.sort(TimSort.java:245)
+<br/>at java.util.Arrays.sort(Arrays.java:1498)
+<br/>at java.util.ArrayList.sort(ArrayList.java:1470)
+<br/>at com.example.examscanner.image_processing.ImageProcessor.orderPoints(ImageProcessor.java:667)
+<br/>at com.example.examscanner.image_processing.ImageProcessorTest.cornerDetectionTestWithRectangle(ImageProcessorTest.java:283)
+<br/>at java.lang.reflect.Method.invoke(Native Method)
+<br/>at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+<br/>at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+<br/>at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+<br/>at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+<br/>at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+<br/>at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+<br/>at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:146)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:128)
+<br/>at org.junit.runners.Suite.runChild(Suite.java:27)
+<br/>at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+<br/>at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+<br/>at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+<br/>at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+<br/>at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+<br/>at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+<br/>at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+<br/>at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+<br/>at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:388)
+<br/>at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2075)
+<br/></span>
 </li>
 </ul>
 </li>

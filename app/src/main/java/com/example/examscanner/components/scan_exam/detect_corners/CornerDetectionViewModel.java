@@ -156,4 +156,10 @@ public class CornerDetectionViewModel extends ViewModel {
     public long getExamId() {
         return exam.getId();
     }
+
+    public void commitResolutions(int scanId) {
+        ScannedCapture scannedCapture = getScannedCaptureById(scanId).getValue();
+        scannedCapture.commitResolutions();
+        getScannedCaptureById(scanId).setValue(scannedCapture);
+    }
 }

@@ -30,12 +30,16 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private MainActivityViewModel viewModel;
     private static boolean stubsMode = false;
+    public static boolean testMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
         if(stubsMode)StubsSetupManager.setup(getBaseContext());
+        if(testMode){
+            AppDatabaseFactory.setTestMode();
+        }
         OpenCVLoader.initDebug();
         ContextProvider.set(this.getApplicationContext());
         MainActivityViewModelFactory factory = new MainActivityViewModelFactory();

@@ -1,7 +1,8 @@
 package com.example.examscanner;
 
 
-import org.junit.Ignore;
+import com.example.examscanner.components.scan_exam.detect_corners.ResolveConflictsTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -27,7 +28,7 @@ import org.junit.runners.Suite;
                 com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModelTest.class,
                 com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.ip_integration.DetectCornersAndResolveAnswersTest.class,
                 com.example.examscanner.components.scan_exam.detect_corners_and_resolve_ans.unit.DetectCornersAndResolveAnswersTest.class,
-                com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersANdResolveConflictsTest.class,
+                ResolveConflictsTest.class,
                 com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersFragmentTest.class,
                 com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModelTest.class,
                 com.example.examscanner.components.scan_exam.reslove_answers.resolve_conflicted_answers.ResolveConflictedAnswersFragmentTest.class,
