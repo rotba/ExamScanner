@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
@@ -67,6 +68,10 @@ public class ResolveConflictedAnswersFragment extends Fragment {
                     Choice c = getChoice(b);
                     conflictedAnswersAdapter.getCurrentCAResolutionSubscriber().onResolution(c);
                     waitABitAndSwipeLeft(viewPager, conflictedAnswersAdapter);
+                    if(!cdViewModel.getScannedCaptureById(scanId).getValue().hasMoreConflictedAnswers()){
+                        cdViewModel.commitResolutions(scanId);
+                        Navigation.findNavController(view).navigateUp();
+                    }
                 }
             });
         }

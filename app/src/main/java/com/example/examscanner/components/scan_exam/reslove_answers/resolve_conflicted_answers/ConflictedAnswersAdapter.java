@@ -48,6 +48,8 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         resolutionSubscribers = new ArrayList<>();
     }
 
+
+
     public List<ResolutionSubscriber> getResolutionSubscribers() {
         return resolutionSubscribers;
     }

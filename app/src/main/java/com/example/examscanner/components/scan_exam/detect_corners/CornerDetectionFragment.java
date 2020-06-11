@@ -124,6 +124,7 @@ public class CornerDetectionFragment extends Fragment {
     private void onViewModelCreated() {
         cornerDetectionCapturesAdapter =
                 new CornerDetectionCapturesAdapter(
+                        getActivity(),
                         getActivity().getSupportFragmentManager(),
                         getActivity().getLifecycle(),
                         cornerDetectionViewModel.getPreProcessedCDCs(), viewPager);

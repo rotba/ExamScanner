@@ -25,6 +25,7 @@ public class ScannedCapture {
     private int id;
     private Future<Version> v;
     private String examineeId;
+    private boolean hasUpdatedFeedbackImage;
 
 
     public ScannedCapture(int id, Bitmap bm, int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, Version v, String examineeId) {
@@ -178,6 +179,59 @@ public class ScannedCapture {
             ans|=v.getId() == getVersion().getId();
         }
         return ans;
+    }
+
+    public boolean hasMoreConflictedAnswers() {
+        for (ConflictedAnswer ca:getConflictedAnswers()) {
+            if(! (ca instanceof ResolvedConflictedAnswer)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasUpdatedFeedbackImage() {
+        if(hasUpdatedFeedbackImage){
+            hasUpdatedFeedbackImage = false;
+            return true;
+        }
+        return hasUpdatedFeedbackImage;
+    }
+
+    public float[] getRelLefts() {
+        float[] ans = new float[getAnswers().size()];
+        for (int i = 1; i <=getAnswers().size() ; i++) {
+            ans[i-1] = getAnswerByNum(i).getLeft();
+        }
+        return ans;
+    }
+
+    public float[] getRelTops() {
+        float[] ans = new float[getAnswers().size()];
+        for (int i = 1; i <=getAnswers().size() ; i++) {
+            ans[i-1] = getAnswerByNum(i).getUp();
+        }
+        return ans;
+    }
+
+    public int[] getSelections() {
+        int[] ans = new int[getAnswers().size()];
+        for (int i = 1; i <=getAnswers().size() ; i++) {
+            ans[i-1] = getAnswerByNum(i).getSelection();
+        }
+        return ans;
+    }
+    public int[] getIds() {
+        int[] ans = new int[getAnswers().size()];
+        for (int i = 1; i <=getAnswers().size() ; i++) {
+            ans[i-1] = i;
+        }
+        return ans;
+    }
+
+    public void setBitmap(Bitmap feedbackImage) {
+        hasUpdatedFeedbackImage = true;
+        bm= feedbackImage;
     }
 
 

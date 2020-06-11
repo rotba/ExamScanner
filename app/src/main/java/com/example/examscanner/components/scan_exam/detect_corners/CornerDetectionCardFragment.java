@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -23,12 +24,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersFragmentDirections;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
+import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 
 public class CornerDetectionCardFragment extends Fragment {
@@ -40,6 +43,17 @@ public class CornerDetectionCardFragment extends Fragment {
     private boolean inProgress = false;
     private ProgressBar pb;
     private View root;
+    private Button resolveButton;
+
+
+    public void setImageView(Bitmap bm) {
+        if(imageView==null){
+            return;
+        }
+        this.imageView.setImageBitmap(bm);
+    }
+
+    private ImageView imageView;
 
     public CornerDetectionCardFragment(long id) {
         this.captureId = id;
@@ -58,9 +72,11 @@ public class CornerDetectionCardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         cornerDetectionViewModel = new ViewModelProvider(requireActivity()).get(CornerDetectionViewModel.class);
         root = inflater.inflate(R.layout.item_corner_detected_capture, container, false);
-        ((ImageView) root.findViewById(R.id.imageView2_corner_detected_capture)).setImageBitmap(
+        imageView = ((ImageView) root.findViewById(R.id.imageView2_corner_detected_capture));
+        imageView.setImageBitmap(
                 cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().getBm()
         );
+
 
         pb = ((ProgressBar) root.findViewById(R.id.progressBar2_scanning_answers));
         if (inProgress) {
@@ -108,6 +124,14 @@ public class CornerDetectionCardFragment extends Fragment {
 //        Log.d(TAG,MSG_PREF+ "::updateCDC");
 //    }
 
+
+
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("LongLogTag")
     @Override
@@ -139,14 +163,20 @@ public class CornerDetectionCardFragment extends Fragment {
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
-        ((Button)view.findViewById(R.id.button_cd_resolve)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CornerDetectionFragmentDirections.ActionCornerDetectionFragmentToResolveConflictedAnswersFragment action = CornerDetectionFragmentDirections.actionCornerDetectionFragmentToResolveConflictedAnswersFragment();
-                action.setScanId(cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().getId());
-                Navigation.findNavController(view).navigate(action);
-            }
-        });
+        resolveButton = ((Button) view.findViewById(R.id.button_cd_resolve));
+        if(cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().hasMoreConflictedAnswers()){
+            resolveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CornerDetectionFragmentDirections.ActionCornerDetectionFragmentToResolveConflictedAnswersFragment action = CornerDetectionFragmentDirections.actionCornerDetectionFragmentToResolveConflictedAnswersFragment();
+                    action.setScanId(cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().getId());
+                    Navigation.findNavController(view).navigate(action);
+                }
+            });
+        }else{
+            resolveButton.setVisibility(View.INVISIBLE);
+            resolveButton.setEnabled(false);
+        }
     }
 
 //    private void onVersionNumbersRetrived(int[] versionNumbers) {
@@ -193,6 +223,12 @@ public class CornerDetectionCardFragment extends Fragment {
         inProgress = false;
         if (pb == null) return;
         pb.setVisibility(View.INVISIBLE);
+    }
+
+    public void hideResolveButton() {
+        if(resolveButton==null)return;;
+        resolveButton.setVisibility(View.INVISIBLE);
+        resolveButton.setEnabled(false);
     }
 //
 //    private class CornerPointOnTouchListener implements View.OnTouchListener {

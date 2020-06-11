@@ -40,12 +40,12 @@ public class ResolvedAnswer extends Answer{
 
     @Override
     public float getLeft() {
-        return 0;
+        return upperLeft.x;
     }
 
     @Override
     public float getUp() {
-        return 0;
+        return upperLeft.y;
     }
 
     @Override

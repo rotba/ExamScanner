@@ -61,7 +61,7 @@ import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.ImageProcessorsGenerator.halfFakeIP;
 import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static org.hamcrest.Matchers.containsString;
-
+import static org.hamcrest.Matchers.not;
 
 
 public class ResolveConflictsTest extends StateFullTest {

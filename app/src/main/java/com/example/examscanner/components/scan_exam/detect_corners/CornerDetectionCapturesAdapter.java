@@ -5,10 +5,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -29,7 +31,7 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
 
 
 
-    public CornerDetectionCapturesAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, List<MutableLiveData<ScannedCapture>> scannedCaptures, ViewPager2 viewPager2) {
+    public CornerDetectionCapturesAdapter(FragmentActivity activity, @NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, List<MutableLiveData<ScannedCapture>> scannedCaptures, ViewPager2 viewPager2) {
         super(fragmentManager, lifecycle);
         cards = new ArrayList<>();
         for (MutableLiveData<ScannedCapture> mSc: scannedCaptures) {
@@ -40,6 +42,17 @@ public class CornerDetectionCapturesAdapter extends FragmentStateAdapter {
                             f
                     )
             );
+            mSc.observe(activity, new Observer<ScannedCapture>() {
+                @Override
+                public void onChanged(ScannedCapture scannedCapture) {
+                    if(mSc.getValue().hasUpdatedFeedbackImage()){
+                        f.setImageView(mSc.getValue().getBm());
+                    }
+                    if(!mSc.getValue().hasMoreConflictedAnswers()){
+                        f.hideResolveButton();
+                    }
+                }
+            });
         }
         this.viewPager2 = viewPager2;
         this.mPosition = new MutableLiveData<>(0);
