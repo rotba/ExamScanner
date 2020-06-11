@@ -193,7 +193,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 new DataSnapshot2Obj<Exam>() {
                     DataSnapshotList2ObjList<String> graderListConverter = iterable ->{
                         List<String> ans = new ArrayList<>();
-                        iterable.forEach(ds-> ans.add(ds.getKey()));
+                        iterable.forEach(ds-> ans.add(ds.getValue().toString()));
                         return ans;
                     };
                     @Override
