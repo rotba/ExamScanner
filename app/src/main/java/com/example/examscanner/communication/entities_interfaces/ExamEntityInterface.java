@@ -15,5 +15,6 @@ public interface ExamEntityInterface {
     public int getSemester();
     public int getNumOfQuestions();
     public String getManagerId();
+    public String[] getGradersIds();
 
 }

@@ -3,7 +3,10 @@ package com.example.examscanner.persistence.local.entities;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,9 +25,10 @@ public class Exam {
     private String remoteId;
     private int numberOfQuestions;
     private String managerId;
+    private String[] gradersIds;
 
 
-    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId) {
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId, String[] gradersIds) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
@@ -34,6 +38,7 @@ public class Exam {
         this.remoteId = remoteId;
         this.numberOfQuestions = numberOfQuestions;
         this.managerId = managerId;
+        this.gradersIds = gradersIds;
     }
 
     public String getUrl() {
@@ -111,5 +116,14 @@ public class Exam {
     public void setManagerId(String managerId) {
         this.managerId = managerId;
     }
+
+    public String[] getGradersIds() {
+        return gradersIds;
+    }
+
+    public void setGradersIds(String[] gradersIds) {
+        this.gradersIds = gradersIds;
+    }
+
 
 }

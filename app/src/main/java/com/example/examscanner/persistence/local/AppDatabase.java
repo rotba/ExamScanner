@@ -2,6 +2,7 @@ package com.example.examscanner.persistence.local;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.example.examscanner.persistence.local.daos.ExamCreationSessionDao;
 import com.example.examscanner.persistence.local.daos.ExamDao;
@@ -33,6 +34,10 @@ import com.example.examscanner.persistence.local.entities.Version;
         },
         version = 1
 )
+
+
+@TypeConverters(GenreConverter.class)
+
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ExamDao getExamDao();
     public abstract ScanExammSessionDao getScanExamSessionDao();
