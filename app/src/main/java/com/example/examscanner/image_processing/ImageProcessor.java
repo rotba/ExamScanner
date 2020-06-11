@@ -1012,7 +1012,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         }
 
         List<Integer> temp = result.values().stream().collect(Collectors.toList());
-        if (Math.abs(temp.get(0) - temp.get(1)) < 0.2 * sizeOfChunk ) {
+        if (Math.abs(temp.get(0) - temp.get(1)) < 0.1 * sizeOfChunk ) {
             return -1;
         }
 
