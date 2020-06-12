@@ -30,6 +30,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -332,32 +333,37 @@ public class CreateExamFragment extends Fragment {
 
     private void handleError(String errorPerefix, Throwable t){
         Log.d(TAG, errorPerefix, t);
-        new AlertDialog.Builder(getActivity())
-                .setTitle("An error occured")
-                .setMessage(String.format(
-                        "Please capture screen and inform the software development team.\nError content:\n" +
-                        "Tag: %s\n"+
-                        "Error prefix: %s\n"+
-                        "%s",
-                        TAG,
-                        errorPerefix,
-                        t.toString()
-                ))
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Navigation.findNavController(root).navigate(
-                                CreateExamFragmentDirections.actionCreateExamFragmentToNavHome()
-                        );
-                    }
-                })
-                .show();
+        try {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("An error occured")
+                    .setMessage(String.format(
+                            "Please capture screen and inform the software development team.\nError content:\n" +
+                                    "Tag: %s\n"+
+                                    "Error prefix: %s\n"+
+                                    "%s",
+                            TAG,
+                            errorPerefix,
+                            t.toString()
+                    ))
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Navigation.findNavController(root).navigate(
+                                    CreateExamFragmentDirections.actionCreateExamFragmentToNavHome()
+                            );
+                        }
+                    })
+                    .show();
+        }catch (Exception e){
+            Log.d(TAG, "Espressoissues", t);
+        }
         t.printStackTrace();
     }
 
 
     private void createModel() {
-        throw new RuntimeException();
+        CEViewModelFactory factory = new CEViewModelFactory(this.getActivity());
+        viewModel = new ViewModelProvider(this, factory).get(CreateExamModelView.class);
     }
 
     private void onModelCreated() {
