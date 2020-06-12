@@ -175,6 +175,11 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
+    public void updateUploaded(long id) {
+        realImpl.updateUploaded(id);
+    }
+
+    @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {
         return realImpl.getVersionByExamIdAndNumber(eId, num);
     }

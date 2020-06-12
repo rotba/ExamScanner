@@ -349,6 +349,16 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         );
     }
 
+    @Override
+    public void updateUploaded(String remoteId){
+        pushChildInPath(
+                String.format("%s/%s/%s",Paths.toExams, Paths.gUploaded, remoteId),
+                1,
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+    }
+
+
 
     private static Observable<String> pushChildInPath(String parent, Object obj, StoreTaskPostprocessor taskPostprocessor) {
         return storeObject(() -> FirebaseDatabaseFactory.get().getReference(parent).push(), obj,taskPostprocessor);

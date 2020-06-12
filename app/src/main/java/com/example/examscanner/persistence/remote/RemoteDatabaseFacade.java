@@ -36,4 +36,6 @@ public interface RemoteDatabaseFacade {
     public void addGraderIfAbsent(String email, String uId) ;
 
     public Observable<List<Exam>> getExamsOfGrader(String userId);
+
+    public void updateUploaded(String remoteId);
 }

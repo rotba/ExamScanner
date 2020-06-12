@@ -551,6 +551,11 @@ public class RealFacadeImple implements CommunicationFacade {
         }
     }
 
+    public void updateUploaded(long examId){
+        String remoteId = db.getExamDao().getExamWithVersions(examId).getExam().getRemoteId();
+        remoteDb.updateUploaded(remoteId);
+    }
+
     @SuppressLint("CheckResult")
     @Override
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {

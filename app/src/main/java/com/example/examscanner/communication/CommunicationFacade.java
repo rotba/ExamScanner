@@ -51,5 +51,7 @@ public interface CommunicationFacade {
     public void removeExamineeSolutionFromCache(long id);
 
     public void deleteExamineeSolution(long id);
-   // public ExamEntityInterface[] getExamsofGrader(String userId);
+
+    public void updateUploaded(long id);
+    // public ExamEntityInterface[] getExamsofGrader(String userId);
 }

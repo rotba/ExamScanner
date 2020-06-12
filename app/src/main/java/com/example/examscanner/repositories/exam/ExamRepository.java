@@ -100,6 +100,11 @@ public class ExamRepository implements Repository<Exam> {
         }
     }
 
+    public void updateUploaded(Exam exam) {
+        exam.setUploaded(1);
+        comFacade.updateUploaded(exam.getId());
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Exam exam) {
