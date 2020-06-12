@@ -19,7 +19,8 @@ public class ExamInstancesGenerator {
                 0,
                 0,
                 "1984",
-                QAD_NUM_OF_QUESTIONS
+                QAD_NUM_OF_QUESTIONS,
+                0
         );
         final Version v = new Version(
                 -1,

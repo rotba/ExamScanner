@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.session.ScanExamSession;
@@ -16,15 +17,19 @@ public class HomeViewModel extends ViewModel {
 
     private Repository<Exam> examRepository;
     private Repository<ScanExamSession> sesRepo;
+    private State state;
 
-    public HomeViewModel(Repository<Exam> examRepository, Repository<ScanExamSession> sesRepo) {
+    public HomeViewModel(Repository<Exam> examRepository, Repository<ScanExamSession> sesRepo, State state) {
          this.examRepository = examRepository;
         this.sesRepo = sesRepo;
+        this.state = state;
     }
 
     public List<LiveData<Exam>> getExams() {
         List<LiveData<Exam>>  mExams = new ArrayList<>();
-        for (Exam e :examRepository.get(e->true)) {
+        for (Exam e :examRepository.get(e ->
+                e.getManagerId().equals(state.getId()) || e.getGraders().stream()
+                        .anyMatch(g -> g.getId().equals(state.getId())))) {
             mExams.add(new MutableLiveData<>(e));
         }
         return mExams;

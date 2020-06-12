@@ -67,7 +67,7 @@ public class CommunicationFacadeTest {
     private ExamContext setUpExamContext() {
         long examCreationContext = oot.createNewCreateExamSession();
         return new ExamContext(
-                oot.createExam("COMP", "walla.co.il", "2020", 1, 1, currentUserId,new String[0],examCreationContext,QAD_NUM_OF_QUESTIONS)
+        oot.createExam("COMP", "walla.co.il", "2020", 1, 1, currentUserId,new String[0],examCreationContext,QAD_NUM_OF_QUESTIONS, 0)
         );
     }
 
@@ -106,7 +106,7 @@ public class CommunicationFacadeTest {
     @Test
     public void testCreateAndGetExamNotNull() {
         String[] graders = new String[]{};
-        long id = oot.createExam("COMP", "walla.co.il", "2020", 1, 1,currentUserId, graders,-1,QAD_NUM_OF_QUESTIONS);
+        long id = oot.createExam("COMP", "walla.co.il", "2020", 1, 1,currentUserId, graders,-1,QAD_NUM_OF_QUESTIONS, 0);
         assertNotNull(oot.getExamById(id));
     }
 
@@ -258,7 +258,7 @@ public class CommunicationFacadeTest {
         final int term = 1;
         final int semester = 1;
         final int sessionId = -1;
-        long id = oot.createExam(comp, url, year, term, semester,currentUserId,new String[0], sessionId,QAD_NUM_OF_QUESTIONS);
+        long id = oot.createExam(comp, url, year, term, semester,currentUserId,new String[0], sessionId,QAD_NUM_OF_QUESTIONS, 0);
         ExamEntityInterface ei = oot.getExamById(id);
         assertEquals(ei.getCourseName(), comp);
         assertEquals(ei.getUrl(), url);

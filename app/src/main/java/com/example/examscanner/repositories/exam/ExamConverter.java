@@ -5,6 +5,7 @@ import com.example.examscanner.communication.entities_interfaces.ExamEntityInter
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.repositories.Converter;
+import com.example.examscanner.repositories.grader.Grader;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,17 +25,23 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
 
     @Override
     public Exam convert(final ExamEntityInterface examEntityInterface) {
+        ArrayList<Grader> graders = new ArrayList<>();
+        for(String gId : examEntityInterface.getGradersIds())
+            // TODO: right now there is no access to the user email in here, replace null
+            graders.add(new Grader(null, gId));
         return new Exam(
-                null,
+                examEntityInterface.getManagerId(),
                 examEntityInterface.getID(),
                 toFutureVersions(examEntityInterface),
-                new ArrayList<>(),
+//                new ArrayList<>(),
+                graders,
                 examEntityInterface.getCourseName(),
                 examEntityInterface.getTerm(),
                 examEntityInterface.getSemester(),
                 examEntityInterface.getSessionId(),
                 examEntityInterface.getYear(),
-                examEntityInterface.getNumOfQuestions()
+                examEntityInterface.getNumOfQuestions(),
+                examEntityInterface.getUploaded()
         );
     }
 

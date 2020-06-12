@@ -1,12 +1,14 @@
 package com.example.examscanner.components.scan_exam.capture;
 
 
+import android.Manifest;
 import android.os.Bundle;
 import android.os.RemoteException;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
 
 import com.example.examscanner.R;
@@ -28,6 +30,7 @@ import com.example.examscanner.stubs.ExamStubFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -51,6 +54,14 @@ public class CaptureFragmentTest{
     private FragmentScenario<CaptureFragment> scenario;
     private UiDevice device;
     private Bundle b;
+
+    @Rule
+    public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    @Rule
+    public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    @Rule
+    public GrantPermissionRule camera = GrantPermissionRule.grant(Manifest.permission.CAMERA);
 
     @Before
     public void setUp() {

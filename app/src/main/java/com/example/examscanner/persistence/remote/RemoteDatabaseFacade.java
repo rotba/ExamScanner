@@ -17,7 +17,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 public interface RemoteDatabaseFacade {
-    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal , long sessionId, int numberOfQuestions);
+    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal , long sessionId, int numberOfQuestions, int uploaded);
     public Observable<String> addVersion(int num, String remoteExamId, String bitmapPath);
     public Observable<List<Grader>> getGraders();
     public Observable<List<Exam>> getExams();
@@ -32,5 +32,8 @@ public interface RemoteDatabaseFacade {
     public void offlineDeleteExamineeSolution(String remoteId);
     public void offlineInsertGradeIntoExamineeSolution(String examineeId, float grade);
     public void offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade);
+    public void addGraderIfAbsent(String email, String uId) ;
+    public Observable<List<Exam>> getExamsOfGrader(String userId);
     public void offlineUpdateAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans);
+    public void updateUploaded(String remoteId);
 }

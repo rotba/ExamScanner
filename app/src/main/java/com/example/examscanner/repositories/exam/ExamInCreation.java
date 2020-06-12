@@ -44,11 +44,12 @@ public class ExamInCreation extends Exam {
                 -1,
                 sessionId,
                 "THE_EMPTY_YEAR",
-                -1
+                -1,
+                0
         );
     }
 
-    public Exam commit(String userId, String courseName, int term, int semester, List<Grader>  graders, String year, String examUrl, int numberOfQuestions) {
+    public Exam commit(String userId, String courseName, int term, int semester, List<Grader>  graders, String year, String examUrl, int numberOfQuestions, int uploaded) {
         this.managerId = userId;
         this.courseName = courseName;
         this.term = term;
@@ -57,6 +58,7 @@ public class ExamInCreation extends Exam {
         this.graders = graders;
         this.url = examUrl;
         this.numOfQuestions = numberOfQuestions;
+        this.uploaded = uploaded;
         return this;
     }
 }

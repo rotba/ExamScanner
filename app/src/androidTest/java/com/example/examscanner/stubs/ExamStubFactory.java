@@ -34,7 +34,8 @@ public class ExamStubFactory {
                 1,
                 sessionId,
                 "2020",
-                QAD_NUM_OF_QUESTIONS
+                QAD_NUM_OF_QUESTIONS,
+                0
         );
         Future<List<Version>> fv = new Future<List<Version>>() {
             @Override

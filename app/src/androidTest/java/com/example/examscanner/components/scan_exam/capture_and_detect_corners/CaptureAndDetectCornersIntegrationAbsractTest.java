@@ -1,6 +1,10 @@
 package com.example.examscanner.components.scan_exam.capture_and_detect_corners;
 
 
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
+
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
@@ -20,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 import io.reactivex.observers.TestObserver;
@@ -42,6 +47,13 @@ import static org.hamcrest.Matchers.containsString;
 
 public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends StateFullTest {
     private CornerDetectionContext2Setuper context;
+    @Rule
+    public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    @Rule
+    public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    @Rule
+    public GrantPermissionRule camera = GrantPermissionRule.grant(Manifest.permission.CAMERA);
 
 //    private static final int QAD_NUM_OF_QUESTIONS = 50;
 //    private String test_course_name;

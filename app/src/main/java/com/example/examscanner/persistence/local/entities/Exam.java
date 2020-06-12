@@ -3,6 +3,11 @@ package com.example.examscanner.persistence.local.entities;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Exam {
@@ -19,9 +24,12 @@ public class Exam {
     private long examCreationSessionId;
     private String remoteId;
     private int numberOfQuestions;
+    private String managerId;
+    private String[] gradersIds;
+    private int uploaded;
 
 
-    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions) {
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId, String[] gradersIds, int uploaded) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
@@ -30,6 +38,9 @@ public class Exam {
         this.examCreationSessionId = examCreationSessionId;
         this.remoteId = remoteId;
         this.numberOfQuestions = numberOfQuestions;
+        this.managerId = managerId;
+        this.gradersIds = gradersIds;
+        this.uploaded = uploaded;
     }
 
     public String getUrl() {
@@ -99,4 +110,24 @@ public class Exam {
     public void setNumberOfQuestions(int numberOfQuestions) {
         this.numberOfQuestions = numberOfQuestions;
     }
+
+    public String  getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
+    }
+
+    public String[] getGradersIds() {
+        return gradersIds;
+    }
+
+    public void setGradersIds(String[] gradersIds) {
+        this.gradersIds = gradersIds;
+    }
+
+
+    public int getUploaded() { return uploaded;}
+    public void setUploaded(int uploaded) { this.uploaded = uploaded;}
 }

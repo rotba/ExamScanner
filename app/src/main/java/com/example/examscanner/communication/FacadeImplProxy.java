@@ -20,8 +20,8 @@ public class FacadeImplProxy implements CommunicationFacade {
     private RealFacadeImple realImpl  = RealFacadeImple.getInstance();
 
     @Override
-    public long createExam(String courseName, String url, String year, int term, int semester,String managerId, String[] graders, long sessionId,int numberOfQuestions) {
-        return realImpl.createExam(courseName, url, year, term, semester, managerId, graders,sessionId,numberOfQuestions);
+    public long createExam(String courseName, String url, String year, int term, int semester,String managerId, String[] graders, long sessionId,int numberOfQuestions, int uploaded) {
+        return realImpl.createExam(courseName, url, year, term, semester, managerId, graders,sessionId,numberOfQuestions, uploaded);
     }
 
     @Override
@@ -172,6 +172,11 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public void deleteExamineeSolution(long id) {
         realImpl.deleteExamineeSolution(id);
+    }
+
+    @Override
+    public void updateUploaded(long id) {
+        realImpl.updateUploaded(id);
     }
 
     @Override

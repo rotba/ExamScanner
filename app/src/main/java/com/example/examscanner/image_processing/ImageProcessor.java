@@ -563,10 +563,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -993,9 +995,10 @@ public class ImageProcessor implements ImageProcessingFacade {
         return showRedRectangles(sXs, sXs, mat, tempW, tempH);
     }
 
-    private int markedAnswer2(List<Mat> imgChunks) {
+    protected int markedAnswer2(List<Mat> imgChunks) {
         int maxBlack = 0;
-        int maxImg = 0;
+        Map<Integer, Integer> bp = new HashMap<>();
+        int sizeOfChunk = imgChunks.get(0).cols() * imgChunks.get(0).rows();
         for (int i = 0; i < imgChunks.size(); i++) {
             Mat currMat = imgChunks.get(i);
             //CONVERT IMAGE TO B&W AND DETERMINE IF IT HAS MORE BLACK OR WHITE
@@ -1005,16 +1008,26 @@ public class ImageProcessor implements ImageProcessingFacade {
             Core.bitwise_not(currMat, currMat);
             int non_black_pixels = Core.countNonZero(currMat);
             int black_pixels = currMat.rows() * currMat.cols() - non_black_pixels;
-            if (maxBlack < black_pixels) {
-                maxBlack = black_pixels;
-                maxImg = i + 1;
-            }
+            bp.put(i+1, black_pixels);
         }
 
-        return maxImg;
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<>(bp.entrySet());
+        list.sort(Map.Entry.<Integer, Integer>comparingByValue().reversed());
+
+        Map<Integer, Integer> result = new LinkedHashMap<>();
+        for (Map.Entry<Integer, Integer> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+
+        List<Integer> temp = result.values().stream().collect(Collectors.toList());
+        if (Math.abs(temp.get(0) - temp.get(1)) < 0.1 * sizeOfChunk ) {
+            return -1;
+        }
+
+        else return result.keySet().stream().collect(Collectors.toList()).get(0);
     }
 
-    private List<Mat> splitImage2(Mat mat, int chunkNumbers) {
+    protected List<Mat> splitImage2(Mat mat, int chunkNumbers) {
 
         List<Mat> chunkedImages = new ArrayList<Mat>(chunkNumbers);
         int sizeOfPart = mat.cols() / chunkNumbers;

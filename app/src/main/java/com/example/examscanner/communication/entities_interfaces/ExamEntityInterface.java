@@ -1,5 +1,9 @@
 package com.example.examscanner.communication.entities_interfaces;
 
+import com.example.examscanner.repositories.grader.Grader;
+
+import java.util.List;
+
 public interface ExamEntityInterface {
     public long getID();
     public long[] getVersionsIds();
@@ -10,4 +14,8 @@ public interface ExamEntityInterface {
     public long getSessionId();
     public int getSemester();
     public int getNumOfQuestions();
+    public String getManagerId();
+    public String[] getGradersIds();
+
+    public int getUploaded();
 }

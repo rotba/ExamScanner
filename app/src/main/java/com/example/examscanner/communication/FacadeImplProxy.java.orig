@@ -20,8 +20,8 @@ public class FacadeImplProxy implements CommunicationFacade {
     private RealFacadeImple realImpl  = RealFacadeImple.getInstance();
 
     @Override
-    public long createExam(String courseName, String url, String year, int term, int semester,String managerId, String[] graders, long sessionId,int numberOfQuestions) {
-        return realImpl.createExam(courseName, url, year, term, semester, managerId, graders,sessionId,numberOfQuestions);
+    public long createExam(String courseName, String url, String year, int term, int semester,String managerId, String[] graders, long sessionId,int numberOfQuestions, int uploaded) {
+        return realImpl.createExam(courseName, url, year, term, semester, managerId, graders,sessionId,numberOfQuestions, uploaded);
     }
 
     @Override
@@ -162,12 +162,9 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-<<<<<<< HEAD
     public void addExamineeGrade(long solutionId, long versionId, int[][] answers, float grade) {
         realImpl.addExamineeGrade(solutionId, versionId, answers, grade);
     }
-
-=======
     public void removeExamineeSolutionFromCache(long id) {
         realImpl.removeExamineeSolutionFromCache(id);
     }
@@ -176,7 +173,16 @@ public class FacadeImplProxy implements CommunicationFacade {
     public void deleteExamineeSolution(long id) {
         realImpl.deleteExamineeSolution(id);
     }
->>>>>>> origin/tmptmptmp
+
+    @Override
+<<<<<<< HEAD
+    public void updateExamineeAnswer(long solutionId, long questionId, int ans, int leftX, int upY, int rightX, int botY) {
+        realImpl.updateExamineeAnswer(solutionId, questionId, ans, leftX, upY, rightX, botY);
+=======
+    public void updateUploaded(long id) {
+        realImpl.updateUploaded(id);
+>>>>>>> grader_bugs
+    }
 
     @Override
     public VersionEntityInterface getVersionByExamIdAndNumber(long eId, int num) {

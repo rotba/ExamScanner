@@ -42,7 +42,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId, int numberOfQuestions) {
+    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId, int numberOfQuestions, int uploaded) {
         return pushChildInPath(
                 Paths.toExams,
                 new Exam(
@@ -54,7 +54,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         year,
                         seal,
                         url,
-                        numberOfQuestions
+                        numberOfQuestions,
+                        uploaded
                 ),
                 StoreTaskPostprocessor.getOnline()
         );
@@ -198,7 +199,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 new DataSnapshot2Obj<Exam>() {
                     DataSnapshotList2ObjList<String> graderListConverter = iterable ->{
                         List<String> ans = new ArrayList<>();
-                        iterable.forEach(ds-> ans.add(ds.getKey()));
+                        iterable.forEach(ds-> ans.add(ds.getValue().toString()));
                         return ans;
                     };
                     @Override
@@ -212,7 +213,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                                 ds.child(Exam.metaYear).getValue(String.class),
                                 ds.child(Exam.metaSeal).getValue(Boolean.class),
                                 ds.child(Exam.metaUrl).getValue(String.class),
-                                ds.child(Exam.metaqnum).getValue(Integer.class)
+                                ds.child(Exam.metaqnum).getValue(Integer.class),
+                                ds.child(Exam.metaUploaded).getValue(Integer.class)
                         );
                         exam._setId(ds.getKey());
                         return exam;
@@ -290,6 +292,59 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         };
     }
 
+
+    public void addGraderIfAbsent(String email, String uId) {
+        DatabaseReference ref = FirebaseDatabaseFactory.get().getReference(Paths.toGraders);
+        ref.orderByChild("userId").equalTo(uId).addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot){
+                if(dataSnapshot.exists()) {
+                    //username exist
+                }
+                else{
+                    createGrader(email, uId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public Observable<List<Exam>> getExamsOfGrader(String userId) {
+        return getChildrenOfRoot(
+                Paths.toExams,
+                new DataSnapshot2Obj<Exam>() {
+                    DataSnapshotList2ObjList<String> graderListConverter = iterable ->{
+                        List<String> ans = new ArrayList<>();
+                        iterable.forEach(ds-> ans.add(ds.getKey()));
+                        return ans;
+                    };
+                    @Override
+                    public Exam convert(DataSnapshot ds) {
+                        Exam exam = new Exam(
+                                ds.child(Exam.metaManager).getValue(String.class),
+                                graderListConverter.convert(ds.child(Exam.metaGraders).getChildren()),
+                                ds.child(Exam.metaCourseName).getValue(String.class),
+                                ds.child(Exam.metaSemester).getValue(Integer.class),
+                                ds.child(Exam.metaTerm).getValue(Integer.class),
+                                ds.child(Exam.metaYear).getValue(String.class),
+                                ds.child(Exam.metaSeal).getValue(Boolean.class),
+                                ds.child(Exam.metaUrl).getValue(String.class),
+                                ds.child(Exam.metaqnum).getValue(Integer.class),
+                                ds.child(Exam.metaUploaded).getValue(Integer.class)
+                        );
+                        exam._setId(ds.getKey());
+                        return exam;
+                    }
+                }
+        );
+    }
+
+
     @Override
     public Observable<String> createGrader(String email, String userId) {
         return pushChildInPath(
@@ -298,6 +353,16 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 StoreTaskPostprocessor.getOnline()
         );
     }
+
+    @Override
+    public void updateUploaded(String remoteId){
+        pushChildInPath(
+                String.format("%s/%s/%s",Paths.toExams, Paths.gUploaded, remoteId),
+                1,
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+    }
+
 
 
     private static Observable<String> pushChildInPath(String parent, Object obj, StoreTaskPostprocessor taskPostprocessor) {

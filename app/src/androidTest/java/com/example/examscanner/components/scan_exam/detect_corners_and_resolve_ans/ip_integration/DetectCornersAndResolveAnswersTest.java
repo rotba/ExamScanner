@@ -53,7 +53,7 @@ public class DetectCornersAndResolveAnswersTest extends DetectCornersAndResolveA
         return new CornerDetectionContext1Setuper(){
             @Override
             public void setup() {
-                e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020",QAD_NUM_OF_QUESTIONS);
+                e = new Exam(null,-1,Exam.theEmptyFutureVersionsList(),new ArrayList<>(),"theTestExamCourseName",0,0,0,"2020",QAD_NUM_OF_QUESTIONS, 0);
                 examRepository = new ExamRepositoryFactory().create();
                 dinaBarzilayVersion = 496351;
                 e.addVersion(new Version(-1, dinaBarzilayVersion,Version.toFuture(e),Version.theEmptyFutureQuestionsList(), BitmapsInstancesFactoryAndroidTest.getTestJpg1()));

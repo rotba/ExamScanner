@@ -76,7 +76,8 @@ public class ExamRepository implements Repository<Exam> {
                 exam.getManagerId(),
                 exam.getGradersIdentifiers(),
                 exam.getSessionId(),
-                exam.getNumOfQuestions()
+                exam.getNumOfQuestions(),
+                exam.getUploaded()
         );
         exam.setId(id);
         insertVersions(exam);
@@ -97,6 +98,11 @@ public class ExamRepository implements Repository<Exam> {
             );
             q.setId(qId);
         }
+    }
+
+    public void updateUploaded(Exam exam) {
+        exam.setUploaded(1);
+        comFacade.updateUploaded(exam.getId());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
