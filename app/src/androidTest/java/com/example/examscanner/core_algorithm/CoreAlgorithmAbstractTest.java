@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
+import com.example.examscanner.authentication.state.State;
+import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
 import com.example.examscanner.components.scan_exam.capture.Capture;
 import com.example.examscanner.components.scan_exam.capture.CaptureViewModel;
@@ -55,7 +57,7 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         FilesManagerFactory.setStubInstance(new FilesManagerStub());
         FirebaseDatabaseFactory.setTestMode();
-//        AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
+
         super.setUp();
         useCaseContext = getUseCaseContext();
         useCaseContext.setup();
@@ -70,12 +72,27 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
 
     @NotNull
     protected CornerDetectionContext2Setuper getUseCaseContext() {
-        return new CornerDetectionContext2Setuper();
+        return new CornerDetectionContext2Setuper(getState());
+    }
+
+    @NotNull
+    protected State getState() {
+        State[] ss = new State[1];
+        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
+            @Override
+            public void onNext(FirebaseAuth firebaseAuth) {
+                StateFactory.get().login(s->ss[0]=s, firebaseAuth);
+            }
+        };
+        AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
+        observer.awaitCount(1);
+        return ss[0];
     }
 
     @Override
     public void tearDown() throws Exception {
         useCaseContext.tearDown();
+        StateFactory.tearDown();
         super.tearDown();
     }
 

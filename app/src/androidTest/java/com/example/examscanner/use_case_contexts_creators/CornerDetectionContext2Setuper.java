@@ -3,7 +3,9 @@ package com.example.examscanner.use_case_contexts_creators;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 
+import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.authentication.state.StateFactory;
+import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.components.create_exam.CreateExamModelView;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.capture.Capture;
@@ -35,25 +37,12 @@ public class CornerDetectionContext2Setuper {
     private int someExamineeId = 123456;
     private Capture capture;
 
-    public void setPDF(boolean PDF) {
-        this.PDF = PDF;
+    public CornerDetectionContext2Setuper(State state, Bitmap comp191_v1_ins_1) {
+        this.state = state;
+
+        this.theCDCBitmap = comp191_v1_ins_1;
     }
 
-    private boolean PDF = false;
-
-    protected Repository<Exam> examRepository;
-    protected ImageProcessingFacade imageProcessor;
-    //    protected Repository<CornerDetectedCapture> cdcRepo;
-    protected Repository<ScannedCapture> scRepo;
-    protected long scanExamSession;
-    protected Exam e;
-    protected int dinaBarzilayVersion;
-    protected CreateExamModelView ceModelView;
-    protected final CornerDetectedCapture[] cdCaptures = new CornerDetectedCapture[1];
-    protected Bitmap createExamBitmap;
-    private int i;
-    private Bitmap theCDCBitmap;
-    private static ImageProcessingFacade imageProcessingFacadeStub;
     public CornerDetectionContext2Setuper(Bitmap cdcBitmap) {
         this.theCDCBitmap = cdcBitmap;
     }
@@ -65,6 +54,36 @@ public class CornerDetectionContext2Setuper {
 
     public CornerDetectionContext2Setuper() {
     }
+
+    public CornerDetectionContext2Setuper(State s) {
+        this.state =s;
+    }
+
+    public CornerDetectionContext2Setuper(State state, Bitmap comp191_v1_ins_9, Bitmap comp191_v1_ins_in1) {
+        this.state= state;
+        this.theCDCBitmap = comp191_v1_ins_9;
+        createExamBitmap = comp191_v1_ins_in1;
+    }
+
+    public void setPDF(boolean PDF) {
+        this.PDF = PDF;
+    }
+    private boolean PDF = false;
+    protected Repository<Exam> examRepository;
+    protected ImageProcessingFacade imageProcessor;
+    //    protected Repository<CornerDetectedCapture> cdcRepo;
+    protected Repository<ScannedCapture> scRepo;
+    protected long scanExamSession;
+    protected Exam e;
+    protected int dinaBarzilayVersion;
+    protected CreateExamModelView ceModelView;
+    protected final CornerDetectedCapture[] cdCaptures = new CornerDetectedCapture[1];
+    protected Bitmap createExamBitmap;
+    private int i;
+    private State state;
+    private Bitmap theCDCBitmap;
+
+    private static ImageProcessingFacade imageProcessingFacadeStub;
 
     public CornerDetectionContext2Setuper(Bitmap testJpg1, Bitmap testJpg11, int i) {
         this.theCDCBitmap = testJpg1;
@@ -84,7 +103,7 @@ public class CornerDetectionContext2Setuper {
                 new ExamRepositoryFactory().create(),
                 new GraderRepoFactory().create(),
                 imageProcessor,
-                StateFactory.get(),
+                state,
                 0
         );
 

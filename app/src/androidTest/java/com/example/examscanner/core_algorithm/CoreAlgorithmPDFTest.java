@@ -104,6 +104,7 @@ public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
     @Test
     public void scanAnswersByPositionsInsatnce10() {
         setupCallback = ()->new CornerDetectionContext2Setuper(
+                getState(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_10(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()
         );
@@ -114,6 +115,7 @@ public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
     @Test
     public void scanAnswersByPositionsInsatnce11() {
         setupCallback = ()->new CornerDetectionContext2Setuper(
+                getState(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_11(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()
         );
@@ -124,6 +126,7 @@ public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
     @Test
     public void scanAnswersByPositionsInsatnce12() {
         setupCallback = ()->new CornerDetectionContext2Setuper(
+                getState(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_12(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()
         );
@@ -134,6 +137,7 @@ public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
     @Test
     public void scanAnswersByPositionsInsatnce13() {
         setupCallback = ()->new CornerDetectionContext2Setuper(
+                getState(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_13(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()
         );
@@ -144,6 +148,7 @@ public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
     @Test
     public void scanAnswersByPositionsInsatnce14() {
         setupCallback = ()->new CornerDetectionContext2Setuper(
+                getState(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_14(),
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()
         );

@@ -70,14 +70,6 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         CameraMangerFactory.setStubInstance(new CameraManagerStub());
         setupCallback = () -> {
-            FirebaseDatabaseFactory.setTestMode();
-            TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
-                @Override
-                public void onNext(FirebaseAuth firebaseAuth) {
-                    firebaseAuth.getUid();
-                }
-            };
-            AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
             context = getContext();
             context.setup();
         };

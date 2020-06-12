@@ -11,4 +11,9 @@ public class StateFactory {
     static void setState(State s){
         instance = s;
     }
+
+    public static void tearDown() {
+        instance = null;
+
+    }
 }

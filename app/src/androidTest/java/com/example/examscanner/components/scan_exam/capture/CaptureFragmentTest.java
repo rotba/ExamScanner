@@ -129,6 +129,8 @@ public class CaptureFragmentTest{
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(null);
         scenario =FragmentScenario.launchInContainer(CaptureFragment.class, b);
         sleepCameraPreviewSetupTime();
+        sleepCameraPreviewSetupTime();
+        sleepCameraPreviewSetupTime();
         theNumberOfUnprocessedCapturesUpdates();
     }
 

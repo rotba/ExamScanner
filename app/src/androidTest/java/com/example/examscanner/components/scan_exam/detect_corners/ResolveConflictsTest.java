@@ -7,6 +7,9 @@ import androidx.test.rule.GrantPermissionRule;
 
 import com.example.examscanner.R;
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
+import com.example.examscanner.authentication.state.State;
+import com.example.examscanner.authentication.state.StateFactory;
+import com.example.examscanner.authentication.state.StateHolder;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.StateFullTest;
 import com.example.examscanner.Utils;
@@ -94,15 +97,6 @@ public class ResolveConflictsTest extends StateFullTest {
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(halfFakeIP(getApplicationContext()));
         CornerDetectionContext2Setuper.setIOStub(new ImageProcessingFactory().create());
         setupCallback = () -> {
-            FirebaseDatabaseFactory.setTestMode();
-            TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
-                @Override
-                public void onNext(FirebaseAuth firebaseAuth) {
-                    currentUserId = firebaseAuth.getUid();
-                }
-            };
-            AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
-            observer.awaitCount(1);
             context = getContext();
             context.setup();
         };
@@ -141,7 +135,23 @@ public class ResolveConflictsTest extends StateFullTest {
 
     @NotNull
     private CornerDetectionContext2Setuper getContext() {
-        return new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_1());
+        State[] ss = new State[1];
+        StateHolder sHolder = new StateHolder() {
+            @Override
+            public void setState(State s) {
+                ss[0] = s;
+            }
+        };
+        FirebaseDatabaseFactory.setTestMode();
+        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
+            @Override
+            public void onNext(FirebaseAuth firebaseAuth) {
+                StateFactory.get().login(sHolder, firebaseAuth);
+            }
+        };
+        AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
+        observer.awaitCount(1);
+        return new CornerDetectionContext2Setuper(ss[0] , BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_1());
     }
     private void navFromHomeToDetecteCornersUnderTestExam() {
         Utils.sleepSwipingTime();
