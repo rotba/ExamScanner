@@ -1,6 +1,7 @@
 package com.example.examscanner.components.scan_exam.reslove_answers.resolve_conflicted_answers;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentDirections;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
 import com.example.examscanner.components.scan_exam.reslove_answers.RAViewModelFactory;
@@ -40,13 +42,14 @@ public class ResolveConflictedAnswersFragment extends Fragment {
     private CornerDetectionViewModel cdViewModel;
     private int scanId;
     private ProgressBar pb;
+    private View root;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        scanId = ResolveConflictedAnswersFragmentArgs.fromBundle(getArguments()).getScanId();
         RAViewModelFactory factory = new RAViewModelFactory(getActivity());
-        View root = inflater.inflate(R.layout.fragment_resolve_one_scane, container, false);
+        root = inflater.inflate(R.layout.fragment_resolve_one_scane, container, false);
         cdViewModel = new ViewModelProvider(getActivity(), factory).get(CornerDetectionViewModel.class);
         return root;
     }
@@ -81,7 +84,7 @@ public class ResolveConflictedAnswersFragment extends Fragment {
                         Completable.fromAction(()->cdViewModel.commitResolutions(scanId))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(()->Navigation.findNavController(view).navigateUp(), t -> Log.d(TAG, MSH_PREF,t));
+                        .subscribe(()->Navigation.findNavController(view).navigateUp(), t ->handleError(MSH_PREF+" onClickedResolve",t));
                     }
                 }
             });
@@ -145,5 +148,30 @@ public class ResolveConflictedAnswersFragment extends Fragment {
         ans.add(view.findViewById(R.id.button_no_answer));
         return ans;
 
+    }
+
+    private void handleError(String errorPerefix, Throwable t) {
+        Log.d(TAG, errorPerefix, t);
+        new androidx.appcompat.app.AlertDialog.Builder(getActivity())
+                .setTitle("An error occured")
+                .setMessage(String.format(
+                        "Please capture screen and inform the software development team.\nError content:\n" +
+                                "Tag: %s\n" +
+                                "Error prefix: %s\n" +
+                                "%s",
+                        TAG,
+                        errorPerefix,
+                        t.toString()
+                ))
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Navigation.findNavController(root).navigate(
+                                ResolveConflictedAnswersFragmentDirections.actionResolveConflictedAnswersFragmentToNavHome()
+                        );
+                    }
+                })
+                .show();
+        t.printStackTrace();
     }
 }

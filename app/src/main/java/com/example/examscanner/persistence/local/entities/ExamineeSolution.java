@@ -21,11 +21,13 @@ public class ExamineeSolution {
     private long sessionId;
     @ForeignKey(entity = Version.class, parentColumns = Version.pkName, childColumns = fkVersion)
     private long versionId;
+    private String remoteId;
 
-    public ExamineeSolution(String examineeId, long sessionId, long versionId) {
+    public ExamineeSolution(String examineeId, long sessionId, long versionId, String remoteId) {
         this.examineeId = examineeId;
         this.sessionId = sessionId;
         this.versionId = versionId;
+        this.remoteId = remoteId;
     }
 
     public long getSessionId() {
@@ -63,4 +65,13 @@ public class ExamineeSolution {
     public String getBitmapPath() {
         return "SOLUTION_"+String.valueOf(id);
     }
+
+    public String getRemoteId() {
+        return remoteId;
+    }
+    public void setRemoteId(String remoteId) {
+        this.remoteId = remoteId;
+    }
+
+
 }

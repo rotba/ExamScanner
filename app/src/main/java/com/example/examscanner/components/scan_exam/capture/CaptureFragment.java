@@ -2,6 +2,7 @@ package com.example.examscanner.components.scan_exam.capture;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -33,6 +35,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
+import com.example.examscanner.components.create_exam.CreateExamFragmentDirections;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
@@ -64,6 +67,7 @@ public class CaptureFragment extends Fragment {
     private View.OnClickListener captureClickListener;
     private AtomicInteger inProgress;
     private ImageButton imageButton;
+    private View root;
     //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -71,7 +75,7 @@ public class CaptureFragment extends Fragment {
     @SuppressLint("ResourceType")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_capture, container, false);
+        root = inflater.inflate(R.layout.fragment_capture, container, false);
         cameraManager = new CameraMangerFactory(
                 getActivity(),
                 root
@@ -107,8 +111,7 @@ public class CaptureFragment extends Fragment {
     }
 
     private void onViewModelCreatedError(Throwable throwable) {
-        Log.d(TAG,MSG_PREF);
-        throwable.printStackTrace();
+        handleError(MSG_PREF + "onViewModelCreatedError", throwable);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -148,7 +151,8 @@ public class CaptureFragment extends Fragment {
                                 ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
                             }
 
-                        }
+                        },
+                        (pref, t) -> handleError(pref,t)
                 );
         captureClickListener = cameraManager.createCaptureClickListener(outputHander);
         imageButton = (ImageButton) getActivity().findViewById(R.id.capture_image_button);
@@ -174,6 +178,7 @@ public class CaptureFragment extends Fragment {
 //                imageButton.setEnabled(isValidExamineeIdAndVersion());
 //            }
 //        });
+//        Observable.fromCallable(() -> captureViewModel.getVersionNumbers())
         Observable.fromCallable(() -> captureViewModel.getVersionNumbers())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -191,6 +196,14 @@ public class CaptureFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {}
         });
+        String examineeId =  CaptureFragmentArgs.fromBundle(getArguments()).getExamineeId();
+//        long version =  CaptureFragmentArgs.fromBundle(getArguments()).getVersionId();
+//        spinner.set
+//        if(examineeId!= null && version != -1){
+        if(examineeId!= null && !examineeId.equals("null")){
+            ((EditText)getActivity().findViewById(R.id.editText_capture_examineeId)).
+                    setText(examineeId);
+        }
         ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture)).setVisibility(View.INVISIBLE);
     }
 
@@ -288,19 +301,40 @@ public class CaptureFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        String examineeId =  CaptureFragmentArgs.fromBundle(getArguments()).getExamineeId();
-//        long version =  CaptureFragmentArgs.fromBundle(getArguments()).getVersionId();
-//        spinner.set
-//        if(examineeId!= null && version != -1){
-        if(examineeId!= null && !examineeId.equals("null")){
-            ((EditText)getActivity().findViewById(R.id.editText_capture_examineeId)).
-                    setText(examineeId);
-        }
 
     }
 
     private void onVersionNumbersRetrivedError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF + " onVersionNumbersRetrivedError", throwable);
-        throwable.printStackTrace();
+        handleError(MSG_PREF + " onVersionNumbersRetrivedError", throwable);
     }
+
+    private void handleError(String errorPerefix, Throwable t){
+        Log.d(TAG, errorPerefix, t);
+        try {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("An error occured")
+                    .setMessage(String.format(
+                            "Please capture screen and inform the software development team.\nError content:\n" +
+                                    "Tag: %s\n"+
+                                    "Error prefix: %s\n"+
+                                    "%s",
+                            TAG,
+                            errorPerefix,
+                            t.toString()
+                    ))
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Navigation.findNavController(root).navigate(
+                                    CaptureFragmentDirections.actionCaptureFragmentToNavHome()
+                            );
+                        }
+                    })
+                    .show();
+        }catch (Exception e){
+            Log.d(TAG, "Espresso issues");
+        }
+        t.printStackTrace();
+    }
+
 }

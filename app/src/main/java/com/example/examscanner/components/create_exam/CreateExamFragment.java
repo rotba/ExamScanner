@@ -30,7 +30,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 
@@ -53,12 +53,13 @@ public class CreateExamFragment extends Fragment {
     private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
     private VersionImageGetter versionImageGetter;
-//    private SpreedsheetUrlGetter spreedsheetUrlGetter;
+    private View root;
+    //    private SpreedsheetUrlGetter spreedsheetUrlGetter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_create_exam, container, false);
+        root = inflater.inflate(R.layout.fragment_create_exam, container, false);
         versionImageGetter = new VersionImageGetterFactory().create();
 //        spreedsheetUrlGetter = SpreedsheetUrlGetterFactory.get();
         return root;
@@ -326,14 +327,37 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onModelCreatedError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF + "onModelCreatedError");
-        throwable.printStackTrace();
+        handleError(MSG_PREF+" onModelCreatedError", throwable);
+    }
+
+    private void handleError(String errorPerefix, Throwable t){
+        Log.d(TAG, errorPerefix, t);
+        new AlertDialog.Builder(getActivity())
+                .setTitle("An error occured")
+                .setMessage(String.format(
+                        "Please capture screen and inform the software development team.\nError content:\n" +
+                        "Tag: %s\n"+
+                        "Error prefix: %s\n"+
+                        "%s",
+                        TAG,
+                        errorPerefix,
+                        t.toString()
+                ))
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Navigation.findNavController(root).navigate(
+                                CreateExamFragmentDirections.actionCreateExamFragmentToNavHome()
+                        );
+                    }
+                })
+                .show();
+        t.printStackTrace();
     }
 
 
     private void createModel() {
-        CEViewModelFactory factory = new CEViewModelFactory(this.getActivity());
-        viewModel = new ViewModelProvider(this, factory).get(CreateExamModelView.class);
+        throw new RuntimeException();
     }
 
     private void onModelCreated() {
@@ -361,9 +385,9 @@ public class CreateExamFragment extends Fragment {
         dialog.show();
     }
 
-    private void onError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF + "onError", throwable);
-        throwable.printStackTrace();
+
+    private void onExamCreatedError(Throwable throwable) {
+        handleError(MSG_PREF + "onExamCreatedError", throwable);
     }
 
     private class CreateClickListener implements View.OnClickListener {
@@ -418,7 +442,7 @@ public class CreateExamFragment extends Fragment {
             Completable.fromAction(() -> create(courseName.getText().toString(), termString, semesterString, year.getText().toString()))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(CreateExamFragment.this::onExamCreated, CreateExamFragment.this::onError);
+                    .subscribe(CreateExamFragment.this::onExamCreated, CreateExamFragment.this::onExamCreatedError);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.N)

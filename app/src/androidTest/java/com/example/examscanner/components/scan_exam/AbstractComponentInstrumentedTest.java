@@ -35,6 +35,7 @@ public abstract class AbstractComponentInstrumentedTest {
     protected DBCallback dbCallback = (theDb -> {
     });
     protected Runnable setupCallback = ()->{};
+    public static boolean USINIG_REAL_DB = false;
 
 
     public static Bundle getBundle(){
@@ -49,7 +50,7 @@ public abstract class AbstractComponentInstrumentedTest {
     @Before
     public void setUp() {
         AppDatabaseFactory.setTestMode();
-        FirebaseDatabaseFactory.setTestMode();
+        if(!USINIG_REAL_DB)FirebaseDatabaseFactory.setTestMode();
         db = AppDatabaseFactory.getInstance();
         dbCallback.call(db);
         setupCallback.run();

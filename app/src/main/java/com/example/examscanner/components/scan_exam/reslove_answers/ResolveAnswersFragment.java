@@ -61,9 +61,9 @@ public class ResolveAnswersFragment extends Fragment {
         ((Button)getActivity().findViewById(R.id.button_ra_resolve_conflicts)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ResolveAnswersFragmentDirections.ActionFragmentResolveAnswersToResolveConflictedAnswersFragment action = ResolveAnswersFragmentDirections.actionFragmentResolveAnswersToResolveConflictedAnswersFragment();
-                action.setScanId(scannedCapturesAdapter.getCurrentScanId());
-                Navigation.findNavController(view).navigate(action);
+//                ResolveAnswersFragmentDirections.ActionFragmentResolveAnswersToResolveConflictedAnswersFragment action = ResolveAnswersFragmentDirections.actionFragmentResolveAnswersToResolveConflictedAnswersFragment();
+//                action.setScanId(scannedCapturesAdapter.getCurrentScanId());
+//                Navigation.findNavController(view).navigate(action);
             }
         });
     }

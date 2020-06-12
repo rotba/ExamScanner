@@ -91,8 +91,8 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade) {
-
+    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade) {
+        return Observable.fromCallable(()->{return "";});
     }
 
     @Override

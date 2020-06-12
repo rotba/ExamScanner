@@ -18,12 +18,14 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
     private final CompositeDisposable processRequestDisposableContainer;
     private OnBeggining cont;
     private OnEnding onEnd;
+    private OnError onError;
 
-    public CameraOutputHandlerImpl(CaptureViewModel captureViewModel, CompositeDisposable processRequestDisposableContainer, OnBeggining cont, OnEnding onEnd) {
+    public CameraOutputHandlerImpl(CaptureViewModel captureViewModel, CompositeDisposable processRequestDisposableContainer, OnBeggining cont, OnEnding onEnd, OnError onError) {
         this.captureViewModel = captureViewModel;
         this.processRequestDisposableContainer = processRequestDisposableContainer;
         this.cont = cont;
         this.onEnd = onEnd;
+        this.onError = onError;
     }
 
     @Override
@@ -49,8 +51,7 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
     }
 
     private void onCapturePtocessError(Throwable throwable) {
-        Log.d(TAG, MSG_PREF, throwable);
-        onEnd.cont();
+        onError.cont(MSG_PREF + "onCapturePtocessError", throwable);
     }
 
     private void onCaptureProcessed() {
@@ -67,5 +68,9 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
 
     public interface OnEnding {
         public void cont();
+    }
+
+    public interface OnError {
+        public void cont(String pref, Throwable t);
     }
 }

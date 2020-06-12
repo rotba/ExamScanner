@@ -11,8 +11,9 @@ public class CaptureAndDetectCornersIntegrationTest extends CaptureAndDetectCorn
     @NotNull
     @Override
     protected CornerDetectionContext2Setuper getContext() {
-        CornerDetectionContext2Setuper context2Setuper = new CornerDetectionContext2Setuper();
+        CornerDetectionContext2Setuper context2Setuper = new CornerDetectionContext2Setuper(getState());
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(null);
+        context2Setuper.setSCRepo(new ScannedCaptureRepositoryFactory().create());
         return context2Setuper;
     }
 

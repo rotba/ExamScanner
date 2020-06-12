@@ -64,7 +64,7 @@ public class CornerDetectionFragment extends Fragment {
         Completable.fromAction(this::createViewModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onViewModelCreated, this::onViewModelCreatedFail);
+                .subscribe(this::onViewModelCreated, this::onViewModelCreatedError);
         viewPager = (ViewPager2) view.findViewById(R.id.viewPager2_corner_detected_captures);
 //        ((Button) view.findViewById(R.id.button_cd_nav_to_resolve_answers)).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -168,9 +168,8 @@ public class CornerDetectionFragment extends Fragment {
         return cdc.hasVersion() && cornerDetectionCapturesAdapter.getItemId(cornerDetectionCapturesAdapter.getPosition().getValue()) == cdc.getId();
     }
 
-    private void onViewModelCreatedFail(Throwable throwable) {
-        Log.d(TAG, MSG_PREF, throwable);
-        throwable.printStackTrace();
+    private void onViewModelCreatedError(Throwable throwable) {
+        handleError(MSG_PREF+ "onViewModelCreatedError", throwable);
     }
 
     private void createViewModel() {
@@ -224,8 +223,7 @@ public class CornerDetectionFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, MSG_PREF + "::generateCaptureScanningCompletable", e);
-                        e.printStackTrace();
+                        handleError(MSG_PREF + "::generateCaptureScanningCompletable", e);
                     }
                 });
     }
@@ -243,6 +241,31 @@ public class CornerDetectionFragment extends Fragment {
                         viewPager.setCurrentItem(adapter.getPosition().getValue() + 1);
                     }
                 });
+    }
+
+    private void handleError(String errorPerefix, Throwable t){
+        Log.d(TAG, errorPerefix, t);
+        new androidx.appcompat.app.AlertDialog.Builder(getActivity())
+                .setTitle("An error occured")
+                .setMessage(String.format(
+                        "Please capture screen and inform the software development team.\nError content:\n" +
+                                "Tag: %s\n"+
+                                "Error prefix: %s\n"+
+                                "%s",
+                        TAG,
+                        errorPerefix,
+                        t.toString()
+                ))
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Navigation.findNavController(root).navigate(
+                                CornerDetectionFragmentDirections.actionCornerDetectionFragmentToNavHome()
+                        );
+                    }
+                })
+                .show();
+        t.printStackTrace();
     }
 
 

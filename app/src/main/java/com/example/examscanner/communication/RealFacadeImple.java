@@ -219,7 +219,12 @@ public class RealFacadeImple implements CommunicationFacade {
         if(v == null)
             throw new CommunicationException("This student solution's version is null");
         String remoteversionId = v.getRemoteVersionId();
-        remoteDb.offlineInsertExamineeSolutionTransaction(es.getExamineeId(), remoteversionId, answers, grade);
+        remoteDb.offlineInsertExamineeSolutionTransaction(es.getExamineeId(), remoteversionId, answers, grade).subscribe(
+                s->{
+                    es.setRemoteId(s);
+                    db.getExamineeSolutionDao().update(es);
+                }
+        );
        // remoteDb.offlineInsertGradeIntoExamineeSolution(es.getExamineeId(), grade);
        //return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
     }
@@ -600,6 +605,9 @@ public class RealFacadeImple implements CommunicationFacade {
     public ExamineeAnswerEntityInterface getAnswerById(long examineeAnswersId) {
         ExamineeAnswer answer = db.getExamineeAnswerDao().getById(examineeAnswersId);
         Question q = db.getQuestionDao().get(answer.getQuestionId());
+        if(q == null){
+            throw new CommunicationException("question should be assosicated with a wuestions");
+        }
         if (answer==null){
             throw new MyAssertionError(String.format("No answer with id:%d",examineeAnswersId));
         }
@@ -667,7 +675,7 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public void deleteExamineeSolution(long id) {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
-        String remoteId = es.getExamineeId();
+        String remoteId = es.getRemoteId();
         removeExamineeSolutionFromCache(id);
         es = null;
         remoteDb.offlineDeleteExamineeSolution(remoteId);
@@ -819,7 +827,7 @@ public class RealFacadeImple implements CommunicationFacade {
             throw new CommunicationException("This student solution's version is null");
         String remote_id = v.getRemoteVersionId();
        // remoteDb.offlineInsertExamineeSolution(examineeId, remote_id);
-        final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId);
+        final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId, null);
         try {
             final long ans = db.getExamineeSolutionDao().insert(es);
             es.setId(ans);

@@ -128,7 +128,9 @@ public class CornerDetectionContext2Setuper {
 
 
 //        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());
-        scRepo = SCEmptyRepositoryFactory.create();
+        if(scRepo ==null){
+            scRepo = SCEmptyRepositoryFactory.create();
+        }
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
         //   ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(scRepo);
 //        cdcRepo = new CDCRepositoryFacrory().create();
@@ -219,5 +221,9 @@ public class CornerDetectionContext2Setuper {
 
     public static void setIOStub(ImageProcessingFacade imageProcessingFacade) {
         imageProcessingFacadeStub = imageProcessingFacade;
+    }
+
+    public void setSCRepo(Repository<ScannedCapture> repository) {
+        scRepo=repository;
     }
 }

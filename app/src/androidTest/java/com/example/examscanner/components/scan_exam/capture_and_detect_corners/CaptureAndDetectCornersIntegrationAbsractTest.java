@@ -8,6 +8,8 @@ import androidx.test.rule.GrantPermissionRule;
 import com.example.examscanner.R;
 import com.example.examscanner.StateFullTest;
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
+import com.example.examscanner.authentication.state.State;
+import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
@@ -66,7 +68,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
 //            long examCreationSessionId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
 //            long eId = db.getExamDao().insert(new Exam(test_course_name,0,"TEST_year","TEST_url",0,examCreationSessionId, null,QAD_NUM_OF_QUESTIONS));
 //        };
-        RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
+        if(!USINIG_REAL_DB)RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         CameraMangerFactory.setStubInstance(new CameraManagerStub());
         setupCallback = () -> {
@@ -80,6 +82,20 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
     @After
     public void tearDown() throws Exception {
         super.tearDown();
+    }
+
+    @NotNull
+    protected State getState() {
+        State[] ss = new State[1];
+        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
+            @Override
+            public void onNext(FirebaseAuth firebaseAuth) {
+                StateFactory.get().login(s->ss[0]=s, firebaseAuth);
+            }
+        };
+        AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
+        observer.awaitCount(1);
+        return ss[0];
     }
 
     @NotNull
@@ -275,4 +291,5 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         onView(withText(R.string.stage_start_another_batch)).perform(click());
         onView(withId(R.id.for_testing_fragment_capture_root)).check(matches(isDisplayed()));
     }
+
 }

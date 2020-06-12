@@ -1,9 +1,11 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +36,7 @@ public class CornerDetectionCardFragment extends Fragment {
 
 
     public void setImageView(Bitmap bm) {
-        if(imageView==null){
+        if (imageView == null) {
             return;
         }
         this.imageView.setImageBitmap(bm);
@@ -112,8 +114,6 @@ public class CornerDetectionCardFragment extends Fragment {
 //    }
 
 
-
-
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -151,7 +151,7 @@ public class CornerDetectionCardFragment extends Fragment {
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
         resolveButton = ((Button) view.findViewById(R.id.button_cd_resolve));
-        if(cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().hasMoreConflictedAnswers()){
+        if (cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().hasMoreConflictedAnswers()) {
             resolveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -160,7 +160,7 @@ public class CornerDetectionCardFragment extends Fragment {
                     Navigation.findNavController(view).navigate(action);
                 }
             });
-        }else{
+        } else {
             resolveButton.setVisibility(View.INVISIBLE);
             resolveButton.setEnabled(false);
         }
@@ -205,7 +205,8 @@ public class CornerDetectionCardFragment extends Fragment {
         if (pb == null) return;
         pb.setVisibility(View.VISIBLE);
     }
-//
+
+    //
     public void onProcessingFinished() {
         inProgress = false;
         if (pb == null) return;
@@ -213,11 +214,13 @@ public class CornerDetectionCardFragment extends Fragment {
     }
 
     public void hideResolveButton() {
-        if(resolveButton==null)return;;
+        if (resolveButton == null) return;
+        ;
         resolveButton.setVisibility(View.INVISIBLE);
         resolveButton.setEnabled(false);
     }
-//
+
+    //
 //    private class CornerPointOnTouchListener implements View.OnTouchListener {
 //        float dX, dY;
 //        private int absoluteLeft;
@@ -350,4 +353,28 @@ public class CornerDetectionCardFragment extends Fragment {
 //
 //        }
 //    }
+    private void handleError(String errorPerefix, Throwable t) {
+        Log.d(TAG, errorPerefix, t);
+        new androidx.appcompat.app.AlertDialog.Builder(getActivity())
+                .setTitle("An error occured")
+                .setMessage(String.format(
+                        "Please capture screen and inform the software development team.\nError content:\n" +
+                                "Tag: %s\n" +
+                                "Error prefix: %s\n" +
+                                "%s",
+                        TAG,
+                        errorPerefix,
+                        t.toString()
+                ))
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Navigation.findNavController(root).navigate(
+                                CornerDetectionFragmentDirections.actionCornerDetectionFragmentToNavHome()
+                        );
+                    }
+                })
+                .show();
+        t.printStackTrace();
+    }
 }

@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import com.example.examscanner.persistence.local.entities.ExamineeSolution;
 import com.example.examscanner.persistence.local.entities.relations.ExamineeSolutionWithExamineeAnswers;
@@ -33,4 +34,7 @@ public interface ExamineeSolutionDao {
 
     @Delete
     public void delete(ExamineeSolution es);
+
+    @Update
+    void update(ExamineeSolution es);
 }
