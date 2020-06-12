@@ -125,6 +125,7 @@ public abstract class CreateExamModelViewAbstractTest {
         out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getExam50Qs());
         out.holdVersionNumber(3);
         out.addVersion();
+        out.holdExamUrl("/d/urlurk");
         out.create("testAddVersion()_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
         assertEquals(exams.size(),1);

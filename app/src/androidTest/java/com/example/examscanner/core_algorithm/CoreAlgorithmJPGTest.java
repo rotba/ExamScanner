@@ -3,10 +3,13 @@ package com.example.examscanner.core_algorithm;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
+
+import io.reactivex.observers.TestObserver;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,6 +24,12 @@ public class CoreAlgorithmJPGTest extends CoreAlgorithmAbstractTest {
     public void setUp() {}
 
     public void lateSetup() {
+//        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
+//            @Override
+//            public void onNext(FirebaseAuth firebaseAuth) {
+////                currentUserId = firebaseAuth.getUid();
+//            }
+//        };
         super.setUp();
     }
 

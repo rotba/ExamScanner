@@ -32,6 +32,7 @@ import static com.example.examscanner.Utils.currentVisChild;
 import static org.hamcrest.Matchers.allOf;
 
 
+@Ignore("Not using")
 public class ResolveConflictedAnswersFragmentTest {
     private ImageProcessingFacade imageProcessor;
     private Repository<ScannedCapture> repo;

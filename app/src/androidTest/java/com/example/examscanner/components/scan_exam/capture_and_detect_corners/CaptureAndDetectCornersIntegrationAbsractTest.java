@@ -101,40 +101,41 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
     }
 
 
-    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
-        navToCapture();
-        resumeYourLastSession();
-        sleepCameraPreviewSetupTime();
-        int numOfCaptures = 2;
-        for (int i = 0; i < numOfCaptures; i++) {
-            captureASolution();
-            sleepSingleCaptureProcessingTime();
-        }
-        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
-        sleepMovingFromCaptureToDetectCorners();
-        onView(withContentDescription("Navigate up")).perform(click());
-        sleepCameraPreviewSetupTime();
-        onView(withText("2/2")).check(matches(isDisplayed()));
-    }
+//    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
+//        navToCapture();
+//        resumeYourLastSession();
+//        sleepCameraPreviewSetupTime();
+//        int numOfCaptures = 2;
+//        for (int i = 0; i < numOfCaptures; i++) {
+//            captureASolution();
+//            sleepSingleCaptureProcessingTime();
+//        }
+//        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+//        sleepMovingFromCaptureToDetectCorners();
+//        onView(withContentDescription("Navigate up")).perform(click());
+//        sleepCameraPreviewSetupTime();
+//        onView(withText("2/2")).check(matches(isDisplayed()));
+//    }
 
 
-    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
-        navToCapture();
-        resumeYourLastSession();
-        sleepCameraPreviewSetupTime();
-        int numOfCaptures = 2;
-        for (int i = 0; i < numOfCaptures; i++) {
-            captureASolution();
-            sleepSingleCaptureProcessingTime();
-        }
-        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
-        sleepMovingFromCaptureToDetectCorners();
-        onView(withContentDescription("Navigate up")).perform(click());
-        sleepCameraPreviewSetupTime();
-        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
-        sleepMovingFromCaptureToDetectCorners();
-        onView(withText("1/2")).check(matches(isDisplayed()));
-    }
+//    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
+//        navToCapture();
+//        resumeYourLastSession();
+//        sleepCameraPreviewSetupTime();
+//        int numOfCaptures = 2;
+//        for (int i = 0; i < numOfCaptures; i++) {
+//            captureASolution();
+//            sleepSingleCaptureProcessingTime();
+//        }
+//        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+//        sleepMovingFromCaptureToDetectCorners();
+//        onView(withContentDescription("Navigate up")).perform(click());
+//        sleepCameraPreviewSetupTime();
+//        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+//        sleepMovingFromCaptureToDetectCorners();
+//        onView(withText("1/2")).check(matches(isDisplayed()));
+//    }
+
 
     @Test
     @Ignore("Crashes the program. TODO - FIXXXXX!!!!!")
@@ -196,6 +197,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         for (int i = 0; i < numOfCaptures; i++) {
             captureASolution();
             sleepSingleCaptureProcessingTime();
+            sleepSingleCaptureProcessingTime();
         }
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
 //        onView(withId(R.id.button_cd_approve)).perform(click());
@@ -206,6 +208,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         int numOfCaptures2 = 2;
         for (int i = 0; i < numOfCaptures2; i++) {
             captureASolution();
+            sleepSingleCaptureProcessingTime();
             sleepSingleCaptureProcessingTime();
         }
         sleepCameraPreviewSetupTime();

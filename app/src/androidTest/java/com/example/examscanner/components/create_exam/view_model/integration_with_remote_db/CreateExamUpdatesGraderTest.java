@@ -79,6 +79,7 @@ public class CreateExamUpdatesGraderTest {
         out.addGrader();
         out.holdNumOfQuestions("50");
         out.addVersion();
+        out.holdExamUrl("/durlurl");
         out.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
         assert 1 == exams.size();

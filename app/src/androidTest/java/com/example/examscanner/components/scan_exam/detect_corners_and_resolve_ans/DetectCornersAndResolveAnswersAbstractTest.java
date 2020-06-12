@@ -28,6 +28,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
+@Ignore("Not using")
 public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFullTest {
     protected CornerDetectionContext1Setuper usecaseContext;
     protected abstract CornerDetectionContext1Setuper createContext();

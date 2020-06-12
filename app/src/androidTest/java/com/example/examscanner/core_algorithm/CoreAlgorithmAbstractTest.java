@@ -54,13 +54,7 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
         RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         FilesManagerFactory.setStubInstance(new FilesManagerStub());
-//        FirebaseDatabaseFactory.setTestMode();
-//        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
-//            @Override
-//            public void onNext(FirebaseAuth firebaseAuth) {
-////                currentUserId = firebaseAuth.getUid();
-//            }
-//        };
+        FirebaseDatabaseFactory.setTestMode();
 //        AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
         super.setUp();
         useCaseContext = getUseCaseContext();

@@ -33,10 +33,10 @@ public class CaptureAndDetectCornersIntegrationTest extends CaptureAndDetectCorn
         return new CornerDetectionContext2Setuper();
     }
 
-    @Test
-    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
-        super.testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture();
-    }
+//    @Test
+//    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture() {
+//        super.testTheAppStateStaysUpdatedWhenNavigatingForthAndBackBetweenCornerDetAndCapture();
+//    }
 
     @Test
     public void testRetake() {
@@ -44,10 +44,10 @@ public class CaptureAndDetectCornersIntegrationTest extends CaptureAndDetectCorn
     }
 
 
-    @Test
-    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
-        super.testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture();
-    }
+//    @Test
+//    public void testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture() {
+//        super.testTheAppStateStaysUpdatedWhenNavigatingForthAndBacAndForthkBetweenCornerDetAndCapture();
+//    }
 
 
     @Test
