@@ -10,4 +10,5 @@ public interface RemoteFilesManager {
     public Observable<byte[]> get(String path);
     public void tearDown();
     public void setTestMode();
+    public Observable<String> createUrl(String pathToRemoteBm);
 }

@@ -22,12 +22,14 @@ public class ExamineeSolution {
     @ForeignKey(entity = Version.class, parentColumns = Version.pkName, childColumns = fkVersion)
     private long versionId;
     private String remoteId;
+    private boolean examineeIdOccupied;
 
     public ExamineeSolution(String examineeId, long sessionId, long versionId, String remoteId) {
         this.examineeId = examineeId;
         this.sessionId = sessionId;
         this.versionId = versionId;
         this.remoteId = remoteId;
+        examineeIdOccupied = false;
     }
 
     public long getSessionId() {
@@ -74,4 +76,11 @@ public class ExamineeSolution {
     }
 
 
+    public void setExamineeIdOccupied(boolean b) {
+        examineeIdOccupied = b;
+    }
+
+    public boolean isExamineeIdOccupied() {
+        return examineeIdOccupied;
+    }
 }

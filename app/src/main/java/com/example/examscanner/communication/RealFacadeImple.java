@@ -2,10 +2,10 @@ package com.example.examscanner.communication;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -41,13 +41,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.example.examscanner.persistence.remote.files_management.Utils.toBitmap;
 import static com.example.examscanner.persistence.remote.files_management.Utils.toByteArray;
@@ -57,6 +58,7 @@ public class RealFacadeImple implements CommunicationFacade {
     private static final long DONT_SAVE_BITMAP = -1;
     private static final int QAD_NUM_OF_QUESTIONS = 50;
     private static RealFacadeImple instance;
+    private final String TAG = "ExamScanner";
     private AppDatabase db;
     private FilesManager fm;
     private RemoteFilesManager rfm;
@@ -96,6 +98,7 @@ public class RealFacadeImple implements CommunicationFacade {
             String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId, numberOfQuestions, uploaded)
                     .blockingFirst();
             long ans = db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions, managerId, graders, uploaded));
+            Log.d(TAG, String.format("examid %d was created", ans));
             return ans;
         } catch (Throwable e) {
             /*TODO - delete exam*/
@@ -218,17 +221,51 @@ public class RealFacadeImple implements CommunicationFacade {
         Version v = db.getVersionDao().getById(versionId);
         if(v == null)
             throw new CommunicationException("This student solution's version is null");
+        Exam e = db.getExamDao().getById(v.getExamId());
+        throwCommunicationExceptionWhenNull(e,Exam.class,  String.format("id is %d", v.getExamId()));
         String remoteversionId = v.getRemoteVersionId();
-        remoteDb.offlineInsertExamineeSolutionTransaction(es.getExamineeId(), remoteversionId, answers, grade).subscribe(
-                s->{
-                    es.setRemoteId(s);
-                    db.getExamineeSolutionDao().update(es);
-                }
-        );
-       // remoteDb.offlineInsertGradeIntoExamineeSolution(es.getExamineeId(), grade);
-       //return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
+        remoteDb.insertExamineeIDOrReturnNull(e.getRemoteId(), es.getExamineeId())
+        .subscribe(
+                result-> handleExamineeIdSuccessInsertion(result,es,remoteversionId,answers, grade,e.getRemoteId()),
+                throwable -> {throw new CommunicationException(throwable);}
+                );
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId) {
+        String examineeId = es.getExamineeId();
+        if(result==null){
+            es.setExamineeIdOccupied(true);
+            byte[] array = new byte[7];
+            new Random().nextBytes(array);
+            examineeId+=new String(array, Charset.forName("UTF-8"));
+            es.setExamineeId(examineeId);
+        }
+        final String finalExamineeID = examineeId;
+        String bitmapPath = PathsGenerator.genExamineeSolution(remoetExamId, examineeId);
+        try {
+            rfm.store(bitmapPath , toByteArray(fm.get(es.getBitmapPath()))).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+            .subscribe(
+                    () -> handleSolutionBitmapStorageSuccess(bitmapPath,es, finalExamineeID, remoteversionId, answers, grade),
+                    throwable -> {throw new CommunicationException(throwable);}
+            );
+        } catch (FileNotFoundException e) {
+            throw new CommunicationException(e);
+        }
+    }
+
+    private void handleSolutionBitmapStorageSuccess(String bitmapPath, ExamineeSolution es, String finalExamineeID, String remoteversionId, int[][] answers, float grade) {
+        rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+          url ->{
+              remoteDb.offlineInsertExamineeSolutionTransaction(finalExamineeID, remoteversionId, answers, grade,url).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+                      s->{
+                          es.setRemoteId(s);
+                          db.getExamineeSolutionDao().update(es);
+                      }
+              );
+          }
+        );
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -252,6 +289,7 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public ExamEntityInterface getExamById(long id) {
         Exam theExam = db.getExamDao().getById(id);
+        throwCommunicationExceptionWhenNull(theExam, Exam.class, String.format("id is %d, db info: %s",id, db.toString()));
         return examEntity2EntityInterface(theExam);
     }
 
@@ -561,6 +599,25 @@ public class RealFacadeImple implements CommunicationFacade {
         remoteDb.updateUploaded(remoteId);
     }
 
+    @Override
+    public Observable<String> observeExamineeIds(long id) {
+        Exam e = db.getExamDao().getById(id);
+        throwCommunicationExceptionWhenNull(e,Exam.class, String.format("id is %d", id));
+        return remoteDb.observeExamineeIds(e.getRemoteId());
+    }
+
+    private void throwCommunicationExceptionWhenNull(Object o,Class c , String msg) {
+        if(o ==null){
+            throw new CommunicationException(
+                    String.format(
+                            "The entity associated with %s ahould not be null\nmsg:%s",
+                            c.toString(),
+                            msg
+                    )
+            );
+        }
+    }
+
     @SuppressLint("CheckResult")
     @Override
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
@@ -757,6 +814,11 @@ public class RealFacadeImple implements CommunicationFacade {
             public long[] getExamineeAnswersIds() {
                 return finalAnswers.stream().mapToLong(ExamineeAnswer::getId).toArray();
             }
+
+            @Override
+            public boolean getExamieeIdIsOccupiedByAnotherSolution() {
+                return examineeSolution.isExamineeIdOccupied();
+            }
         };
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -823,8 +885,7 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public long createExamineeSolution(long session, Bitmap bm, String examineeId, long versionId) {
         Version v = db.getVersionDao().getById(versionId);
-        if(v == null)
-            throw new CommunicationException("This student solution's version is null");
+        throwCommunicationExceptionWhenNull(v, Version.class, String.format("This student solution's version is null, verid:%d",versionId));
         String remote_id = v.getRemoteVersionId();
        // remoteDb.offlineInsertExamineeSolution(examineeId, remote_id);
         final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId, null);

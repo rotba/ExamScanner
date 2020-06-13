@@ -1,5 +1,6 @@
 package com.example.examscanner.persistence.remote.files_management;
 
+import android.net.Uri;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -89,6 +90,28 @@ class RemoteFilesManagerImpl implements RemoteFilesManager {
             ans = "test/"+path;
         }
         return ans;
+    }
+
+    @Override
+    public Observable<String> createUrl(String pathToRemoteBm) {
+        return new Observable<String>() {
+            @Override
+            protected void subscribeActual(Observer<? super String> observer) {
+                storage.getReference(pathToRemoteBm).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        observer.onNext(uri.toString());
+                        observer.onComplete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        observer.onError(e);
+                        observer.onComplete();
+                    }
+                });
+            }
+        };
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -2,6 +2,7 @@ package com.example.examscanner.use_case_contexts_creators;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.util.Log;
 
 import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.authentication.state.StateFactory;
@@ -36,6 +37,7 @@ import static org.junit.Assert.assertEquals;
 public class CornerDetectionContext2Setuper {
     private int someExamineeId = 123456;
     private Capture capture;
+    private String TAG = "ExamScanner";;
 
     public CornerDetectionContext2Setuper(State state, Bitmap comp191_v1_ins_1) {
         this.state = state;
@@ -125,6 +127,8 @@ public class CornerDetectionContext2Setuper {
         examRepository = new ExamRepositoryFactory().create();
         List<Exam> exams = examRepository.get((e) -> true);
         e = exams.get(0);
+
+        Log.d(TAG, String.format("TEST:contextSetup, examid is %d was created succefully", e.getId()));
 
 
 //        CDCRepositoryFacrory.ONLYFORTESTINGsetTestInstance(DCEmptyRepositoryFactory.create());

@@ -9,5 +9,6 @@ public interface ExamineeSolutionsEntityInterface {
     public long getSessionId();
     public long getVersionId();
     public long[] getExamineeAnswersIds();
+    public boolean getExamieeIdIsOccupiedByAnotherSolution();
 
 }

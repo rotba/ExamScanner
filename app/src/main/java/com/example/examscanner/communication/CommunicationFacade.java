@@ -14,6 +14,8 @@ import com.example.examscanner.repositories.scanned_capture.Answer;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+
 public interface CommunicationFacade {
     public long createExam(String courseName, String url, String year, int term, int semester,String mangerId, String[] gradersIdentifiers ,long sessionId, int numberOfQuestions, int uploaded);
     public long getExamIdByScanExamSession(long sId);
@@ -54,5 +56,7 @@ public interface CommunicationFacade {
 
     public void updateExamineeAnswer(long solutionId, long questionId ,int ans, int leftX, int upY, int rightX, int botY);
     public void updateUploaded(long id);
+
+    Observable<String> observeExamineeIds(long id);
     // public ExamEntityInterface[] getExamsofGrader(String userId);
 }

@@ -34,4 +34,9 @@ public class RemoteFilesManagerStub implements RemoteFilesManager {
     public void setTestMode() {
 
     }
+
+    @Override
+    public Observable<String> createUrl(String pathToRemoteBm) {
+        return Observable.fromCallable(()->"");
+    }
 }

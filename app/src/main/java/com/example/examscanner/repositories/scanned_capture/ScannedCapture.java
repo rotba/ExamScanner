@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 public class ScannedCapture {
     private List<Answer> answers;
     private Bitmap bm;
+    private boolean isExamieeIdIsOccupiedByAnotherSolution;
     private int id;
     private Future<Version> v;
     private String examineeId;
@@ -51,12 +52,13 @@ public class ScannedCapture {
 
 
 
-    public ScannedCapture(long id, Bitmap bitmap, List<Answer> answers, Future<Version> fV, String exaimneeId) {
+    public ScannedCapture(long id, Bitmap bitmap, List<Answer> answers, Future<Version> fV, String exaimneeId, boolean isExamieeIdIsOccupiedByAnotherSolution) {
         this.id = (int)id;
         this.bm = bitmap;
         this.answers = answers;
         v= fV;
         this.examineeId =exaimneeId;
+        this.isExamieeIdIsOccupiedByAnotherSolution = isExamieeIdIsOccupiedByAnotherSolution;
     }
 
     private boolean in(int item, int[] arr){
@@ -232,6 +234,10 @@ public class ScannedCapture {
     public void setBitmap(Bitmap feedbackImage) {
         hasUpdatedFeedbackImage = true;
         bm= feedbackImage;
+    }
+
+    public boolean isExamineeIdIsOccupied() {
+        return isExamieeIdIsOccupiedByAnotherSolution;
     }
 
 

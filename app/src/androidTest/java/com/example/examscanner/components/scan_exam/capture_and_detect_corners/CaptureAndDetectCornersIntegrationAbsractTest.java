@@ -48,7 +48,7 @@ import static org.hamcrest.Matchers.containsString;
 
 
 public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends StateFullTest {
-    private CornerDetectionContext2Setuper context;
+    protected CornerDetectionContext2Setuper context;
     @Rule
     public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     @Rule
@@ -116,7 +116,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         onView(withText("1/2")).check(matches(isDisplayed()));
     }
 
-    private void resumeYourLastSession() {
+    protected void resumeYourLastSession() {
 //        onView(withText(R.string.home_dialog_yes)).perform().perform(click());
     }
 
@@ -197,15 +197,22 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
 
     protected void navToCapture() {
 //        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
+        sleepSwipingTime();
+        sleepSwipingTime();
+        sleepSwipingTime();
         onView(withText(containsString(context.getTheExam().getCourseName()))).perform(click());
 //        onView(withText(R.string.start_scan_exam)).perform(click());
 
     }
 
-    private void captureASolution() {
+    protected void captureASolution() {
+        captureASolution(context.getSomeExamineeId());
+    }
+
+    protected void captureASolution(String examineeId) {
         onView(withId(R.id.spinner_capture_version_num)).perform(click());
         onView(withText(Integer.toString(context.getSomeVersion()))).perform(click());
-        onView(withId(R.id.editText_capture_examineeId)).perform(replaceText(context.getSomeExamineeId()));
+        onView(withId(R.id.editText_capture_examineeId)).perform(replaceText(examineeId));
         onView(withId(R.id.capture_image_button)).perform(click());
     }
 
@@ -220,9 +227,9 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
             sleepSingleCaptureProcessingTime();
         }
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
-//        onView(withId(R.id.button_cd_approve)).perform(click());
-//        sleepSwipingTime();
+        sleepCameraPreviewSetupTime();
         onView(withId(R.id.button_cd_retake)).perform(click());
+        sleepMovingFromCaptureToDetectCorners();
         sleepMovingFromCaptureToDetectCorners();
         onView(withId(R.id.for_testing_fragment_capture_root)).check(matches(isDisplayed()));
         int numOfCaptures2 = 2;
@@ -248,6 +255,8 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         }
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
         for (int i = 0; i < numOfCaptures; i++) {
+            sleepSwipingTime();
+            sleepSwipingTime();
             onView(withId(R.id.button_cd_approve)).perform(click());
             sleepSwipingTime();
         }
@@ -265,6 +274,8 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         }
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
         for (int i = 0; i < numOfCaptures; i++) {
+            sleepSwipingTime();
+            sleepSwipingTime();
             onView(withId(R.id.button_cd_approve)).perform(click());
             sleepSwipingTime();
         }
@@ -284,6 +295,8 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         }
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
         for (int i = 0; i < numOfCaptures; i++) {
+            sleepSwipingTime();
+            sleepSwipingTime();
             onView(withId(R.id.button_cd_approve)).perform(click());
             sleepSwipingTime();
         }

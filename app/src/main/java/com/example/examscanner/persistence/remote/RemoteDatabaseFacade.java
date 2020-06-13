@@ -31,9 +31,13 @@ public interface RemoteDatabaseFacade {
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans);
     public void offlineDeleteExamineeSolution(String remoteId);
     public void offlineInsertGradeIntoExamineeSolution(String examineeId, float grade);
-    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade);
+    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl);
     public void addGraderIfAbsent(String email, String uId) ;
     public Observable<List<Exam>> getExamsOfGrader(String userId);
     public void offlineUpdateAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans);
     public void updateUploaded(String remoteId);
+
+    Observable<String> observeExamineeIds(String remoteId);
+
+    Observable<String> insertExamineeIDOrReturnNull(String remoteId, String examineeId);
 }

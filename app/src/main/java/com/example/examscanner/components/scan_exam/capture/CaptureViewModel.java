@@ -15,8 +15,13 @@ import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+
+import io.reactivex.schedulers.Schedulers;
 
 
 public class CaptureViewModel extends ViewModel {
@@ -27,6 +32,7 @@ public class CaptureViewModel extends ViewModel {
     private MutableLiveData<Version> mVersion;
     private MutableLiveData<String> mExamineeId;
     private ImageProcessingFacade imageProcessor;
+    private List<String> examineeIds;
     private long sessionId;
     private Exam exam;
     private int[] versionNumers;
@@ -44,7 +50,16 @@ public class CaptureViewModel extends ViewModel {
         mVersion = new MutableLiveData<>();
         mExamineeId = new MutableLiveData<>();
         this.sessionId = sessionId;
+        examineeIds = new ArrayList<>();
+        exam.observeExamineeIds()
+        .subscribeOn(Schedulers.io())
+        .subscribe(this::consumeExamineeId);
+    }
 
+    private void consumeExamineeId(String s) {
+        synchronized (examineeIds){
+            examineeIds.add(cannonic(s));
+        }
     }
 
     public void refresh(){
@@ -133,10 +148,20 @@ public class CaptureViewModel extends ViewModel {
     }
 
     public void setVersion(Integer intChoice) {
-        mVersion.setValue(exam.getVersionByNum(intChoice));
+        mVersion.postValue(exam.getVersionByNum(intChoice));
     }
 
     public void setExamineeId(String toString) {
-        mExamineeId.setValue(toString);
+        mExamineeId.postValue(toString);
+    }
+
+    public boolean isUniqueExamineeId(String examineeID) {
+        synchronized (examineeIds){
+            return !examineeIds.contains(cannonic(examineeID));
+        }
+    }
+
+    private String cannonic(String examineeID) {
+        return examineeID.replace('\\', '_').replace('/','_');
     }
 }

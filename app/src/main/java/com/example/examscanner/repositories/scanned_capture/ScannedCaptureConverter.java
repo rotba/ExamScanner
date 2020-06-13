@@ -37,7 +37,8 @@ class ScannedCaptureConverter implements Converter<ExamineeSolutionsEntityInterf
                 ei.getBitmap(),
                 answers,
                 toVersionFuture(ei.getVersionId()),
-                ei.getExaimneeId()
+                ei.getExaimneeId(),
+                ei.getExamieeIdIsOccupiedByAnotherSolution()
         );
     }
 

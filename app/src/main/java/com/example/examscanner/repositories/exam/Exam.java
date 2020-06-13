@@ -14,6 +14,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import io.reactivex.Observable;
+
 public class Exam {
     private final static String TAG = "ExamScanner";
     private final static String MSG_PREF = "Exam::";
@@ -28,12 +30,13 @@ public class Exam {
     private List<Version> newVersions;
 //    private List<Version> cachedVersions;
     private Future<List<Version>> fVersions;
+    private ExamineeIdsSocket examineeIdsSocket;
     protected int numOfQuestions;
     protected String url = "THE_EMPTY_URL";
     protected int uploaded;
 //    private boolean doResolveFutures;
 
-    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions, int uploaded) {
+    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions, int uploaded, ExamineeIdsSocket examineeIdsSocket) {
         this.id = id;
         this.courseName = courseName;
         this.term = moed;
@@ -42,6 +45,7 @@ public class Exam {
         this.sessionId = sessionId;
         this.year = year;
         this.fVersions = fVersions;
+        this.examineeIdsSocket = examineeIdsSocket;
         newVersions = new ArrayList<>();
 //        cachedVersions = new ArrayList<>();
         this.numOfQuestions = numOfQuestions;
@@ -187,6 +191,10 @@ public class Exam {
 
     public int getNumOfQuestions() {
         return numOfQuestions;
+    }
+
+    public Observable<String> observeExamineeIds() {
+        return examineeIdsSocket.observe();
     }
 
     public class NuSuchVerion extends RuntimeException {

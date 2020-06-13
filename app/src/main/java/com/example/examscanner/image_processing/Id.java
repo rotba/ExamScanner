@@ -33,7 +33,7 @@ class Id {
 
     private String rep;
     public Id(int id, int x, int y, int tempW, int tempH) {
-        int shiftLeft = (int)(0.7 * tempW);
+        int shiftLeft = (int)(0.85 * tempW);
         location = new Point(x- shiftLeft, y +tempH- Y_ANS_PADDING);
         color = new Scalar(0,0,0);
         rep = String.format("%d.", id);

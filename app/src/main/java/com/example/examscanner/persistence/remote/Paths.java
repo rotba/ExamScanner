@@ -11,4 +11,5 @@ public class Paths {
     public static String toExamGraders = "graders";
     public static String toQuestions = "questions";
     public static String toSolutions = "solutions";
+    public static String examineeIds = "examineeIds";
 }

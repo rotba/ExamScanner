@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -163,6 +164,16 @@ public class CornerDetectionCardFragment extends Fragment {
         } else {
             resolveButton.setVisibility(View.INVISIBLE);
             resolveButton.setEnabled(false);
+        }
+        if(cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().isExamineeIdIsOccupied()){
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.examinee_id_duplication)
+                    .setMessage(
+                            String.format(
+                                    "ExamScanner saved the the solution with examinee id: %s. Please resolve the conflict in the spreadsheet",
+                                    cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().getExamineeId()
+                                    )
+                    );
         }
     }
 

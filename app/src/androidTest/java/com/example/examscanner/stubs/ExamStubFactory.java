@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.repositories.exam.Exam;
+import com.example.examscanner.repositories.exam.ExamineeIdsSocket;
 import com.example.examscanner.repositories.exam.Version;
 
 import java.util.ArrayList;
@@ -35,7 +36,8 @@ public class ExamStubFactory {
                 sessionId,
                 "2020",
                 QAD_NUM_OF_QUESTIONS,
-                0
+                0,
+                ExamineeIdsSocket.getEmpty()
         );
         Future<List<Version>> fv = new Future<List<Version>>() {
             @Override

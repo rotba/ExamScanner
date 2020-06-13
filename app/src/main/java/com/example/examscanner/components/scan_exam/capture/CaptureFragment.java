@@ -191,7 +191,12 @@ public class CaptureFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                captureViewModel.setExamineeId(s.toString());
+                final String examineeID = s.toString();
+                if(!captureViewModel.isUniqueExamineeId(examineeID)){
+                    handleNotUniqueExamineeId(examineeID);
+                }else{
+                    captureViewModel.setExamineeId(examineeID);
+                }
             }
             @Override
             public void afterTextChanged(Editable s) {}
@@ -205,6 +210,18 @@ public class CaptureFragment extends Fragment {
                     setText(examineeId);
         }
         ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture)).setVisibility(View.INVISIBLE);
+    }
+
+    private void handleNotUniqueExamineeId(String examineeID) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.examinee_id_duplication)
+                .setMessage(String.format("Someone already checked %s",examineeID))
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+        ((EditText) getActivity().findViewById(R.id.editText_capture_examineeId)).getText().clear();
     }
 
     private boolean isValidExamineeIdAndVersion() {

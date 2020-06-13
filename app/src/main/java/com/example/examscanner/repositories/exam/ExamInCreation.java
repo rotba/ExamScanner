@@ -45,7 +45,8 @@ public class ExamInCreation extends Exam {
                 sessionId,
                 "THE_EMPTY_YEAR",
                 -1,
-                0
+                0,
+                ExamineeIdsSocket.getEmpty()
         );
     }
 

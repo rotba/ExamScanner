@@ -11,4 +11,13 @@ public class PathsGenerator {
     public static String genVersionPath(String examId, int verNum){
         return Paths.get(examId, String.valueOf(verNum)).toString();
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String genExamineeSolution(String examId, String solutionId){
+        return Paths.get(examId, canonic(solutionId)).toString();
+    }
+
+    private static String canonic(String solutionId) {
+        return solutionId.replace('/','_').replace('\\', '_');
+    }
 }

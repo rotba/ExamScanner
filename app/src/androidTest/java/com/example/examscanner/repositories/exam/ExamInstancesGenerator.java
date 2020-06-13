@@ -20,7 +20,8 @@ public class ExamInstancesGenerator {
                 0,
                 "1984",
                 QAD_NUM_OF_QUESTIONS,
-                0
+                0,
+                ExamineeIdsSocket.getEmpty()
         );
         final Version v = new Version(
                 -1,

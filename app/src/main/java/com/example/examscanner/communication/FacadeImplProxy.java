@@ -16,6 +16,8 @@ import com.example.examscanner.communication.entities_interfaces.VersionEntityIn
 
 import java.util.List;
 
+import io.reactivex.Observable;
+
 public class FacadeImplProxy implements CommunicationFacade {
     private RealFacadeImple realImpl  = RealFacadeImple.getInstance();
 
@@ -177,6 +179,11 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public void updateUploaded(long id) {
         realImpl.updateUploaded(id);
+    }
+
+    @Override
+    public Observable<String> observeExamineeIds(long id) {
+        return realImpl.observeExamineeIds(id);
     }
 
     @Override

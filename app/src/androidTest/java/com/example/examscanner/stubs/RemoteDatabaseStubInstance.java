@@ -90,8 +90,10 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     }
 
+
+
     @Override
-    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade) {
+    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl) {
         return Observable.fromCallable(()->{return "";});
     }
 
@@ -103,6 +105,16 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     @Override
     public void updateUploaded(String remoteId) {
 
+    }
+
+    @Override
+    public Observable<String> observeExamineeIds(String remoteId) {
+        return Observable.fromCallable(()->{return "adfgjkndsfgljksndfgjndsfgkjsdnfg";});
+    }
+
+    @Override
+    public Observable<String> insertExamineeIDOrReturnNull(String remoteId, String examineeId) {
+        return null;
     }
 
 

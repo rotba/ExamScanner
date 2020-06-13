@@ -5,6 +5,7 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.persistence.remote.entities.Exam;
@@ -16,12 +17,17 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +68,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> createVersion(int num, String remoteExamId,String pathToBitmap) {
+    public Observable<String> createVersion(int num, String remoteExamId, String pathToBitmap) {
         return pushChildInPath(
                 Paths.toVersions,
                 new Version(
@@ -96,10 +102,10 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         return getChildrenOfRoot(
                 Paths.toSolutions,
                 ds -> {
-                    List<Long> value = (ArrayList<Long>)ds.child(ExamineeSolution.metaAnswers).getValue();
-                    Map<Integer, Integer> answers = new HashMap<>();
-                    for(int i =1; i< value.size(); i++){
-                        answers.put(i , value.get(i).intValue());
+                    List<Long> value = (ArrayList<Long>) ds.child(ExamineeSolution.metaAnswers).getValue();
+                    Map<Integer, Integer> answers = new HashMap<Integer, Integer>();
+                    for (int i = 1; i < value.size(); i++) {
+                        answers.put(i, value.get(i).intValue());
                     }
                     ExamineeSolution examineeSolution = new ExamineeSolution(
                             ds.child(ExamineeSolution.metaVersionId).getValue(String.class),
@@ -114,29 +120,31 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     @Override
     public void offlineInsertExamineeSolution(String examineeId, String versionId) {
         putObjectInLocation(
-                String.format("%s/%s",Paths.toSolutions,examineeId),
+                String.format("%s/%s", Paths.toSolutions, examineeId),
                 new ExamineeSolution(
                         examineeId,
                         versionId,
                         0,
-                        new HashMap<>()
+                        new HashMap<>(),
+                        null
                 ),
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();
     }
 
     @Override
-    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade) {
+    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl) {
         HashMap ans = new HashMap();
-        for(int i = 0; i< answers.length; i++)
-            ans.put(String.valueOf(i+1), answers[i][0]);
+        for (int i = 0; i < answers.length; i++)
+            ans.put(String.valueOf(i + 1), answers[i][0]);
         return pushChildInPath(
                 Paths.toSolutions,
                 new ExamineeSolution(
                         examineeId,
                         versionId,
                         grade,
-                        ans
+                        ans,
+                        bitmapUrl
                 ),
                 StoreTaskPostprocessor.getOnline()
         );
@@ -150,7 +158,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     @Override
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans) {
         putObjectInLocation(
-                String.format("%s/%s/%s/%d", Paths.toSolutions,examineeId,ExamineeSolution.metaAnswers ,questionNum),
+                String.format("%s/%s/%s/%d", Paths.toSolutions, examineeId, ExamineeSolution.metaAnswers, questionNum),
                 new Integer(ans),
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();
@@ -159,24 +167,24 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     @Override
     public void offlineInsertGradeIntoExamineeSolution(String examineeId, float grade) {
         putObjectInLocation(
-                String.format("%s/%s/%s", Paths.toSolutions,examineeId,ExamineeSolution.metaGrade),
+                String.format("%s/%s/%s", Paths.toSolutions, examineeId, ExamineeSolution.metaGrade),
                 new Float(grade),
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();
     }
-    
-        @Override
+
+    @Override
     public void offlineDeleteExamineeSolution(String remoteId) {
         putObjectInLocation(
-                String.format("%s/%s",Paths.toSolutions,remoteId),
+                String.format("%s/%s", Paths.toSolutions, remoteId),
                 null,
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();
     }
 
     @Override
-    public Observable<String> addVersion(int num, String remoteExamId,String pathToBitmap) {
-        return createVersion(num,remoteExamId,pathToBitmap);
+    public Observable<String> addVersion(int num, String remoteExamId, String pathToBitmap) {
+        return createVersion(num, remoteExamId, pathToBitmap);
     }
 
     @Override
@@ -197,11 +205,12 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         return getChildrenOfRoot(
                 Paths.toExams,
                 new DataSnapshot2Obj<Exam>() {
-                    DataSnapshotList2ObjList<String> graderListConverter = iterable ->{
+                    DataSnapshotList2ObjList<String> graderListConverter = iterable -> {
                         List<String> ans = new ArrayList<>();
-                        iterable.forEach(ds-> ans.add(ds.getValue().toString()));
+                        iterable.forEach(ds -> ans.add(ds.getValue().toString()));
                         return ans;
                     };
+
                     @Override
                     public Exam convert(DataSnapshot ds) {
                         Exam exam = new Exam(
@@ -295,13 +304,12 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     public void addGraderIfAbsent(String email, String uId) {
         DatabaseReference ref = FirebaseDatabaseFactory.get().getReference(Paths.toGraders);
-        ref.orderByChild("userId").equalTo(uId).addListenerForSingleValueEvent(new ValueEventListener(){
+        ref.orderByChild("userId").equalTo(uId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot){
-                if(dataSnapshot.exists()) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
                     //username exist
-                }
-                else{
+                } else {
                     createGrader(email, uId);
                 }
             }
@@ -318,11 +326,12 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         return getChildrenOfRoot(
                 Paths.toExams,
                 new DataSnapshot2Obj<Exam>() {
-                    DataSnapshotList2ObjList<String> graderListConverter = iterable ->{
+                    DataSnapshotList2ObjList<String> graderListConverter = iterable -> {
                         List<String> ans = new ArrayList<>();
-                        iterable.forEach(ds-> ans.add(ds.getKey()));
+                        iterable.forEach(ds -> ans.add(ds.getKey()));
                         return ans;
                     };
+
                     @Override
                     public Exam convert(DataSnapshot ds) {
                         Exam exam = new Exam(
@@ -355,22 +364,101 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void updateUploaded(String remoteId){
+    public void updateUploaded(String remoteId) {
         pushChildInPath(
-                String.format("%s/%s/%s",Paths.toExams, Paths.gUploaded, remoteId),
+                String.format("%s/%s/%s", Paths.toExams, Paths.gUploaded, remoteId),
                 1,
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();
     }
 
+    @Override
+    public Observable<String> observeExamineeIds(String remoteId) {
+        return observeList(
+                String.format("%s/%s", Paths.examineeIds, remoteId),
+                ds -> ds.getKey()
+        );
+    }
 
+    @Override
+    public Observable<String> insertExamineeIDOrReturnNull(String remoteId, String examineeId) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(String.format("%s/%s/%s", Paths.examineeIds, remoteId, cannonic(examineeId)));
+        return new Observable<String>() {
+            @Override
+            protected void subscribeActual(Observer<? super String> observer) {
+                ref.runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                        if(mutableData.getValue()== null){
+                            mutableData.setValue(true);
+                            observer.onNext("COOLNESSNESS");
+                        }else{
+                            observer.onNext(null);
+                        }
+                        observer.onComplete();
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+
+                    }
+                });
+            }
+        };
+    }
+
+    private String cannonic(String examineeId) {
+        return examineeId.replace('\\','_').replace('/', '_');
+    }
+
+    private <T> Observable<T> observeList(String path, DSMap<T> map) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(path);
+        return generateChildrenObserver(reference, map);
+    }
+
+    private <T> Observable<T> generateChildrenObserver(DatabaseReference reference, DSMap<T> map) {
+        return new Observable<T>() {
+            @Override
+            protected void subscribeActual(Observer<? super T> observer) {
+                final ChildEventListener childEventListener = new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                        observer.onNext(map.map(dataSnapshot));
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                        observer.onNext(map.map(dataSnapshot));
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey() + " ExamScanner doestn handle!");
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                        Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey() + " ExamScanner doestn handle!");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        observer.onError(databaseError.toException());
+                    }
+                };
+                reference.addChildEventListener(childEventListener);
+            }
+        };
+    }
 
     private static Observable<String> pushChildInPath(String parent, Object obj, StoreTaskPostprocessor taskPostprocessor) {
-        return storeObject(() -> FirebaseDatabaseFactory.get().getReference(parent).push(), obj,taskPostprocessor);
+        return storeObject(() -> FirebaseDatabaseFactory.get().getReference(parent).push(), obj, taskPostprocessor);
     }
 
     private Observable<String> putObjectInLocation(String location, Object obj, StoreTaskPostprocessor taskPostprocessor) {
-        return storeObject(() -> FirebaseDatabaseFactory.get().getReference(location), obj,taskPostprocessor);
+        return storeObject(() -> FirebaseDatabaseFactory.get().getReference(location), obj, taskPostprocessor);
     }
 
     private static Observable<String> storeObject(ReferenceLocationAllocator allocator, Object obj, StoreTaskPostprocessor postProcessor) {
@@ -388,7 +476,6 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
 
-
     private interface ReferenceLocationAllocator {
         DatabaseReference allocate();
     }
@@ -401,9 +488,10 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         List<T> convert(Iterable<DataSnapshot> ds);
     }
 
-    private interface StoreTaskPostprocessor{
+    private interface StoreTaskPostprocessor {
         Observable<String> postProcess(Task t, DatabaseReference ref);
-        static StoreTaskPostprocessor getOnline(){
+
+        static StoreTaskPostprocessor getOnline() {
             return new StoreTaskPostprocessor() {
                 @Override
                 public Observable<String> postProcess(Task t, DatabaseReference ref) {
@@ -419,7 +507,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
             };
         }
 
-        static StoreTaskPostprocessor getOffline(){
+        static StoreTaskPostprocessor getOffline() {
             return new StoreTaskPostprocessor() {
                 private static final String DEBUG_TAG = "DebugExamScanner";
 
@@ -429,12 +517,12 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         t.addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d(DEBUG_TAG, MSG_PREF+"::offlineStoreObject SUCCESS");
+                                Log.d(DEBUG_TAG, MSG_PREF + "::offlineStoreObject SUCCESS");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.d(DEBUG_TAG, MSG_PREF+"::offlineStoreObject FAILURE", e);
+                                Log.d(DEBUG_TAG, MSG_PREF + "::offlineStoreObject FAILURE", e);
                             }
                         });
                         return "return";
@@ -442,5 +530,9 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 }
             };
         }
+    }
+
+    interface DSMap<T> {
+        T map(DataSnapshot ds);
     }
 }

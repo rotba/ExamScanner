@@ -1,5 +1,7 @@
 package com.example.examscanner.persistence.local;
 
+import android.util.Log;
+
 import androidx.room.Room;
 
 
@@ -13,9 +15,11 @@ import static androidx.test.core.app.ApplicationProvider.*;
 
 
 public class AppDatabaseFactory {
+    private static final String TAG = "ExamScanner";
     private static AppDatabase instance;
     private static AppDatabase testInstance;
     private static boolean isTestMode = false;
+
     public static synchronized AppDatabase getInstance(){
         if(isTestMode){
             return getTestInstance();
@@ -43,6 +47,7 @@ public class AppDatabaseFactory {
     }
 
     public static void tearDownDb(){
+        Log.d(TAG, "tearing db down");
         testInstance.clearAllTables();
     }
 }
