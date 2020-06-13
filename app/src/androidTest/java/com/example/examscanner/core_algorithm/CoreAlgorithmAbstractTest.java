@@ -56,7 +56,8 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
         RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
         FilesManagerFactory.setStubInstance(new FilesManagerStub());
-        FirebaseDatabaseFactory.setTestMode();
+        if(!USINIG_REAL_DB)
+            FirebaseDatabaseFactory.setTestMode();
 
         super.setUp();
         useCaseContext = getUseCaseContext();
