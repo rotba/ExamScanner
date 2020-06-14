@@ -944,7 +944,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         //DEBUGGING_HACK: use in the evalutaor showRedRectangles(leftMostXs,upperMostYs,img_exam,img_template.width(),img_template.height())
         List<Integer> unidentified = answersMap.values().stream().filter(x -> x == -1).collect(Collectors.toList());
         if (unidentified.size() > unIdentifiedThreshold) {
-            answersMap = findQuestions(img_exam, img_template, numOfQuestions);
+          //  answersMap = findQuestions(img_exam, img_template, numOfQuestions);
         }
         return answersMap;
     }

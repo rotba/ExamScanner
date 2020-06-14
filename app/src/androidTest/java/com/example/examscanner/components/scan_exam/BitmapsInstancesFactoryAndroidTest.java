@@ -43,6 +43,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String Comp191_V1_PDF_Auth_No_Flash = "comp191_v1_pdf_auth.jpg";;
     private static String Comp191_v1_JPG_ANS = "comp191_v1_ans.jpg";
     private static String Comp191_v1_JPG_ANS_2 = "comp191_v1_ans_jpg_2.jpg";
+    private static String caspl182_V1_orig = "instances/caspl182/a1.jpg";
     private static String comp191_V1_ins_1 = "instances/comp191_v1/_1.jpg";
     private static String comp191_V1_ins_2= "instances/comp191_v1/_2.jpg";
     private static String comp191_V1_ins_3= "instances/comp191_v1/_3.jpg";
@@ -52,13 +53,27 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String comp191_V1_ins_7= "instances/comp191_v1/_7.jpg";
     private static String comp191_V1_ins_8= "instances/comp191_v1/_8.jpg";
     private static String comp191_V1_ins_9 ="instances/comp191_v1/_9.jpg";
+    private static String comp191_V1_ins_15 = "instances/comp191_v1/_15.jpg";
+    private static String comp191_V1_ins_16 = "instances/comp191_v1/_16.jpg";
+    private static String comp191_V1_ins_17 = "instances/comp191_v1/_17.jpg";
+    private static String comp191_V1_ins_18 = "instances/comp191_v1/_18.jpg";
+    private static String comp191_V1_ins_19 = "instances/comp191_v1/_19.jpg";
+    private static String comp191_V1_ins_20 = "instances/comp191_v1/_20.jpg";
+    private static String comp191_V1_ins_21 = "instances/comp191_v1/_21.jpg";
+    private static String comp191_V1_ins_22 = "instances/comp191_v1/_22.jpg";
+    private static String comp191_V1_ins_23 = "instances/comp191_v1/_23.jpg";
+    private static String comp191_V1_ins_24 = "instances/comp191_v1/_24.jpg";
+    private static String comp191_V1_ins_25 = "instances/comp191_v1/_25.jpg";
+    private static String comp191_V1_ins_26 = "instances/comp191_v1/_26.jpg";
+    private static String caspl182_V1_ins_1 = "instances/caspl182/_1.jpg";
     private static String comp191_V1_ins_in1 = "instances/comp191_v1/in_1.jpg";
     private static String comp191_V1_pdf_ins_in1 ="instances/comp191_v1/in_1.pdf";
-    private static String comp191_V1_pdf_ins_in10 = "instances/comp191_v1/_10.jpg";;
-    private static String comp191_V1_pdf_ins_in11 = "instances/comp191_v1/_11.jpg";;
-    private static String comp191_V1_pdf_ins_in12 = "instances/comp191_v1/_12.jpg";;
-    private static String comp191_V1_pdf_ins_in13 = "instances/comp191_v1/_13.jpg";;
-    private static String comp191_V1_pdf_ins_in14 = "instances/comp191_v1/_14.jpg";;
+    private static String comp191_V1_pdf_ins_in10 = "instances/comp191_v1/_10.jpg";
+    private static String comp191_V1_pdf_ins_in11 = "instances/comp191_v1/_11.jpg";
+    private static String comp191_V1_pdf_ins_in12 = "instances/comp191_v1/_12.jpg";
+    private static String comp191_V1_pdf_ins_in13 = "instances/comp191_v1/_13.jpg";
+    private static String comp191_V1_pdf_ins_in14 = "instances/comp191_v1/_14.jpg";
+
 
     public static Bitmap getTestJpg1() {
         return getBitmapFromAssets(testJpg1FilePath);
@@ -202,6 +217,10 @@ public class BitmapsInstancesFactoryAndroidTest {
         return getBitmapFromAssets(comp191_V1_ins_in1);
     }
 
+    public static Bitmap getCaspl182_V1_orig() {
+        return transform90D(getBitmapFromAssets(caspl182_V1_orig));
+    }
+
     public static Bitmap getComp191_V1_pdf_ins_in1() {
         return getBitmapFromPdfAsset(comp191_V1_pdf_ins_in1);
     }
@@ -220,6 +239,58 @@ public class BitmapsInstancesFactoryAndroidTest {
     }
     public static Bitmap getComp191_V1_ins_14() {
         return transform90D(getBitmapFromAssets(comp191_V1_pdf_ins_in14));
+    }
+
+    public static Bitmap getComp191_V1_ins_15() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_15));
+    }
+
+    public static Bitmap getComp191_V1_ins_16() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_16));
+    }
+
+    public static Bitmap getComp191_V1_ins_17() {
+        return getBitmapFromAssets(comp191_V1_ins_17);
+    }
+
+    public static Bitmap getComp191_V1_ins_18() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_18));
+    }
+
+    public static Bitmap getComp191_V1_ins_19() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_19));
+    }
+
+    public static Bitmap getComp191_V1_ins_20() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_20));
+    }
+
+    public static Bitmap getComp191_V1_ins_21() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_21));
+    }
+
+    public static Bitmap getComp191_V1_ins_22() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_22));
+    }
+
+    public static Bitmap getComp191_V1_ins_23() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_23));
+    }
+
+    public static Bitmap getComp191_V1_ins_24() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_24));
+    }
+
+    public static Bitmap getComp191_V1_ins_25() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_25));
+    }
+
+    public static Bitmap getComp191_V1_ins_26() {
+        return transform90D(getBitmapFromAssets(comp191_V1_ins_26));
+    }
+
+    public static Bitmap getCaspl182_V1_ins_001() {
+        return getBitmapFromAssets(caspl182_V1_ins_1);
     }
 
     private static Bitmap getBitmapFromPdfAsset(String path) {
@@ -308,6 +379,8 @@ public class BitmapsInstancesFactoryAndroidTest {
         if (curr_c % 3 == 2) return getTestJpg3Marked();
         return null;
     }
+
+
 
 }
 
