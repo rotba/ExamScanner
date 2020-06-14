@@ -72,6 +72,7 @@ public class CaptureFragment extends Fragment {
     private ImageButton imageButton;
     private View root;
     private EditText examineeEditText;
+    private TextView captureProgressEditText;
     //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -86,6 +87,7 @@ public class CaptureFragment extends Fragment {
         ).create();
         inProgress = new AtomicInteger(0);
         requestCamera();
+        captureProgressEditText = (TextView) root.findViewById(R.id.capture_processing_progress);
         return root;
     }
 
@@ -93,6 +95,7 @@ public class CaptureFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        captureProgressEditText.setVisibility(View.INVISIBLE);
         pb = (ProgressBar) view.findViewById(R.id.progressBar_capture);
         pb.setVisibility(View.INVISIBLE);
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
@@ -123,10 +126,9 @@ public class CaptureFragment extends Fragment {
         captureViewModel.getNumOfTotalCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer totalCaptures) {
-                final TextView viewById = (TextView) getActivity().findViewById(R.id.capture_processing_progress);
                 final Integer processedCaptures = captureViewModel.getNumOfProcessedCaptures().getValue();
-                viewById.setText(processedCaptures + "/" + totalCaptures);
-                viewById.setVisibility(totalCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
+                captureProgressEditText.setText(processedCaptures + "/" + totalCaptures);
+                captureProgressEditText.setVisibility(totalCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
                 ((Button) getActivity().findViewById(R.id.button_move_to_detect_corners))
                         .setVisibility(totalCaptures > 0 && processedCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
             }
@@ -137,7 +139,7 @@ public class CaptureFragment extends Fragment {
                 final TextView viewById = (TextView) getActivity().findViewById(R.id.capture_processing_progress);
                 viewById.setText(processedCaptures + "/" + captureViewModel.getNumOfTotalCaptures().getValue());
                 ((Button) getActivity().findViewById(R.id.button_move_to_detect_corners))
-                        .setVisibility(processedCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
+                        .setVisibility(captureViewModel.thereAreScannedCaptures()||processedCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
             }
         });
         outputHander =

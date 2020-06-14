@@ -212,6 +212,7 @@ public class RealFacadeImple implements CommunicationFacade {
         return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void addExamineeGrade(long solutionId, long versionId, int[][] answers, float grade) {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
@@ -224,6 +225,7 @@ public class RealFacadeImple implements CommunicationFacade {
         Exam e = db.getExamDao().getById(v.getExamId());
         throwCommunicationExceptionWhenNull(e,Exam.class,  String.format("id is %d", v.getExamId()));
         String remoteversionId = v.getRemoteVersionId();
+        Log.d(TAG, String.format("starting creating the remote instance of the solution %d", es.getId()));
         remoteDb.insertExamineeIDOrReturnNull(e.getRemoteId(), es.getExamineeId())
         .subscribe(
                 result-> handleExamineeIdSuccessInsertion(result,es,remoteversionId,answers, grade,e.getRemoteId()),
@@ -233,6 +235,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId) {
+        Log.d(TAG, String.format("inserted the eaminieeid %s to the eaxminee ids table. solution local id is %d", result, es.getId()));
         String examineeId = es.getExamineeId();
         if(result==null){
             es.setExamineeIdOccupied(true);
@@ -244,9 +247,13 @@ public class RealFacadeImple implements CommunicationFacade {
         final String finalExamineeID = examineeId;
         String bitmapPath = PathsGenerator.genExamineeSolution(remoetExamId, examineeId);
         try {
+            Log.d(TAG, String.format("started storring the bitmap of es.getId():%d", es.getId()));
             rfm.store(bitmapPath , toByteArray(fm.get(es.getBitmapPath()))).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
             .subscribe(
-                    () -> handleSolutionBitmapStorageSuccess(bitmapPath,es, finalExamineeID, remoteversionId, answers, grade),
+                    () ->{
+                        Log.d(TAG, String.format("done storring the bitmap of es.getId():%d", es.getId()));
+                        handleSolutionBitmapStorageSuccess(bitmapPath,es, finalExamineeID, remoteversionId, answers, grade);
+                    } ,
                     throwable -> {throw new CommunicationException(throwable);}
             );
         } catch (FileNotFoundException e) {
@@ -257,8 +264,10 @@ public class RealFacadeImple implements CommunicationFacade {
     private void handleSolutionBitmapStorageSuccess(String bitmapPath, ExamineeSolution es, String finalExamineeID, String remoteversionId, int[][] answers, float grade) {
         rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
           url ->{
+              Log.d(TAG, String.format("created the url of es.getId():%d", es.getId()));
               remoteDb.offlineInsertExamineeSolutionTransaction(finalExamineeID, remoteversionId, answers, grade,url).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
                       s->{
+                          Log.d(TAG, String.format("done inserting es.getId():%d as %s", es.getId(), s));
                           es.setRemoteId(s);
                           db.getExamineeSolutionDao().update(es);
                       }
@@ -895,6 +904,7 @@ public class RealFacadeImple implements CommunicationFacade {
         final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId, null);
         try {
             final long ans = db.getExamineeSolutionDao().insert(es);
+            Log.d(TAG,String.format("inserted %d solution to the local db" , ans));
             es.setId(ans);
             fm.store(bm, es.getBitmapPath());
             return ans;

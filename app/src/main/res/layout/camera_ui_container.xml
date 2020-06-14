@@ -24,17 +24,7 @@
     android:layout_height="match_parent">
 
     <!-- Camera control and gallery buttons -->
-    <TextView
-    android:id="@+id/capture_processing_progress"
-    android:layout_width="@dimen/round_button_medium"
-    android:layout_height="@dimen/round_button_medium"
-    android:layout_marginBottom="@dimen/margin_xlarge"
-    android:background="@android:color/darker_gray"
-    android:contentDescription="@string/switch_camera_button_alt"
-    android:padding="@dimen/spacing_small"
-    android:scaleType="fitCenter"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent" />
+
 
     <ImageButton
         android:id="@+id/capture_image_button"

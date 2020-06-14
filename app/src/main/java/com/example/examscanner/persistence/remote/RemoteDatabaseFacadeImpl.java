@@ -387,31 +387,37 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public Observable<String> insertExamineeIDOrReturnNull(String remoteExamId, String examineeId) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(String.format("%s/%s/%s", Paths.examineeIds, remoteExamId, cannonic(examineeId)));
-        return new Observable<String>() {
-            @Override
-            protected void subscribeActual(Observer<? super String> observer) {
-                ref.runTransaction(new Transaction.Handler() {
-                    @NonNull
-                    @Override
-                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                        if(mutableData.getValue()== null){
-                            mutableData.setValue(true);
-                            observer.onNext("COOLNESSNESS");
-                        }else{
-                            observer.onNext(null);
-                        }
-                        observer.onComplete();
-                        return Transaction.success(mutableData);
-                    }
-
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-
-                    }
-                });
-            }
-        };
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(String.format("%s/%s/%s", Paths.examineeIds, remoteExamId, cannonic(examineeId)));
+        return putObjectInLocation(
+                String.format("%s/%s/%s", Paths.examineeIds, remoteExamId, cannonic(examineeId)),
+                new Boolean(true),
+                StoreTaskPostprocessor.getOnline()
+        );
+//        return new Observable<String>() {
+//            @Override
+//            protected void subscribeActual(Observer<? super String> observer) {
+//                ref.runTransaction(new Transaction.Handler() {
+//                    @NonNull
+//                    @Override
+//                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+//                        if(mutableData.getValue()== null){
+//                            mutableData.setValue(true);
+//                            observer.onNext("COOLNESSNESS");
+//                        }else{
+//                            observer.onNext(null);
+//                        }
+//                        final Transaction.Result success = Transaction.success(mutableData);
+//                        observer.onComplete();
+//                        return success;
+//                    }
+//
+//                    @Override
+//                    public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+//
+//                    }
+//                });
+//            }
+//        };
     }
 
     private String cannonic(String examineeId) {
@@ -496,7 +502,6 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     private interface StoreTaskPostprocessor {
         Observable<String> postProcess(Task t, DatabaseReference ref);
-
         static StoreTaskPostprocessor getOnline() {
             return new StoreTaskPostprocessor() {
                 @Override

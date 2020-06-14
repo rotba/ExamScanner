@@ -26,6 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CaptureViewModel extends ViewModel {
     private final String REMOVE_INDICATION = "REMOVE:";
+    private final String TAG = "ExamScanner";
     private MutableLiveData<Integer> mNumOfTotalCaptures;
     private MutableLiveData<Integer> mNumOfProcessedCaptures;
     private Queue<Capture> unProcessedCaptures;
@@ -37,6 +38,7 @@ public class CaptureViewModel extends ViewModel {
     private long sessionId;
     private Exam exam;
     private int[] versionNumers;
+    private boolean thereAreScannedCaptures;
 
 
     public CaptureViewModel(Repository<ScannedCapture> scRepo, ImageProcessingFacade imageProcessor, long sessionId, Exam exam) {
@@ -55,6 +57,7 @@ public class CaptureViewModel extends ViewModel {
         exam.observeExamineeIds()
         .subscribeOn(Schedulers.io())
         .subscribe(this::consumeExamineeId);
+        thereAreScannedCaptures = !scRepo.get(sc->true).isEmpty();
     }
 
     private void consumeExamineeId(String s) {
@@ -62,7 +65,7 @@ public class CaptureViewModel extends ViewModel {
             if(s.indexOf(REMOVE_INDICATION)!=-1){
                 String sRemove =s.replace(REMOVE_INDICATION,"");
                 if(!examineeIds.contains(sRemove)){
-                    Log.d("ExamScanner", String.format("BUG in examinee ids removal. dont want to crach the app: s:%s, sRemove:%s",s,sRemove));
+                    Log.d(TAG, String.format("BUG in examinee ids removal. dont want to crach the app: s:%s, sRemove:%s",s,sRemove));
                 }else{
                     examineeIds.remove(sRemove);
                 }
@@ -73,6 +76,7 @@ public class CaptureViewModel extends ViewModel {
     }
 
     public void refresh(){
+        thereAreScannedCaptures = !scRepo.get(sc->true).isEmpty();
         mNumOfProcessedCaptures = new MutableLiveData<>(0);
         mNumOfTotalCaptures = new MutableLiveData<>(mNumOfProcessedCaptures.getValue());
     }
@@ -102,6 +106,7 @@ public class CaptureViewModel extends ViewModel {
                     @Override
                     public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                         final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds);
+                        Log.d(TAG, "starting creating ScannedCapture");
                         scRepo.create(new ScannedCapture(
                                 -1, bitmap, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
 
@@ -183,5 +188,9 @@ public class CaptureViewModel extends ViewModel {
 
     private String cannonic(String examineeID) {
         return examineeID.replace('\\', '_').replace('/','_');
+    }
+
+    public boolean thereAreScannedCaptures() {
+        return thereAreScannedCaptures;
     }
 }
