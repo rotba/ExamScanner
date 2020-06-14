@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private MainActivityViewModel viewModel;
     private static boolean stubsMode = false;
-    public static boolean testMode = true;
+    public static boolean testMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

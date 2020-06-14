@@ -42,6 +42,7 @@ public class AppDatabaseFactory {
         return testInstance;
     }
     public static void setTestMode(){
+        Log.d(TAG, "Setting test mode in db",new Exception());
         isTestMode=true;
 
     }
