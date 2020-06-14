@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -58,6 +60,7 @@ import io.reactivex.schedulers.Schedulers;
 public class CaptureFragment extends Fragment {
     private static final String TAG = "ExamScanner";
     private static final String MSG_PREF = "CaptureFragment::";
+    private static final String DEBUG_TAG = "DebugExamScanner";
     private CameraManager cameraManager;
     private CaptureViewModel captureViewModel;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
@@ -68,6 +71,7 @@ public class CaptureFragment extends Fragment {
     private AtomicInteger inProgress;
     private ImageButton imageButton;
     private View root;
+    private EditText examineeEditText;
     //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -91,7 +95,7 @@ public class CaptureFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         pb = (ProgressBar) view.findViewById(R.id.progressBar_capture);
         pb.setVisibility(View.INVISIBLE);
-        ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
+        ((ProgressBar) getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
         final Button nextStepButton = (Button) view.findViewById(R.id.button_move_to_detect_corners);
         nextStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +106,7 @@ public class CaptureFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action);
             }
         });
-        ((ProgressBar)view.findViewById(R.id.progressBar_capture)).setVisibility(View.VISIBLE);
+        ((ProgressBar) view.findViewById(R.id.progressBar_capture)).setVisibility(View.VISIBLE);
         Completable.fromAction(this::createViewModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -124,7 +128,7 @@ public class CaptureFragment extends Fragment {
                 viewById.setText(processedCaptures + "/" + totalCaptures);
                 viewById.setVisibility(totalCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
                 ((Button) getActivity().findViewById(R.id.button_move_to_detect_corners))
-                        .setVisibility(totalCaptures > 0 && processedCaptures>0 ? View.VISIBLE : View.INVISIBLE);
+                        .setVisibility(totalCaptures > 0 && processedCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
             }
         });
         captureViewModel.getNumOfProcessedCaptures().observe(getActivity(), new Observer<Integer>() {
@@ -133,35 +137,41 @@ public class CaptureFragment extends Fragment {
                 final TextView viewById = (TextView) getActivity().findViewById(R.id.capture_processing_progress);
                 viewById.setText(processedCaptures + "/" + captureViewModel.getNumOfTotalCaptures().getValue());
                 ((Button) getActivity().findViewById(R.id.button_move_to_detect_corners))
-                        .setVisibility(processedCaptures>0 ? View.VISIBLE : View.INVISIBLE);
+                        .setVisibility(processedCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
             }
         });
         outputHander =
                 new CameraOutputHandlerImpl(
                         captureViewModel,
                         processRequestDisposableContainer,
-                        ()->{
-                            ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.VISIBLE);
-                            inProgress.set(inProgress.intValue()+1);
+                        () -> {
+                            ((ProgressBar) getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.VISIBLE);
+                            inProgress.set(inProgress.intValue() + 1);
                             ((EditText) getActivity().findViewById(R.id.editText_capture_examineeId)).getText().clear();
                             onVersionNumbersRetrived(captureViewModel.getVersionNumbers());
                         },
-                        ()->{
-                            if(inProgress.decrementAndGet()==0){
-                                ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
+                        () -> {
+                            if (inProgress.decrementAndGet() == 0) {
+                                ((ProgressBar) getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
                             }
 
                         },
-                        (pref, t) -> handleError(pref,t)
+                        (pref, t) -> handleError(pref, t)
                 );
         captureClickListener = cameraManager.createCaptureClickListener(outputHander);
         imageButton = (ImageButton) getActivity().findViewById(R.id.capture_image_button);
+        examineeEditText = (EditText) getActivity().findViewById(R.id.editText_capture_examineeId);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isValidExamineeIdAndVersion()){
+                if(!captureViewModel.isHoldingValidExamineeId() && (examineeEditText.getText().length()!=0)){
+                    if(!consumeExamineeIdOrHandleIfInvalid(examineeEditText.getText().toString())){
+                        return;
+                    }
+                }
+                if (isValidExamineeIdAndVersion()) {
                     captureClickListener.onClick(v);
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Please enter examinee id and verion number", Toast.LENGTH_LONG).show();
                 }
             }
@@ -183,49 +193,116 @@ public class CaptureFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
-        final EditText examineeEditText = (EditText) getActivity().findViewById(R.id.editText_capture_examineeId);
-        examineeEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                final String examineeID = s.toString();
-                if(!captureViewModel.isUniqueExamineeId(examineeID)){
-                    handleNotUniqueExamineeId(examineeID);
-                }else{
-                    captureViewModel.setExamineeId(examineeID);
+//        examineeEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                final String examineeID = s.toString();
+//                if(!captureViewModel.isUniqueExamineeId(examineeID)){
+//                    handleNotUniqueExamineeId(examineeID);
+//                }else{
+//                    captureViewModel.setExamineeId(examineeID);
+//                }
+//            }
+//            @Override
+//            public void afterTextChanged(Editable s) {}
+//        });
+//        examineeEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+//                        actionId == EditorInfo.IME_ACTION_DONE ||
+//                        event != null &&
+//                                event.getAction() == KeyEvent.ACTION_DOWN &&
+//                                event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+//                    if (event == null || !event.isShiftPressed()) {
+//                        final String examineeID = examineeEditText.getText().toString();
+//                        if(!captureViewModel.isUniqueExamineeId(examineeID)){
+//                            handleNotUniqueExamineeId(examineeID);
+//                        }else{
+//                            captureViewModel.setExamineeId(examineeID);
+//                        }
+//                        return true; // consume.
+//                    }
+//                }
+//                return false; // pass on to other listeners.
+//            }
+//        });
+//        examineeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                // When focus is lost check that the text field has valid values.
+//
+//                if (!hasFocus) {
+//                    final String examineeID = examineeEditText.getText().toString();
+//                    if (!captureViewModel.isUniqueExamineeId(examineeID)) {
+//                        handleNotUniqueExamineeId(examineeID);
+//                    } else {
+//                        captureViewModel.setExamineeId(examineeID);
+//                    }
+//                }
+//            }
+//        });
+        examineeEditText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    Log.d(DEBUG_TAG, "done predd on examinee id edittext");
+                    final String examineeID = examineeEditText.getText().toString();
+                    consumeExamineeIdOrHandleIfInvalid(examineeID);
+                    return true;
                 }
+                return false;
             }
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
-        String examineeId =  CaptureFragmentArgs.fromBundle(getArguments()).getExamineeId();
+        String examineeId = CaptureFragmentArgs.fromBundle(getArguments()).getExamineeId();
 //        long version =  CaptureFragmentArgs.fromBundle(getArguments()).getVersionId();
 //        spinner.set
 //        if(examineeId!= null && version != -1){
-        if(examineeId!= null && !examineeId.equals("null")){
-            ((EditText)getActivity().findViewById(R.id.editText_capture_examineeId)).
+        if (examineeId != null && !examineeId.equals("null")) {
+            ((EditText) getActivity().findViewById(R.id.editText_capture_examineeId)).
                     setText(examineeId);
         }
-        ((ProgressBar)getActivity().findViewById(R.id.progressBar_capture)).setVisibility(View.INVISIBLE);
+        ((ProgressBar)
+
+                getActivity().
+
+                        findViewById(R.id.progressBar_capture)).
+
+                setVisibility(View.INVISIBLE);
+    }
+
+    //returns true iff valid examinee id
+    protected boolean consumeExamineeIdOrHandleIfInvalid(String examineeID) {
+        if (!captureViewModel.isUniqueExamineeId(examineeID)) {
+            handleNotUniqueExamineeId(examineeID);
+            return false;
+        } else {
+            captureViewModel.setExamineeId(examineeID);
+            return true;
+        }
     }
 
     private void handleNotUniqueExamineeId(String examineeID) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.examinee_id_duplication)
-                .setMessage(String.format("Someone already checked %s",examineeID))
+                .setMessage(String.format("Someone already checked %s", examineeID))
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        final EditText editText = (EditText) getActivity().findViewById(R.id.editText_capture_examineeId);
+                        editText.getText().clear();
+                        editText.requestFocus();
+
                     }
                 }).show();
-        ((EditText) getActivity().findViewById(R.id.editText_capture_examineeId)).getText().clear();
     }
 
     private boolean isValidExamineeIdAndVersion() {
-        return captureViewModel.isValidVersion() &&captureViewModel.isValidExamineeId();
+        return captureViewModel.isValidVersion() && captureViewModel.isValidExamineeId();
     }
 
     private void createViewModel() {
@@ -262,7 +339,7 @@ public class CaptureFragment extends Fragment {
             cameraManager.setUp();
         }
         int x = 1;
-        x+=1;
+        x += 1;
         System.out.println(x);
     }
 
@@ -325,15 +402,15 @@ public class CaptureFragment extends Fragment {
         handleError(MSG_PREF + " onVersionNumbersRetrivedError", throwable);
     }
 
-    private void handleError(String errorPerefix, Throwable t){
+    private void handleError(String errorPerefix, Throwable t) {
         Log.d(TAG, errorPerefix, t);
         try {
             new AlertDialog.Builder(getActivity())
                     .setTitle("An error occured")
                     .setMessage(String.format(
                             "Please capture screen and inform the software development team.\nError content:\n" +
-                                    "Tag: %s\n"+
-                                    "Error prefix: %s\n"+
+                                    "Tag: %s\n" +
+                                    "Error prefix: %s\n" +
                                     "%s",
                             TAG,
                             errorPerefix,
@@ -348,7 +425,7 @@ public class CaptureFragment extends Fragment {
                         }
                     })
                     .show();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, "Espresso issues");
         }
         t.printStackTrace();

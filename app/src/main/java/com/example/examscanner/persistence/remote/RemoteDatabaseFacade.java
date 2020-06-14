@@ -1,19 +1,13 @@
 package com.example.examscanner.persistence.remote;
 
-import android.graphics.Bitmap;
-
-import com.example.examscanner.communication.entities_interfaces.GraderEntityInterface;
 import com.example.examscanner.persistence.remote.entities.Exam;
 import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
 import com.example.examscanner.persistence.remote.entities.Grader;
 import com.example.examscanner.persistence.remote.entities.Question;
 import com.example.examscanner.persistence.remote.entities.Version;
 
-import java.util.HashMap;
 import java.util.List;
 
-import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 public interface RemoteDatabaseFacade {
@@ -29,7 +23,7 @@ public interface RemoteDatabaseFacade {
     public Observable<List<ExamineeSolution>> getExamineeSolutions();
     public void offlineInsertExamineeSolution(String examineeId, String versionId);
     public void offlineInsertAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans);
-    public void offlineDeleteExamineeSolution(String remoteId);
+    public void offlineDeleteExamineeSolution(String solutionId, String examineeId, String remoteExamId);
     public void offlineInsertGradeIntoExamineeSolution(String examineeId, float grade);
     public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl);
     public void addGraderIfAbsent(String email, String uId) ;

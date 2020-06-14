@@ -97,7 +97,7 @@ public class CornerDetectionFragment extends Fragment {
                 cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 String examineeId = sc.getExamineeId();
                 long versionId = sc.getVersion().getId();
-                Completable.fromAction(() -> cornerDetectionViewModel.delete(sc)).subscribeOn(Schedulers.io()).subscribe();
+                Completable.fromAction(() -> cornerDetectionViewModel.delete(sc)).subscribeOn(Schedulers.io()).subscribe(()->{}, t ->{Log.d(TAG, "delete scanned capture", t);});
 //                waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
                 CornerDetectionFragmentDirections.ActionCornerDetectionFragmentToCaptureFragment2 action = CornerDetectionFragmentDirections.actionCornerDetectionFragmentToCaptureFragment2();
                 action.setExamId(cornerDetectionViewModel.getExamId());

@@ -2,6 +2,7 @@ package com.example.examscanner.components.scan_exam.capture;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
@@ -16,7 +17,6 @@ import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -25,6 +25,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class CaptureViewModel extends ViewModel {
+    private final String REMOVE_INDICATION = "REMOVE:";
     private MutableLiveData<Integer> mNumOfTotalCaptures;
     private MutableLiveData<Integer> mNumOfProcessedCaptures;
     private Queue<Capture> unProcessedCaptures;
@@ -58,7 +59,16 @@ public class CaptureViewModel extends ViewModel {
 
     private void consumeExamineeId(String s) {
         synchronized (examineeIds){
-            examineeIds.add(cannonic(s));
+            if(s.indexOf(REMOVE_INDICATION)!=-1){
+                String sRemove =s.replace(REMOVE_INDICATION,"");
+                if(!examineeIds.contains(sRemove)){
+                    Log.d("ExamScanner", String.format("BUG in examinee ids removal. dont want to crach the app: s:%s, sRemove:%s",s,sRemove));
+                }else{
+                    examineeIds.remove(sRemove);
+                }
+            }else{
+                examineeIds.add(cannonic(s));
+            }
         }
     }
 
@@ -136,6 +146,16 @@ public class CaptureViewModel extends ViewModel {
     }
 
     public boolean isValidExamineeId() {
+        if(mExamineeId.getValue() == null){
+            return false;
+        }
+        if(mExamineeId.getValue().equals("")){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isHoldingValidExamineeId() {
         return mExamineeId.getValue() != null;
     }
 

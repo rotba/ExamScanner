@@ -1,7 +1,5 @@
 package com.example.examscanner.stubs;
 
-import android.graphics.Bitmap;
-
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.entities.Exam;
 import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
@@ -12,7 +10,6 @@ import com.example.examscanner.persistence.remote.entities.Version;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
@@ -81,7 +78,7 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineDeleteExamineeSolution(String remoteId) {
+    public void offlineDeleteExamineeSolution(String solutionId, String examineeId, String remoteExamId) {
 
     }
 

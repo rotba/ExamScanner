@@ -87,11 +87,6 @@ public class ResolveConflictedAnswersFragment extends Fragment {
                     Choice c = getChoice(b);
                     finalConflictedAnswersAdapter.getCurrentCAResolutionSubscriber().onResolution(c);
                     waitABitAndSwipeLeft(viewPager, finalConflictedAnswersAdapter);
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     if(!cdViewModel.getScannedCaptureById(scanId).getValue().hasMoreConflictedAnswers()){
                         pb.setVisibility(View.VISIBLE);
                         Completable.fromAction(()->cdViewModel.commitResolutions(scanId))

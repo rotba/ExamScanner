@@ -238,7 +238,7 @@ public class RealFacadeImple implements CommunicationFacade {
             es.setExamineeIdOccupied(true);
             byte[] array = new byte[7];
             new Random().nextBytes(array);
-            examineeId+=new String(array, Charset.forName("UTF-8"));
+            examineeId+="CONFLITCT_"+new String(array, Charset.forName("UTF-8"));
             es.setExamineeId(examineeId);
         }
         final String finalExamineeID = examineeId;
@@ -734,8 +734,12 @@ public class RealFacadeImple implements CommunicationFacade {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
         String remoteId = es.getRemoteId();
         removeExamineeSolutionFromCache(id);
-        es = null;
-        remoteDb.offlineDeleteExamineeSolution(remoteId);
+        Version v = db.getVersionDao().getById(es.getVersionId());
+        throwCommunicationExceptionWhenNull(v, Version.class, "should exist");
+        Exam e = db.getExamDao().getById(v.getExamId());
+        throwCommunicationExceptionWhenNull(e, Exam.class, "should exist");
+//        es = null;
+        remoteDb.offlineDeleteExamineeSolution(remoteId, es.getExamineeId(), e.getRemoteId());
     }
 
     @Override
@@ -759,7 +763,7 @@ public class RealFacadeImple implements CommunicationFacade {
         ea.setRightX(rightX);
         ea.setBottomY(botY);
         db.getExamineeAnswerDao().update(ea);
-        remoteDb.offlineUpdateAnswerIntoExamineeSolution(es.getExamineeId(), q.getQuestionNum(), ans);
+        remoteDb.offlineUpdateAnswerIntoExamineeSolution(es.getRemoteId(), q.getQuestionNum(), ans);
 
     }
 

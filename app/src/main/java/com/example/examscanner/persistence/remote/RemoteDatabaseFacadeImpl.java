@@ -27,7 +27,6 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -174,9 +173,14 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineDeleteExamineeSolution(String remoteId) {
+    public void offlineDeleteExamineeSolution(String solutionId, String examineeId, String remoteExamId) {
         putObjectInLocation(
-                String.format("%s/%s", Paths.toSolutions, remoteId),
+                String.format("%s/%s/%s", Paths.examineeIds, remoteExamId, examineeId),
+                null,
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+        putObjectInLocation(
+                String.format("%s/%s", Paths.toSolutions, solutionId),
                 null,
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();
@@ -376,13 +380,14 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     public Observable<String> observeExamineeIds(String remoteId) {
         return observeList(
                 String.format("%s/%s", Paths.examineeIds, remoteId),
-                ds -> ds.getKey()
+                ds -> ds.getKey(),
+                ds -> "REMOVE:"+ds.getKey()
         );
     }
 
     @Override
-    public Observable<String> insertExamineeIDOrReturnNull(String remoteId, String examineeId) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(String.format("%s/%s/%s", Paths.examineeIds, remoteId, cannonic(examineeId)));
+    public Observable<String> insertExamineeIDOrReturnNull(String remoteExamId, String examineeId) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(String.format("%s/%s/%s", Paths.examineeIds, remoteExamId, cannonic(examineeId)));
         return new Observable<String>() {
             @Override
             protected void subscribeActual(Observer<? super String> observer) {
@@ -413,12 +418,12 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         return examineeId.replace('\\','_').replace('/', '_');
     }
 
-    private <T> Observable<T> observeList(String path, DSMap<T> map) {
+    private <T> Observable<T> observeList(String path, DSMap<T> map,DSMap<T> removeMap) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(path);
-        return generateChildrenObserver(reference, map);
+        return generateChildrenObserver(reference, map,removeMap);
     }
 
-    private <T> Observable<T> generateChildrenObserver(DatabaseReference reference, DSMap<T> map) {
+    private <T> Observable<T> generateChildrenObserver(DatabaseReference reference, DSMap<T> map, DSMap<T> removeMap) {
         return new Observable<T>() {
             @Override
             protected void subscribeActual(Observer<? super T> observer) {
@@ -435,6 +440,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        observer.onNext(removeMap.map(dataSnapshot));
                         Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey() + " ExamScanner doestn handle!");
                     }
 
