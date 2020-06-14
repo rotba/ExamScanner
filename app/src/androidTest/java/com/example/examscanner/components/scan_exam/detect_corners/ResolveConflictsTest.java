@@ -163,7 +163,6 @@ public class ResolveConflictsTest extends StateFullTest {
         captureASolution();
         Utils.sleepScanAnswersTime();
         Utils.sleepScanAnswersTime();
-        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
 //        onView(withId(R.id.spinner_detect_corners_version_num)).perform(click());
 //        onView(withId(R.id.button_cd_nav_to_resolve_answers)).perform(click());
     }
@@ -176,6 +175,20 @@ public class ResolveConflictsTest extends StateFullTest {
 
     @Test
     public void testConflictAndCheckedAMountUpdatesUponResolution() {
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        onView(withText("Resolve")).perform(click());
+        resolveAndSwipe("4");
+        Utils.sleepSwipingTime();
+        resolveAndSwipe("5");
+        Utils.sleepSwipingTime();
+    }
+
+    @Test
+    public void testConflictAndCheckedAMountUpdatesUponResolution2() {
+        captureASolution();
+        Utils.sleepScanAnswersTime();
+        Utils.sleepScanAnswersTime();
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
         onView(withText("Resolve")).perform(click());
         resolveAndSwipe("4");
         Utils.sleepSwipingTime();

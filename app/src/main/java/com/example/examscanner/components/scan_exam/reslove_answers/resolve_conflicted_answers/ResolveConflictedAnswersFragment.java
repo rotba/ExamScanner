@@ -23,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragmentDirections;
+import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionUseCaseException;
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
 import com.example.examscanner.components.scan_exam.reslove_answers.RAViewModelFactory;
@@ -40,25 +41,31 @@ public class ResolveConflictedAnswersFragment extends Fragment {
     private static final String TAG = "ExamScanner";
     private static final String MSH_PREF = "ResolveConflictedAnswersFragment::";
     private CornerDetectionViewModel cdViewModel;
-    private int scanId;
+    private long scanId;
     private ProgressBar pb;
     private View root;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        scanId = ResolveConflictedAnswersFragmentArgs.fromBundle(getArguments()).getScanId();
+        scanId = ResolveConflictedAnswersFragmentArgs.fromBundle(getArguments()).getScanId();
         RAViewModelFactory factory = new RAViewModelFactory(getActivity());
         root = inflater.inflate(R.layout.fragment_resolve_one_scane, container, false);
-        cdViewModel = new ViewModelProvider(getActivity(), factory).get(CornerDetectionViewModel.class);
+        cdViewModel = new ViewModelProvider(requireActivity(), factory).get(CornerDetectionViewModel.class);
         return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ViewPager2 viewPager = (ViewPager2) view.findViewById(R.id.viewPager2_conflicted_answers);
-        ConflictedAnswersAdapter conflictedAnswersAdapter =
-                new ConflictedAnswersAdapter(getActivity(), cdViewModel.getScannedCaptureById(scanId), viewPager);
+        ConflictedAnswersAdapter conflictedAnswersAdapter = null;
+        try {
+            conflictedAnswersAdapter=
+                    new ConflictedAnswersAdapter(getActivity(), cdViewModel.getScannedCaptureById(scanId), viewPager);
+        } catch (CornerDetectionUseCaseException e){
+            handleError("ResolveConflictedAnswersFragment::onViewCreated", e);
+            return;
+        }
         viewPager.setAdapter(conflictedAnswersAdapter);
         conflictedAnswersAdapter.getPosition().observe(getActivity(), new Observer<Integer>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -72,13 +79,19 @@ public class ResolveConflictedAnswersFragment extends Fragment {
         pb = ((ProgressBar) view.findViewById(R.id.progressBar_ra));
         pb.setVisibility(View.INVISIBLE);
         for (Button b : getChoiceButtons(view)) {
+            ConflictedAnswersAdapter finalConflictedAnswersAdapter = conflictedAnswersAdapter;
             b.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onClick(View view) {
                     Choice c = getChoice(b);
-                    conflictedAnswersAdapter.getCurrentCAResolutionSubscriber().onResolution(c);
-                    waitABitAndSwipeLeft(viewPager, conflictedAnswersAdapter);
+                    finalConflictedAnswersAdapter.getCurrentCAResolutionSubscriber().onResolution(c);
+                    waitABitAndSwipeLeft(viewPager, finalConflictedAnswersAdapter);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     if(!cdViewModel.getScannedCaptureById(scanId).getValue().hasMoreConflictedAnswers()){
                         pb.setVisibility(View.VISIBLE);
                         Completable.fromAction(()->cdViewModel.commitResolutions(scanId))
@@ -107,11 +120,7 @@ public class ResolveConflictedAnswersFragment extends Fragment {
     }
 
 
-    @Override
-    public void onDestroy() {
-        cdViewModel.commitResolutions(scanId);
-        super.onDestroy();
-    }
+
 
     private Choice getChoice(Button b) {
         switch (b.getId()) {
