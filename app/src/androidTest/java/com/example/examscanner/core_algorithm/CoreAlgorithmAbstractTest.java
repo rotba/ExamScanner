@@ -34,7 +34,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.observers.TestObserver;
 
@@ -138,5 +140,33 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
         assertEquals(50, resolved);
         assertEquals(50, correctResolved);
         assertEquals(0, wrongResolved);
+    }
+
+
+    public void scanAnswersByPositions_Uncertain() {
+
+        cvm.consumeCapture(useCaseContext.getCapture());
+        cvm.processCapture();
+        List<Integer> answers = new ArrayList<>(Arrays.asList(5, 4, 3, 5, 3, 3, 5, 2, 4, 1, 1, 1, 2, 3, 4, 5, 1, 2, 3, -1, 5, 1, 2, 3, 4,
+                                            5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4));
+        List<Integer> uncertainAnswers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 7, 8, 9, 13, 14, 15, 16, 18, 20, 21, 22, 25, 27, 28, 29, 30, 32, 33, 38));
+        List<ScannedCapture> sclst = useCaseContext.getSCRepo().get(x -> true);
+        assert sclst.size() == 1;
+        ScannedCapture sc = sclst.get(0);
+        assertEquals(50, sc.getAnswers().size());
+
+
+        for (int i = 0; i < useCaseContext.getTheExam().getNumOfQuestions(); i++) {
+            Answer ans = sc.getAnswerByNum(i + 1);
+            if (ans.isResolved()) {
+                ResolvedAnswer rAns = (ResolvedAnswer) ans;
+                assertEquals("The algorithm was mistaken resolving question " + (i+1),
+                        (int)answers.get(i), rAns.getSelection());
+            }
+            else{
+                assertTrue("The algorithm didn't resolve question " + (i+1),
+                            uncertainAnswers.contains(i+1));
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import io.reactivex.observers.TestObserver;
@@ -106,5 +107,102 @@ public class CoreAlgorithmJPGTest extends CoreAlgorithmAbstractTest {
         lateSetup();
         super.scanAnswersByPositions();
     }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce15() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_15());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce16() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_16());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce17() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_17());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce18() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_18());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce19() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_19());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce20() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_20());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce21() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_21());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce22() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_22());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce23() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_23());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce24() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_24());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce25() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_25());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce26() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_26());
+        lateSetup();
+        super.scanAnswersByPositions_Uncertain();
+    }
+
+    @Ignore
+    @Test
+    public void scanAnswersByPositionsInsatnce001() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(
+                getState(),
+                BitmapsInstancesFactoryAndroidTest.getCaspl182_V1_ins_001(),
+                BitmapsInstancesFactoryAndroidTest.getCaspl182_V1_orig()
+        );
+        lateSetup();
+        super.scanAnswersByPositions();
+    }
+
 
 }
