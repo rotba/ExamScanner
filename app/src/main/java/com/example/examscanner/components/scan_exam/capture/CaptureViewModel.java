@@ -210,4 +210,8 @@ public class CaptureViewModel extends ViewModel {
     public boolean thereAreScannedCaptures() {
         return thereAreScannedCaptures;
     }
+
+    public boolean isHoldingVersion() {
+        return mVersion.getValue()!=null;
+    }
 }

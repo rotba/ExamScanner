@@ -6,15 +6,11 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,11 +33,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
-import com.example.examscanner.components.create_exam.CreateExamFragmentDirections;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
-import com.example.examscanner.repositories.exam.Version;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -73,6 +67,8 @@ public class CaptureFragment extends Fragment {
     private View root;
     private EditText examineeEditText;
     private TextView captureProgressEditText;
+    private Spinner versionSpinner;
+    private String theEmptyChoice;
     //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -88,6 +84,7 @@ public class CaptureFragment extends Fragment {
         inProgress = new AtomicInteger(0);
         requestCamera();
         captureProgressEditText = (TextView) root.findViewById(R.id.capture_processing_progress);
+        theEmptyChoice = getActivity().getString(R.string.capture_the_empty_version_choice);
         return root;
     }
 
@@ -171,6 +168,12 @@ public class CaptureFragment extends Fragment {
                         return;
                     }
                 }
+                if(!captureViewModel.isHoldingVersion() && versionIsChosen()){
+                    if(!consumeVersionIdOrHandleIfInvalid(versionSpinner.getSelectedItem().toString())){
+                        return;
+                    }
+                }
+
                 if (isValidExamineeIdAndVersion()) {
                     captureClickListener.onClick(v);
                 } else {
@@ -277,6 +280,20 @@ public class CaptureFragment extends Fragment {
                 setVisibility(View.INVISIBLE);
     }
 
+    private boolean consumeVersionIdOrHandleIfInvalid(String toString) {
+        if (toString.equals(theEmptyChoice)){
+            Toast.makeText(getActivity(), "Please choose version", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        Integer intChoice = Integer.parseInt(toString);
+        captureViewModel.setVersion(intChoice);
+        return true;
+    }
+
+    private boolean versionIsChosen() {
+        return versionSpinner.getSelectedItem() !=null && !((String)versionSpinner.getSelectedItem()).equals(theEmptyChoice);
+    }
+
     //returns true iff valid examinee id
     protected boolean consumeExamineeIdOrHandleIfInvalid(String examineeID) {
         if (!captureViewModel.isUniqueExamineeId(examineeID)) {
@@ -374,16 +391,15 @@ public class CaptureFragment extends Fragment {
 
     private void onVersionNumbersRetrived(int[] versionNumbers) {
         String[] versionStrings = new String[versionNumbers.length + 1];
-        String theEmptyChoice = getActivity().getString(R.string.capture_the_empty_version_choice);
         versionStrings[0] = theEmptyChoice;
         for (int i = 1; i < versionNumbers.length + 1; i++) {
             versionStrings[i] = new String(Integer.toString(versionNumbers[i - 1]));
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, versionStrings);
 
-        Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner_capture_version_num);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        versionSpinner = (Spinner) root.findViewById(R.id.spinner_capture_version_num);
+        versionSpinner.setAdapter(adapter);
+        versionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String choice = (String) parent.getSelectedItem();
