@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 public class PathsGenerator {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String genVersionPath(String examId, int verNum){
-        return Paths.get(examId, String.valueOf(verNum)).toString();
+        return Paths.get(examId, "VER_"+String.valueOf(verNum)).toString();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -18,7 +18,7 @@ public class PathsGenerator {
     }
 
     private static String canonic(String solutionId) {
-        return solutionId.replace('/','_').replace('\\', '_');
+        return "SOL_"+solutionId.replace('/','_').replace('\\', '_');
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
