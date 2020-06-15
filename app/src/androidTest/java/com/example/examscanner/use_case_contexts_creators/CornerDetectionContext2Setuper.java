@@ -39,7 +39,7 @@ public class CornerDetectionContext2Setuper {
     private int someExamineeId = 123456;
     private Capture capture;
     private String TAG = "ExamScanner";;
-    public static boolean stubExamRepo = false;
+    public static boolean stubExamRepo = true;
 
     public CornerDetectionContext2Setuper(State state, Bitmap comp191_v1_ins_1) {
         this.state = state;

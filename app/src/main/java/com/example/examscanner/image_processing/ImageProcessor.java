@@ -542,6 +542,7 @@ import androidx.annotation.RequiresApi;
 import com.example.examscanner.R;
 import com.example.examscanner.communication.ContextProvider;
 
+import org.jetbrains.annotations.NotNull;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -579,8 +580,8 @@ public class ImageProcessor implements ImageProcessingFacade {
     Mat questionTemplate;
     final int thresh = 50;
     final int N = 11;
-    final static Scalar param_LOW_BOUND_BLACKS_COUNTING = new Scalar(20, 20, 20);
-    final static Scalar param_UPPER_BOUND_BLACKS_COUNTING = new Scalar(110, 110, 110);
+    final static Scalar param_LOW_BOUND_BLACKS_COUNTING = new Scalar(120);
+    final static Scalar param_UPPER_BOUND_BLACKS_COUNTING = new Scalar(255);
     final static boolean param_USE_FINE_AJDUSTMENT = true;
     private static final int ORIGINAL_WIDTH = 2550;
     private static final int ORIGINAL_HEIGHT = 3300;
@@ -923,7 +924,14 @@ public class ImageProcessor implements ImageProcessingFacade {
             Point matchLoc = new Point(leftMostXs[i], upperMostYs[i]);
             Rect rect = null;
             if (param_USE_FINE_AJDUSTMENT) {
-                FineAdjustment adjustment = FineAdjustment.create(img_exam, leftMostXs[i], upperMostYs[i], img_template.cols(), img_template.rows());
+                FineAdjustment adjustment = FineAdjustment.create(
+                        img_exam,
+                        leftMostXs[i],
+                        upperMostYs[i],
+                        img_template.cols(),
+                        img_template.rows(),
+                        getLowerWhiteBound(img_exam.submat(new Rect(leftMostXs[i], upperMostYs[i], img_template.cols(), img_template.rows())))
+                );
                 cummulatedAdjustment.accumulateX(adjustment.getXAdj());
                 cummulatedAdjustment.accumulateY(adjustment.getYAdj());
                 rect = new Rect(
@@ -947,6 +955,11 @@ public class ImageProcessor implements ImageProcessingFacade {
           //  answersMap = findQuestions(img_exam, img_template, numOfQuestions);
         }
         return answersMap;
+    }
+
+    @NotNull
+    private Scalar getLowerWhiteBound(Mat submat) {
+        return Core.mean(submat);
     }
 
     private Bitmap showRedRectanglesWithAdj(int[] xs, int[] ys, Mat mat, int tempW, int tempH, FineAdjustment[] adj) {
@@ -1005,7 +1018,7 @@ public class ImageProcessor implements ImageProcessingFacade {
             Imgproc.cvtColor(currMat, currMat, Imgproc.COLOR_BGR2GRAY);
             Mat cloneONLYFORTESTING = currMat.clone();
             Core.inRange(currMat, param_LOW_BOUND_BLACKS_COUNTING, param_UPPER_BOUND_BLACKS_COUNTING, currMat);
-            Core.bitwise_not(currMat, currMat);
+//            Core.bitwise_not(currMat, currMat);
             int non_black_pixels = Core.countNonZero(currMat);
             int black_pixels = currMat.rows() * currMat.cols() - non_black_pixels;
             bp.put(i+1, black_pixels);
@@ -1109,7 +1122,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     }
 
-    private static Bitmap helperMatToBitmap(Mat m) {
+    public static Bitmap helperMatToBitmap(Mat m) {
         Bitmap bm = Bitmap.createBitmap(m.width(), m.height(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(m, bm);
         return bm;
