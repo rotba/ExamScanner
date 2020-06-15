@@ -923,6 +923,7 @@ public class ImageProcessor implements ImageProcessingFacade {
             upperMostYs[i] +=cummulatedAdjustment.getCurrYAdj();
             Point matchLoc = new Point(leftMostXs[i], upperMostYs[i]);
             Rect rect = null;
+            final Scalar lowerWhiteBound = getLowerWhiteBound(img_exam.submat(new Rect(leftMostXs[i], upperMostYs[i], img_template.cols(), img_template.rows())));
             if (param_USE_FINE_AJDUSTMENT) {
                 FineAdjustment adjustment = FineAdjustment.create(
                         img_exam,
@@ -930,7 +931,7 @@ public class ImageProcessor implements ImageProcessingFacade {
                         upperMostYs[i],
                         img_template.cols(),
                         img_template.rows(),
-                        getLowerWhiteBound(img_exam.submat(new Rect(leftMostXs[i], upperMostYs[i], img_template.cols(), img_template.rows())))
+                        lowerWhiteBound
                 );
                 cummulatedAdjustment.accumulateX(adjustment.getXAdj());
                 cummulatedAdjustment.accumulateY(adjustment.getYAdj());
@@ -945,7 +946,7 @@ public class ImageProcessor implements ImageProcessingFacade {
             }
             Mat currAns = img_exam.submat(rect);
             List<Mat> imgChunks = splitImage2(currAns, 5);
-            int correctAns = markedAnswer2(imgChunks);
+            int correctAns = markedAnswer2(imgChunks, lowerWhiteBound);
             answersMap.put(matchLoc, correctAns);
         }
         //DEBUGGING_HACK: use in the evaluator showRedRectanglesWithAdj(leftMostXs,upperMostYs,img_exam,img_template.width(),img_template.height(),forDebugging_ADJUSTMENTS)
@@ -1008,7 +1009,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         return showRedRectangles(sXs, sXs, mat, tempW, tempH);
     }
 
-    protected int markedAnswer2(List<Mat> imgChunks) {
+    protected int markedAnswer2(List<Mat> imgChunks, Scalar mean) {
         int maxBlack = 0;
         Map<Integer, Integer> bp = new HashMap<>();
         int sizeOfChunk = imgChunks.get(0).cols() * imgChunks.get(0).rows();
@@ -1017,7 +1018,7 @@ public class ImageProcessor implements ImageProcessingFacade {
             //CONVERT IMAGE TO B&W AND DETERMINE IF IT HAS MORE BLACK OR WHITE
             Imgproc.cvtColor(currMat, currMat, Imgproc.COLOR_BGR2GRAY);
             Mat cloneONLYFORTESTING = currMat.clone();
-            Core.inRange(currMat, param_LOW_BOUND_BLACKS_COUNTING, param_UPPER_BOUND_BLACKS_COUNTING, currMat);
+            Core.inRange(currMat, mean, param_UPPER_BOUND_BLACKS_COUNTING, currMat);
 //            Core.bitwise_not(currMat, currMat);
             int non_black_pixels = Core.countNonZero(currMat);
             int black_pixels = currMat.rows() * currMat.cols() - non_black_pixels;

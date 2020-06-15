@@ -14,6 +14,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
@@ -314,7 +315,7 @@ public class ImageProcessorTest {
     public void markedAnswerTestWithOnePicture(){
         Mat ans_one_marking = loadFromResource(R.drawable.answer1marking);
         List<Mat> chunks = imageProcessor.splitImage2(ans_one_marking, 5);
-        int ans = imageProcessor.markedAnswer2(chunks);
+        int ans = imageProcessor.markedAnswer2(chunks, ImageProcessor.param_LOW_BOUND_BLACKS_COUNTING);
         assertEquals(ans, 3);
     }
 
@@ -322,7 +323,7 @@ public class ImageProcessorTest {
     public void markedAnswerTestWithNothingMarked(){
         Mat ans_no_marking = loadFromResource(R.drawable.template);
         List<Mat> chunks = imageProcessor.splitImage2(ans_no_marking, 5);
-        int ans = imageProcessor.markedAnswer2(chunks);
+        int ans = imageProcessor.markedAnswer2(chunks,ImageProcessor.param_LOW_BOUND_BLACKS_COUNTING);
         assertEquals(ans, -1);
     }
 
@@ -330,7 +331,7 @@ public class ImageProcessorTest {
     public void markedAnswerTestWithTwoMarking(){
         Mat ans_2_markings = loadFromResource(R.drawable.answertwomarkings);
         List<Mat> chunks = imageProcessor.splitImage2(ans_2_markings, 5);
-        int ans = imageProcessor.markedAnswer2(chunks);
+        int ans = imageProcessor.markedAnswer2(chunks,ImageProcessor.param_LOW_BOUND_BLACKS_COUNTING);
         assertEquals(ans, -1);
     }
 
@@ -346,7 +347,7 @@ public class ImageProcessorTest {
     public void markedAnswerTestWithNotFullMarking(){
         Mat ans_not_full_marking = loadFromResource(R.drawable.markingnotfull);
         List<Mat> chunks = imageProcessor.splitImage2(ans_not_full_marking, 5);
-        int ans = imageProcessor.markedAnswer2(chunks);
+        int ans = imageProcessor.markedAnswer2(chunks,ImageProcessor.param_LOW_BOUND_BLACKS_COUNTING);
         assertEquals(ans, 3);
     }
 
