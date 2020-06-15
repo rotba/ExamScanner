@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class BitmapInstancesFactory {
+    private static final String comp191_V1_ins_27 = "_27.jpg";
+
     public BitmapInstancesFactory(Context context) {
         this.context = context;
     }
@@ -67,6 +69,10 @@ public class BitmapInstancesFactory {
 
     public Bitmap getTestJpg3Marked() {
         return getBitmapFromAssets(testJpg3MarkedFilePath);
+    }
+
+    public Bitmap getComp191_V1_ins_27() {
+        return getBitmapFromAssets(comp191_V1_ins_27);
     }
 
     @Nullable

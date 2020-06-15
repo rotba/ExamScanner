@@ -305,4 +305,15 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
         onView(withId(R.id.for_testing_fragment_capture_root)).check(matches(isDisplayed()));
     }
 
+
+    protected void testTake5() {
+        navToCapture();
+        resumeYourLastSession();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 5;
+        for (int i = 0; i < numOfCaptures; i++) {
+            captureASolution();
+            sleepSingleCaptureProcessingTime();
+        }
+    }
 }

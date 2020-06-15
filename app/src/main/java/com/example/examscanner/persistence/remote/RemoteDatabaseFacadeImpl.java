@@ -125,6 +125,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         versionId,
                         0,
                         new HashMap<>(),
+                        null,
                         null
                 ),
                 StoreTaskPostprocessor.getOffline()
@@ -132,7 +133,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl) {
+    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl, String origBitmapUrl) {
         HashMap ans = new HashMap();
         for (int i = 0; i < answers.length; i++)
             ans.put(String.valueOf(i + 1), answers[i][0]);
@@ -143,7 +144,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         versionId,
                         grade,
                         ans,
-                        bitmapUrl
+                        bitmapUrl,
+                        origBitmapUrl
                 ),
                 StoreTaskPostprocessor.getOnline()
         );

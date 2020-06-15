@@ -22,6 +22,12 @@ import java.util.function.Predicate;
 public class ScannedCapture {
     private List<Answer> answers;
     private Bitmap bm;
+
+    public Bitmap getOrigBitmap() {
+        return origBitmap;
+    }
+
+    private Bitmap origBitmap;
     private boolean isExamieeIdIsOccupiedByAnotherSolution;
     private int id;
     private Future<Version> v;
@@ -29,8 +35,9 @@ public class ScannedCapture {
     private boolean hasUpdatedFeedbackImage;
 
 
-    public ScannedCapture(int id, Bitmap bm, int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, Version v, String examineeId) {
+    public ScannedCapture(int id, Bitmap bm, Bitmap origBitmap, int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, Version v, String examineeId) {
         this.bm=bm;
+        this.origBitmap = origBitmap;
         this.answers = new ArrayList<>();
         for (int i = 0; i <numOfAnswersDetected ; i++) {
             if(selections[i] >0){

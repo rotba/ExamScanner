@@ -29,18 +29,18 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 0;
     private AppBarConfiguration mAppBarConfiguration;
     private MainActivityViewModel viewModel;
-    private static boolean stubsMode = false;
+    private static boolean stubsMode = true;
     public static boolean testMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
+        OpenCVLoader.initDebug();
         if(stubsMode)StubsSetupManager.setup(getBaseContext());
         if(testMode){
             AppDatabaseFactory.setTestMode();
         }
-        OpenCVLoader.initDebug();
         ContextProvider.set(this.getApplicationContext());
         MainActivityViewModelFactory factory = new MainActivityViewModelFactory();
         viewModel = new ViewModelProvider(this,factory).get(MainActivityViewModel.class);

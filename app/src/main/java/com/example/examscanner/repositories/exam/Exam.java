@@ -142,7 +142,7 @@ public class Exam {
     }
 
     public Version getVersionByNum(int verNum) {
-        for (Version v : accessVersionFuture()) {
+        for (Version v : getVersions()) {
             if (v.getNum() == verNum)
                 return v;
         }

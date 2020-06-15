@@ -91,7 +91,7 @@ public class CornerDetectionFragmentTest {
         ScannedCapturesInstancesFactory.instance1(new ScanAnswersConsumer() {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                final ScannedCapture t = new ScannedCapture(-1, testJpg, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, exam.getVersions().get(0), NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET + String.valueOf(QAD_counter++));
+                final ScannedCapture t = new ScannedCapture(-1, testJpg, testJpg, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, exam.getVersions().get(0), NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET + String.valueOf(QAD_counter++));
                 repo.create(t);
             }
         });

@@ -39,6 +39,7 @@ public class CaptureViewModel extends ViewModel {
     private Exam exam;
     private int[] versionNumers;
     private boolean thereAreScannedCaptures;
+    private boolean aBoolean;
 
 
     public CaptureViewModel(Repository<ScannedCapture> scRepo, ImageProcessingFacade imageProcessor, long sessionId, Exam exam) {
@@ -108,7 +109,7 @@ public class CaptureViewModel extends ViewModel {
                         final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds);
                         Log.d(TAG, "starting creating ScannedCapture");
                         scRepo.create(new ScannedCapture(
-                                -1, bitmap, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
+                                -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
 
                         ));
                     }
@@ -147,14 +148,20 @@ public class CaptureViewModel extends ViewModel {
     }
 
     public boolean isValidVersion() {
-        return mVersion.getValue() != null;
+        aBoolean = mVersion.getValue() != null;
+        if(!aBoolean){
+            Log.d(TAG, String.format("in valid version :%s", mVersion.getValue()));
+        }
+        return aBoolean;
     }
 
     public boolean isValidExamineeId() {
         if(mExamineeId.getValue() == null){
+            Log.d(TAG, String.format("in valid examineeId :%s", mExamineeId.getValue()));
             return false;
         }
         if(mExamineeId.getValue().equals("")){
+            Log.d(TAG, String.format("in valid examineeId :%s", mExamineeId.getValue()));
             return false;
         }
         return true;
@@ -177,7 +184,12 @@ public class CaptureViewModel extends ViewModel {
     }
 
     public void setExamineeId(String toString) {
-        mExamineeId.postValue(toString);
+        try {
+            mExamineeId.setValue(toString);
+        }catch (Exception e){
+            Log.d(TAG, "mExamineeId.setValue(toString) failed probably because of main thread stuff", e);
+            mExamineeId.postValue(toString);
+        }
     }
 
     public boolean isUniqueExamineeId(String examineeID) {

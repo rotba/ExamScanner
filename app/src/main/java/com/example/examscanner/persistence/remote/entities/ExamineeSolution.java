@@ -14,6 +14,7 @@ public class ExamineeSolution {
     private String id;
     public String examineeId;
     public String bitmapUrl;
+    public String origBitmapUrl;
 
     public ExamineeSolution(String versionId, Map<Integer, Integer> answers) {
         this.examineeId = examineeId;
@@ -22,12 +23,13 @@ public class ExamineeSolution {
         this.answers = answers;
     }
 
-    public ExamineeSolution(String examineeId, String versionId, float grade, Map<Integer, Integer> answers, String bitmapUrl) {
+    public ExamineeSolution(String examineeId, String versionId, float grade, Map<Integer, Integer> answers, String bitmapUrl, String origBitmapUrl) {
         this.examineeId = examineeId;
         this.versionId = versionId;
         this.grade = grade;
         this.answers = answers;
         this.bitmapUrl = bitmapUrl;
+        this.origBitmapUrl = origBitmapUrl;
     }
 
     public String _getId(){

@@ -20,4 +20,9 @@ public class PathsGenerator {
     private static String canonic(String solutionId) {
         return solutionId.replace('/','_').replace('\\', '_');
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String genExamineeSolutionOrig(String remoetExamId, String solutionId) {
+        return Paths.get(remoetExamId, "ORIG",canonic(solutionId)).toString();
+    }
 }

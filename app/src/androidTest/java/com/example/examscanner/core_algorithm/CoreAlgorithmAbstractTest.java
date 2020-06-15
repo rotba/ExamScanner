@@ -50,8 +50,8 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
     public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     @Rule
     public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
-    private CornerDetectionContext2Setuper useCaseContext;
-    private CaptureViewModel cvm;
+    public CornerDetectionContext2Setuper useCaseContext;
+    public CaptureViewModel cvm;
 
     @Before
     public void setUp() {

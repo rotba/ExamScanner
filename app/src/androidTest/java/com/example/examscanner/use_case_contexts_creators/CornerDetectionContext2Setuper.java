@@ -26,6 +26,7 @@ import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.repositories.session.SESessionProviderFactory;
+import com.example.examscanner.stubs.ExamRepositoryStub;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -38,6 +39,7 @@ public class CornerDetectionContext2Setuper {
     private int someExamineeId = 123456;
     private Capture capture;
     private String TAG = "ExamScanner";;
+    public static boolean stubExamRepo = false;
 
     public CornerDetectionContext2Setuper(State state, Bitmap comp191_v1_ins_1) {
         this.state = state;
@@ -65,6 +67,11 @@ public class CornerDetectionContext2Setuper {
         this.state= state;
         this.theCDCBitmap = comp191_v1_ins_9;
         createExamBitmap = comp191_v1_ins_in1;
+    }
+
+    public CornerDetectionContext2Setuper(State state, ImageProcessingFacade alignmentSubIp) {
+        this.state =state;
+        imageProcessingFacadeStub = alignmentSubIp;
     }
 
     public void setPDF(boolean PDF) {
@@ -100,6 +107,12 @@ public class CornerDetectionContext2Setuper {
         }else{
             ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(imageProcessingFacadeStub);
         }
+        if(stubExamRepo){
+            examRepository = new ExamRepositoryStub();
+            ExamRepositoryFactory.setStubInstance(examRepository);
+        }else{
+            examRepository = new ExamRepositoryFactory().create();
+        }
         imageProcessor = new ImageProcessingFactory().create();
         ceModelView = new CreateExamModelView(
                 new ExamRepositoryFactory().create(),
@@ -124,7 +137,6 @@ public class CornerDetectionContext2Setuper {
         ceModelView.addVersion();
         ceModelView.holdExamUrl("https://docs.google.com/spreadsheets/d/1AoTx5aw0t4e_KvjUpHUmvAkd6Ywj9_Mqd5sluJQfcVA/edit?usp=sharing");
         ceModelView.create("testAddVersion()_courseName", "A", "Fall", "2020");
-        examRepository = new ExamRepositoryFactory().create();
         List<Exam> exams = examRepository.get((e) -> true);
         e = exams.get(0);
 

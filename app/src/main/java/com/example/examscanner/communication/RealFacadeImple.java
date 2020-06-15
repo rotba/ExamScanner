@@ -84,7 +84,7 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
 
-    private RealFacadeImple(AppDatabase db, FilesManager fm,RemoteFilesManager rfm , RemoteDatabaseFacade remoteDb) {
+    private RealFacadeImple(AppDatabase db, FilesManager fm, RemoteFilesManager rfm, RemoteDatabaseFacade remoteDb) {
         this.db = db;
         this.fm = fm;
         this.rfm = rfm;
@@ -202,77 +202,94 @@ public class RealFacadeImple implements CommunicationFacade {
     public long addExamineeAnswer(long solutionId, long questionId, int ans, int leftX, int upY, int rightX, int botY) {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
         Question q = db.getQuestionDao().get(questionId);
-        if(es ==null){
+        if (es == null) {
             throw new MyAssertionError("ExamineeSolution should exist in db");
         }
-        if(q ==null){
+        if (q == null) {
             throw new MyAssertionError("Question should exist in db");
         }
-     //   remoteDb.offlineInsertAnswerIntoExamineeSolution(es.getExamineeId(), q.getQuestionNum(), ans);
+        //   remoteDb.offlineInsertAnswerIntoExamineeSolution(es.getExamineeId(), q.getQuestionNum(), ans);
         return db.getExamineeAnswerDao().insert(new ExamineeAnswer(questionId, solutionId, ans, leftX, upY, rightX, botY));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void addExamineeGrade(long solutionId, long versionId, int[][] answers, float grade) {
+    public void addExamineeGrade(long solutionId, long versionId, int[][] answers, float grade, Bitmap origBitmap
+    ) {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
-        if(es ==null){
+        if (es == null) {
             throw new MyAssertionError("ExamineeSolution should exist in db");
         }
         Version v = db.getVersionDao().getById(versionId);
-        if(v == null)
+        if (v == null)
             throw new CommunicationException("This student solution's version is null");
         Exam e = db.getExamDao().getById(v.getExamId());
-        throwCommunicationExceptionWhenNull(e,Exam.class,  String.format("id is %d", v.getExamId()));
+        throwCommunicationExceptionWhenNull(e, Exam.class, String.format("id is %d", v.getExamId()));
         String remoteversionId = v.getRemoteVersionId();
         Log.d(TAG, String.format("starting creating the remote instance of the solution %d", es.getId()));
         remoteDb.insertExamineeIDOrReturnNull(e.getRemoteId(), es.getExamineeId())
-        .subscribe(
-                result-> handleExamineeIdSuccessInsertion(result,es,remoteversionId,answers, grade,e.getRemoteId()),
-                throwable -> {throw new CommunicationException(throwable);}
+                .subscribe(
+                        result -> handleExamineeIdSuccessInsertion(result, es, remoteversionId, answers, grade, e.getRemoteId(), origBitmap),
+                        throwable -> {
+                            throw new CommunicationException(throwable);
+                        }
                 );
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId) {
+    private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId, Bitmap orig) {
         Log.d(TAG, String.format("inserted the eaminieeid %s to the eaxminee ids table. solution local id is %d", result, es.getId()));
         String examineeId = es.getExamineeId();
-        if(result==null){
+        if (result == null) {
             es.setExamineeIdOccupied(true);
             byte[] array = new byte[7];
             new Random().nextBytes(array);
-            examineeId+="CONFLITCT_"+new String(array, Charset.forName("UTF-8"));
+            examineeId += "CONFLITCT_" + new String(array, Charset.forName("UTF-8"));
             es.setExamineeId(examineeId);
         }
         final String finalExamineeID = examineeId;
         String bitmapPath = PathsGenerator.genExamineeSolution(remoetExamId, examineeId);
+        String origBitmapPath = PathsGenerator.genExamineeSolutionOrig(remoetExamId, examineeId);
         try {
             Log.d(TAG, String.format("started storring the bitmap of es.getId():%d", es.getId()));
-            rfm.store(bitmapPath , toByteArray(fm.get(es.getBitmapPath()))).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-            .subscribe(
-                    () ->{
-                        Log.d(TAG, String.format("done storring the bitmap of es.getId():%d", es.getId()));
-                        handleSolutionBitmapStorageSuccess(bitmapPath,es, finalExamineeID, remoteversionId, answers, grade);
-                    } ,
-                    throwable -> {throw new CommunicationException(throwable);}
-            );
+            rfm.store(bitmapPath, toByteArray(fm.get(es.getBitmapPath()))).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+                    .subscribe(() -> {
+                                rfm.store(origBitmapPath, toByteArray(orig)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+                                        .subscribe(
+                                                () -> {
+                                                    Log.d(TAG, String.format("done storring the bitmap of es.getId():%d", es.getId()));
+                                                    handleSolutionBitmapStorageSuccess(bitmapPath, origBitmapPath, es, finalExamineeID, remoteversionId, answers, grade);
+                                                },
+                                                throwable -> {
+                                                    throw new CommunicationException(throwable);
+                                                }
+                                        );
+                            }
+                    );
         } catch (FileNotFoundException e) {
             throw new CommunicationException(e);
         }
     }
 
-    private void handleSolutionBitmapStorageSuccess(String bitmapPath, ExamineeSolution es, String finalExamineeID, String remoteversionId, int[][] answers, float grade) {
+    private void handleSolutionBitmapStorageSuccess(String bitmapPath, String origBitmapPath, ExamineeSolution es, String finalExamineeID, String remoteversionId, int[][] answers, float grade) {
         rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-          url ->{
-              Log.d(TAG, String.format("created the url of es.getId():%d", es.getId()));
-              remoteDb.offlineInsertExamineeSolutionTransaction(finalExamineeID, remoteversionId, answers, grade,url).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-                      s->{
-                          Log.d(TAG, String.format("done inserting es.getId():%d as %s", es.getId(), s));
-                          es.setRemoteId(s);
-                          db.getExamineeSolutionDao().update(es);
-                      }
-              );
-          }
+                url -> {
+                    rfm.createUrl(origBitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+                            urlOrig -> {
+                                Log.d(TAG, String.format("created the url of es.getId():%d", es.getId()));
+                                remoteDb.offlineInsertExamineeSolutionTransaction(finalExamineeID, remoteversionId, answers, grade, url, urlOrig).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+                                        s -> {
+                                            Log.d(TAG, String.format("done inserting es.getId():%d as %s", es.getId(), s));
+                                            es.setRemoteId(s);
+                                            db.getExamineeSolutionDao().update(es);
+                                        }
+                                );
+                            },
+                            throwable -> {
+                                throw new CommunicationException(throwable);
+                            }
+                    );
+                }
         );
     }
 
@@ -298,7 +315,7 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public ExamEntityInterface getExamById(long id) {
         Exam theExam = db.getExamDao().getById(id);
-        throwCommunicationExceptionWhenNull(theExam, Exam.class, String.format("id is %d, db info: %s",id, db.toString()));
+        throwCommunicationExceptionWhenNull(theExam, Exam.class, String.format("id is %d, db info: %s", id, db.toString()));
         return examEntity2EntityInterface(theExam);
     }
 
@@ -413,7 +430,7 @@ public class RealFacadeImple implements CommunicationFacade {
         version.setId(vId);
         final Bitmap[] bmBox = {null};
         rfm.get(rv.bitmapPath).blockingSubscribe(bytes -> bmBox[0] = toBitmap(bytes));
-        assert  bmBox[0]!=null;
+        assert bmBox[0] != null;
         Bitmap bm = bmBox[0];
         try {
             fm.store(bm, version._getBitmapPath());
@@ -498,7 +515,6 @@ public class RealFacadeImple implements CommunicationFacade {
             throw new CommunicationException(t);
         }
     }
-
 
 
     @Override
@@ -603,7 +619,7 @@ public class RealFacadeImple implements CommunicationFacade {
         }
     }
 
-    public void updateUploaded(long examId){
+    public void updateUploaded(long examId) {
         String remoteId = db.getExamDao().getExamWithVersions(examId).getExam().getRemoteId();
         remoteDb.updateUploaded(remoteId);
     }
@@ -611,12 +627,12 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public Observable<String> observeExamineeIds(long id) {
         Exam e = db.getExamDao().getById(id);
-        throwCommunicationExceptionWhenNull(e,Exam.class, String.format("id is %d", id));
+        throwCommunicationExceptionWhenNull(e, Exam.class, String.format("id is %d", id));
         return remoteDb.observeExamineeIds(e.getRemoteId());
     }
 
-    private void throwCommunicationExceptionWhenNull(Object o,Class c , String msg) {
-        if(o ==null){
+    private void throwCommunicationExceptionWhenNull(Object o, Class c, String msg) {
+        if (o == null) {
             throw new CommunicationException(
                     String.format(
                             "The entity associated with %s ahould not be null\nmsg:%s",
@@ -632,7 +648,7 @@ public class RealFacadeImple implements CommunicationFacade {
     public long insertQuestionReplaceOnConflict(long vId, int qNum, int qAns, int left, int right, int up, int bottom) {
         Question maybeQuestion = db.getQuestionDao().getQuestionByVerIdAndQNum(vId, qNum);
         if (maybeQuestion == null) {
-            return createQuestion(vId, qNum, qAns, left, up, right , bottom);
+            return createQuestion(vId, qNum, qAns, left, up, right, bottom);
         } else {
             db.getQuestionDao().update(maybeQuestion);
             return maybeQuestion.getId();
@@ -663,7 +679,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public void createGrader(String userName, String uesrId) {
-       // remoteDb.createGrader(userName, uesrId).blockingFirst();
+        // remoteDb.createGrader(userName, uesrId).blockingFirst();
         remoteDb.addGraderIfAbsent(userName, uesrId);
     }
 
@@ -671,14 +687,14 @@ public class RealFacadeImple implements CommunicationFacade {
     public ExamineeAnswerEntityInterface getAnswerById(long examineeAnswersId) {
         ExamineeAnswer answer = db.getExamineeAnswerDao().getById(examineeAnswersId);
         Question q = db.getQuestionDao().get(answer.getQuestionId());
-        if(q == null){
+        if (q == null) {
             throw new CommunicationException("question should be assosicated with a wuestions");
         }
-        if (answer==null){
-            throw new MyAssertionError(String.format("No answer with id:%d",examineeAnswersId));
+        if (answer == null) {
+            throw new MyAssertionError(String.format("No answer with id:%d", examineeAnswersId));
         }
-        if (q==null){
-            throw new MyAssertionError(String.format("No question with id:%d",answer.getQuestionId()));
+        if (q == null) {
+            throw new MyAssertionError(String.format("No question with id:%d", answer.getQuestionId()));
         }
         return new ExamineeAnswerEntityInterface() {
             @Override
@@ -730,8 +746,8 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public void removeExamineeSolutionFromCache(long id) {
-        ExamineeSolution es =  db.getExamineeSolutionDao().getById(id);
-        if(es == null){
+        ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
+        if (es == null) {
             throw new CommunicationException(String.format("ExamineeSolution %d should be in db", id));
         }
         fm.delete(es.getBitmapPath());
@@ -754,12 +770,12 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public void updateExamineeAnswer(long solutionId, long questionId, int ans, int leftX, int upY, int rightX, int botY) {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
-        if(es == null){
+        if (es == null) {
             throw new CommunicationException("examinee answer should be associated with an existing solution");
         }
 
         Question q = db.getQuestionDao().get(questionId);
-        if(q == null){
+        if (q == null) {
             throw new CommunicationException("question should be associated with an existing solution");
         }
         ExamineeAnswer ea = db.getExamineeAnswerDao().getBySolutionIdAndQuestionId(solutionId, questionId);
@@ -781,12 +797,12 @@ public class RealFacadeImple implements CommunicationFacade {
 //        SemiScannedCapture ssc = db.getSemiScannedCaptureDao().findById(examineeSolution.getScannedCaptureId());
         final List<ExamineeSolutionWithExamineeAnswers> examineeSolutionWithExamineeAnswers = db.getExamineeSolutionDao().getExamineeSolutionWithExamineeAnswers();
         List<ExamineeAnswer> answers = null;
-        for (ExamineeSolutionWithExamineeAnswers eWithAs: examineeSolutionWithExamineeAnswers){
-            if(eWithAs.getExamineeSolution().getId()==examineeSolution.getId()){
+        for (ExamineeSolutionWithExamineeAnswers eWithAs : examineeSolutionWithExamineeAnswers) {
+            if (eWithAs.getExamineeSolution().getId() == examineeSolution.getId()) {
                 answers = eWithAs.getExamineeAnswers();
             }
         }
-        if(answers==null){
+        if (answers == null) {
             throw new MyAssertionError("ExamineeSolution should exist in db");
         }
         List<ExamineeAnswer> finalAnswers = answers;
@@ -834,9 +850,10 @@ public class RealFacadeImple implements CommunicationFacade {
             }
         };
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private Bitmap createEmprtBitmap(){
-        Bitmap ans= Bitmap.createBitmap(2550, 3600, Bitmap.Config.ARGB_8888, true);
+    private Bitmap createEmprtBitmap() {
+        Bitmap ans = Bitmap.createBitmap(2550, 3600, Bitmap.Config.ARGB_8888, true);
         Canvas canvas = new Canvas(ans);
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(ans, 0, 0, null);
@@ -855,7 +872,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public long addVersion(long examId, int versionNumber, Bitmap bm) {
-        return createVersion(examId,versionNumber,bm);
+        return createVersion(examId, versionNumber, bm);
 //        String remoteExamId = db.getExamDao().getById(examId).getRemoteId();
 //        try {
 //            String remoteVersionId = remoteDb.addVersion(remoteExamId, versionNumber).blockingFirst();
@@ -867,6 +884,7 @@ public class RealFacadeImple implements CommunicationFacade {
 //            throw new CommunicationException(e);
 //        }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public long createVersion(long examId, int num, Bitmap verBm) {
@@ -881,7 +899,7 @@ public class RealFacadeImple implements CommunicationFacade {
             final long ans = db.getVersionDao().insert(version);
             version.setId(ans);
             fm.store(verBm, version._getBitmapPath());
-            Completable comp = rfm.store(pathToRemoteBm , toByteArray(verBm));
+            Completable comp = rfm.store(pathToRemoteBm, toByteArray(verBm));
             comp.blockingAwait();
             return ans;
         } catch (Throwable t) {
@@ -898,13 +916,13 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public long createExamineeSolution(long session, Bitmap bm, String examineeId, long versionId) {
         Version v = db.getVersionDao().getById(versionId);
-        throwCommunicationExceptionWhenNull(v, Version.class, String.format("This student solution's version is null, verid:%d",versionId));
+        throwCommunicationExceptionWhenNull(v, Version.class, String.format("This student solution's version is null, verid:%d", versionId));
         String remote_id = v.getRemoteVersionId();
-       // remoteDb.offlineInsertExamineeSolution(examineeId, remote_id);
+        // remoteDb.offlineInsertExamineeSolution(examineeId, remote_id);
         final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId, null);
         try {
             final long ans = db.getExamineeSolutionDao().insert(es);
-            Log.d(TAG,String.format("inserted %d solution to the local db" , ans));
+            Log.d(TAG, String.format("inserted %d solution to the local db", ans));
             es.setId(ans);
             fm.store(bm, es.getBitmapPath());
             return ans;
@@ -973,7 +991,8 @@ public class RealFacadeImple implements CommunicationFacade {
 
             @Override
             public String getManagerId() {
-                return theExam.getManagerId(); }
+                return theExam.getManagerId();
+            }
 
             @Override
             public String[] getGradersIds() {
@@ -992,6 +1011,7 @@ public class RealFacadeImple implements CommunicationFacade {
         public MyAssertionError(String s, Throwable e) {
             super(e);
         }
+
         public MyAssertionError(String s) {
             super(s);
         }

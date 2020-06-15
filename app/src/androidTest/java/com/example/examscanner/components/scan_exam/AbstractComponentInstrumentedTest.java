@@ -35,7 +35,7 @@ public abstract class AbstractComponentInstrumentedTest {
     protected DBCallback dbCallback = (theDb -> {
     });
     protected Runnable setupCallback = ()->{};
-    public static boolean USINIG_REAL_DB = true;
+    public static boolean USINIG_REAL_DB = false;
 
 
     public static Bundle getBundle(){

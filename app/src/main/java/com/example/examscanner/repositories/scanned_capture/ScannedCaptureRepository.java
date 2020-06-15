@@ -109,7 +109,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
                     (int)(a.getBottom()*scannedCapture.getBm().getHeight())
             );
         }
-        comFacade.addExamineeGrade(id, scannedCapture.getVersion().getId(), answersPrim , grade);
+        comFacade.addExamineeGrade(id, scannedCapture.getVersion().getId(), answersPrim , grade, scannedCapture.getOrigBitmap());
     }
 
     @Override
