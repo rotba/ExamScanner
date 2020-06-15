@@ -180,7 +180,12 @@ public class CaptureViewModel extends ViewModel {
     }
 
     public void setVersion(Integer intChoice) {
-        mVersion.postValue(exam.getVersionByNum(intChoice));
+        try {
+            mVersion.setValue(exam.getVersionByNum(intChoice));
+        }catch (Exception e){
+            Log.d(TAG, "mVersion.setValue(exam.getVersionByNum(intChoice)) failed probably because of main thread stuff", e);
+            mVersion.postValue(exam.getVersionByNum(intChoice));
+        }
     }
 
     public void setExamineeId(String toString) {
