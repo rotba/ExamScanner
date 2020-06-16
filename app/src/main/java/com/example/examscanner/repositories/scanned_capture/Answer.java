@@ -2,6 +2,8 @@ package com.example.examscanner.repositories.scanned_capture;
 
 import androidx.annotation.NonNull;
 
+import com.example.examscanner.repositories.exam.Question;
+
 import java.util.List;
 
 public abstract class Answer {
@@ -39,4 +41,6 @@ public abstract class Answer {
     public abstract float getRight();
 
     public abstract float getBottom();
+
+    public abstract boolean isCorrect(Question questionByNumber);
 }

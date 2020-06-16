@@ -36,7 +36,7 @@ public class ExamInstancesGenerator {
         Question q = new Question(
                 -1,
                 Question.toFuture(v),
-                4,
+                1,
                 4,
                 1,
                 1,

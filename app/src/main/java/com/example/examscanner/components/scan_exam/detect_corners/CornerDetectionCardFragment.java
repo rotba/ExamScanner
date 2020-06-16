@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -74,6 +75,12 @@ public class CornerDetectionCardFragment extends Fragment {
         } else {
             pb.setVisibility(View.INVISIBLE);
         }
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(root).navigateUp();
+            }
+        });
         return root;
     }
 

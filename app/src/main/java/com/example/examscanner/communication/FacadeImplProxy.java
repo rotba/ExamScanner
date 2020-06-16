@@ -164,8 +164,8 @@ public class FacadeImplProxy implements CommunicationFacade {
     }
 
     @Override
-    public void addExamineeGrade(long solutionId, long versionId, int[][] answers, float grade, Bitmap origBitmap) {
-        realImpl.addExamineeGrade(solutionId, versionId, answers, grade,origBitmap);
+    public void addExamineeGrade(long solutionId, float grade) {
+        realImpl.addExamineeGrade(solutionId, grade);
     }
     public void removeExamineeSolutionFromCache(long id) {
         realImpl.removeExamineeSolutionFromCache(id);
@@ -184,6 +184,21 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public Observable<String> observeExamineeIds(long id) {
         return realImpl.observeExamineeIds(id);
+    }
+
+    @Override
+    public void updateExamineeGrade(long id, float grade) {
+        realImpl.updateExamineeGrade(id,grade);
+    }
+
+    @Override
+    public void validateSolution(long id) {
+        realImpl.validateSolution(id);
+    }
+
+    @Override
+    public void approveSolution(long id) {
+        realImpl.approveSolution(id);
     }
 
     @Override
@@ -209,8 +224,8 @@ public class FacadeImplProxy implements CommunicationFacade {
 
 
     @Override
-    public long createExamineeSolution(long sId, Bitmap bm, String examineeId, long versionId) {
-        return realImpl.createExamineeSolution(sId, bm, examineeId,  versionId);
+    public long createExamineeSolution(long sId, Bitmap bm, String examineeId, long versionId, Bitmap origBm) {
+        return realImpl.createExamineeSolution(sId, bm, examineeId, versionId, origBm);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

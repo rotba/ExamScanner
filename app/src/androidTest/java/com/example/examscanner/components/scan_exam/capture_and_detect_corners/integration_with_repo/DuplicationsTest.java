@@ -7,6 +7,7 @@ import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext4Setuper;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,9 +24,17 @@ import static com.example.examscanner.Utils.sleepSwipingTime;
 
 public class DuplicationsTest extends CaptureAndDetectCornersIntegrationAbsractTest {
 
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        CornerDetectionContext2Setuper.stubExamRepo=true;
+        super.tearDown();
+    }
+
     @NotNull
     @Override
     protected CornerDetectionContext2Setuper getContext() {
+        CornerDetectionContext4Setuper.stubExamRepo=false;
         final CornerDetectionContext4Setuper theCOntext = new CornerDetectionContext4Setuper(getState());
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(null);
         theCOntext.setSCRepo(new ScannedCaptureRepositoryFactory().create());

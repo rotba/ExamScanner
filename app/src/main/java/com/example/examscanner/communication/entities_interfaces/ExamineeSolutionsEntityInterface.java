@@ -11,4 +11,5 @@ public interface ExamineeSolutionsEntityInterface {
     public long[] getExamineeAnswersIds();
     public boolean getExamieeIdIsOccupiedByAnotherSolution();
 
+    boolean getIsValid();
 }

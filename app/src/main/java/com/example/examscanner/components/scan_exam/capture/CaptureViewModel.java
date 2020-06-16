@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.RepositoryException;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
@@ -100,23 +101,27 @@ public class CaptureViewModel extends ViewModel {
         Capture capture = unProcessedCaptures.remove();
         final Version version = capture.getVersion();
         capture.setBitmap(imageProcessor.align(capture.getBitmap(), version.getPerfectImage()));
-        imageProcessor.scanAnswers(
-                capture.getBitmap(),
-                exam.getNumOfQuestions(),
-                new ScanAnswersConsumer() {
-                    @Override
-                    public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                        final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds);
-                        Log.d(TAG, "starting creating ScannedCapture");
-                        scRepo.create(new ScannedCapture(
-                                -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
+        try {
+            imageProcessor.scanAnswers(
+                    capture.getBitmap(),
+                    exam.getNumOfQuestions(),
+                    new ScanAnswersConsumer() {
+                        @Override
+                        public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
+                            final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds);
+                            Log.d(TAG, "starting creating ScannedCapture");
+                            scRepo.create(new ScannedCapture(
+                                    -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
 
-                        ));
-                    }
-                },
-                version.getRealtiveLefts(),
-                version.getRealtiveUps()
-        );
+                            ));
+                        }
+                    },
+                    version.getRealtiveLefts(),
+                    version.getRealtiveUps()
+            );
+        }catch (RepositoryException e){
+            throw  e;
+        }
 //        imageProcessor.detectCorners(
 //                capture.getBitmap(),
 //                new DetectCornersConsumer() {

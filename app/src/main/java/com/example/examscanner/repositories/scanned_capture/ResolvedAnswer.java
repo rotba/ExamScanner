@@ -4,6 +4,8 @@ import android.graphics.PointF;
 
 import androidx.annotation.NonNull;
 
+import com.example.examscanner.repositories.exam.Question;
+
 import java.util.List;
 
 public class ResolvedAnswer extends Answer{
@@ -56,6 +58,11 @@ public class ResolvedAnswer extends Answer{
     @Override
     public float getBottom() {
         return 0;
+    }
+
+    @Override
+    public boolean isCorrect(Question questionByNumber) {
+        return questionByNumber.getAns()==selection;
     }
 
     @NonNull

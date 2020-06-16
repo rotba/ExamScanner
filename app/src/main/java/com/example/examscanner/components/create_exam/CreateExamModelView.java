@@ -2,6 +2,7 @@ package com.example.examscanner.components.create_exam;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
@@ -11,6 +12,7 @@ import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.RepositoryException;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamInCreation;
 import com.example.examscanner.repositories.exam.Question;
@@ -60,19 +62,25 @@ public class CreateExamModelView extends ViewModel {
         String spreadsheetID = (startIndex > 0) ?
                 spreadsheetUrl.substring(startIndex+3, endIndex): spreadsheetUrl;
 
-        eRepo.create(
-                examCreated.commit(
-                        state.getId(),
-                        courseName,
-                        Term.createByViewValue(term).getValue(),
-                        Semester.createByViewValue(semester).getValue(),
-                        graders,
-                        year,
-                        spreadsheetID,
-                        examCreated.getNumOfQuestions(),
-                        0 // whether exam finished uploading
-                )
-        );
+        try {
+            eRepo.create(
+                    examCreated.commit(
+                            state.getId(),
+                            courseName,
+                            Term.createByViewValue(term).getValue(),
+                            Semester.createByViewValue(semester).getValue(),
+                            graders,
+                            year,
+                            spreadsheetID,
+                            examCreated.getNumOfQuestions(),
+                            0 // whether exam finished uploading
+                    )
+            );
+        } catch (RepositoryException e) {
+            Log.d("ExamScanner", "createExam failed and not handled. furture work", e);
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public MutableLiveData<Integer> getAddedVersions() {

@@ -1,14 +1,17 @@
 package com.example.examscanner.repositories.scanned_capture;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.examscanner.communication.CommunicationException;
 import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.QuestionEntityInterface;
 import com.example.examscanner.repositories.Repository;
+import com.example.examscanner.repositories.RepositoryException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +25,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
     private ScannedCaptureConverter converter;
     private CommunicationFacade comFacade;
     private List<ScannedCapture> cache;
+    private String TAG;
 
 
     public static ScannedCaptureRepository getInstance(){
@@ -64,7 +68,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
         for (ExamineeSolutionsEntityInterface ei: comFacade.getExamineeSoultions()) {
             ScannedCapture inCache = inCache(ei.getId());
             final ScannedCapture convert = inCache!=null? inCache:converter.convert(ei);
-            if(criteria.test(convert)){
+            if(convert.isValid() && criteria.test(convert)){
                 ans.add(convert);
             }
         }
@@ -82,38 +86,44 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
 
     @Override
     public void create(ScannedCapture scannedCapture) {
-        final long id = comFacade.createExamineeSolution(
-                -1,
-                scannedCapture.getBm(),
-                scannedCapture.getExamineeId(),
-                scannedCapture.getVersion().getId()
-        );
-
-        float grade = 0;
-        float questioneScore = (float)100 / (float)scannedCapture.getAnswers().size();
-        long examID = scannedCapture.getVersion().getExam().getId();
-        int versionNum = scannedCapture.getVersion().getNum();
-        int[][] answersPrim = new int [scannedCapture.getAnswers().size()][1];
-        for (Answer a:scannedCapture.getAnswers()) {
-            answersPrim[a.getAnsNum()-1][0] = a.getSelection();
-            QuestionEntityInterface origQuestion = comFacade.getQuestionByExamIdVerNumAndQNum(examID, versionNum, a.getAnsNum());
-            if(a.getSelection() == origQuestion.getCorrectAnswer())
-                grade+= questioneScore;
-            comFacade.addExamineeAnswer(
-                    id,
-                    scannedCapture.getVersion().getQuestionByNumber(a.getAnsNum()).getId(),
-                    a.getSelection(),
-                    (int)(a.getLeft()*scannedCapture.getBm().getWidth()),
-                    (int)(a.getUp()*scannedCapture.getBm().getHeight()),
-                    (int)(a.getRight()*scannedCapture.getBm().getWidth()),
-                    (int)(a.getBottom()*scannedCapture.getBm().getHeight())
+        try {
+            final long id = comFacade.createExamineeSolution(
+                    -1,
+                    scannedCapture.getBm(),
+                    scannedCapture.getExamineeId(),
+                    scannedCapture.getVersion().getId(),
+                    scannedCapture.getOrigBitmap()
             );
+
+            for (Answer a:scannedCapture.getAnswers()) {
+                comFacade.addExamineeAnswer(
+                        id,
+                        scannedCapture.getVersion().getQuestionByNumber(a.getAnsNum()).getId(),
+                        a.getSelection(),
+                        (int)(a.getLeft()*scannedCapture.getBm().getWidth()),
+                        (int)(a.getUp()*scannedCapture.getBm().getHeight()),
+                        (int)(a.getRight()*scannedCapture.getBm().getWidth()),
+                        (int)(a.getBottom()*scannedCapture.getBm().getHeight())
+                );
+            }
+            comFacade.addExamineeGrade(id, scannedCapture.calcGrade());
+            scannedCapture.setApprovalCallback(()->comFacade.approveSolution(scannedCapture.getId()));
+            scannedCapture.setId((int)id);
+            scannedCapture.setValid();
+            comFacade.validateSolution((long)id);
+        }catch (CommunicationException e){
+            try {
+                delete(scannedCapture.getId());
+            }catch (Exception someE){
+                Log.d(TAG,"scanned capture transction failed and failed to delete. not to bad",someE);
+            }
+            throw new RepositoryException(e);
         }
-        comFacade.addExamineeGrade(id, scannedCapture.getVersion().getId(), answersPrim , grade, scannedCapture.getOrigBitmap());
     }
 
     @Override
     public void update(ScannedCapture scannedCapture) {
+        float grade = scannedCapture.calcGrade();
         for (Answer a:scannedCapture.getAnswers()) {
             comFacade.updateExamineeAnswer(
                     scannedCapture.getId(),
@@ -125,6 +135,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
                     (int)(a.getBottom()*scannedCapture.getBm().getHeight())
             );
         }
+        comFacade.updateExamineeGrade((long)scannedCapture.getId(), grade);
     }
 
     @Override

@@ -74,6 +74,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String comp191_V1_pdf_ins_in13 = "instances/comp191_v1/_13.jpg";
     private static String comp191_V1_pdf_ins_in14 = "instances/comp191_v1/_14.jpg";
     private static String comp191_V1_ins_27 = "instances/comp191_v1/_27.jpg";
+    private static String comp191_V1_ins_28 = "instances/comp191_v1/_28.jpg";
 
 
     public static Bitmap getTestJpg1() {
@@ -294,6 +295,10 @@ public class BitmapsInstancesFactoryAndroidTest {
         return getBitmapFromAssets(comp191_V1_ins_27);
     }
 
+    public static Bitmap getComp191_V1_ins_28() {
+        return getBitmapFromAssets(comp191_V1_ins_28);
+    }
+
     public static Bitmap getCaspl182_V1_ins_001() {
         return getBitmapFromAssets(caspl182_V1_ins_1);
     }
@@ -384,6 +389,5 @@ public class BitmapsInstancesFactoryAndroidTest {
         if (curr_c % 3 == 2) return getTestJpg3Marked();
         return null;
     }
-
 }
 

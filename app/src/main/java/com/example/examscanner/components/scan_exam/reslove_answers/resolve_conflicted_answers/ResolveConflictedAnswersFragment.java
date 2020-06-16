@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -52,6 +53,12 @@ public class ResolveConflictedAnswersFragment extends Fragment {
         RAViewModelFactory factory = new RAViewModelFactory(getActivity());
         root = inflater.inflate(R.layout.fragment_resolve_one_scane, container, false);
         cdViewModel = new ViewModelProvider(requireActivity(), factory).get(CornerDetectionViewModel.class);
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(root).navigateUp();
+            }
+        });
         return root;
     }
 

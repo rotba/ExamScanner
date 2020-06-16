@@ -24,7 +24,7 @@ public interface CommunicationFacade {
     public long addExamineeAnswer(long solutionId, long questionId ,int ans, int leftX, int upY, int rightX, int botY);
     public long addVersion(long examId, int versionNumber, Bitmap bm);
     public long addQuestion(long vId, int qNum, int correctAnswer, int leftX, int upY, int rightX, int bottomY);
-    public long createExamineeSolution(long sId, Bitmap bm, String examineeId, long versionId);
+    public long createExamineeSolution(long sId, Bitmap bm, String examineeId, long versionId, Bitmap origbm);
     public long[] getSemiScannedCaptureBySession(long sId);
     public long[] getExamineeSolutionsBySession(long sId);
     public long[] getExamineeAnswersIdsByExamineeSolutionId(long esId);
@@ -49,7 +49,7 @@ public interface CommunicationFacade {
     public void createGrader(String userName, String userId);
     public ExamineeAnswerEntityInterface getAnswerById(long examineeAnswersId);
     public ExamineeSolutionsEntityInterface[] getExamineeSoultions();
-    public void addExamineeGrade(long solutionId, long versionId, int[][] answers, float grade, Bitmap origBitmap);
+    public void addExamineeGrade(long solutionId, float grade);
     public void removeExamineeSolutionFromCache(long id);
 
     public void deleteExamineeSolution(long id);
@@ -58,5 +58,10 @@ public interface CommunicationFacade {
     public void updateUploaded(long id);
 
     Observable<String> observeExamineeIds(long id);
+
+    void updateExamineeGrade(long id, float grade);
+
+    void validateSolution(long id);
+    public void approveSolution(long id);
     // public ExamEntityInterface[] getExamsofGrader(String userId);
 }

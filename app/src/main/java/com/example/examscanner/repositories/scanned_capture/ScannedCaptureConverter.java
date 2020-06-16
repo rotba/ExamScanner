@@ -38,7 +38,9 @@ class ScannedCaptureConverter implements Converter<ExamineeSolutionsEntityInterf
                 answers,
                 toVersionFuture(ei.getVersionId()),
                 ei.getExaimneeId(),
-                ei.getExamieeIdIsOccupiedByAnotherSolution()
+                ei.getExamieeIdIsOccupiedByAnotherSolution(),
+                ei.getIsValid(),
+                ()->comFacade.approveSolution(ei.getId())
         );
     }
 

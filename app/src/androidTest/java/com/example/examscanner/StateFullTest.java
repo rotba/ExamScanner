@@ -42,6 +42,13 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
         onView(withText("NEXT")).perform(click());
         onView(withHint("Password")).perform(replaceText("Ycombinator"));
         onView(withText("SIGN IN")).perform(click());
+        if(USINIG_REAL_DB){
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @After

@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import androidx.annotation.NonNull;
 
 import com.example.examscanner.components.scan_exam.reslove_answers.resolve_conflicted_answers.Choice;
+import com.example.examscanner.repositories.exam.Question;
 
 import java.util.List;
 
@@ -70,5 +71,10 @@ public class ConflictedAnswer extends Answer{
     @Override
     public float getBottom() {
         return bottomRight.y;
+    }
+
+    @Override
+    public boolean isCorrect(Question questionByNumber) {
+        return false;
     }
 }

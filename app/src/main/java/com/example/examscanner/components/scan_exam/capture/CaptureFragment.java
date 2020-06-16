@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -85,6 +86,12 @@ public class CaptureFragment extends Fragment {
         requestCamera();
         captureProgressEditText = (TextView) root.findViewById(R.id.capture_processing_progress);
         theEmptyChoice = getActivity().getString(R.string.capture_the_empty_version_choice);
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(root).navigateUp();
+            }
+        });
         return root;
     }
 
@@ -151,7 +158,7 @@ public class CaptureFragment extends Fragment {
                         },
                         () -> {
                             if (inProgress.decrementAndGet() == 0) {
-                                ((ProgressBar) getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
+                                ((ProgressBar) root.findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
                             }
 
                         },

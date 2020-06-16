@@ -23,6 +23,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -63,6 +64,12 @@ public class CreateExamFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_create_exam, container, false);
         versionImageGetter = new VersionImageGetterFactory().create();
 //        spreedsheetUrlGetter = SpreedsheetUrlGetterFactory.get();
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(root).navigateUp();
+            }
+        });
         return root;
     }
 

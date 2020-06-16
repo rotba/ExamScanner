@@ -10,6 +10,7 @@ import com.example.examscanner.persistence.remote.entities.Version;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
@@ -66,8 +67,8 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineInsertExamineeSolution(String examineeId, String versionId) {
-
+    public Observable<String> onlineInsertExamineeSolution(String examineeId, String versionId, boolean isValid) {
+        return Observable.fromCallable(()->{return "";});
     }
 
 
@@ -90,7 +91,7 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
 
     @Override
-    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl,String origBitmapUrl) {
+    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl,String origBitmapUrl, boolean isValid) {
         return Observable.fromCallable(()->{return "";});
     }
 
@@ -111,7 +112,42 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     @Override
     public Observable<String> insertExamineeIDOrReturnNull(String remoteId, String examineeId) {
-        return null;
+        return Observable.fromCallable(()->"COOLNESSNESS");
+    }
+
+    @Override
+    public void offlineUpdateExamineeGrade(String remoteId, float grade) {
+
+    }
+
+    @Override
+    public void validateSolution(String remoteId) {
+
+    }
+
+    @Override
+    public void deleteExam(String examId) {
+
+    }
+
+    @Override
+    public void setSolutionBitmapUrl(String url, String remoteId) {
+
+    }
+
+    @Override
+    public void setOriginialBitmapUrl(String url, String remoteId) {
+
+    }
+
+    @Override
+    public void offilneInsertExamineeSolutionGrade(String remoteId, float grade) {
+
+    }
+
+    @Override
+    public void insertReserevedExamineeId(String remoteId, String reservedExamineeId) {
+
     }
 
 

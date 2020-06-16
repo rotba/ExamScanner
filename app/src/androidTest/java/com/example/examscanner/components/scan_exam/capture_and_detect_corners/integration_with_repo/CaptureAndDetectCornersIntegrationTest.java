@@ -5,16 +5,25 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCaptureReposi
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.After;
 import org.junit.Test;
 
 public class CaptureAndDetectCornersIntegrationTest extends CaptureAndDetectCornersIntegrationAbsractTest {
     @NotNull
     @Override
     protected CornerDetectionContext2Setuper getContext() {
+        CornerDetectionContext2Setuper.stubExamRepo=false;
         CornerDetectionContext2Setuper context2Setuper = new CornerDetectionContext2Setuper(getState());
         ScannedCaptureRepositoryFactory.ONLYFORTESTINGsetTestInstance(null);
         context2Setuper.setSCRepo(new ScannedCaptureRepositoryFactory().create());
         return context2Setuper;
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        CornerDetectionContext2Setuper.stubExamRepo=true;
+        super.tearDown();
     }
 
     @Test

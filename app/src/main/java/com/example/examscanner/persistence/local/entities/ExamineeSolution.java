@@ -23,13 +23,23 @@ public class ExamineeSolution {
     private long versionId;
     private String remoteId;
     private boolean examineeIdOccupied;
+    private boolean isValid;
 
-    public ExamineeSolution(String examineeId, long sessionId, long versionId, String remoteId) {
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
+    public ExamineeSolution(String examineeId, long sessionId, long versionId, String remoteId, boolean isValid) {
         this.examineeId = examineeId;
         this.sessionId = sessionId;
         this.versionId = versionId;
         this.remoteId = remoteId;
         examineeIdOccupied = false;
+        this.isValid = isValid;
     }
 
     public long getSessionId() {

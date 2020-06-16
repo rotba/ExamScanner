@@ -9,7 +9,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 public class FineAdjustment implements Comparable<FineAdjustment> {
-    private final static int XDELTA = 10;
+    private final static int XDELTA = 20;
     private final static int YDELTA = 10;
     private int xFineAdjustment;
     private int yFineAdjustment;
@@ -32,12 +32,17 @@ public class FineAdjustment implements Comparable<FineAdjustment> {
                 }
             }
         }
-        //helperAsjViewr( left, up, theAdjustment,  mat,rWidth,  rHeight);
+//        helperAsjViewr( left, up, theAdjustment,  mat,rWidth,  rHeight);
+        //        helperAsjViewr( left, up, candidate,  mat,rWidth,  rHeight);
         return theAdjustment;
     }
 
     private static Bitmap helperAsjViewr(int left, int y, FineAdjustment fa, Mat mat,int rWidth, int rHeight){
-        return ImageProcessor.helperMatToBitmap(mat.submat(new Rect(left+fa.getYAdj(), y+fa.getYAdj(), rWidth, rHeight)));
+        return ImageProcessor.helperMatToBitmap(mat.submat(new Rect(left+fa.getXAdj(), y+fa.getYAdj(), rWidth, rHeight)));
+    }
+
+    private static Bitmap helper2Bm(Mat m){
+        return ImageProcessor.helperMatToBitmap(m);
     }
 
     @Override

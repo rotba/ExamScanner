@@ -22,6 +22,8 @@ import java.util.function.Predicate;
 public class ScannedCapture {
     private List<Answer> answers;
     private Bitmap bm;
+    private boolean valid;
+    private ApprovalCallback approvalCallback;
 
     public Bitmap getOrigBitmap() {
         return origBitmap;
@@ -55,17 +57,20 @@ public class ScannedCapture {
         this.id = id;
         this.v =genResolvedFuture(v);
         this.examineeId = examineeId;
+        valid = false;
     }
 
 
 
-    public ScannedCapture(long id, Bitmap bitmap, List<Answer> answers, Future<Version> fV, String exaimneeId, boolean isExamieeIdIsOccupiedByAnotherSolution) {
+    public ScannedCapture(long id, Bitmap bitmap, List<Answer> answers, Future<Version> fV, String exaimneeId, boolean isExamieeIdIsOccupiedByAnotherSolution, boolean isValid, ApprovalCallback approvalCallback) {
         this.id = (int)id;
         this.bm = bitmap;
         this.answers = answers;
         v= fV;
         this.examineeId =exaimneeId;
         this.isExamieeIdIsOccupiedByAnotherSolution = isExamieeIdIsOccupiedByAnotherSolution;
+        valid = isValid;
+        this.approvalCallback = approvalCallback;
     }
 
     private boolean in(int item, int[] arr){
@@ -247,6 +252,36 @@ public class ScannedCapture {
         return isExamieeIdIsOccupiedByAnotherSolution;
     }
 
+    public float calcGrade() {
+        float grade = 0;
+        float questioneScore = (float)100 / (float)getVersion().getExam().getNumOfQuestions();
+        for (Answer a:getAnswers()) {
+            if(a.isCorrect(getVersion().getQuestionByNumber(a.getAnsNum()))){
+                grade+=questioneScore;
+            }
+        }
+        return grade;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void approve() {
+        if(!isValid()){
+            throw new RuntimeException("Cannot approve in valid scanned capture");
+        }
+        approvalCallback.approve();
+    }
+
+    public void setApprovalCallback(ApprovalCallback approvalCallback) {
+        this.approvalCallback = approvalCallback;
+    }
+
+    public void setValid() {
+        valid =true;
+    }
+
 
     private class NoSuchAnswerException extends Exception{
 
@@ -304,5 +339,9 @@ public class ScannedCapture {
         public MyAssersionError(String msg) {
             super(msg);
         }
+    }
+
+    public interface ApprovalCallback{
+        public void approve();
     }
 }

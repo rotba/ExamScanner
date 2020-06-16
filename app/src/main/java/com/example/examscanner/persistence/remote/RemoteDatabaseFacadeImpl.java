@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
@@ -101,15 +102,20 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         return getChildrenOfRoot(
                 Paths.toSolutions,
                 ds -> {
+                    if(!ds.child(ExamineeSolution.metaIsValid).getValue(Boolean.class)){
+                        return ExamineeSolution.getInvalidInstance();
+                    }
                     List<Long> value = (ArrayList<Long>) ds.child(ExamineeSolution.metaAnswers).getValue();
                     Map<Integer, Integer> answers = new HashMap<Integer, Integer>();
-                    for (int i = 1; i < value.size(); i++) {
+                    for (int i = 1; value!=null && i < value.size(); i++) {
                         answers.put(i, value.get(i).intValue());
                     }
                     ExamineeSolution examineeSolution = new ExamineeSolution(
                             ds.child(ExamineeSolution.metaVersionId).getValue(String.class),
-                            answers
+                            answers,
+                            ds.child(ExamineeSolution.metaIsValid).getValue(Boolean.class)
                     );
+                    examineeSolution.examineeId = ds.child(ExamineeSolution.metaExamineeId).getValue(String.class);
                     examineeSolution._setId(ds.getKey());
                     return examineeSolution;
                 }
@@ -117,23 +123,55 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineInsertExamineeSolution(String examineeId, String versionId) {
-        putObjectInLocation(
-                String.format("%s/%s", Paths.toSolutions, examineeId),
+    public Observable<String> onlineInsertExamineeSolution(String examineeId, String versionId, boolean isValid) {
+        return pushChildInPath(
+                String.format("%s", Paths.toSolutions),
                 new ExamineeSolution(
                         examineeId,
                         versionId,
                         0,
                         new HashMap<>(),
                         null,
-                        null
+                        null,
+                        isValid
                 ),
+                StoreTaskPostprocessor.getOnline()
+        );
+    }
+    @Override
+    public void setSolutionBitmapUrl(String url, String remoteId) {
+        putObjectInLocation(
+                String.format("%s/%s/%s", Paths.toSolutions, remoteId, ExamineeSolution.metaBitmapUrl),
+                url,
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();
     }
 
     @Override
-    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl, String origBitmapUrl) {
+    public void setOriginialBitmapUrl(String url, String remoteId) {
+        putObjectInLocation(
+                String.format("%s/%s/%s", Paths.toSolutions, remoteId, ExamineeSolution.metaOrigBitmapUrl),
+                url,
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+    }
+
+    @Override
+    public void offilneInsertExamineeSolutionGrade(String remoteId, float grade) {
+
+    }
+
+    @Override
+    public void insertReserevedExamineeId(String remoteId, String reservedExamineeId) {
+        putObjectInLocation(
+                String.format("%s/%s/%s", Paths.toSolutions, remoteId, ExamineeSolution.metaExamineeId),
+                reservedExamineeId,
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+    }
+
+    @Override
+    public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl, String origBitmapUrl, boolean isValid) {
         HashMap ans = new HashMap();
         for (int i = 0; i < answers.length; i++)
             ans.put(String.valueOf(i + 1), answers[i][0]);
@@ -145,7 +183,8 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         grade,
                         ans,
                         bitmapUrl,
-                        origBitmapUrl
+                        origBitmapUrl,
+                        isValid
                 ),
                 StoreTaskPostprocessor.getOnline()
         );
@@ -238,6 +277,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
         );
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public Observable<List<Version>> getVersions() {
@@ -301,6 +341,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         observer.onError(databaseError.toException());
+                        observer.onComplete();
                     }
                 });
             }
@@ -420,6 +461,29 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 //                });
 //            }
 //        };
+    }
+
+    @Override
+    public void offlineUpdateExamineeGrade(String remoteId, float grade) {
+        putObjectInLocation(
+                String.format("%s/%s/%s", Paths.toSolutions,remoteId, ExamineeSolution.metaGrade),
+                new Integer((int)grade),
+                StoreTaskPostprocessor.getOffline()
+        );
+    }
+
+    @Override
+    public void validateSolution(String remoteId) {
+        putObjectInLocation(
+                String.format("%s/%s/%s", Paths.toSolutions,remoteId, ExamineeSolution.metaIsValid),
+                new Boolean(true),
+                StoreTaskPostprocessor.getOffline()
+        );
+    }
+
+    @Override
+    public void deleteExam(String examId) {
+        Log.d(TAG, "remote exam deletion yet implemented");
     }
 
     private String cannonic(String examineeId) {
