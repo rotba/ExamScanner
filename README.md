@@ -8,12 +8,13 @@ Requirments:
 
 SetUp:
 - download the .apk file to your device and install it.
-- from app folder run 'firebase deploy'
+- on your PC, from the 'app' folder run 'firebase deploy' to use the remote DB, storage and functions (one time only)
 
-Usage:
+Usage guidelines:
 - click on the + button to create new exam
 - upload versions keys in PDF format
-- in the url container please insert a public Google spreadsheet url or 
+- in the url container please insert a public Google spreadsheet url **or** 
   a private one with editing premissions to the app service account: examscanner-de46e@appspot.gserviceaccount.com
 - to scan student solution click on the newly created exam.
+- watch the spreadsheet filled with data.
 
