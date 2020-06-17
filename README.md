@@ -6,6 +6,14 @@ Requirments:
 - device with Android operation system
 - internet connectivity
 
-Usage:
+SetUp:
 - download the .apk file to your device and install it.
-- 
+- from app folder run 'firebase deploy'
+
+Usage:
+- click on the + button to create new exam
+- upload versions keys in PDF format
+- in the url container please insert a public Google spreadsheet url or 
+  a private one with editing premissions to the app service account: examscanner-de46e@appspot.gserviceaccount.com
+- to scan student solution click on the newly created exam.
+
