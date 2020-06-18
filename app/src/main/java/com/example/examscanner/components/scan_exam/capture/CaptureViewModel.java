@@ -5,10 +5,12 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.camera.core.ImageCaptureException;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.examscanner.image_processing.ImageProcessingError;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.repositories.Repository;
@@ -99,6 +101,7 @@ public class CaptureViewModel extends ViewModel {
 
     public void processCapture() {
         Capture capture = unProcessedCaptures.remove();
+        consumeExamineeId(capture.getExamineeId());
         final Version version = capture.getVersion();
         capture.setBitmap(imageProcessor.align(capture.getBitmap(), version.getPerfectImage()));
         try {
@@ -119,7 +122,13 @@ public class CaptureViewModel extends ViewModel {
                     version.getRealtiveLefts(),
                     version.getRealtiveUps()
             );
-        }catch (RepositoryException e){
+        }catch (RepositoryException | ImageProcessingError e){
+            Log.d(TAG, "Scan answers exception", e);
+            final Bitmap bitmap = imageProcessor.createFailFeedbackImage(capture.getBitmap());
+            scRepo.create(new ScannedCapture(
+                    -1, capture.getBitmap(),capture.getBitmap(), exam.getNumOfQuestions(), 0, new int[0], new float[0], new float[0], new float[0], new float[0], new int[0], version, capture.getExamineeId()
+
+            ));
             throw  e;
         }
 //        imageProcessor.detectCorners(
@@ -218,5 +227,9 @@ public class CaptureViewModel extends ViewModel {
 
     public boolean isHoldingVersion() {
         return mVersion.getValue()!=null;
+    }
+
+    public void unconsumeExamineeId(String examineeId) {
+        consumeExamineeId(REMOVE_INDICATION+examineeId);
     }
 }

@@ -42,4 +42,9 @@ public class ImageProcessorStub implements ImageProcessingFacade {
     public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
         return null;
     }
+
+    @Override
+    public Bitmap createFailFeedbackImage(Bitmap bitmap) {
+        return bitmap;
+    }
 }

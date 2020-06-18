@@ -83,7 +83,8 @@
     <fragment
         android:id="@+id/cornerDetectionFragment"
         android:name="com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionFragment"
-        android:label="Stage">
+        android:label="Stage"
+        tools:layout="@layout/fragment_corner_detection">>
         <argument
             android:name="examId"
             android:defaultValue="-1L"

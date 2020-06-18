@@ -166,4 +166,8 @@ public class CornerDetectionViewModel extends ViewModel {
         getScannedCaptureById(scanId).postValue(scannedCapture);
         scRepo.update(scannedCapture);
     }
+
+    public void approve(ScannedCapture sc) {
+        sc.approve();
+    }
 }

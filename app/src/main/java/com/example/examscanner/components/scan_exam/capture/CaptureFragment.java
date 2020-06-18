@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,6 +38,8 @@ import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
+
+import org.reactivestreams.Subscription;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -70,6 +73,8 @@ public class CaptureFragment extends Fragment {
     private TextView captureProgressEditText;
     private Spinner versionSpinner;
     private String theEmptyChoice;
+    private OnBackPressedCallback onBackPressedCallback;
+    private Button nextStepButton;
     //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -82,28 +87,18 @@ public class CaptureFragment extends Fragment {
                 getActivity(),
                 root
         ).create();
+        pb = (ProgressBar) root.findViewById(R.id.progressBar_capture);
         inProgress = new AtomicInteger(0);
-        requestCamera();
         captureProgressEditText = (TextView) root.findViewById(R.id.capture_processing_progress);
         theEmptyChoice = getActivity().getString(R.string.capture_the_empty_version_choice);
-        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+        onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 Navigation.findNavController(root).navigateUp();
             }
-        });
-        return root;
-    }
-
-    @SuppressLint({"WrongViewCast", "RestrictedApi"})
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        captureProgressEditText.setVisibility(View.INVISIBLE);
-        pb = (ProgressBar) view.findViewById(R.id.progressBar_capture);
-        pb.setVisibility(View.INVISIBLE);
-        ((ProgressBar) getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
-        final Button nextStepButton = (Button) view.findViewById(R.id.button_move_to_detect_corners);
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), onBackPressedCallback);
+        nextStepButton = (Button) root.findViewById(R.id.button_move_to_detect_corners);
         nextStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +108,33 @@ public class CaptureFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action);
             }
         });
+        lockWindow();
+        requestCamera();
+        return root;
+    }
+    private void lockWindow(){
+        pb.setVisibility(View.VISIBLE);
+        onBackPressedCallback.setEnabled(false);
+        nextStepButton.setEnabled(false);
+        nextStepButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void unlockWindow(){
+        pb.setVisibility(View.INVISIBLE);
+        onBackPressedCallback.setEnabled(true);
+        nextStepButton.setEnabled(true);
+        nextStepButton.setVisibility(View.VISIBLE);
+    }
+
+    @SuppressLint({"WrongViewCast", "RestrictedApi"})
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        captureProgressEditText.setVisibility(View.INVISIBLE);
+        ((ProgressBar) getActivity().findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
         ((ProgressBar) view.findViewById(R.id.progressBar_capture)).setVisibility(View.VISIBLE);
+//        processRequestDisposableContainer.add()
+
         Completable.fromAction(this::createViewModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -122,14 +143,17 @@ public class CaptureFragment extends Fragment {
     }
 
     private void onViewModelCreatedError(Throwable throwable) {
+        unlockWindow();
         handleError(MSG_PREF + "onViewModelCreatedError", throwable);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void onViewModelCreated() {
+        Log.d(TAG, "onViewModelCreated");
         captureViewModel.getNumOfTotalCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer totalCaptures) {
+                if(captureProgressEditText == null ||getActivity().findViewById(R.id.button_move_to_detect_corners) == null) return;
                 final Integer processedCaptures = captureViewModel.getNumOfProcessedCaptures().getValue();
                 captureProgressEditText.setText(processedCaptures + "/" + totalCaptures);
                 captureProgressEditText.setVisibility(totalCaptures > 0 ? View.VISIBLE : View.INVISIBLE);
@@ -140,6 +164,7 @@ public class CaptureFragment extends Fragment {
         captureViewModel.getNumOfProcessedCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer processedCaptures) {
+                if(getActivity().findViewById(R.id.button_move_to_detect_corners) == null) return;
                 final TextView viewById = (TextView) getActivity().findViewById(R.id.capture_processing_progress);
                 viewById.setText(processedCaptures + "/" + captureViewModel.getNumOfTotalCaptures().getValue());
                 ((Button) getActivity().findViewById(R.id.button_move_to_detect_corners))
@@ -158,7 +183,10 @@ public class CaptureFragment extends Fragment {
                         },
                         () -> {
                             if (inProgress.decrementAndGet() == 0) {
-                                ((ProgressBar) root.findViewById(R.id.progressBar_capture_scanning)).setVisibility(View.INVISIBLE);
+                                if(root== null) return;
+                                final ProgressBar pb = (ProgressBar) root.findViewById(R.id.progressBar_capture_scanning);
+                                if(pb == null) return;
+                                pb.setVisibility(View.INVISIBLE);
                             }
 
                         },
@@ -201,10 +229,6 @@ public class CaptureFragment extends Fragment {
 //            }
 //        });
 //        Observable.fromCallable(() -> captureViewModel.getVersionNumbers())
-        Observable.fromCallable(() -> captureViewModel.getVersionNumbers())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
 
 //        examineeEditText.addTextChangedListener(new TextWatcher() {
 //            @Override
@@ -275,16 +299,15 @@ public class CaptureFragment extends Fragment {
 //        spinner.set
 //        if(examineeId!= null && version != -1){
         if (examineeId != null && !examineeId.equals("null")) {
+            captureViewModel.unconsumeExamineeId(examineeId);
             ((EditText) getActivity().findViewById(R.id.editText_capture_examineeId)).
                     setText(examineeId);
         }
-        ((ProgressBar)
-
-                getActivity().
-
-                        findViewById(R.id.progressBar_capture)).
-
-                setVisibility(View.INVISIBLE);
+        pb.setVisibility(View.VISIBLE);
+        Observable.fromCallable(() -> captureViewModel.getVersionNumbers())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
     }
 
     private boolean consumeVersionIdOrHandleIfInvalid(String toString) {
@@ -375,10 +398,12 @@ public class CaptureFragment extends Fragment {
         cameraManager.onDestroy();
     }
 
+
+
     @Override
     public void onPause() {
         super.onPause();
-        cameraManager.onPause();
+//        cameraManager.onPause();
     }
 
     private class ProgressBarOnClickListenerDecorator implements View.OnClickListener {
@@ -404,6 +429,9 @@ public class CaptureFragment extends Fragment {
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, versionStrings);
 
+        if(root == null || (Spinner) root.findViewById(R.id.spinner_capture_version_num) == null){
+            return;
+        }
         versionSpinner = (Spinner) root.findViewById(R.id.spinner_capture_version_num);
         versionSpinner.setAdapter(adapter);
         versionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -420,10 +448,11 @@ public class CaptureFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
+        unlockWindow();
     }
 
     private void onVersionNumbersRetrivedError(Throwable throwable) {
+        unlockWindow();
         handleError(MSG_PREF + " onVersionNumbersRetrivedError", throwable);
     }
 

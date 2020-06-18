@@ -9,6 +9,7 @@ import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.ContextProvider;
+import com.example.examscanner.communication.tasks.Continuation;
 import com.example.examscanner.communication.tasks.IdsGenerator;
 import com.example.examscanner.communication.tasks.TasksManager;
 import com.example.examscanner.communication.tasks.TasksManagerFactory;
@@ -95,8 +96,8 @@ public class CreateTransaction {
     }
 
     private void tearDown(String versionId) {
-        for (Version v:out2.getVersions().blockingFirst()) {
-            if(v._getId().equals(versionId)){
+        for (Version v : out2.getVersions().blockingFirst()) {
+            if (v._getId().equals(versionId)) {
                 out2.deleteExam(v.examId);
             }
         }
@@ -105,10 +106,10 @@ public class CreateTransaction {
     @NotNull
     private State getState() {
         State[] ss = new State[1];
-        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
+        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>() {
             @Override
             public void onNext(FirebaseAuth firebaseAuth) {
-                StateFactory.get().login(s->ss[0]=s, firebaseAuth);
+                StateFactory.get().login(s -> ss[0] = s, firebaseAuth);
             }
         };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
@@ -124,8 +125,8 @@ public class CreateTransaction {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 try {
-                    int[] ansDet ={1};
-                    int[] sel ={1};
+                    int[] ansDet = {1};
+                    int[] sel = {1};
                     scs[0] = new ScannedCapture(-1, BitmapsInstancesFactoryAndroidTest.getTestJpg1(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 1, 1, ansDet, new float[1], new float[1], new float[1], new float[1], sel, theExam.getVersions().get(0), examineeId);
                     out1.create(
                             scs[0]
@@ -139,27 +140,30 @@ public class CreateTransaction {
         List<ExamineeSolution> remoteSolutions = new ArrayList<>();
         TasksManager tasks = TasksManagerFactory.get();
         try {
-            Thread.sleep(10*1000);
+            Thread.sleep(10 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         scs[0].approve();
         try {
-            Thread.sleep(7*1000);
+            Thread.sleep(7 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        tasks.get(IdsGenerator.forSolution(out1.get(x->true).get(0).getId())).addContinuation(()->{
-            out2.getExamineeSolutions().blockingSubscribe(l->remoteSolutions.addAll(l),throwable -> {throw  new RuntimeException(throwable);});
-            for (ExamineeSolution es:remoteSolutions) {
-                if(es.examineeId.equals(examineeId)){
-                    assertNotEquals(es._getId(), "null");
-                    assertEquals(es.isValid, true);
-                    tearDown(es.versionId);
-                    return;
-                }
-            }
-        });
+        tasks.get(IdsGenerator.forSolution(out1.get(x -> true).get(0).getId())).addContinuation(() -> {
+                    out2.getExamineeSolutions().blockingSubscribe(l -> remoteSolutions.addAll(l), throwable -> {
+                        throw new RuntimeException(throwable);
+                    });
+                    for (ExamineeSolution es : remoteSolutions) {
+                        if (es.examineeId.equals(examineeId)) {
+                            assertNotEquals(es._getId(), "null");
+                            assertEquals(es.isValid, true);
+                            tearDown(es.versionId);
+                            return;
+                        }
+                    }
+                },
+                Continuation.ShouldNotHappenException());
     }
 
 

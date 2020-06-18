@@ -86,12 +86,14 @@ public class CoreAlgorithmJPGTest extends CoreAlgorithmAbstractTest {
 //        lateSetup();
 //        super.scanAnswersByPositions();
 //    }
-//    @Test
-//    public void scanAnswersByPositionsInsatnce3() {
-//        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_3());
-//        lateSetup();
-//        super.scanAnswersByPositions();
-//    }
+    @Test
+    public void scanAnswersByPositionsInsatnce3() {
+//        USINIG_REAL_DB =true;
+        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_3());
+        lateSetup();
+        super.scanAnswersByPositions();
+//        USINIG_REAL_DB =false;
+    }
 //    @Test
 //    public void scanAnswersByPositionsInsatnce4() {
 //        setupCallback = ()->new CornerDetectionContext2Setuper(getState(),BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_4());

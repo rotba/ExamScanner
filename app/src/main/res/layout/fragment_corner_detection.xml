@@ -18,6 +18,7 @@
     <!--        tools:srcCompat="@tools:sample/avatars" />-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/for_testing_fragment_corner_det"
         android:layout_width="371dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"

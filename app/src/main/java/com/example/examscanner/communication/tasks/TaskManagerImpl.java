@@ -3,6 +3,7 @@ package com.example.examscanner.communication.tasks;
 import java.util.HashMap;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 
 class TaskManagerImpl implements TasksManager {
 
@@ -14,6 +15,10 @@ class TaskManagerImpl implements TasksManager {
 
     @Override
     public Task get(String id) {
-        return map.get(id);
+        if(map.containsKey(id)){
+            return map.get(id);
+        }else{
+            return new VeporizedTask(Completable.fromObservable(Observable.empty()), "Veporized");
+        }
     }
 }

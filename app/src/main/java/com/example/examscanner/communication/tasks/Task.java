@@ -2,8 +2,6 @@ package com.example.examscanner.communication.tasks;
 
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,7 +33,7 @@ public class Task {
         });
     }
 
-    public void addContinuation(Continuation continuation) {
+    public void addContinuation(Continuation continuation, Continuation onVeporized) {
         if (completed.get()) {
             continuation.cont();
         } else {
@@ -43,7 +41,4 @@ public class Task {
         }
     }
 
-    public interface Continuation {
-        public void cont();
-    }
 }

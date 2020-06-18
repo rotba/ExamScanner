@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -49,18 +50,22 @@ public class CornerDetectionFragment extends Fragment {
     private ViewPager2 viewPager;
     private final CompositeDisposable processRequestDisposableContainer = new CompositeDisposable();
     private View root;
+    private OnBackPressedCallback onBackPressedCallback;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_corner_detection, container, false);
-        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        onBackPressedCallback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
                 Navigation.findNavController(root).navigateUp();
             }
-        });
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), onBackPressedCallback);
         return root;
     }
 
@@ -168,6 +173,8 @@ public class CornerDetectionFragment extends Fragment {
 //            }
 //        });
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_detect_corners)).setVisibility(View.INVISIBLE);
+        onBackPressedCallback.setEnabled(true);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
     }
 
@@ -196,6 +203,7 @@ public class CornerDetectionFragment extends Fragment {
 //            cornerDetectionViewModel.align(cdc);
 //            /* TODO : replace -1 with version num */
 //            cornerDetectionViewModel.scanAnswers(cdc);
+            cornerDetectionViewModel.approve(sc);
             cornerDetectionViewModel.remove(sc);
             return "Done";
         })
@@ -251,6 +259,8 @@ public class CornerDetectionFragment extends Fragment {
     }
 
     private void handleError(String errorPerefix, Throwable t){
+        onBackPressedCallback.setEnabled(true);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         Log.d(TAG, errorPerefix, t);
         new androidx.appcompat.app.AlertDialog.Builder(getActivity())
                 .setTitle("An error occured")

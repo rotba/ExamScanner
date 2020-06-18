@@ -68,6 +68,11 @@ public class StubImageProcessingFactory {
             public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return bmFact.getRandom();
             }
+
+            @Override
+            public Bitmap createFailFeedbackImage(Bitmap bitmap) {
+                return bitmap;
+            }
         };
     }
 }

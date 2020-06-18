@@ -52,6 +52,11 @@ public class ImageProcessorsGenerator {
             public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return bitmap;
             }
+
+            @Override
+            public Bitmap createFailFeedbackImage(Bitmap bitmap) {
+                return bitmap;
+            }
         };
     }
     public static ImageProcessingFacade slowIP(){
@@ -115,6 +120,11 @@ public class ImageProcessorsGenerator {
             public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return bitmap;
             }
+
+            @Override
+            public Bitmap createFailFeedbackImage(Bitmap bitmap) {
+                return bitmap;
+            }
         };
     }
     public static ImageProcessingFacade quickIP(){
@@ -151,6 +161,11 @@ public class ImageProcessorsGenerator {
 
             @Override
             public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
+                return bitmap;
+            }
+
+            @Override
+            public Bitmap createFailFeedbackImage(Bitmap bitmap) {
                 return bitmap;
             }
         };
@@ -190,6 +205,11 @@ public class ImageProcessorsGenerator {
 
             @Override
             public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
+                return bitmap;
+            }
+
+            @Override
+            public Bitmap createFailFeedbackImage(Bitmap bitmap) {
                 return bitmap;
             }
         };
@@ -240,6 +260,11 @@ public class ImageProcessorsGenerator {
             public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return real.createFeedbackImage(bitmap, lefts, tops, selections, ids);
             }
+
+            @Override
+            public Bitmap createFailFeedbackImage(Bitmap bitmap) {
+                return bitmap;
+            }
         };
     }
     public static ImageProcessingFacade alignmentSubIp(Bitmap bm, ImageProcessingFacade real){
@@ -277,6 +302,11 @@ public class ImageProcessorsGenerator {
             @Override
             public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
                 return real.createFeedbackImage(bitmap, lefts, tops, selections, ids);
+            }
+
+            @Override
+            public Bitmap createFailFeedbackImage(Bitmap bitmap) {
+                return bitmap;
             }
         };
     }

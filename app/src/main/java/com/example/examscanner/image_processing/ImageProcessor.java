@@ -835,35 +835,39 @@ public class ImageProcessor implements ImageProcessingFacade {
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer, float[] leftMostXs, float[] upperMostYs) {
 
         if (bitmap == null || leftMostXs == null || upperMostYs == null || consumer == null)
-            throw new NullPointerException("given input is null");
+            throw new ImageProcessingError("given input is null");
 
-        Mat scaledTemplate = questionTemplate.clone();
-        final float xScaleConcreteToOrig = (float) bitmap.getWidth() / (float) ORIGINAL_WIDTH;
-        final float yScaleConcreteToOrig = (float) bitmap.getHeight() / (float) ORIGINAL_HEIGHT;
-        Imgproc.resize(
-                scaledTemplate,
-                scaledTemplate,
-                new Size(
-                        (scaledTemplate.width() * xScaleConcreteToOrig),
-                        scaledTemplate.height() * yScaleConcreteToOrig
-                )
-        );
-        int[] scaledLefts = new int[leftMostXs.length];
-        int[] scaledUps = new int[upperMostYs.length];
-        for (int i = 0; i < leftMostXs.length; i++) {
-            scaledLefts[i] = (int) (leftMostXs[i] * bitmap.getWidth());
-            scaledUps[i] = (int) (upperMostYs[i] * bitmap.getHeight());
+        try{
+            Mat scaledTemplate = questionTemplate.clone();
+            final float xScaleConcreteToOrig = (float) bitmap.getWidth() / (float) ORIGINAL_WIDTH;
+            final float yScaleConcreteToOrig = (float) bitmap.getHeight() / (float) ORIGINAL_HEIGHT;
+            Imgproc.resize(
+                    scaledTemplate,
+                    scaledTemplate,
+                    new Size(
+                            (scaledTemplate.width() * xScaleConcreteToOrig),
+                            scaledTemplate.height() * yScaleConcreteToOrig
+                    )
+            );
+            int[] scaledLefts = new int[leftMostXs.length];
+            int[] scaledUps = new int[upperMostYs.length];
+            for (int i = 0; i < leftMostXs.length; i++) {
+                scaledLefts[i] = (int) (leftMostXs[i] * bitmap.getWidth());
+                scaledUps[i] = (int) (upperMostYs[i] * bitmap.getHeight());
+            }
+            Mat exam = matFromBitmap(bitmap);
+            int answersIds[] = new int[amountOfQuestions];
+            float lefts[] = new float[amountOfQuestions];
+            float tops[] = new float[amountOfQuestions];
+            float rights[] = new float[amountOfQuestions];
+            float bottoms[] = new float[amountOfQuestions];
+            int selections[] = new int[amountOfQuestions];
+            Map<Point, Integer> answersMap = findQuestions(exam, scaledTemplate, scaledLefts, scaledUps);
+            sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, scaledTemplate.cols(), scaledTemplate.rows(), exam.cols(), exam.rows());
+            consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
+        }catch (Exception e){
+            throw new ImageProcessingError(e);
         }
-        Mat exam = matFromBitmap(bitmap);
-        int answersIds[] = new int[amountOfQuestions];
-        float lefts[] = new float[amountOfQuestions];
-        float tops[] = new float[amountOfQuestions];
-        float rights[] = new float[amountOfQuestions];
-        float bottoms[] = new float[amountOfQuestions];
-        int selections[] = new int[amountOfQuestions];
-        Map<Point, Integer> answersMap = findQuestions(exam, scaledTemplate, scaledLefts, scaledUps);
-        sortQuestions(answersMap, answersIds, lefts, tops, rights, bottoms, selections, scaledTemplate.cols(), scaledTemplate.rows(), exam.cols(), exam.rows());
-        consumer.consume(amountOfQuestions, answersIds, lefts, tops, rights, bottoms, selections);
     }
 
 
@@ -1516,6 +1520,15 @@ public class ImageProcessor implements ImageProcessingFacade {
         return generateFeedbackBitmap(leftsI, topsI, selections, bitmap, questionTemplate.width(), questionTemplate.height(),  ids);
     }
 
+    @Override
+    public Bitmap createFailFeedbackImage(Bitmap bitmap) {
+        Mat mat = matFromBitmap(bitmap);
+        Imgproc.putText(mat, String.format("Scan failed. please retake"), new Point(mat.cols()/2, mat.rows()/2), 5, 20, new Scalar(0,0,255), 3);
+        Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(mat, ans);
+        return ans;
+    }
+
     private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH,  int[] ids) {
         final float xScaleConcreteToOrig = (float) bm.getWidth() / (float) ORIGINAL_WIDTH;
         final float yScaleConcreteToOrig = (float) bm.getHeight() / (float) ORIGINAL_HEIGHT;
@@ -1534,6 +1547,49 @@ public class ImageProcessor implements ImageProcessingFacade {
             );
             Imgproc.putText(mat, selection.getRep(), selection.getLocation(), selection.getFontSize(), selection.getFontScale(), selection.getColor(), selection.getThickness());
             Imgproc.putText(mat, id.getRep(), id.getLocation(), id.getFontSize(), id.getFontScale(), id.getColor(), id.getThickness());
+//            Log.d("DebugExamScanner", selection.getRep());
+        }
+        Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(mat, ans);
+        return ans;
+    }
+
+    private Bitmap generateFeedbackBitmapNoNums(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH) {
+        final float xScaleConcreteToOrig = (float) bm.getWidth() / (float) ORIGINAL_WIDTH;
+        final float yScaleConcreteToOrig = (float) bm.getHeight() / (float) ORIGINAL_HEIGHT;
+        Mat mat = matFromBitmap(bm);
+        for (int i = 0; i < xs.length; i++) {
+            final int scaledTempW = (int) (tempW * xScaleConcreteToOrig);
+            final int scaledTempH = (int) (tempH * yScaleConcreteToOrig);
+            Selection selection = new Selection(selecetions[i], xs[i], ys[i], scaledTempW, scaledTempH);
+            Imgproc.rectangle(
+                    mat,
+                    new Point(xs[i], ys[i]),
+                    new Point(xs[i] + scaledTempW, ys[i] + scaledTempH),
+                    selection.getColor(),
+                    5
+            );
+            Imgproc.putText(mat, selection.getRep(), selection.getLocation(), selection.getFontSize(), selection.getFontScale(), selection.getColor(), selection.getThickness());
+//            Log.d("DebugExamScanner", selection.getRep());
+        }
+        Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(mat, ans);
+        return ans;
+    }
+    private Bitmap generateFeedbackBitmapTMP(int[] xs, int[] ys, Bitmap bm, int tempW, int tempH) {
+        final float xScaleConcreteToOrig = (float) bm.getWidth() / (float) ORIGINAL_WIDTH;
+        final float yScaleConcreteToOrig = (float) bm.getHeight() / (float) ORIGINAL_HEIGHT;
+        Mat mat = matFromBitmap(bm);
+        for (int i = 0; i < xs.length; i++) {
+            final int scaledTempW = (int) (tempW * xScaleConcreteToOrig);
+            final int scaledTempH = (int) (tempH * yScaleConcreteToOrig);
+            Imgproc.rectangle(
+                    mat,
+                    new Point(xs[i], ys[i]),
+                    new Point(xs[i] + scaledTempW, ys[i] + scaledTempH),
+                    new Scalar(0,0,200),
+                    5
+            );
 //            Log.d("DebugExamScanner", selection.getRep());
         }
         Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);

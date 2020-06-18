@@ -39,6 +39,11 @@ public class NullImageProcessingProvider implements ImageProcessingFacade {
     }
 
     @Override
+    public Bitmap createFailFeedbackImage(Bitmap bitmap) {
+        return bitmap;
+    }
+
+    @Override
     public void detectCorners(Bitmap bm, DetectCornersConsumer consumer) {
         consumer.consume(new PointF(),null,null,new PointF());
     }

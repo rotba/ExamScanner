@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -35,6 +36,7 @@ public class CornerDetectionCardFragment extends Fragment {
     private ProgressBar pb;
     private View root;
     private Button resolveButton;
+    private OnBackPressedCallback onBackPressedCallback;
 
 
     public void setImageView(Bitmap bm) {
@@ -63,7 +65,10 @@ public class CornerDetectionCardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         cornerDetectionViewModel = new ViewModelProvider(requireActivity()).get(CornerDetectionViewModel.class);
         root = inflater.inflate(R.layout.item_corner_detected_capture, container, false);
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         imageView = ((ImageView) root.findViewById(R.id.imageView2_corner_detected_capture));
+
         imageView.setImageBitmap(
                 cornerDetectionViewModel.getScannedCaptureById(captureId).getValue().getBm()
         );
@@ -75,12 +80,13 @@ public class CornerDetectionCardFragment extends Fragment {
         } else {
             pb.setVisibility(View.INVISIBLE);
         }
-        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+        onBackPressedCallback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
                 Navigation.findNavController(root).navigateUp();
             }
-        });
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), onBackPressedCallback);
         return root;
     }
 
@@ -182,6 +188,9 @@ public class CornerDetectionCardFragment extends Fragment {
                                     )
                     );
         }
+        pb.setVisibility(View.INVISIBLE);
+        onBackPressedCallback.setEnabled(true);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
 //    private void onVersionNumbersRetrived(int[] versionNumbers) {
