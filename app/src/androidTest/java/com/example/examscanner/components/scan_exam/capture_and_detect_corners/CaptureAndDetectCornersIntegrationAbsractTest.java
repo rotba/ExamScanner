@@ -92,9 +92,20 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
             public void onNext(FirebaseAuth firebaseAuth) {
                 StateFactory.get().login(s->ss[0]=s, firebaseAuth);
             }
+
+            @Override
+            public void onError(Throwable t) {
+                super.onError(t);
+            }
+
+            @Override
+            public void onSuccess(FirebaseAuth value) {
+                super.onSuccess(value);
+            }
         };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
         observer.awaitCount(1);
+        assert ss[0]!=null;
         return ss[0];
     }
 

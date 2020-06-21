@@ -394,14 +394,16 @@ public class CaptureFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        Log.d(TAG, "CaptureFragment::onDestroy");
         cameraManager.onDestroy();
+        super.onDestroyView();
     }
 
 
 
     @Override
     public void onPause() {
+        Log.d(TAG, "CaptureFragment::onPause");
         super.onPause();
 //        cameraManager.onPause();
     }

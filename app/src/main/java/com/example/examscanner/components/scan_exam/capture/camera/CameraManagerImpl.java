@@ -40,7 +40,7 @@ import java.util.concurrent.Executor;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
-    private static String TAG = "ExamScan";
+    private static String TAG = "ExamScanner";
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private FragmentActivity activity;
     private ImageCapture imageCapture;
@@ -130,9 +130,11 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                cameraProvider.shutdown();
+                cameraProvider.unbindAll();
+//                cameraProvider.shutdown();
+                Log.d(TAG, "CameraManagerImpl::onDestroy");
             } catch (ExecutionException | InterruptedException e) {
-                Log.d(TAG, "onPause()");
+                Log.d(TAG, "CameraManagerImpl::onDestroy ERROR", e);
                 e.printStackTrace();
             }
         }, ContextCompat.getMainExecutor(activity));
