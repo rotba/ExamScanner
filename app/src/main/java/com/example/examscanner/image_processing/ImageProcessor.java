@@ -1507,7 +1507,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     @Override
-    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops, int[] selections, int[] ids) {
+    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops, int[] selections, int[] ids, String examineeId) {
         int[] leftsI = new int[lefts.length];
         int[] topsI = new int[tops.length];
         for (int i = 0; i < lefts.length; i++) {
@@ -1517,7 +1517,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 //        return generateFeedbackBitmap(
 //                leftsI,topsI, bitmap, questionTemplate.width(), questionTemplate.height()
 //        );
-        return generateFeedbackBitmap(leftsI, topsI, selections, bitmap, questionTemplate.width(), questionTemplate.height(),  ids);
+        return generateFeedbackBitmap(leftsI, topsI, selections, bitmap, questionTemplate.width(), questionTemplate.height(),  ids, examineeId);
     }
 
     @Override
@@ -1529,10 +1529,11 @@ public class ImageProcessor implements ImageProcessingFacade {
         return ans;
     }
 
-    private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH,  int[] ids) {
+    private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH,  int[] ids, String examineeId) {
         final float xScaleConcreteToOrig = (float) bm.getWidth() / (float) ORIGINAL_WIDTH;
         final float yScaleConcreteToOrig = (float) bm.getHeight() / (float) ORIGINAL_HEIGHT;
         Mat mat = matFromBitmap(bm);
+        Imgproc.putText(mat, examineeId, new Point(mat.cols()/2, mat.rows()/10), 5, 8.0, new Scalar(0,0,200), 3);
         for (int i = 0; i < xs.length; i++) {
             final int scaledTempW = (int) (tempW * xScaleConcreteToOrig);
             final int scaledTempH = (int) (tempH * yScaleConcreteToOrig);

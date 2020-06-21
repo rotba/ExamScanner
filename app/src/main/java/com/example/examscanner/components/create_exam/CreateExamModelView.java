@@ -98,7 +98,7 @@ public class CreateExamModelView extends ViewModel {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 Version v = new Version(-1,currentVersionNumber,Version.toFuture(examCreated), Version.theEmptyFutureQuestionsList(),currentVersionBitmap);
-                versionFeedbackImag = imageProcessor.createFeedbackImage(currentVersionBitmap , lefts, tops,selections,answersIds);
+                versionFeedbackImag = imageProcessor.createFeedbackImage(currentVersionBitmap , lefts, tops,selections,answersIds, "");
                 ScannedCapture scannedCapture = new ScannedCapture(-1,null, null, numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections,v, NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS);
                 if(versionScanningWentWell(scannedCapture)) {
                     throw new VersionScanningDidntGoWell();

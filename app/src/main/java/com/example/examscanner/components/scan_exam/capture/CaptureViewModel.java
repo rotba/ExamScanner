@@ -111,7 +111,7 @@ public class CaptureViewModel extends ViewModel {
                     new ScanAnswersConsumer() {
                         @Override
                         public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                            final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds);
+                            final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds, capture.getExamineeId());
                             Log.d(TAG, "starting creating ScannedCapture");
                             scRepo.create(new ScannedCapture(
                                     -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
