@@ -44,7 +44,12 @@ public class AppDatabaseFactory {
     public static void setTestMode(){
         Log.d(TAG, "Setting test mode in db");
         isTestMode=true;
+    }
 
+    public static void setTestInstance(AppDatabase testInstance){
+        Log.d(TAG, "Setting test mode in db");
+        isTestMode=true;
+        AppDatabaseFactory.testInstance = testInstance;
     }
 
     public static void tearDownDb(){

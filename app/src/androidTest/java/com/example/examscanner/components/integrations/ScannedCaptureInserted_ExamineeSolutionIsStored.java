@@ -3,18 +3,12 @@ package com.example.examscanner.components.integrations;
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
 import com.example.examscanner.authentication.state.StateFactory;
 import com.example.examscanner.authentication.state.StateHolder;
-import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest;
-import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
-import com.example.examscanner.image_processing.ImageProcessingFactory;
-import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
-import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
 import com.example.examscanner.repositories.scanned_capture.Answer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
-import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext3Setuper;
 
 import org.junit.Before;

@@ -49,7 +49,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s) {
                 return bitmap;
             }
 
@@ -117,7 +117,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s) {
                 return bitmap;
             }
 
@@ -160,7 +160,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s) {
                 return bitmap;
             }
 
@@ -204,7 +204,7 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s) {
                 return bitmap;
             }
 
@@ -257,8 +257,8 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
-                return real.createFeedbackImage(bitmap, lefts, tops, selections, ids);
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s) {
+                return real.createFeedbackImage(bitmap, lefts, tops, selections, ids, s);
             }
 
             @Override
@@ -300,8 +300,8 @@ public class ImageProcessorsGenerator {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids) {
-                return real.createFeedbackImage(bitmap, lefts, tops, selections, ids);
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s) {
+                return real.createFeedbackImage(bitmap, lefts, tops, selections, ids, s);
             }
 
             @Override

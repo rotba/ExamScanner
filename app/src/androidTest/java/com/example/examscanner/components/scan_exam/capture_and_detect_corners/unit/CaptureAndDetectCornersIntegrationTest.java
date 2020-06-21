@@ -9,12 +9,10 @@ import androidx.test.rule.GrantPermissionRule;
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
 import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.authentication.state.StateFactory;
-import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture_and_detect_corners.CaptureAndDetectCornersIntegrationAbsractTest;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
-import com.example.examscanner.use_case_contexts_creators.Context2Setuper;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 import com.google.firebase.auth.FirebaseAuth;
 

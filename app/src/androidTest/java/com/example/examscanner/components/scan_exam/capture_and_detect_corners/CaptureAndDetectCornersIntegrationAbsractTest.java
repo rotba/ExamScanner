@@ -14,7 +14,6 @@ import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
-import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;

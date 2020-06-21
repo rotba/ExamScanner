@@ -1,7 +1,6 @@
 package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.Manifest;
-import android.graphics.PointF;
 
 import androidx.test.rule.GrantPermissionRule;
 
@@ -15,28 +14,14 @@ import com.example.examscanner.StateFullTest;
 import com.example.examscanner.Utils;
 import com.example.examscanner.components.scan_exam.capture.CameraManagerStub;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
-import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
-import com.example.examscanner.components.scan_exam.reslove_answers.SCEmptyRepositoryFactory;
-import com.example.examscanner.components.scan_exam.reslove_answers.ScannedCapturesInstancesFactory;
-import com.example.examscanner.image_processing.DetectCornersConsumer;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
-import com.example.examscanner.persistence.local.entities.Exam;
-import com.example.examscanner.persistence.local.entities.ExamCreationSession;
-import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.Repository;
-import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;
-import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
-import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
-import com.example.examscanner.repositories.session.SESessionProviderFactory;
-import com.example.examscanner.stubs.ExamRepositoryStub;
-import com.example.examscanner.stubs.ExamStubFactory;
-import com.example.examscanner.stubs.FilesManagerStub;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,7 +29,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -54,15 +38,10 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.example.examscanner.ImageProcessorsGenerator.fakeIP;
 import static com.example.examscanner.ImageProcessorsGenerator.halfFakeIP;
-import static com.example.examscanner.ImageProcessorsGenerator.nullIP;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 

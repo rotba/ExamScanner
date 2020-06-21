@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("RestrictedApi")
     public void onExamsRetrival(List<LiveData<Exam>> exams) {
-        mAdapter = new MyAdapter(exams, this::onItemClick);
+        mAdapter = new MyAdapter(exams, this::onItemClick, homeViewModel.getState());
         recyclerView.setAdapter(mAdapter);
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_home)).setVisibility(View.INVISIBLE);
         floatingButton.setVisibility(View.VISIBLE);

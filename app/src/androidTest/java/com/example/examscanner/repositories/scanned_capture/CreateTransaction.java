@@ -23,7 +23,6 @@ import com.example.examscanner.repositories.corner_detected_capture.CDCRepositor
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.exam.ExamInstancesGenerator;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
-import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.stubs.FilesManagerStub;
 import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
@@ -35,8 +34,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.List;
 
 import io.reactivex.observers.TestObserver;
 

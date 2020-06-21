@@ -8,7 +8,6 @@ import com.example.examscanner.components.scan_exam.AbstractComponentInstrumente
 import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.repositories.exam.ExamRepositoryFactory;
-import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext3Setuper;

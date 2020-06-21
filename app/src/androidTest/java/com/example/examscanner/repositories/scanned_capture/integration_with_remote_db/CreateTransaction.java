@@ -23,7 +23,6 @@ import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
 import com.example.examscanner.persistence.remote.entities.Version;
-import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.RepositoryException;
 import com.example.examscanner.repositories.corner_detected_capture.CDCRepositoryFacrory;

@@ -44,4 +44,8 @@ public class HomeViewModel extends ViewModel {
         }
         return last;
     }
+
+    public State getState() {
+        return state;
+    }
 }

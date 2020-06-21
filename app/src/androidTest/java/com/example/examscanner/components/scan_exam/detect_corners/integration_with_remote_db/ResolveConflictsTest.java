@@ -18,14 +18,10 @@ import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerF
 import com.example.examscanner.components.scan_exam.detect_corners.RemoteFilesManagerStub;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
-import com.example.examscanner.persistence.local.AppDatabaseFactory;
-import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
-import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
-import com.example.examscanner.stubs.RemoteDatabaseStubInstance;
 import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext2Setuper;
 import com.google.firebase.auth.FirebaseAuth;
 
