@@ -123,7 +123,9 @@ public class CaptureFragment extends Fragment {
         pb.setVisibility(View.INVISIBLE);
         onBackPressedCallback.setEnabled(true);
         nextStepButton.setEnabled(true);
-        nextStepButton.setVisibility(View.VISIBLE);
+        nextStepButton.setVisibility(
+                captureViewModel.thereAreScannedCaptures()? View.VISIBLE: View.INVISIBLE
+        );
     }
 
     @SuppressLint({"WrongViewCast", "RestrictedApi"})

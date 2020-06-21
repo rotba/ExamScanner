@@ -42,13 +42,17 @@ public class HomeFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private HomeViewModel homeViewModel;
     private OnPermissionsGranted  cont;
+    private FloatingActionButton floatingButton;
 
+    @SuppressLint("RestrictedApi")
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
-        ((FloatingActionButton) root.findViewById(R.id.floating_button_home_create_exam)).setOnClickListener(new View.OnClickListener() {
+        floatingButton = ((FloatingActionButton) root.findViewById(R.id.floating_button_home_create_exam));
+        floatingButton.setVisibility(View.INVISIBLE);
+        floatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavDirections action = HomeFragmentDirections.actionNavHomeToCreateExamFragment();
@@ -118,10 +122,12 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @SuppressLint("RestrictedApi")
     public void onExamsRetrival(List<LiveData<Exam>> exams) {
         mAdapter = new MyAdapter(exams, this::onItemClick);
         recyclerView.setAdapter(mAdapter);
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_home)).setVisibility(View.INVISIBLE);
+        floatingButton.setVisibility(View.VISIBLE);
     }
 
     public void onItemClick(Exam e){

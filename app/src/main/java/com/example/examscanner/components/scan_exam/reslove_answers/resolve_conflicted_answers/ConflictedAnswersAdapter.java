@@ -21,7 +21,9 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAdapter.ViewHolder> {
     private MutableLiveData<ScannedCapture> scannedCapture;
@@ -31,6 +33,7 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
     private final ViewPager2 viewPager;
     private LayoutInflater inflater;
     private MutableLiveData<Integer> position;
+
 
 
     public ConflictedAnswersAdapter(FragmentActivity activity, MutableLiveData<ScannedCapture> scannedCapture, ViewPager2 viewPager) {
@@ -50,9 +53,9 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
 
 
 
-    public List<ResolutionSubscriber> getResolutionSubscribers() {
-        return resolutionSubscribers;
-    }
+//    public List<ResolutionSubscriber> getResolutionSubscribers() {
+//        return resolutionSubscribers;
+//    }
 
     public MutableLiveData<Integer> getPosition() {
         return position;
@@ -71,6 +74,7 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         ConflictedAnswer ca = getConflictedAnswer(position);
         Bitmap bm = scannedCapture.getValue().getBm();
         holder.answerFrameImageView.setImageBitmap(generateCAnswerFrame(ca, bm));
+//        resolutionMap.put(holder, new ResolutionSubscriber(position + 1,scannedCapture,ca, holder));
         resolutionSubscribers.add(new ResolutionSubscriber(position + 1,scannedCapture,ca, holder));
     }
     @RequiresApi(api = Build.VERSION_CODES.N)

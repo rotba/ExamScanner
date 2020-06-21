@@ -88,12 +88,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.camera.view.PreviewView
-                android:id="@+id/preview_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<!--            <androidx.camera.view.PreviewView-->
+<!--                android:id="@+id/preview_view"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
 
-            </androidx.camera.view.PreviewView>
+<!--            </androidx.camera.view.PreviewView>-->
             <ProgressBar
                 android:id="@+id/progressBar_capture"
                 android:layout_width="wrap_content"
@@ -115,7 +115,8 @@
             app:layout_constraintEnd_toStartOf="@id/spinner_capture_version_num"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/spinner_capture_version_num" />
+            app:layout_constraintTop_toTopOf="@+id/spinner_capture_version_num"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Spinner
             android:id="@+id/spinner_capture_version_num"
