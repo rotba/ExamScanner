@@ -63,5 +63,7 @@ public interface CommunicationFacade {
 
     void validateSolution(long id);
     public void approveSolution(long id);
+
+    void deleteExam(long id);
     // public ExamEntityInterface[] getExamsofGrader(String userId);
 }

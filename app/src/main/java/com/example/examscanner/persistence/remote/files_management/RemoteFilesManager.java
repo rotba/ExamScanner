@@ -11,4 +11,5 @@ public interface RemoteFilesManager {
     public void tearDown();
     public void setTestMode();
     public Observable<String> createUrl(String pathToRemoteBm);
+    public void deleteExam(String remoteId);
 }

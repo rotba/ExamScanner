@@ -129,7 +129,7 @@ public class ExamRepository implements Repository<Exam> {
 
     @Override
     public void delete(int id) {
-
+        comFacade.deleteExam((long)id);
     }
 
     @Override

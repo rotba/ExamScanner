@@ -114,6 +114,11 @@ class RemoteFilesManagerImpl implements RemoteFilesManager {
         };
     }
 
+    @Override
+    public void deleteExam(String remoteId) {
+        tearDownDir(storage.getReference(remoteId));
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Completable store(String path, byte[] data) {

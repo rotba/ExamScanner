@@ -5,7 +5,6 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.examscanner.persistence.remote.entities.Exam;
@@ -22,8 +21,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
@@ -42,6 +38,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     private static final String TAG = "ExamScanner";
     private static final String MSG_PREF = "RemoteDatabaseFacadeImpl";
+    private final String DELETED = "DELETED";
 
     private void storeVersionBitmap(Bitmap verBm) {
 
@@ -171,6 +168,24 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
+    public void deleteVersion(String remoteVersionId) {
+        putObjectInLocation(
+                String.format("%s/%s", Paths.toVersions, remoteVersionId),
+                null,
+                StoreTaskPostprocessor.getOffline()
+        );
+    }
+
+    @Override
+    public void deleteQuestion(String remoteId) {
+        putObjectInLocation(
+                String.format("%s/%s", Paths.toQuestions, remoteId),
+                null,
+                StoreTaskPostprocessor.getOffline()
+        );
+    }
+
+    @Override
     public Observable<String> offlineInsertExamineeSolutionTransaction(String examineeId, String versionId, int[][] answers, float grade, String bitmapUrl, String origBitmapUrl, boolean isValid) {
         HashMap ans = new HashMap();
         for (int i = 0; i < answers.length; i++)
@@ -258,6 +273,13 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
                     @Override
                     public Exam convert(DataSnapshot ds) {
+                        try {
+                            if(ds.getValue(String.class).equals(DELETED)){
+                                return Exam.theDeletedExam(ds.getKey());
+                            }
+                        }catch (Exception e){
+
+                        }
                         Exam exam = new Exam(
                                 ds.child(Exam.metaManager).getValue(String.class),
                                 graderListConverter.convert(ds.child(Exam.metaGraders).getChildren()),
@@ -483,7 +505,11 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public void deleteExam(String examId) {
-        Log.d(TAG, "remote exam deletion yet implemented");
+        putObjectInLocation(
+                String.format("%s/%s", Paths.toExams,examId),
+                DELETED,
+                StoreTaskPostprocessor.getOffline()
+        );
     }
 
     private String cannonic(String examineeId) {

@@ -5,7 +5,13 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(indices = {@Index(value = {"examId", "verNum"}, unique = true)})
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(
+        indices = {@Index(value = {"examId", "verNum"}, unique = true)},
+        foreignKeys ={@ForeignKey(onDelete = CASCADE,entity = Exam.class,
+        parentColumns = Exam.pkName,childColumns = Version.fkExam)}
+        )
 public class Version {
     public static final String pkName = "id";
 

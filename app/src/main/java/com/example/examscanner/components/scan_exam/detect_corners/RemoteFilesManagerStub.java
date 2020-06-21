@@ -39,4 +39,9 @@ public class RemoteFilesManagerStub implements RemoteFilesManager {
     public Observable<String> createUrl(String pathToRemoteBm) {
         return Observable.fromCallable(()->"");
     }
+
+    @Override
+    public void deleteExam(String remoteId) {
+
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.examscanner.persistence.local.daos;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -34,4 +35,7 @@ public interface ExamDao {
 
     @Query("SELECT * FROM exam WHERE courseName IS :courseName AND semester IS :semester AND term IS :term AND year IS :year LIMIT 1")
     Exam getByCoursenameSemeseterTermYear(String courseName, int semester, int term, String year);
+
+    @Delete
+    void delete(Exam e);
 }

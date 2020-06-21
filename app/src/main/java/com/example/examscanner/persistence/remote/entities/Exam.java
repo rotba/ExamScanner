@@ -44,6 +44,20 @@ public class Exam {
         this.numberOfQuestions = numberOfQuestions;
         this.uploaded = uploaded;
     }
+    public static Exam theDeletedExam(String key) {
+        Exam exam = new Exam(){
+            @Override
+            public boolean _isDeleted() {
+                return true;
+            }
+        };
+        exam._setId(key);
+        return exam;
+    }
+
+    public boolean _isDeleted(){
+        return false;
+    }
 
     public String _getId() {
         return id;

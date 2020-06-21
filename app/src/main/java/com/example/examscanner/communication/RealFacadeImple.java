@@ -32,7 +32,9 @@ import com.example.examscanner.persistence.local.entities.Question;
 import com.example.examscanner.persistence.local.entities.SemiScannedCapture;
 import com.example.examscanner.persistence.local.entities.ScanExamSession;
 import com.example.examscanner.persistence.local.entities.Version;
+import com.example.examscanner.persistence.local.entities.relations.ExamWithVersions;
 import com.example.examscanner.persistence.local.entities.relations.ExamineeSolutionWithExamineeAnswers;
+import com.example.examscanner.persistence.local.entities.relations.VersionWithQuestions;
 import com.example.examscanner.persistence.local.files_management.FilesManager;
 import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
@@ -390,7 +392,14 @@ public class RealFacadeImple implements CommunicationFacade {
         remoteDb.getExams().blockingSubscribe(res -> remoteExams.addAll(res));
         for (com.example.examscanner.persistence.remote.entities.Exam re :
                 remoteExams) {
-            if (!examExists(examEntities, re)) {
+            if(re._isDeleted()){
+                for(Exam e: examEntities){
+                    if(re._getId().equals(e.getRemoteId())){
+                        db.getExamDao().delete(e);
+                        examEntities.remove(e);
+                    }
+                }
+            }else if (!examExists(examEntities, re)) {
                 importRemoteExam(re);
                 examEntities.add(db.getExamDao().getByCoursenameSemeseterTermYear(re.courseName, re.semester, re.term, re.year));
             }
@@ -671,6 +680,27 @@ public class RealFacadeImple implements CommunicationFacade {
                     }
                 }
         );
+    }
+
+    @Override
+    public void deleteExam(long id) {
+        Exam e = db.getExamDao().getById(id);
+        throwCommunicationExceptionWhenNull(e, Exam.class, String.format("id:%d", id));
+        remoteDb.deleteExam(e.getRemoteId());
+        rfm.deleteExam(e.getRemoteId());
+        ExamWithVersions ewv = db.getExamDao().getExamWithVersions(id);
+        for (Version v:ewv.getVersions()) {
+            deleteVersion(v);
+        }
+        db.getExamDao().delete(e);
+    }
+
+    private void deleteVersion(Version v) {
+        remoteDb.deleteVersion(v.getRemoteVersionId());
+        VersionWithQuestions vwq = db.getVersionDao().getVersionWithQuestions(v.getId());
+        for(Question q: vwq.getQuestions()){
+            remoteDb.deleteQuestion(q.getRemoteId());
+        }
     }
 
     private void throwCommunicationExceptionWhenNull(Object o, Class c, String msg) {

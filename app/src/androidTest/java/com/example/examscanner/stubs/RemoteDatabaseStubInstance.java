@@ -150,6 +150,16 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     }
 
+    @Override
+    public void deleteVersion(String remoteVersionId) {
+
+    }
+
+    @Override
+    public void deleteQuestion(String remoteId) {
+
+    }
+
 
     @Override
     public void addGraderIfAbsent(String email, String uId) {

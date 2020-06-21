@@ -38,6 +38,7 @@ import io.reactivex.observers.TestObserver;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.BOB_ID;
+import static com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest.USINIG_REAL_DB;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
 
@@ -51,6 +52,7 @@ public class AdminViewModelTest {
     private Exam theExpectedExam;
     private AppDatabase aliceDB;
     private AppDatabase bobDB;
+    private static boolean WITH_REAL_REMOTE_DB =false;
 
 
     @Rule
@@ -61,14 +63,15 @@ public class AdminViewModelTest {
 
     @Before
     public void setUp() throws Exception {
-        FirebaseDatabaseFactory.setTestMode();
+        if(!AdminViewModelTest.WITH_REAL_REMOTE_DB)FirebaseDatabaseFactory.setTestMode();
         aliceDB = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase.class).build();
         AppDatabaseFactory.setTestInstance(aliceDB);
         FilesManagerFactory.setTestMode(getApplicationContext());
-        RemoteFilesManagerFactory.setTestMode();
+        if(!AdminViewModelTest.WITH_REAL_REMOTE_DB)RemoteFilesManagerFactory.setTestMode();
         remoteDatabaseFacade = RemoteDatabaseFacadeFactory.get();
         remoteDatabaseFacade.addGraderIfAbsent("bobexamscanner80@gmail.com","QR6JunUJDvaZr1kSOWEq3iiCToQ2");
         remoteDatabaseFacade.addGraderIfAbsent("aliceexamscanner80@gmail.com","vtXTnHcehjdRmBvg38r5S0K1R8p1");
+        sleep(2000);
         TestObserver to = new TestObserver(){
             @Override
             public void onNext(Object value) {
@@ -97,6 +100,7 @@ public class AdminViewModelTest {
         createExamModelView.addVersion();
         createExamModelView.holdExamUrl("/durlurl");
         createExamModelView.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
+        sleep(1000);
         List<Exam> exams = examRepository.get((e)->true);
         assert 1 == exams.size();
         theExpectedExam = exams.get(0);
@@ -148,6 +152,7 @@ public class AdminViewModelTest {
         CommunicationFacadeFactory.tearDown();
         GraderRepoFactory.tearDown();
         StateFactory.tearDown();
+        USINIG_REAL_DB =false;
     }
 
     @Test
