@@ -12,12 +12,12 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    sourceSets{
-        androidTest{
-            java.srcDirs+= "src/sharedTest/java"
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/sharedTest/java"
         }
-        test{
-            java.srcDirs+= "src/sharedTest/java"
+        test {
+            java.srcDirs += "src/sharedTest/java"
         }
     }
     buildTypes {
@@ -69,7 +69,7 @@ dependencies {
         exclude group: 'androidx.test', module: 'core'
     })
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation 'androidx.room:room-runtime:'+ rootProject.room_version
+    implementation 'androidx.room:room-runtime:' + rootProject.room_version
 
     // volley
     implementation 'com.android.volley:volley:1.1.0'
@@ -79,8 +79,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.3.0'
     implementation 'com.google.firebase:firebase-auth:19.3.0'
     implementation 'com.google.firebase:firebase-database:19.2.1'
-    implementation 'com.firebaseui:firebase-ui-auth:' +rootProject.firebase_ui_auth_version
-    implementation 'com.google.firebase:firebase-database:' +rootProject.firebase_db_version
+    implementation 'com.firebaseui:firebase-ui-auth:' + rootProject.firebase_ui_auth_version
+    implementation 'com.google.firebase:firebase-database:' + rootProject.firebase_db_version
 
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.github.barteksc:android-pdf-viewer:2.0.3'
@@ -98,8 +98,7 @@ dependencies {
     // Optional -- Mockito framework
     androidTestImplementation 'org.mockito:mockito-core:1.10.19'
     androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.25.1'
-    androidTestImplementation 'androidx.navigation:navigation-testing:'+ rootProject.nav_version
-
+    androidTestImplementation 'androidx.navigation:navigation-testing:' + rootProject.nav_version
 
 
     // test
@@ -115,12 +114,12 @@ dependencies {
     testImplementation 'org.json:json:20140107'
     testImplementation project(path: ':openCVLibrary343')
     // Test helpers
-    testImplementation 'androidx.room:room-testing:'+ rootProject.room_version
-    annotationProcessor 'androidx.room:room-compiler:'+ rootProject.room_version
+    testImplementation 'androidx.room:room-testing:' + rootProject.room_version
+    annotationProcessor 'androidx.room:room-compiler:' + rootProject.room_version
 
 
     debugImplementation 'androidx.fragment:fragment-testing:' + fragment_version
-    debugImplementation 'androidx.navigation:navigation-testing:'+ rootProject.nav_version
+    debugImplementation 'androidx.navigation:navigation-testing:' + rootProject.nav_version
     debugImplementation 'androidx.test:core:' + rootProject.coreVersion
     debugImplementation 'androidx.test:monitor:' + rootProject.coreVersion
 

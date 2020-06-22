@@ -35,6 +35,8 @@ public class HomeViewModel extends ViewModel {
         return mExams;
     }
 
+
+
     public long getLastSESession(long examId) {
         List<ScanExamSession> ses = sesRepo.get(s->s.examId()==examId);
         if(ses.size()==0)return -1;
@@ -48,4 +50,6 @@ public class HomeViewModel extends ViewModel {
     public State getState() {
         return state;
     }
+
+
 }

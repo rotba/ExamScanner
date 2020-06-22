@@ -19,6 +19,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/for_testing_home_fragment"
         android:layout_width="110dp"
         android:layout_height="104dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("RestrictedApi")
     public void onExamsRetrival(List<LiveData<Exam>> exams) {
-        mAdapter = new MyAdapter(exams, this::onItemClick, homeViewModel.getState());
+        mAdapter = new MyAdapter(exams, this::onItemClick, this::onAdminPageItemClick,homeViewModel.getState());
         recyclerView.setAdapter(mAdapter);
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_home)).setVisibility(View.INVISIBLE);
         floatingButton.setVisibility(View.VISIBLE);
@@ -135,6 +135,12 @@ public class HomeFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(sessionId->onExamSessionRetrieved(sessionId,e.getId()));
+    }
+
+    public void onAdminPageItemClick(View v ,Exam e){
+        HomeFragmentDirections.ActionNavHomeToAdminPage action = HomeFragmentDirections.actionNavHomeToAdminPage();
+        action.setExamId(e.getId());
+        Navigation.findNavController(v).navigate(action);
     }
 
     private long getLastSession(long examId) {
@@ -177,6 +183,10 @@ public class HomeFragment extends Fragment {
 
     interface OnItemClick {
         public void onItemClick(Exam e);
+    }
+
+    interface onAdminPagelicked{
+        public void onAdminPageClicked(View v, Exam e);
     }
 
     private interface OnPermissionsGranted {

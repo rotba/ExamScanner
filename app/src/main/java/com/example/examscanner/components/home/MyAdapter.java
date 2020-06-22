@@ -22,13 +22,15 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<LiveData<Exam>> mExams;
     private HomeFragment.OnItemClick onItemClick;
+    private HomeFragment.onAdminPagelicked onAdminPagelicked;
     private State state;
 
     private static final String TAG = "MyAdapter";
 
-    public MyAdapter(List<LiveData<Exam>> exams, HomeFragment.OnItemClick onItemClick, State state) {
+    public MyAdapter(List<LiveData<Exam>> exams,HomeFragment.OnItemClick onItemClick, HomeFragment.onAdminPagelicked onAdminPagelicked, State state) {
         this.mExams = exams;
         this.onItemClick = onItemClick;
+        this.onAdminPagelicked = onAdminPagelicked;
         this.state = state;
     }
 
@@ -53,6 +55,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         });
         if(e.getManagerId().equals(state.getId())){
             holder.edit.setVisibility(View.VISIBLE);
+            holder.edit.setOnClickListener(v -> onAdminPagelicked.onAdminPageClicked(v,e));
         }else{
             holder.edit.setVisibility(View.INVISIBLE);
         }

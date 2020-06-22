@@ -19,6 +19,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static java.lang.Thread.sleep;
 
 public class Utils {
 
@@ -216,6 +217,14 @@ public class Utils {
     public static void createExamTime() {
         try {
             Thread.sleep(20*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sleepABit() {
+        try {
+            sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
