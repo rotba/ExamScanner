@@ -49,4 +49,6 @@ public interface RemoteDatabaseFacade {
     void offilneInsertExamineeSolutionGrade(String remoteId, float grade);
 
     void insertReserevedExamineeId(String remoteId, String reservedExamineeId);
+
+    void offilneInsertExamineeSolutionGrader(String remoteId, String graderEmail);
 }

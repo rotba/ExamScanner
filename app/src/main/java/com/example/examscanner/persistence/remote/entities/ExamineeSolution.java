@@ -7,6 +7,7 @@ public class ExamineeSolution {
     public static String metaAnswers = "answers";
     public static String metaVersionId = "versionId";
     public static Object metaGrade = "grade";
+    public static Object metaGrader = "graderEmail";
     public static String metaBitmapUrl = "bitmapUrl";
     public static String metaIsValid ="isValid";
     public static String metaOrigBitmapUrl = "origBitmapUrl";

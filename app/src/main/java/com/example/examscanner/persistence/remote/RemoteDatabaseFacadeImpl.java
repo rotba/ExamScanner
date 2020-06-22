@@ -166,6 +166,15 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
+    public void offilneInsertExamineeSolutionGrader(String remoteId, String email) {
+        putObjectInLocation(
+                String.format("%s/%s/%s", Paths.toSolutions, remoteId, ExamineeSolution.metaGrader),
+                email,
+                StoreTaskPostprocessor.getOffline()
+        ).subscribe();
+    }
+
+    @Override
     public void insertReserevedExamineeId(String remoteId, String reservedExamineeId) {
         putObjectInLocation(
                 String.format("%s/%s/%s", Paths.toSolutions, remoteId, ExamineeSolution.metaExamineeId),

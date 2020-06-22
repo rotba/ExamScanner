@@ -244,6 +244,18 @@ public class RealFacadeImple implements CommunicationFacade {
 //                );
     }
 
+
+    @Override
+    public void addGraderToSolution(long solutionId, String graderEmail) {
+        tasksManager.get(IdsGenerator.forSolution(solutionId)).addContinuation(() -> {
+                    ExamineeSolution es = db.getExamineeSolutionDao().getById(solutionId);
+                    throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("Examinee soultion %d should exit", solutionId));
+                    remoteDb.offilneInsertExamineeSolutionGrader(es.getRemoteId(), graderEmail);
+                },
+                Continuation.ShouldNotHappenException()
+        );
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId, Bitmap orig) {
         Log.d(TAG, String.format("inserted the eaminieeid %s to the eaxminee ids table. solution local id is %d", result, es.getId()));
