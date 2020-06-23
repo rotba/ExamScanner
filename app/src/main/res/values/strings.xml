@@ -86,7 +86,7 @@
     <string name="choose_spreed_sheet">Add</string>
     <string name="done_batch">Done scanning batch!</string>
     <string name="stage_back_to_home">Back to home</string>
-    <string name="stage_start_another_batch">Start another batch</string>
+    <string name="stage_start_another_batch">Scan some more</string>
     <string name="resolve_scan">Resolve</string>
     <string name="examinee_id_duplication">This examinee already exist. Check spreadsheet to resolve the conflict.</string>
     <string name="delete_exam">Delete</string>

@@ -204,6 +204,10 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public void deleteExam(long id) {
         realImpl.deleteExam(id);
+        }
+          @Override
+    public void addGraderToSolution(long id, String graderEmail) {
+        realImpl.addGraderToSolution(id, graderEmail);
     }
 
     @Override

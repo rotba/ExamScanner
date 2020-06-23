@@ -65,5 +65,6 @@ public interface CommunicationFacade {
     public void approveSolution(long id);
 
     void deleteExam(long id);
+    void addGraderToSolution(long id, String graderEmail);
     // public ExamEntityInterface[] getExamsofGrader(String userId);
 }

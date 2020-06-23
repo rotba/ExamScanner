@@ -42,4 +42,6 @@ public interface RemoteDatabaseFacade {
     void insertReserevedExamineeId(String remoteId, String reservedExamineeId);
     void deleteVersion(String remoteVersionId);
     void deleteQuestion(String remoteId);
+
+    void offilneInsertExamineeSolutionGrader(String remoteId, String graderEmail);
 }

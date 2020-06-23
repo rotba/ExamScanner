@@ -35,9 +35,10 @@ public class ScannedCapture {
     private Future<Version> v;
     private String examineeId;
     private boolean hasUpdatedFeedbackImage;
+    private String graderEmail;
 
 
-    public ScannedCapture(int id, Bitmap bm, Bitmap origBitmap, int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, Version v, String examineeId) {
+    public ScannedCapture(int id, Bitmap bm, Bitmap origBitmap, int numOfTotalAnswers, int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections, Version v, String examineeId, String graderEmail) {
         this.bm=bm;
         this.origBitmap = origBitmap;
         this.answers = new ArrayList<>();
@@ -58,6 +59,7 @@ public class ScannedCapture {
         this.v =genResolvedFuture(v);
         this.examineeId = examineeId;
         valid = false;
+        this.graderEmail = graderEmail;
     }
 
 
@@ -280,6 +282,10 @@ public class ScannedCapture {
 
     public void setValid() {
         valid =true;
+    }
+
+    public String getGraderEmail() {
+        return this.graderEmail;
     }
 
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.image_processing.ImageProcessingError;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
@@ -43,9 +44,10 @@ public class CaptureViewModel extends ViewModel {
     private int[] versionNumers;
     private boolean thereAreScannedCaptures;
     private boolean aBoolean;
+    private State state;
 
 
-    public CaptureViewModel(Repository<ScannedCapture> scRepo, ImageProcessingFacade imageProcessor, long sessionId, Exam exam) {
+    public CaptureViewModel(Repository<ScannedCapture> scRepo, ImageProcessingFacade imageProcessor, long sessionId, Exam exam, State state) {
         this.exam = exam;
         unProcessedCaptures = new LinkedList<>();
         this.scRepo = scRepo;
@@ -62,6 +64,7 @@ public class CaptureViewModel extends ViewModel {
         .subscribeOn(Schedulers.io())
         .subscribe(this::consumeExamineeId);
         thereAreScannedCaptures = !scRepo.get(sc->true).isEmpty();
+        this.state = state;
     }
 
     private void consumeExamineeId(String s) {
@@ -114,7 +117,7 @@ public class CaptureViewModel extends ViewModel {
                             final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds, capture.getExamineeId());
                             Log.d(TAG, "starting creating ScannedCapture");
                             scRepo.create(new ScannedCapture(
-                                    -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId()
+                                    -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId(), state.getUserEmail()
 
                             ));
                         }
@@ -126,7 +129,7 @@ public class CaptureViewModel extends ViewModel {
             Log.d(TAG, "Scan answers exception", e);
             final Bitmap bitmap = imageProcessor.createFailFeedbackImage(capture.getBitmap());
             scRepo.create(new ScannedCapture(
-                    -1, capture.getBitmap(),capture.getBitmap(), exam.getNumOfQuestions(), 0, new int[0], new float[0], new float[0], new float[0], new float[0], new int[0], version, capture.getExamineeId()
+                    -1, capture.getBitmap(),capture.getBitmap(), exam.getNumOfQuestions(), 0, new int[0], new float[0], new float[0], new float[0], new float[0], new int[0], version, capture.getExamineeId(), state.getUserEmail()
 
             ));
             throw  e;
