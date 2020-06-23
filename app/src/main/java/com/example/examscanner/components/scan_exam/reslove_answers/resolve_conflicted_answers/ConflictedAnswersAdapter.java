@@ -74,6 +74,7 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         ConflictedAnswer ca = getConflictedAnswer(position);
         Bitmap bm = scannedCapture.getValue().getBm();
         holder.answerFrameImageView.setImageBitmap(generateCAnswerFrame(ca, bm));
+        holder.qNum.setText(String.format("Q#%d", ca.getAnsNum()));
 //        resolutionMap.put(holder, new ResolutionSubscriber(position + 1,scannedCapture,ca, holder));
         resolutionSubscribers.add(new ResolutionSubscriber(position + 1,scannedCapture,ca, holder));
     }
@@ -116,12 +117,14 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView answerFrameImageView;
-
         TextView resolutionTextView;
+        private TextView qNum;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             answerFrameImageView = itemView.findViewById(R.id.imageView_conflicted_answer_frame);
             resolutionTextView = itemView.findViewById(R.id.textView_resolution);
+            qNum = itemView.findViewById(R.id.textView_ra_qnum);
+
         }
     }
     public class ResolutionSubscriber {

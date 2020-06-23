@@ -207,7 +207,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public void offlineUpdateAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans) {
-        offlineInsertAnswerIntoExamineeSolution(examineeId, questionNum, ans);
+        offlineInsertAnswerIntoExamineeSolution(examineeId, questionNum, ExamineeSolution.mapAns(ans));
     }
 
     @Override

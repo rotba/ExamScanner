@@ -158,7 +158,7 @@ public class ResolveConflictsTest extends StateFullTest {
         onView(withText("Resolve")).perform(click());
         resolveAndSwipe("4");
         Utils.sleepSwipingTime();
-        resolveAndSwipe("5");
+        resolveAndSwipe("No Answer");
         Utils.sleepSwipingTime();
     }
 

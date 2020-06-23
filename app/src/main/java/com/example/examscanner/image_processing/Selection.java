@@ -5,6 +5,7 @@ import org.opencv.core.Scalar;
 
 class Selection {
     private static final int Y_ANS_PADDING = 10;
+    private static int NO_ANSWER_ANS = 0;
     private static int LOWEST_VALID_ANS = 1;
     private static int HIGHEST_VALID_ANS = 5;
     private static int THICKNESS = 3;
@@ -37,6 +38,10 @@ class Selection {
         if(LOWEST_VALID_ANS<=selection && selection <= HIGHEST_VALID_ANS){
             color = new Scalar(0,0,200);
             rep = String.valueOf(selection);
+        }else if(selection == NO_ANSWER_ANS){
+            color = new Scalar(200,0,0);
+            rep = "REJECTED";
+            FONT_SCALE = 2.5;
         }else{
             color = new Scalar(120,0,0);
             rep = "?";

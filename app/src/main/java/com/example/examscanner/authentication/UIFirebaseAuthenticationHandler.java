@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 
 class UIFirebaseAuthenticationHandler implements UIAuthenticationHandler<FirebaseAuth> {
+
+    static boolean smartLockEnabled =false;
+
     @Override
     public Intent generateAuthenticationIntent() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -17,7 +20,7 @@ class UIFirebaseAuthenticationHandler implements UIAuthenticationHandler<Firebas
         return AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setIsSmartLockEnabled(false)
+                .setIsSmartLockEnabled(smartLockEnabled)
                 .build();
     }
 

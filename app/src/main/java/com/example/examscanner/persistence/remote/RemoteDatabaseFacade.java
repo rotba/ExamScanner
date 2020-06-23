@@ -31,26 +31,15 @@ public interface RemoteDatabaseFacade {
     public Observable<List<Exam>> getExamsOfGrader(String userId);
     public void offlineUpdateAnswerIntoExamineeSolution(String examineeId, int questionNum, int ans);
     public void updateUploaded(String remoteId);
-
     Observable<String> observeExamineeIds(String remoteId);
-
     Observable<String> insertExamineeIDOrReturnNull(String remoteId, String examineeId);
-
     void offlineUpdateExamineeGrade(String remoteId, float grade);
-
     public void validateSolution(String remoteId);
-
     public void deleteExam(String examId);
-
     public void setSolutionBitmapUrl(String url, String remoteId);
-
     public void setOriginialBitmapUrl(String url, String remoteId);
-
     void offilneInsertExamineeSolutionGrade(String remoteId, float grade);
-
     void insertReserevedExamineeId(String remoteId, String reservedExamineeId);
-
     void deleteVersion(String remoteVersionId);
-
     void deleteQuestion(String remoteId);
 }

@@ -6,6 +6,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.MainActivity;
+import com.example.examscanner.authentication.UIAuthenticationHandlerFactory;
 import com.example.examscanner.communication.CommunicationFacadeFactory;
 import com.example.examscanner.communication.RealFacadeImple;
 import com.example.examscanner.persistence.local.AppDatabase;
@@ -50,6 +51,7 @@ public abstract class AbstractComponentInstrumentedTest {
     @Before
     public void setUp() {
         AppDatabaseFactory.setTestMode();
+        UIAuthenticationHandlerFactory.setTestMode();
         if(!USINIG_REAL_DB)FirebaseDatabaseFactory.setTestMode();
         db = AppDatabaseFactory.getInstance();
         dbCallback.call(db);
@@ -68,6 +70,7 @@ public abstract class AbstractComponentInstrumentedTest {
         CDCRepositoryFacrory.tearDown();
         ScannedCaptureRepositoryFactory.tearDown();
         GraderRepoFactory.tearDown();
+        UIAuthenticationHandlerFactory.tearDown();
     }
 
     protected interface DBCallback {
