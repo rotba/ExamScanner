@@ -89,9 +89,6 @@ public class ExamRepository implements Repository<Exam> {
             v.setId(versionId);
             insertQuestions(v);
         }
-        for (Version v: exam.getVersions()) {
-            insertQuestions(v);
-        }
     }
 
     private void insertQuestions(Version v) {
