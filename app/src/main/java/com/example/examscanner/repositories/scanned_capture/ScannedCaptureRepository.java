@@ -108,7 +108,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
             }
             comFacade.addExamineeGrade(id, scannedCapture.calcGrade());
             comFacade.addGraderToSolution(id, scannedCapture.getGraderEmail());
-            scannedCapture.setApprovalCallback(()->comFacade.approveSolution(scannedCapture.getId()));
+            scannedCapture.setApprovalCallback(g->comFacade.approveSolutionAndStats(scannedCapture.getId(), g));
             scannedCapture.setId((int)id);
             scannedCapture.setValid();
             comFacade.validateSolution((long)id);

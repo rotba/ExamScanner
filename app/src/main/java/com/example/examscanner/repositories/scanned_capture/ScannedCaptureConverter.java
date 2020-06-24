@@ -24,6 +24,8 @@ class ScannedCaptureConverter implements Converter<ExamineeSolutionsEntityInterf
         this.comFacade = comFacade;
     }
 
+
+
     @Override
     public ScannedCapture convert(ExamineeSolutionsEntityInterface ei) {
         List<Answer> answers = new ArrayList<>();
@@ -40,7 +42,7 @@ class ScannedCaptureConverter implements Converter<ExamineeSolutionsEntityInterf
                 ei.getExaimneeId(),
                 ei.getExamieeIdIsOccupiedByAnotherSolution(),
                 ei.getIsValid(),
-                ()->comFacade.approveSolution(ei.getId())
+                g -> comFacade.approveSolutionAndStats((int)ei.getId(), g)
         );
     }
 

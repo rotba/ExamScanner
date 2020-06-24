@@ -21,6 +21,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -499,12 +501,65 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineUpdateExamineeGrade(String remoteId, float grade) {
+    public void offlineUpdateExamineeGrade(String remoteId, String examRemoteId, float grade) {
         putObjectInLocation(
                 String.format("%s/%s/%s", Paths.toSolutions,remoteId, ExamineeSolution.metaGrade),
                 new Integer((int)grade),
                 StoreTaskPostprocessor.getOffline()
         );
+
+    }
+
+
+
+    public void updateTotalAndAverageTransaction(String examRemoteId, Float grade) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(String.format("%s/%s", Paths.toExams, examRemoteId));
+        ref.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                 Exam exam = mutableData.getValue(Exam.class);
+                if (exam == null) {
+                    // shouldn't get here
+                    return Transaction.success(mutableData);
+                }
+                // Set value and report transaction success
+                int prevTotal = exam.total;
+                exam.total = prevTotal + 1;
+                exam.average = (exam.average * prevTotal + grade) / exam.total;
+                mutableData.setValue(exam);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean committed,
+                                   DataSnapshot currentData) {
+                // Transaction completed
+                Log.d(TAG, "incTotalTransaction:onComplete:" + databaseError);
+            }
+        });
+    }
+
+    private void updateTotalTransaction(String examRemoteId, float grade) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(String.format("%s/%s/%s", Paths.toExams, examRemoteId, Exam.metaTotal));
+        ref.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Integer prevTotal = mutableData.getValue(Integer.class);
+                if (prevTotal == null) {
+                    return Transaction.success(mutableData);
+                }
+                // Set value and report transaction success
+                mutableData.setValue(prevTotal+1);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean committed,
+                                   DataSnapshot currentData) {
+                // Transaction completed
+                Log.d(TAG, "incTotalTransaction:onComplete:" + databaseError);
+            }
+        });
     }
 
     @Override

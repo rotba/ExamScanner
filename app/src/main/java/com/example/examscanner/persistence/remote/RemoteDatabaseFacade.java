@@ -33,7 +33,7 @@ public interface RemoteDatabaseFacade {
     public void updateUploaded(String remoteId);
     Observable<String> observeExamineeIds(String remoteId);
     Observable<String> insertExamineeIDOrReturnNull(String remoteId, String examineeId);
-    void offlineUpdateExamineeGrade(String remoteId, float grade);
+    void offlineUpdateExamineeGrade(String remoteId, String examRemoteId, float grade);
     public void validateSolution(String remoteId);
     public void deleteExam(String examId);
     public void setSolutionBitmapUrl(String url, String remoteId);
@@ -44,4 +44,5 @@ public interface RemoteDatabaseFacade {
     void deleteQuestion(String remoteId);
 
     void offilneInsertExamineeSolutionGrader(String remoteId, String graderEmail);
+    void updateTotalAndAverageTransaction(String examRemoteId, Float grade);
 }
