@@ -1,6 +1,7 @@
 package com.example.examscanner.communication;
 
 import android.annotation.SuppressLint;
+import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -258,6 +259,8 @@ public class RealFacadeImple implements CommunicationFacade {
                 Continuation.ShouldNotHappenException()
         );
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId, Bitmap orig) {
@@ -731,7 +734,10 @@ public class RealFacadeImple implements CommunicationFacade {
     public void updateExamineeGrade(long id, float grade) {
         ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
         throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("should exist. id:%s", id));
-        remoteDb.offlineUpdateExamineeGrade(es.getRemoteId(), grade);
+        long verId = es.getVersionId();
+        long examId = db.getVersionDao().getById(verId).getExamId();
+        Exam exam = db.getExamDao().getById(examId);
+        remoteDb.offlineUpdateExamineeGrade(es.getRemoteId(), exam.getRemoteId(), grade);
     }
 
     @Override
@@ -748,6 +754,24 @@ public class RealFacadeImple implements CommunicationFacade {
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
                     throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("should exist. id:%s", id));
                     remoteDb.validateSolution(es.getRemoteId());
+                },
+                ()->{
+                    ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
+                    if(es.getRemoteId()==null){
+                        throw new CommunicationException("the examinee id should ve stored. nothing to do");
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void approveSolutionAndStats(int id, float calcGrade) {
+        tasksManager.get(IdsGenerator.forSolution(id)).addContinuation(() -> {
+                    ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
+                    throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("should exist. id:%s", id));
+                    remoteDb.validateSolution(es.getRemoteId());
+                    String remoteExamId = db.getExamDao().getById(db.getVersionDao().getById(es.getVersionId()).getExamId()).getRemoteId();
+                    remoteDb.updateTotalAndAverageTransaction(remoteExamId, calcGrade);
                 },
                 ()->{
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
@@ -1099,6 +1123,9 @@ public class RealFacadeImple implements CommunicationFacade {
             fm.store(bm, es.getBitmapPath());
             return ans;
         } catch (IOException e) {
+            throw new CommunicationException(e);
+        }
+        catch (SQLiteConstraintException e){
             throw new CommunicationException(e);
         }
     }

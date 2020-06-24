@@ -23,7 +23,7 @@ public class ScannedCapture {
     private List<Answer> answers;
     private Bitmap bm;
     private boolean valid;
-    private ApprovalCallback approvalCallback;
+    private GetGradeAndApprove approvalCallback;
 
     public Bitmap getOrigBitmap() {
         return origBitmap;
@@ -64,7 +64,7 @@ public class ScannedCapture {
 
 
 
-    public ScannedCapture(long id, Bitmap bitmap, List<Answer> answers, Future<Version> fV, String exaimneeId, boolean isExamieeIdIsOccupiedByAnotherSolution, boolean isValid, ApprovalCallback approvalCallback) {
+    public ScannedCapture(long id, Bitmap bitmap, List<Answer> answers, Future<Version> fV, String exaimneeId, boolean isExamieeIdIsOccupiedByAnotherSolution, boolean isValid, GetGradeAndApprove approvalCallback) {
         this.id = (int)id;
         this.bm = bitmap;
         this.answers = answers;
@@ -273,10 +273,10 @@ public class ScannedCapture {
         if(!isValid()){
             throw new RuntimeException("Cannot approve in valid scanned capture");
         }
-        approvalCallback.approve();
+        approvalCallback.approve(calcGrade());
     }
 
-    public void setApprovalCallback(ApprovalCallback approvalCallback) {
+    public void setApprovalCallback(GetGradeAndApprove approvalCallback) {
         this.approvalCallback = approvalCallback;
     }
 
@@ -349,5 +349,8 @@ public class ScannedCapture {
 
     public interface ApprovalCallback{
         public void approve();
+    }
+    public interface GetGradeAndApprove {
+        void approve(float grade);
     }
 }
