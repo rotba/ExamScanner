@@ -54,6 +54,7 @@ public class CreateTransaction {
     public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     @Rule
     public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    private String QAD_GRADER_EMAIL;
 
 
     @Before
@@ -105,8 +106,9 @@ public class CreateTransaction {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 try {
+                    QAD_GRADER_EMAIL = "QAD_GRADER_EMAIL";
                     out.create(
-                            new ScannedCapture(-1,null, null, numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections,theExam.getVersions().get(0), QAD_NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS)
+                            new ScannedCapture(-1,null, null, numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections,theExam.getVersions().get(0), QAD_NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS, QAD_GRADER_EMAIL)
                     );
                 } catch (RepositoryException e) {
                     return;
@@ -127,7 +129,7 @@ public class CreateTransaction {
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 try {
                     out.create(
-                            new ScannedCapture(-1,null, null, numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections,theExam.getVersions().get(0), QAD_NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS)
+                            new ScannedCapture(-1,null, null, numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections,theExam.getVersions().get(0), QAD_NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS, QAD_GRADER_EMAIL)
                     );
                 } catch (RepositoryException e) {
                     fm.stopThrowing();
@@ -154,7 +156,7 @@ public class CreateTransaction {
                     int[] ansDet ={1};
                     int[] sel ={1};
                     out.create(
-                            new ScannedCapture(-1,BitmapsInstancesFactoryAndroidTest.getTestJpg1(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 1,1,ansDet,new float[1],new float[1],new float[1],new float[1],sel,theExam.getVersions().get(0), QAD_NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS)
+                            new ScannedCapture(-1,BitmapsInstancesFactoryAndroidTest.getTestJpg1(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 1,1,ansDet,new float[1],new float[1],new float[1],new float[1],sel,theExam.getVersions().get(0), QAD_NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS, QAD_GRADER_EMAIL)
                     );
                 } catch (RepositoryException e) {
                     fail(e.getMessage());

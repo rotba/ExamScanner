@@ -7,7 +7,6 @@ import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
@@ -165,6 +164,18 @@ public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
         setupCallback = ()->new CornerDetectionContext2Setuper(
                 getState(),
                 alignmentSubIp(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_27(), new ImageProcessor(getApplicationContext()))
+        );
+        lateSetup();
+        super.scanAnswersByPositions();
+    }
+
+    @Test
+    public void scanAnswersByPositionsInsatnce28() {
+        setupCallback = ()->new CornerDetectionContext2Setuper(
+                getState(),
+                BitmapsInstancesFactoryAndroidTest.getex0_V1_ins_1(),
+                BitmapsInstancesFactoryAndroidTest.get_pdf_ex0_V1_ins_in(),
+                80
         );
         lateSetup();
         super.scanAnswersByPositions();

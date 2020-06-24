@@ -66,6 +66,7 @@ public class CreateTransaction {
     public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     @Rule
     public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    private String QAD_GRADER_ENAIL;
 
 
     @Before
@@ -126,7 +127,8 @@ public class CreateTransaction {
                 try {
                     int[] ansDet = {1};
                     int[] sel = {1};
-                    scs[0] = new ScannedCapture(-1, BitmapsInstancesFactoryAndroidTest.getTestJpg1(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 1, 1, ansDet, new float[1], new float[1], new float[1], new float[1], sel, theExam.getVersions().get(0), examineeId);
+                    QAD_GRADER_ENAIL = "QAD_GRADERM_EMAIL";
+                    scs[0] = new ScannedCapture(-1, BitmapsInstancesFactoryAndroidTest.getTestJpg1(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 1, 1, ansDet, new float[1], new float[1], new float[1], new float[1], sel, theExam.getVersions().get(0), examineeId, QAD_GRADER_ENAIL);
                     out1.create(
                             scs[0]
                     );

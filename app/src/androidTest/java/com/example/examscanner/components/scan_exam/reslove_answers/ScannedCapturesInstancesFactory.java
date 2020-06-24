@@ -8,6 +8,8 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 public class ScannedCapturesInstancesFactory {
 
 
+    private static String QAD_GRADER_EMAIL;
+
     /**
      * @return instance with 52 answers and 40 sucessfully detected answers. corresponds to assets/test_jpg_1.jpg
      */
@@ -45,7 +47,8 @@ public class ScannedCapturesInstancesFactory {
         assert rights.length == bottoms.length;
         assert bottoms.length == selections.length;
         assert selections.length == answersIds.length;
-        return new ScannedCapture(-1, BitmapsInstancesFactoryAndroidTest.getTestJpg1(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 53, answersIds.length, answersIds, lefts, tops, rights, bottoms, selections, null, null);
+        QAD_GRADER_EMAIL = "QAD_GRADER_EMAIL";
+        return new ScannedCapture(-1, BitmapsInstancesFactoryAndroidTest.getTestJpg1(), BitmapsInstancesFactoryAndroidTest.getTestJpg1(), 53, answersIds.length, answersIds, lefts, tops, rights, bottoms, selections, null, null, QAD_GRADER_EMAIL);
     }
 
     /**

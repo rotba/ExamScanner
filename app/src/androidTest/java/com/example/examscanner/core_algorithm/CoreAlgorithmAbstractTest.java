@@ -61,7 +61,8 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
                 useCaseContext.getImageProcessor(),
 //                useCaseContext.getCDCRepo(),
                 -1,
-                useCaseContext.getTheExam()
+                useCaseContext.getTheExam(),
+                getState()
         );
     }
 

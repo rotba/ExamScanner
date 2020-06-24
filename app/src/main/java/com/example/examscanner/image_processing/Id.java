@@ -10,7 +10,7 @@ class Id {
     private static int THICKNESS = 3;
     private static final int X_ANS_PADDING = 10;
     private final Point location;
-    private double FONT_SCALE = 5.0;
+    private double FONT_SCALE = 3.0;
 
     public int getThickness() {
         return THICKNESS;
@@ -33,10 +33,10 @@ class Id {
 
     private String rep;
     public Id(int id, int x, int y, int tempW, int tempH) {
-        int shiftLeft = (int)(0.85 * tempW);
+        int shiftLeft = (int)(0.4 * tempW);
         location = new Point(x- shiftLeft, y +tempH- Y_ANS_PADDING);
         color = new Scalar(0,0,0);
-        rep = String.format("%d.", id);
+        rep = String.format("%d", id);
     }
 
     public double getFontScale() {

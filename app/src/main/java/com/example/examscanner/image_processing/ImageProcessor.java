@@ -1024,6 +1024,7 @@ public class ImageProcessor implements ImageProcessingFacade {
             Mat cloneONLYFORTESTING = currMat.clone();
             Core.inRange(currMat, mean, param_UPPER_BOUND_BLACKS_COUNTING, currMat);
 //            Core.bitwise_not(currMat, currMat);
+
             int non_black_pixels = Core.countNonZero(currMat);
             int black_pixels = currMat.rows() * currMat.cols() - non_black_pixels;
             bp.put(i+1, black_pixels);
@@ -1098,6 +1099,7 @@ public class ImageProcessor implements ImageProcessingFacade {
             if (i <= numOfQuestions) {
 //                if(!checkOverlapping(answersMap, matchLoc)) {
                 if (true) {
+                    final Scalar lowerWhiteBound = getLowerWhiteBound(img_exam.submat(new Rect((int) matchLoc.x, (int) matchLoc.y, img_template.cols(), img_template.rows())));
                     Imgproc.rectangle(img_exam, matchLoc, new Point(matchLoc.x + img_template.cols(),
                             matchLoc.y + img_template.rows()), new Scalar(0, 0, 255), -1);
                     // find the answer
@@ -1105,9 +1107,9 @@ public class ImageProcessor implements ImageProcessingFacade {
                     Bitmap img_bitmap = Bitmap.createBitmap(img_result.cols(), img_result.rows(), Bitmap.Config.ARGB_8888);
                     Utils.matToBitmap(img_result, img_bitmap);
                     Bitmap bm = Bitmap.createBitmap(img_bitmap, (int) matchLoc.x, (int) matchLoc.y, img_template.cols(), img_template.rows());
-                    ArrayList<Bitmap> imgChunks = splitImage(bm, 5);
-                    int correctAns = markedAnswer(imgChunks);
-                    answersMap.put(matchLoc, correctAns + 1);
+                    List<Mat> imgChunks = splitImage2(matFromBitmap(bm), 5);
+                    int correctAns = markedAnswer2(imgChunks, lowerWhiteBound);
+                    answersMap.put(matchLoc, correctAns );
                     // erase this matching to prevent infinite loop
 //                    Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + img_template.cols(),
 //                            matchLoc.y + img_template.rows()), new Scalar(0, 0, 0), -1);

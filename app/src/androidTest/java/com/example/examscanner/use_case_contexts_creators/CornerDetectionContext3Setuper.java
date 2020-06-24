@@ -6,6 +6,7 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCaptureReposi
 
 public class CornerDetectionContext3Setuper extends CornerDetectionContext2Setuper {
     private static final String DONT_KNOW_EAMINEE_ID = "DONT_KNOW_EAMINEE_ID";
+    private static final String QAD_GRADER_EMAIL = "QAD_GRADER_EMAIL";
     private ScannedCapture sc;
 
     @Override
@@ -25,7 +26,7 @@ public class CornerDetectionContext3Setuper extends CornerDetectionContext2Setup
                 new ScanAnswersConsumer() {
                     @Override
                     public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                        sc = new ScannedCapture(-1, getCapture().getBitmap(), getCapture().getBitmap(), getTheExam().getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, getCapture().getVersion(), DONT_KNOW_EAMINEE_ID);
+                        sc = new ScannedCapture(-1, getCapture().getBitmap(), getCapture().getBitmap(), getTheExam().getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, getCapture().getVersion(), DONT_KNOW_EAMINEE_ID,QAD_GRADER_EMAIL);
                         getSCRepo().create(sc);
                     }
                 },

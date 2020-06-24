@@ -75,6 +75,7 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String comp191_V1_pdf_ins_in14 = "instances/comp191_v1/_14.jpg";
     private static String comp191_V1_ins_27 = "instances/comp191_v1/_27.jpg";
     private static String comp191_V1_ins_28 = "instances/comp191_v1/_28.jpg";
+    private static String ex0_V1_pdf_ins_in = "instances/example_0/ex0_v1.pdf";;
 
 
     public static Bitmap getTestJpg1() {
@@ -301,6 +302,14 @@ public class BitmapsInstancesFactoryAndroidTest {
 
     public static Bitmap getCaspl182_V1_ins_001() {
         return getBitmapFromAssets(caspl182_V1_ins_1);
+    }
+
+    public static Bitmap getex0_V1_ins_1() {
+        return getBitmapFromAssets(caspl182_V1_ins_1);
+    }
+
+    public static Bitmap get_pdf_ex0_V1_ins_in() {
+        return getBitmapFromPdfAsset(ex0_V1_pdf_ins_in);
     }
 
     private static Bitmap getBitmapFromPdfAsset(String path) {

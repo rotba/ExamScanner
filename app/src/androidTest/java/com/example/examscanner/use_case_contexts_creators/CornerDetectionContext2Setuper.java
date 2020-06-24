@@ -89,12 +89,19 @@ public class CornerDetectionContext2Setuper {
     protected final CornerDetectedCapture[] cdCaptures = new CornerDetectedCapture[1];
     protected Bitmap createExamBitmap;
     private int i;
-    private State state;
+    protected State state;
     private Bitmap theCDCBitmap;
 
     private static ImageProcessingFacade imageProcessingFacadeStub;
 
     public CornerDetectionContext2Setuper(Bitmap testJpg1, Bitmap testJpg11, int i) {
+        this.theCDCBitmap = testJpg1;
+        createExamBitmap = testJpg11;
+        this.i = i;
+    }
+
+    public CornerDetectionContext2Setuper(State s, Bitmap testJpg1, Bitmap testJpg11, int i) {
+        this.state=s;
         this.theCDCBitmap = testJpg1;
         createExamBitmap = testJpg11;
         this.i = i;
@@ -172,6 +179,9 @@ public class CornerDetectionContext2Setuper {
 
     private Bitmap getOriginalVersionBitmap() {
         if (PDF) {
+            if(createExamBitmap != null){
+                return createExamBitmap;
+            }
             return BitmapsInstancesFactoryAndroidTest.getComp191_V1_pdf_ins_in1();
         } else {
             return BitmapsInstancesFactoryAndroidTest.getComp191_v1_JPG_ANS_2();

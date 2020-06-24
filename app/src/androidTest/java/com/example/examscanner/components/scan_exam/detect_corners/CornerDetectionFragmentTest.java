@@ -57,6 +57,7 @@ public class CornerDetectionFragmentTest {
     private long sessionId;
     private Exam exam;
     private int QAD_counter = 0;
+    private String QAD_GRADER_EMAIL;
 
     @Before
     public void setUp() {
@@ -91,7 +92,8 @@ public class CornerDetectionFragmentTest {
         ScannedCapturesInstancesFactory.instance1(new ScanAnswersConsumer() {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                final ScannedCapture t = new ScannedCapture(-1, testJpg, testJpg, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, exam.getVersions().get(0), NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET + String.valueOf(QAD_counter++));
+                QAD_GRADER_EMAIL = "QAD_GRADER_EMAIL";
+                final ScannedCapture t = new ScannedCapture(-1, testJpg, testJpg, exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, exam.getVersions().get(0), NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET + String.valueOf(QAD_counter++), QAD_GRADER_EMAIL);
                 repo.create(t);
             }
         });

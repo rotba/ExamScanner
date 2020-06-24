@@ -22,7 +22,8 @@ public class CornerDetectionContext4Setuper extends CornerDetectionContext2Setup
                 getSCRepo(),
                 getImageProcessor(),
                 -1,
-                getTheExam()
+                getTheExam(),
+                state
         );
         captureViewModel.setVersion(getVersionNum());
         captureViewModel.setExamineeId(getSomeExamineeId());

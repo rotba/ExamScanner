@@ -160,6 +160,11 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     }
 
+    @Override
+    public void offilneInsertExamineeSolutionGrader(String remoteId, String graderEmail) {
+
+    }
+
 
     @Override
     public void addGraderIfAbsent(String email, String uId) {
