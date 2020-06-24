@@ -17,7 +17,7 @@ import java.util.List;
 import io.reactivex.Observable;
 
 public interface CommunicationFacade {
-    public long createExam(String courseName, String url, String year, int term, int semester,String mangerId, String[] gradersIdentifiers ,long sessionId, int numberOfQuestions, int uploaded);
+    public long createExam(String courseName, String url, String year, int term, int semester,String mangerId, String[] gradersIdentifiers ,long sessionId, int numberOfQuestions, int uploaded, int numOfVersion);
     public long getExamIdByScanExamSession(long sId);
     public long createSemiScannedCapture(int leftMostX, int upperMostY, int rightMostX, int rightMostY, long sessionId, Bitmap bm);
     public long createNewScanExamSession(long examId);

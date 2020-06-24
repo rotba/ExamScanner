@@ -15,6 +15,7 @@ import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
+import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.files_management.RemoteFilesManagerFactory;
 import com.example.examscanner.repositories.Repository;
@@ -46,6 +47,7 @@ public class CreateExamUpdatesGraderTest {
     private Repository<Grader> graderRepository;
     private ImageProcessingFacade imageProcessor;
     private Exam theExpectedExam;
+    private RemoteDatabaseFacade remoteDatabaseFacade;
 
     @Before
     public void setUp() throws Exception {
@@ -60,6 +62,8 @@ public class CreateExamUpdatesGraderTest {
             }
         };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
+        remoteDatabaseFacade = RemoteDatabaseFacadeFactory.get();
+        remoteDatabaseFacade.addGraderIfAbsent("bobexamscanner80@gmail.com","QR6JunUJDvaZr1kSOWEq3iiCToQ2");
         to.awaitCount(1);
         ImageProcessingFactory.setTestMode(getApplicationContext());
         imageProcessor = new ImageProcessingFactory().create();

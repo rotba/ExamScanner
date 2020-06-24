@@ -16,7 +16,7 @@ import io.reactivex.Observable;
 public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     @Override
-    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId, int numberOfQuestions, int uploaded) {
+    public Observable<String> createExam(String courseName, String url, String year, int term, int semester, String mangerId, String[] gradersIdentifiers, boolean seal, long sessionId, int numberOfQuestions, int uploaded, int numOfVe) {
         return Observable.fromCallable(()->{return "null";});
     }
 

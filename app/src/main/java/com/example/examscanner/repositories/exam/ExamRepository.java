@@ -77,7 +77,8 @@ public class ExamRepository implements Repository<Exam> {
                 exam.getGradersIdentifiers(),
                 exam.getSessionId(),
                 exam.getNumOfQuestions(),
-                exam.getUploaded()
+                exam.getUploaded(),
+                exam.getVersions().size()
         );
         exam.setId(id);
         insertVersions(exam);
@@ -87,6 +88,9 @@ public class ExamRepository implements Repository<Exam> {
         for (Version v: exam.getVersions()) {
             long versionId = comFacade.insertVersionReplaceOnConflict(exam.getId(),v.getNum(), v.getPerfectImage());
             v.setId(versionId);
+//            insertQuestions(v);
+        }
+        for (Version v: exam.getVersions()) {
             insertQuestions(v);
         }
     }

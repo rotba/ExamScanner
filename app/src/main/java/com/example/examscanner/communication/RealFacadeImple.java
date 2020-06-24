@@ -103,11 +103,11 @@ public class RealFacadeImple implements CommunicationFacade {
 
 
     @Override
-    public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId, int numberOfQuestions, int uploaded) {
+    public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId, int numberOfQuestions, int uploaded, int numOfVer) {
         try {
-            String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId, numberOfQuestions, uploaded)
+            String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId, numberOfQuestions, uploaded,numOfVer)
                     .blockingFirst();
-            long ans = db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions, managerId, graders, uploaded));
+            long ans = db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions, managerId, graders, uploaded,numOfVer));
             Log.d(TAG, String.format("examid %d was created", ans));
             return ans;
         } catch (Throwable e) {
@@ -454,7 +454,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
 
     private void importRemoteExam(com.example.examscanner.persistence.remote.entities.Exam re) {
-        long eId = db.getExamDao().insert(new Exam(re.courseName, re.term, re.year, re.url, re.semester, -1, re._getId(), re.numberOfQuestions, re.manager, re.graders.toArray(new String[0]), re.uploaded));
+        long eId = db.getExamDao().insert(new Exam(re.courseName, re.term, re.year, re.url, re.semester, -1, re._getId(), re.numberOfQuestions, re.manager, re.graders.toArray(new String[0]), re.uploaded, re.numOfVersions));
         List<com.example.examscanner.persistence.remote.entities.Version> remoteVersions = new ArrayList<>();
         remoteDb.getVersions().blockingSubscribe(rvs -> remoteVersions.addAll(rvs));
         for (com.example.examscanner.persistence.remote.entities.Version rv :
@@ -488,7 +488,7 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     private void importRemoteQuestion(com.example.examscanner.persistence.remote.entities.Question rq, long verionId) {
-        db.getQuestionDao().insert(new Question(rq.num, verionId, rq.ans, rq.left, rq.up, rq.right, rq.bottom, rq._getId()));
+        db.getQuestionDao().insert(new Question(rq.num, verionId, rq.ans, rq.left, rq.up, rq.right, rq.bottom, rq._getId(), false));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -518,7 +518,7 @@ public class RealFacadeImple implements CommunicationFacade {
         } catch (Throwable e) {
             throw new MyAssertionError("assert updateExam::db.getExamDao().getById(id).getRemoteId()!=null violated", e);
         }
-        Exam e = new Exam(courseName, term, year, "THE_EMPTY_URL", semester, sessionId, remoteId, QAD_NUM_OF_QUESTIONS, null, null, 0);
+        Exam e = new Exam(courseName, term, year, "THE_EMPTY_URL", semester, sessionId, remoteId, QAD_NUM_OF_QUESTIONS, null, null, 0, 0);
         e.setId(id);
         db.getExamDao().update(e);
     }
@@ -557,12 +557,35 @@ public class RealFacadeImple implements CommunicationFacade {
         if (v == null)
             throw new CommunicationException("Triyng to create a question associated with a version that does not exist");
         try {
-            String remoteId = remoteDb.createQuestion(v.getRemoteVersionId(), num, ans, left, up, right, bottom)
-                    .blockingFirst();
-            return db.getQuestionDao().insert(new Question(num, versionId, ans, left, up, right, bottom, remoteId));
+            final long ret = db.getQuestionDao().insert(new Question(num, versionId, ans, left, up, right, bottom, null, false));
+            remoteDb.createQuestion(v.getRemoteVersionId(), num, ans, left, up, right, bottom)
+                    .subscribe(remoteId->{
+                        Question q = db.getQuestionDao().get(ret);
+                        q.setRemoteId(remoteId);
+                        q.setUploaded(true);
+                        notifyQuestionUploaded(q);
+                    }, throwable -> {throw new CommunicationException(throwable);});
+            return ret;
         } catch (Throwable t) {
             /*TODO - delete exam*/
             throw new CommunicationException(t);
+        }
+    }
+
+    private void notifyQuestionUploaded(Question q) {
+        Version v  = db.getVersionDao().getById(q.getVerId());
+        Exam e = db.getExamDao().getById(v.getExamId());
+        VersionWithQuestions vwq = db.getVersionDao().getVersionWithQuestions(v.getId());
+        if(vwq.getQuestions().size() == e.getNumberOfQuestions()){
+            notifyExamVersionUploaded(v);
+        }
+    }
+
+    private void notifyExamVersionUploaded(Version v) {
+        ExamWithVersions ewv = db.getExamDao().getExamWithVersions(v.getExamId());
+        if(ewv.getVersions().size() == ewv.getExam().getNumOfVersions()){
+            Exam e = ewv.getExam();
+            e.setUploaded(1);
         }
     }
 

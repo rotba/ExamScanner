@@ -17,6 +17,7 @@ public class Exam {
     public static String metaUrl = "url";
     public static String metaqnum = "numberOfQuestions";
     public static String metaUploaded = "uploaded";
+    public static String metaNumOfVersions = "numOfVersions";
     public String manager;
     public List<String> graders;
     public String courseName;
@@ -28,11 +29,12 @@ public class Exam {
     private String id;
     public int numberOfQuestions;
     public int uploaded;
+    public int numOfVersions;
 
     public Exam() {
     }
 
-    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url, int numberOfQuestions, int uploaded) {
+    public Exam(String manager, List<String> graders, String courseName, int semester, int term, String year, boolean seal, String url, int numberOfQuestions, int uploaded, int numOfVersions) {
         this.manager = manager;
         this.graders = graders;
         this.courseName = courseName;
@@ -43,6 +45,7 @@ public class Exam {
         this.url = url;
         this.numberOfQuestions = numberOfQuestions;
         this.uploaded = uploaded;
+        this.numOfVersions = numOfVersions;
     }
     public static Exam theDeletedExam(String key) {
         Exam exam = new Exam(){

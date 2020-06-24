@@ -28,8 +28,18 @@ public class Exam {
     private String[] gradersIds;
     private int uploaded;
 
+    public int getNumOfVersions() {
+        return numOfVersions;
+    }
 
-    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId, String[] gradersIds, int uploaded) {
+    public void setNumOfVersions(int numOfVersions) {
+        this.numOfVersions = numOfVersions;
+    }
+
+    private int numOfVersions;
+
+
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId, String[] gradersIds, int uploaded, int numOfVersions) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
@@ -41,6 +51,7 @@ public class Exam {
         this.managerId = managerId;
         this.gradersIds = gradersIds;
         this.uploaded = uploaded;
+        this.numOfVersions = numOfVersions;
     }
 
     public String getUrl() {
