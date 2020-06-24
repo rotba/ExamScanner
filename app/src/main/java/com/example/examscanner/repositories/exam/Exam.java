@@ -197,6 +197,10 @@ public class Exam {
         return examineeIdsSocket.observe();
     }
 
+    public boolean isUploaded() {
+        return uploaded>0;
+    }
+
     public class NuSuchVerion extends RuntimeException {
 
 

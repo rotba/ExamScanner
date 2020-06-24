@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -55,9 +56,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         });
         if(e.getManagerId().equals(state.getId())){
             holder.edit.setVisibility(View.VISIBLE);
-            holder.edit.setOnClickListener(v -> onAdminPagelicked.onAdminPageClicked(v,e));
+            holder.edit.setOnClickListener(v -> {
+                if(e.isUploaded()){
+                    onAdminPagelicked.onAdminPageClicked(v,e);
+                }
+            });
         }else{
             holder.edit.setVisibility(View.INVISIBLE);
+        }
+        if(e.isUploaded()){
+            holder.pb.setVisibility(View.INVISIBLE);
+        }else{
+            holder.pb.setVisibility(View.VISIBLE);
         }
 
     }
@@ -71,13 +81,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         TextView examName;
         ConstraintLayout parentLayout;
         Button edit;
+        ProgressBar pb;
 
         public MyViewHolder(ConstraintLayout v) {
             super(v);
             examName = v.findViewById(R.id.exam_name);
             parentLayout = v;
             edit = v.findViewById(R.id.button_home_admin);
-
+            pb = v.findViewById(R.id.progressBar_home_exam_is_uploded);
         }
     }
 

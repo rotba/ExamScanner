@@ -56,8 +56,8 @@ public class ResolveAnswersANdResolveConflictsTest extends StateFullTest {
         dbCallback = db ->{
             long creationId = db.getExamCreationSessionDao().insert(new ExamCreationSession());
             examId = db.getExamDao().insert(new Exam(theTestExamCourseName,0,"2020","url",0,creationId, null,QAD_NUM_OF_QUESTIONS, null, new String[0], 0,2));
-            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(dinaBarzilayVersionNumber, examId, null));
-            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(theDevilVersionNumber, examId, null));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(dinaBarzilayVersionNumber, examId, null, false));
+            db.getVersionDao().insert(new com.example.examscanner.persistence.local.entities.Version(theDevilVersionNumber, examId, null, false));
         };
         super.setUp();
         RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());

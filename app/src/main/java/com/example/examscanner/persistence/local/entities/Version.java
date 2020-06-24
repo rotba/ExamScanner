@@ -20,13 +20,29 @@ public class Version {
     public static final String fkExam = "examId";
     @ForeignKey(entity = Exam.class, parentColumns =Exam.pkName , childColumns =fkExam )
     private long examId;
+
+    public void setRemoteVersionId(String remoteVersionId) {
+        this.remoteVersionId = remoteVersionId;
+    }
+
     private String remoteVersionId;
+    private boolean isUploaded;
+
+    public boolean isUploaded() {
+        return isUploaded;
+    }
+
+    public void setUploaded(boolean uploaded) {
+        isUploaded = uploaded;
+    }
+
     private int verNum;
 
-    public Version(int verNum, long examId, String remoteVersionId) {
+    public Version(int verNum, long examId, String remoteVersionId, boolean isUploaded) {
         this.verNum = verNum;
         this.examId = examId;
         this.remoteVersionId = remoteVersionId;
+        this.isUploaded = isUploaded;
     }
 
     public long getId() {
@@ -56,4 +72,6 @@ public class Version {
     public String _getBitmapPath(){
         return "VERISION_"+String.valueOf(id);
     }
+
+
 }
