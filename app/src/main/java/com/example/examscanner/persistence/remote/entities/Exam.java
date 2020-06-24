@@ -17,6 +17,8 @@ public class Exam {
     public static String metaUrl = "url";
     public static String metaqnum = "numberOfQuestions";
     public static String metaUploaded = "uploaded";
+    public static String metaTotal = "total";
+    public static String metaAverage = "average";
     public String manager;
     public List<String> graders;
     public String courseName;
@@ -28,6 +30,8 @@ public class Exam {
     private String id;
     public int numberOfQuestions;
     public int uploaded;
+    public int total;
+    public float average;
 
     public Exam() {
     }
@@ -43,6 +47,8 @@ public class Exam {
         this.url = url;
         this.numberOfQuestions = numberOfQuestions;
         this.uploaded = uploaded;
+        this.total = 0;
+        this.average = 0;
     }
     public static Exam theDeletedExam(String key) {
         Exam exam = new Exam(){
