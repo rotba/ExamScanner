@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,11 +52,13 @@ public class CreateExamFragment extends Fragment {
     public static final int PICKFILE_REQUEST_CODE = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_WRITE_FILES = 1;
     private static final int PICKSPREADSHEET_REQUEST_CODE = 2;
+    private static final String DEBUG_TAG = "DebugExamScanner";
     private static String MSG_PREF = "CreateExamFragment::";
     private static String TAG = "ExamScanner";
     private CreateExamModelView viewModel;
     private VersionImageGetter versionImageGetter;
     private View root;
+    private EditText versionNumEdit;
     //    private SpreedsheetUrlGetter spreedsheetUrlGetter;
 
     @Nullable
@@ -91,19 +94,44 @@ public class CreateExamFragment extends Fragment {
         createExamButton.setOnClickListener(new CreateClickListener());
         ((Button) view.findViewById(R.id.button_create_exam_upload_version_image)).setOnClickListener(this::onChooseVersionPdfClick);
         ((Button) view.findViewById(R.id.button_create_exam_choose_spreadsheet)).setOnClickListener(this::onChooseSpreadsheet);
-        ((EditText) view.findViewById(R.id.editText_create_exam_version_number)).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        versionNumEdit = ((EditText) view.findViewById(R.id.editText_create_exam_version_number));
+//        versionNumEdit.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                if(s.length()==0){
+//                    return;
+//                }
+//                viewModel.holdVersionNumber(Integer.valueOf(s.toString()));
+//                refreshAddVersionButton();
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//            }
+//        });
+        versionNumEdit.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    Log.d(DEBUG_TAG, "versionNumEdit.setOnKeyListener");
+                    consumeVersionNumIfNotEmpty();
+                    refreshAddVersionButton();
+                    return true;
+                }
+                return false;
             }
-
+        });
+        versionNumEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.holdVersionNumber(Integer.valueOf(s.toString()));
-                refreshAddVersionButton();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                Log.d(DEBUG_TAG, "versionNumEdit.setOnFocusChangeListener");
+                if(!hasFocus){
+                    Log.d(DEBUG_TAG, "versionNumEdit.setOnFocusChangeListener && !hasFocus");
+                    consumeVersionNumIfNotEmpty();
+                }
             }
         });
         ((EditText) view.findViewById(R.id.editText_create_exam_spreadsheet_url)).addTextChangedListener(new TextWatcher() {
@@ -139,6 +167,14 @@ public class CreateExamFragment extends Fragment {
         ((Button) view.findViewById(R.id.button_create_exam_add_version)).setOnClickListener(this::onAddVersion);
         ((Button) view.findViewById(R.id.button_create_exam_add_greader)).setOnClickListener(this::onAddGrader);
         askPemissionsLoop();
+    }
+
+    protected void consumeVersionNumIfNotEmpty() {
+        if(viewModel.getCurrentVersionNumber()!=null || versionNumEdit.getText() == null || versionNumEdit.getText().toString().length() ==0){
+            return;
+        }
+        final String examineeID = versionNumEdit.getText().toString();
+        viewModel.holdVersionNumber(Integer.valueOf(examineeID));
     }
 
     private void refreshSpreadsheetButton() {
@@ -244,6 +280,7 @@ public class CreateExamFragment extends Fragment {
             viewModel.holdVersionBitmap(bitmap);
             ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageBitmap(bitmap);
             ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
+            consumeVersionNumIfNotEmpty();
             refreshAddVersionButton();
         }
     }
@@ -258,7 +295,7 @@ public class CreateExamFragment extends Fragment {
     private void onVersionAdded() {
         Continuation successCont = ()->{
             ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).clearAnimation();
-            ((TextView) getActivity().findViewById(R.id.textView_create_exam_version_num)).clearComposingText();
+            ((EditText) getActivity().findViewById(R.id.editText_create_exam_version_number)).getText().clear();
             viewModel.holdVersionNumber(null);
             viewModel.holdVersionBitmap(null);
             ((ImageView) getActivity().findViewById(R.id.imageView_create_exam_curr_version_img)).setImageResource(0);
@@ -281,7 +318,7 @@ public class CreateExamFragment extends Fragment {
                 .setNegativeButton(R.string.create_exam_version_scanned_dialog_try_again, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((TextView) getActivity().findViewById(R.id.textView_create_exam_version_num)).clearComposingText();
+                        ((EditText) getActivity().findViewById(R.id.editText_create_exam_version_number)).getText().clear();
                         viewModel.holdVersionBitmap(null);
                         refreshAddVersionButton();
                         versionImageGetter.get(CreateExamFragment.this, PICKFILE_REQUEST_CODE);

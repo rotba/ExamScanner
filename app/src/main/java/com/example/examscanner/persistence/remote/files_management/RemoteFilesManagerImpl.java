@@ -85,9 +85,9 @@ class RemoteFilesManagerImpl implements RemoteFilesManager {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private String toPathString(String path) {
-        String ans =path;
-        if (inTestMode){
-            ans = "test/"+path;
+        String ans = path;
+        if (inTestMode) {
+            ans = "test/" + path;
         }
         return ans;
     }
@@ -150,7 +150,7 @@ class RemoteFilesManagerImpl implements RemoteFilesManager {
             @Override
             protected void subscribeActual(Observer<? super byte[]> observer) {
                 StorageReference ref = storage.getReference(toPathString(path));
-                final long ONE_MEGABYTE = 1024 * 1024;
+                final long ONE_MEGABYTE = 1024 * 1024 * 5;
                 ref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
