@@ -74,4 +74,7 @@ public class Exam {
     public void  _setId(String theId) {
         id= theId;
     }
+    public boolean _isUploaded(){
+        return uploaded >0;
+    }
 }

@@ -1,7 +1,8 @@
-package com.example.examscanner.components.create_exam.view_model.integration_with_remote_db;
+package com.example.examscanner.components.create_exam.view_model.manual;
 
 import android.graphics.Bitmap;
 
+import androidx.core.util.Pair;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
@@ -30,6 +31,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.observers.TestObserver;
@@ -37,26 +40,29 @@ import io.reactivex.observers.TestObserver;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.BOB_ID;
 import static com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest.USINIG_REAL_DB;
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class CreateExamUpdatesGraderTest {
+public class CreateExamUpdatesGraderBigExamTest {
     private CreateExamModelView out;
     private Repository<Exam> examRepository;
     private Repository<Grader> graderRepository;
     private ImageProcessingFacade imageProcessor;
     private Exam theExpectedExam;
     private RemoteDatabaseFacade remoteDatabaseFacade;
+    private interface BitmapLambda{
+        Bitmap get();
+    }
 
     @Before
     public void setUp() throws Exception {
-        USINIG_REAL_DB = false;
+        USINIG_REAL_DB = true;
         if(!USINIG_REAL_DB)FirebaseDatabaseFactory.setTestMode();
         AppDatabaseFactory.setTestMode();
         FilesManagerFactory.setTestMode(getApplicationContext());
-        if(!USINIG_REAL_DB)RemoteFilesManagerFactory.setTestMode();
+//        RemoteFilesManagerFactory.setTestMode();
         TestObserver to = new TestObserver(){
             @Override
             public void onNext(Object value) {
@@ -65,7 +71,9 @@ public class CreateExamUpdatesGraderTest {
         };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
         remoteDatabaseFacade = RemoteDatabaseFacadeFactory.get();
-        remoteDatabaseFacade.addGraderIfAbsent("bobexamscanner80@gmail.com","QR6JunUJDvaZr1kSOWEq3iiCToQ2");
+        remoteDatabaseFacade.addGraderIfAbsent("rotemhas@post.bgu.ac.il","5etmuMvCN3aY9aUXWa8rOX0CZXj1");
+        remoteDatabaseFacade.addGraderIfAbsent("rotemb271@gmail.com","n5BDz7ckJpT45JP772xnAVhQtWn2");
+        sleep(2000);
         to.awaitCount(1);
         ImageProcessingFactory.setTestMode(getApplicationContext());
         imageProcessor = new ImageProcessingFactory().create();
@@ -79,13 +87,29 @@ public class CreateExamUpdatesGraderTest {
         examRepository = new ExamRepositoryFactory().create();
         graderRepository = new GraderRepoFactory().create();
         graderRepository.create(new Grader("bobexamscanner80@gmail.com", BOB_ID));
-        out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1());
-        out.holdVersionNumber(3);
-        out.holdGraderIdentifier("bobexamscanner80@gmail.com");
+        out.holdGraderIdentifier("rotemhas@post.bgu.ac.il");
         out.addGrader();
-        out.holdNumOfQuestions("50");
-        out.addVersion();
-        out.holdExamUrl("/durlurl");
+        out.holdGraderIdentifier("rotemb271@gmail.com");
+        out.addGrader();
+        out.holdNumOfQuestions("80");
+        List<Pair<Integer, BitmapLambda>> versions = new ArrayList<>(
+                Arrays.asList(
+                        new Pair<>(1,()->BitmapsInstancesFactoryAndroidTest.exmp0_ver1()),
+                        new Pair<>(2,()->BitmapsInstancesFactoryAndroidTest.exmp0_ver2()),
+                        new Pair<>(3,()->BitmapsInstancesFactoryAndroidTest.exmp0_ver3()),
+                        new Pair<>(4,()->BitmapsInstancesFactoryAndroidTest.exmp0_ver4()),
+                        new Pair<>(5,()->BitmapsInstancesFactoryAndroidTest.exmp0_ver5()),
+                        new Pair<>(6,()->BitmapsInstancesFactoryAndroidTest.exmp0_ver6()),
+                        new Pair<>(7,()->BitmapsInstancesFactoryAndroidTest.exmp0_ver7()),
+                        new Pair<>(8,()->BitmapsInstancesFactoryAndroidTest.exmp0_ver8())
+                )
+        );
+        for (Pair<Integer, BitmapLambda> pair:versions) {
+            out.holdVersionNumber(pair.first);
+            out.holdVersionBitmap(pair.second.get());
+            out.addVersion();
+        }
+        out.holdExamUrl("https://docs.google.com/spreadsheets/d/1ByBHLwEsRbl6nSvM82CILYmwO_p1l1Z-NYrfcXOiqfk/edit?usp=sharing");
         out.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
         assert 1 == exams.size();

@@ -23,6 +23,9 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.opencv.android.OpenCVLoader;
 
+import io.reactivex.Completable;
+import io.reactivex.schedulers.Schedulers;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+
 
     @Override
     public boolean onSupportNavigateUp() {

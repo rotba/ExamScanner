@@ -452,11 +452,11 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
     @Override
     public void updateUploaded(String remoteId) {
-        pushChildInPath(
-                String.format("%s/%s/%s", Paths.toExams, Paths.gUploaded, remoteId),
-                1,
+        putObjectInLocation(
+                String.format("%s/%s/%s", Paths.toExams, remoteId , Exam.metaUploaded),
+                new Integer(1),
                 StoreTaskPostprocessor.getOffline()
-        ).subscribe();
+        );
     }
 
     @Override

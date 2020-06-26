@@ -416,7 +416,9 @@ public class RealFacadeImple implements CommunicationFacade {
                         examEntities.remove(e);
                     }
                 }
-            }else if (!examExists(examEntities, re)) {
+            }
+            else if (re._isUploaded() && !examExists(examEntities, re)) {
+                Log.d(DEBUG_TAG, String.format("importing %s %d",re.courseName, re.semester));
                 importRemoteExam(re);
                 Exam importedExam = db.getExamDao().getByCoursenameSemeseterTermYear(re.courseName, re.semester, re.term, re.year);
                 examEntities.add(importedExam);
@@ -612,6 +614,7 @@ public class RealFacadeImple implements CommunicationFacade {
             Exam e = ewv.getExam();
             e.setUploaded(1);
             db.getExamDao().update(e);
+            remoteDb.updateUploaded(e.getRemoteId());
         }
     }
 
@@ -760,6 +763,8 @@ public class RealFacadeImple implements CommunicationFacade {
                     if(es.getRemoteId()==null){
                         throw new CommunicationException("the examinee id should ve stored. nothing to do");
                     }
+                    remoteDb.validateSolution(es.getRemoteId());
+
                 }
         );
     }
@@ -778,6 +783,9 @@ public class RealFacadeImple implements CommunicationFacade {
                     if(es.getRemoteId()==null){
                         throw new CommunicationException("the examinee id should ve stored. nothing to do");
                     }
+                    remoteDb.validateSolution(es.getRemoteId());
+                    String remoteExamId = db.getExamDao().getById(db.getVersionDao().getById(es.getVersionId()).getExamId()).getRemoteId();
+                    remoteDb.updateTotalAndAverageTransaction(remoteExamId, calcGrade);
                 }
         );
     }
@@ -1105,8 +1113,8 @@ public class RealFacadeImple implements CommunicationFacade {
         Version v = db.getVersionDao().getById(versionId);
         throwCommunicationExceptionWhenNull(v, Version.class, String.format("This student solution's version is null, verid:%d", versionId));
         String remoteVersionId = v.getRemoteVersionId();
-        final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId, null, false);
         try {
+            final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId, null, false);
             final long ans = db.getExamineeSolutionDao().insert(es);
             Log.d(TAG, String.format("inserted %d solution to the local db", ans));
             es.setId(ans);
