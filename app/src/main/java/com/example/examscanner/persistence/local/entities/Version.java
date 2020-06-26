@@ -28,6 +28,16 @@ public class Version {
     private String remoteVersionId;
     private boolean isUploaded;
 
+    public boolean isDownloaded() {
+        return isDownloaded;
+    }
+
+    public void setDownloaded(boolean downloaded) {
+        isDownloaded = downloaded;
+    }
+
+    private boolean isDownloaded;
+
     public boolean isUploaded() {
         return isUploaded;
     }
@@ -38,11 +48,12 @@ public class Version {
 
     private int verNum;
 
-    public Version(int verNum, long examId, String remoteVersionId, boolean isUploaded) {
+    public Version(int verNum, long examId, String remoteVersionId, boolean isUploaded, boolean isDownloaded) {
         this.verNum = verNum;
         this.examId = examId;
         this.remoteVersionId = remoteVersionId;
         this.isUploaded = isUploaded;
+        this.isDownloaded = isDownloaded;
     }
 
     public long getId() {
@@ -72,6 +83,7 @@ public class Version {
     public String _getBitmapPath(){
         return "VERISION_"+String.valueOf(id);
     }
+
 
 
 }

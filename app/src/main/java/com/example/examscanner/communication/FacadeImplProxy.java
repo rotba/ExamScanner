@@ -16,6 +16,7 @@ import com.example.examscanner.communication.entities_interfaces.VersionEntityIn
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class FacadeImplProxy implements CommunicationFacade {
@@ -213,6 +214,16 @@ public class FacadeImplProxy implements CommunicationFacade {
     @Override
     public void approveSolutionAndStats(int id, float calcGrade) {
         realImpl.approveSolutionAndStats(id, calcGrade);
+    }
+
+    @Override
+    public Completable observeExamDownload(long id) {
+        return realImpl.observeExamDownload(id);
+    }
+
+    @Override
+    public Completable observeExamUpladed(long id) {
+        return realImpl.observeExamUpladed(id);
     }
 
     @Override

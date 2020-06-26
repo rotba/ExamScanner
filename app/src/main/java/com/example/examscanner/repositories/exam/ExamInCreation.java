@@ -46,7 +46,10 @@ public class ExamInCreation extends Exam {
                 "THE_EMPTY_YEAR",
                 -1,
                 0,
-                ExamineeIdsSocket.getEmpty()
+                ExamineeIdsSocket.getEmpty(),
+                true,
+                DownloadCompletable.getEmpty(),
+                DownloadCompletable.getEmpty()
         );
     }
 

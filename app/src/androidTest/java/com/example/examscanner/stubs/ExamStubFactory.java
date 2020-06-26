@@ -37,7 +37,10 @@ public class ExamStubFactory {
                 "2020",
                 QAD_NUM_OF_QUESTIONS,
                 0,
-                ExamineeIdsSocket.getEmpty()
+                ExamineeIdsSocket.getEmpty(),
+                true,
+                Exam.DownloadCompletable.getEmpty(),
+                Exam.DownloadCompletable.getEmpty()
         );
         Future<List<Version>> fv = new Future<List<Version>>() {
             @Override

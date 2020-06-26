@@ -14,6 +14,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class Exam {
@@ -31,12 +32,20 @@ public class Exam {
 //    private List<Version> cachedVersions;
     private Future<List<Version>> fVersions;
     private ExamineeIdsSocket examineeIdsSocket;
+    private boolean isDownloaded;
+    private DownloadCompletable downloadCompletable;
+    private DownloadCompletable uploadCompletable;
+
+    public void setUploadCompletable(DownloadCompletable uploadCompletable) {
+        this.uploadCompletable = uploadCompletable;
+    }
+
     protected int numOfQuestions;
     protected String url = "THE_EMPTY_URL";
     protected int uploaded;
 //    private boolean doResolveFutures;
 
-    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions, int uploaded, ExamineeIdsSocket examineeIdsSocket) {
+    public Exam(String managerId,long id, Future<List<Version>> fVersions, List<Grader> graders, String courseName, int moed, int semester, long sessionId, String year, int numOfQuestions, int uploaded, ExamineeIdsSocket examineeIdsSocket, boolean isDownloaded, DownloadCompletable downloadCompletable, DownloadCompletable uploadCompletable) {
         this.id = id;
         this.courseName = courseName;
         this.term = moed;
@@ -46,6 +55,9 @@ public class Exam {
         this.year = year;
         this.fVersions = fVersions;
         this.examineeIdsSocket = examineeIdsSocket;
+        this.isDownloaded = isDownloaded;
+        this.downloadCompletable = downloadCompletable;
+        this.uploadCompletable = uploadCompletable;
         newVersions = new ArrayList<>();
 //        cachedVersions = new ArrayList<>();
         this.numOfQuestions = numOfQuestions;
@@ -201,6 +213,22 @@ public class Exam {
         return uploaded>0;
     }
 
+    public boolean isDownloaded() {
+        return isDownloaded;
+    }
+
+    public void setDownloaded(boolean downloaded) {
+        isDownloaded = downloaded;
+    }
+
+    public Completable observeDownload() {
+        return downloadCompletable.observe();
+    }
+
+    public Completable observeUpload() {
+        return uploadCompletable.observe();
+    }
+
     public class NuSuchVerion extends RuntimeException {
 
 
@@ -290,6 +318,17 @@ public class Exam {
     public void quziEagerLoad() {
         for (Version v:getVersions()) {
             v.quziEagerLoad();
+        }
+    }
+    public interface DownloadCompletable{
+        public Completable observe();
+        public static DownloadCompletable getEmpty(){
+            return new DownloadCompletable() {
+                @Override
+                public Completable observe() {
+                    return Completable.fromAction(()->{});
+                }
+            };
         }
     }
 }

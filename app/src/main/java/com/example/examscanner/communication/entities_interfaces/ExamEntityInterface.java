@@ -18,4 +18,6 @@ public interface ExamEntityInterface {
     public String[] getGradersIds();
 
     public int getUploaded();
+
+    boolean getDownloaded();
 }

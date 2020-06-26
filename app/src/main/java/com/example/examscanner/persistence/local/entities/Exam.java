@@ -37,9 +37,10 @@ public class Exam {
     }
 
     private int numOfVersions;
+    private boolean downloaded;
 
 
-    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId, String[] gradersIds, int uploaded, int numOfVersions) {
+    public Exam(String courseName, int term, String year, String url, int semester, long examCreationSessionId, String remoteId, int numberOfQuestions, String managerId, String[] gradersIds, int uploaded, int numOfVersions, boolean downloaded) {
         this.courseName = courseName;
         this.term = term;
         this.year = year;
@@ -52,6 +53,7 @@ public class Exam {
         this.gradersIds = gradersIds;
         this.uploaded = uploaded;
         this.numOfVersions = numOfVersions;
+        this.downloaded = downloaded;
     }
 
     public String getUrl() {
@@ -141,4 +143,12 @@ public class Exam {
 
     public int getUploaded() { return uploaded;}
     public void setUploaded(int uploaded) { this.uploaded = uploaded;}
+
+    public boolean isDownloaded() {
+        return downloaded;
+    }
+
+    public void setDownloaded(boolean downloaded) {
+        this.downloaded = downloaded;
+    }
 }

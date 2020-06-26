@@ -81,6 +81,7 @@ public class ExamRepository implements Repository<Exam> {
                 exam.getVersions().size()
         );
         exam.setId(id);
+        exam.setUploadCompletable(()->comFacade.observeExamUpladed(id));
         insertVersions(exam);
     }
 

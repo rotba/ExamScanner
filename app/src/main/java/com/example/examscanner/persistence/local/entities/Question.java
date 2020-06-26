@@ -29,7 +29,6 @@ public class Question {
     public void setRemoteId(String remoteId) {
         this.remoteId = remoteId;
     }
-
     private String remoteId;
 
     public boolean isUploaded() {
@@ -41,8 +40,9 @@ public class Question {
     }
 
     private boolean isUploaded;
+    private boolean downloaded;
 
-    public Question(int questionNum, long verId, int correctAns, int leftX, int upY, int rightX, int borromY, String remoteId, boolean isUploaded) {
+    public Question(int questionNum, long verId, int correctAns, int leftX, int upY, int rightX, int borromY, String remoteId, boolean isUploaded, boolean downloaded) {
         this.questionNum = questionNum;
         this.verId = verId;
         this.correctAns = correctAns;
@@ -52,6 +52,7 @@ public class Question {
         this.borromY = borromY;
         this.remoteId = remoteId;
         this.isUploaded = isUploaded;
+        this.downloaded = downloaded;
     }
 
     public int getLeftX() {
@@ -120,5 +121,13 @@ public class Question {
 
     public String getRemoteId() {
         return remoteId;
+    }
+
+    public boolean isDownloaded() {
+        return downloaded;
+    }
+
+    public void setDownloaded(boolean downloaded) {
+        this.downloaded = downloaded;
     }
 }

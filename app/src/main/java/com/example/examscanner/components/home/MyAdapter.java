@@ -4,10 +4,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,6 +17,9 @@ import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.repositories.exam.Exam;
 
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<LiveData<Exam>> mExams;
@@ -48,12 +49,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         Log.d(TAG, "onBindViewHolder: called");
         Exam  e = mExams.get(position).getValue();
         holder.examName.setText(e.toString());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClick.onItemClick(e);
-            }
-        });
         if(e.getManagerId().equals(state.getId())){
             holder.edit.setVisibility(View.VISIBLE);
             holder.edit.setOnClickListener(v -> {
@@ -64,10 +59,55 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }else{
             holder.edit.setVisibility(View.INVISIBLE);
         }
-        if(e.isUploaded()){
-            holder.pb.setVisibility(View.INVISIBLE);
-        }else{
+
+
+        if(!e.isUploaded() || !e.isDownloaded()){
             holder.pb.setVisibility(View.VISIBLE);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {}
+            });
+            if(!e.isUploaded()){
+                e.observeUpload()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                ()->{
+                                    holder.pb.setVisibility(View.INVISIBLE);
+                                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            onItemClick.onItemClick(e);
+                                        }
+                                    });
+                                },
+                                t-> Log.d(TAG, "BUG IN Exam:observeDownload", t)
+                        );
+            }else if(! e.isDownloaded()){
+                e.observeDownload()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                ()->{
+                                    holder.pb.setVisibility(View.INVISIBLE);
+                                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            onItemClick.onItemClick(e);
+                                        }
+                                    });
+                                },
+                                t-> Log.d(TAG, "BUG IN Exam:observeDownload", t)
+                        );
+            }
+        }else{
+            holder.pb.setVisibility(View.INVISIBLE);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClick.onItemClick(e);
+                }
+            });
         }
 
     }

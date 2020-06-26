@@ -14,6 +14,7 @@ import com.example.examscanner.repositories.scanned_capture.Answer;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public interface CommunicationFacade {
@@ -68,5 +69,8 @@ public interface CommunicationFacade {
     void addGraderToSolution(long id, String graderEmail);
 
     void approveSolutionAndStats(int id, float calcGrade);
+
+    Completable observeExamDownload(long id);
+    Completable observeExamUpladed(long id);
     // public ExamEntityInterface[] getExamsofGrader(String userId);
 }

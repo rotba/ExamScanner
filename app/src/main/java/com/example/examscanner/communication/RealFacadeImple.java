@@ -58,8 +58,8 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.example.examscanner.persistence.remote.files_management.Utils.toBitmap;
 import static com.example.examscanner.persistence.remote.files_management.Utils.toByteArray;
+import static java.lang.Thread.sleep;
 
 
 public class RealFacadeImple implements CommunicationFacade {
@@ -72,7 +72,8 @@ public class RealFacadeImple implements CommunicationFacade {
     private RemoteFilesManager rfm;
     private RemoteDatabaseFacade remoteDb;
     private TasksManager tasksManager;
-    private String DEBUG_TAG = "DebugExamScanner";;
+    private String DEBUG_TAG = "DebugExamScanner";
+    ;
 
     public static synchronized RealFacadeImple getInstance() {
         if (instance == null) {
@@ -107,9 +108,9 @@ public class RealFacadeImple implements CommunicationFacade {
     @Override
     public long createExam(String courseName, String url, String year, int term, int semester, String managerId, String[] graders, long sessionId, int numberOfQuestions, int uploaded, int numOfVer) {
         try {
-            String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId, numberOfQuestions, uploaded,numOfVer)
+            String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId, numberOfQuestions, uploaded, numOfVer)
                     .blockingFirst();
-            long ans = db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions, managerId, graders, uploaded,numOfVer));
+            long ans = db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions, managerId, graders, uploaded, numOfVer,true));
             Log.d(TAG, String.format("examid %d was created", ans));
             return ans;
         } catch (Throwable e) {
@@ -261,7 +262,6 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId, Bitmap orig) {
         Log.d(TAG, String.format("inserted the eaminieeid %s to the eaxminee ids table. solution local id is %d", result, es.getId()));
@@ -409,28 +409,26 @@ public class RealFacadeImple implements CommunicationFacade {
         remoteDb.getExams().blockingSubscribe(res -> remoteExams.addAll(res));
         for (com.example.examscanner.persistence.remote.entities.Exam re :
                 remoteExams) {
-            if(re._isDeleted()){
-                for(Exam e: examEntities){
-                    if(re._getId().equals(e.getRemoteId())){
+            if (re._isDeleted()) {
+                for (Exam e : examEntities) {
+                    if (re._getId().equals(e.getRemoteId())) {
                         db.getExamDao().delete(e);
                         examEntities.remove(e);
                     }
                 }
-            }
-            else if (re._isUploaded() && !examExists(examEntities, re)) {
-                Log.d(DEBUG_TAG, String.format("importing %s %d",re.courseName, re.semester));
+            } else if (re._isUploaded() && !examExists(examEntities, re)) {
+                Log.d(DEBUG_TAG, String.format("importing %s %d", re.courseName, re.semester));
                 importRemoteExam(re);
                 Exam importedExam = db.getExamDao().getByCoursenameSemeseterTermYear(re.courseName, re.semester, re.term, re.year);
                 examEntities.add(importedExam);
                 onlyRemoteExams.add(importedExam);
-            }
-            else{
-                onlyRemoteExams.add(localExamEntity(examEntities, re));
+            } else {
+//                onlyRemoteExams.add(localExamEntity(examEntities, re));
             }
         }
-        List<Exam> toRemove = new ArrayList<>(examEntities);
-        toRemove.removeAll(onlyRemoteExams);
-        examEntities.removeAll(toRemove);
+//        List<Exam> toRemove = new ArrayList<>(examEntities);
+//        toRemove.removeAll(onlyRemoteExams);
+//        examEntities.removeAll(toRemove);
         ExamEntityInterface[] ans = new ExamEntityInterface[examEntities.size()];
         for (int i = 0; i < ans.length; i++) {
             ans[i] = examEntity2EntityInterface(examEntities.get(i));
@@ -460,7 +458,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
 
     private void importRemoteExam(com.example.examscanner.persistence.remote.entities.Exam re) {
-        long eId = db.getExamDao().insert(new Exam(re.courseName, re.term, re.year, re.url, re.semester, -1, re._getId(), re.numberOfQuestions, re.manager, re.graders.toArray(new String[0]), re.uploaded, re.numOfVersions));
+        long eId = db.getExamDao().insert(new Exam(re.courseName, re.term, re.year, re.url, re.semester, -1, re._getId(), re.numberOfQuestions, re.manager, re.graders.toArray(new String[0]), re.uploaded, re.numOfVersions, false));
         List<com.example.examscanner.persistence.remote.entities.Version> remoteVersions = new ArrayList<>();
         remoteDb.getVersions().blockingSubscribe(rvs -> remoteVersions.addAll(rvs));
         for (com.example.examscanner.persistence.remote.entities.Version rv :
@@ -471,31 +469,46 @@ public class RealFacadeImple implements CommunicationFacade {
         }
     }
 
+    @SuppressLint("CheckResult")
     private void importRemoteVersion(com.example.examscanner.persistence.remote.entities.Version rv, long examId) {
-        final Version version = new Version(rv.versionNumber, examId, rv._getId(),false);
+        final Version version = new Version(rv.versionNumber, examId, rv._getId(), false, false);
         long vId = db.getVersionDao().insert(version);
         version.setId(vId);
         final Bitmap[] bmBox = {null};
-        rfm.get(rv.bitmapPath).blockingSubscribe(bytes -> bmBox[0] = toBitmap(bytes));
-        assert bmBox[0] != null;
-        Bitmap bm = bmBox[0];
-        try {
-            fm.store(bm, version._getBitmapPath());
-        } catch (IOException e) {
-            throw new CommunicationException(e);
-        }
-        List<com.example.examscanner.persistence.remote.entities.Question> remoteQuestions = new ArrayList<>();
-        remoteDb.getQuestions().blockingSubscribe(rqs -> remoteQuestions.addAll(rqs));
-        for (com.example.examscanner.persistence.remote.entities.Question q :
-                remoteQuestions) {
-            if (q.versionId.equals(rv._getId()))
-                importRemoteQuestion(q, vId);
-        }
+        rfm.get(rv.bitmapPath)
+                .subscribe(
+                        bytes -> {
+                            assert bmBox[0] != null;
+                            Bitmap bm = bmBox[0];
+                            try {
+                                fm.store(bm, version._getBitmapPath());
+                            } catch (IOException e) {
+                                throw new CommunicationException(e);
+                            }
+                            remoteDb.getQuestions().subscribe(
+                                    remoteQuestions -> {
+                                        for (com.example.examscanner.persistence.remote.entities.Question q :
+                                                remoteQuestions) {
+                                            if (q.versionId.equals(rv._getId())){
+                                                importRemoteQuestion(q, vId);
+                                            }
+                                        }
+                                    },
+                                    throwable -> {
+                                        throw new CommunicationException(throwable);
+                                    });
+
+                        },
+                        throwable -> {throw new CommunicationException(throwable);}
+                );
     }
 
     private void importRemoteQuestion(com.example.examscanner.persistence.remote.entities.Question rq, long verionId) {
-        db.getQuestionDao().insert(new Question(rq.num, verionId, rq.ans, rq.left, rq.up, rq.right, rq.bottom, rq._getId(), false));
+        db.getQuestionDao().insert(new Question(rq.num, verionId, rq.ans, rq.left, rq.up, rq.right, rq.bottom, rq._getId(), false, true));
+        notifyQuestionDownloaded(verionId);
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private boolean examExists(List<Exam> examEntities, com.example.examscanner.persistence.remote.entities.Exam re) {
@@ -513,7 +526,7 @@ public class RealFacadeImple implements CommunicationFacade {
                         s.getSemester() == re.semester &&
                         s.getTerm() == re.term
         ).toArray();
-        return (Exam)arr[0];
+        return (Exam) arr[0];
     }
 
     @Override
@@ -524,7 +537,7 @@ public class RealFacadeImple implements CommunicationFacade {
         } catch (Throwable e) {
             throw new MyAssertionError("assert updateExam::db.getExamDao().getById(id).getRemoteId()!=null violated", e);
         }
-        Exam e = new Exam(courseName, term, year, "THE_EMPTY_URL", semester, sessionId, remoteId, QAD_NUM_OF_QUESTIONS, null, null, 0, 0);
+        Exam e = new Exam(courseName, term, year, "THE_EMPTY_URL", semester, sessionId, remoteId, QAD_NUM_OF_QUESTIONS, null, null, 0, 0, true);
         e.setId(id);
         db.getExamDao().update(e);
     }
@@ -563,54 +576,99 @@ public class RealFacadeImple implements CommunicationFacade {
         if (v == null)
             throw new CommunicationException("Triyng to create a question associated with a version that does not exist");
         try {
-            final long ret = db.getQuestionDao().insert(new Question(num, versionId, ans, left, up, right, bottom, null, false));
+            final long ret = db.getQuestionDao().insert(new Question(num, versionId, ans, left, up, right, bottom, null, false, true));
             remoteDb.createQuestion(v.getRemoteVersionId(), num, ans, left, up, right, bottom)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe(remoteId->{
+                    .subscribe(remoteId -> {
                         Question q = db.getQuestionDao().get(ret);
                         q.setRemoteId(remoteId);
                         q.setUploaded(true);
                         db.getQuestionDao().update(q);
                         notifyQuestionUploaded(q);
-                    }, throwable -> {throw new CommunicationException(throwable);});
+                    }, throwable -> {
+                        throw new CommunicationException(throwable);
+                    });
             return ret;
         } catch (Throwable t) {
             /*TODO - delete exam*/
             throw new CommunicationException(t);
         }
     }
-
-    private void notifyQuestionUploaded(Question q) {
-        Version v  = db.getVersionDao().getById(q.getVerId());
+    private void notifyQuestionDownloaded(long verionId) {
+        Version v = db.getVersionDao().getById(verionId);
         Exam e = db.getExamDao().getById(v.getExamId());
         VersionWithQuestions vwq = db.getVersionDao().getVersionWithQuestions(v.getId());
-        int numOfUploaded = 0;
-        for (Question currQq:vwq.getQuestions()) {
-            if(currQq.isUploaded()){
-                numOfUploaded++;
+        int numOfDownloaded = 0;
+        for (Question currQq : vwq.getQuestions()) {
+            if (currQq.isDownloaded()) {
+                numOfDownloaded++;
             }
         }
 
+        Log.d(DEBUG_TAG, String.format("%d questions uploded for v:%d", numOfDownloaded, v.getId()));
+        if (numOfDownloaded == e.getNumberOfQuestions()) {
+            v.setDownloaded(true);
+            db.getVersionDao().update(v);
+            notifyExamVersionDownloaded(e.getId());
+        }
+    }
+
+
+
+    private void notifyQuestionUploaded(Question q) {
+        Version v = db.getVersionDao().getById(q.getVerId());
+        Log.d(DEBUG_TAG, String.format("q.getVerId():%d",q.getVerId()));
+        Exam e = db.getExamDao().getById(v.getExamId());
+        VersionWithQuestions vwq = db.getVersionDao().getVersionWithQuestions(v.getId());
+        int numOfUploaded = 0;
+        try {
+            for (Question currQq : vwq.getQuestions()) {
+                if (currQq.isUploaded()) {
+                    numOfUploaded++;
+                }
+            }
+        }catch (NullPointerException np){
+            Log.d(DEBUG_TAG, String.format("v.id:%d", v.getId()), np);
+            throw  np;
+        }
+
+
         Log.d(DEBUG_TAG, String.format("%d questions uploded for v:%d", numOfUploaded, v.getId()));
-        if(numOfUploaded == e.getNumberOfQuestions()){
+        if (numOfUploaded == e.getNumberOfQuestions()) {
             v.setUploaded(true);
             db.getVersionDao().update(v);
             notifyExamVersionUploaded(v);
         }
     }
 
+    private void notifyExamVersionDownloaded(long id) {
+        ExamWithVersions ewv = db.getExamDao().getExamWithVersions(id);
+        int numOfDownloaded = 0;
+        for (Version currV : ewv.getVersions()) {
+            if (currV.isDownloaded()) {
+                numOfDownloaded++;
+            }
+        }
+        Log.d(DEBUG_TAG, String.format("%d versions numOfDownloaded for e:%d", numOfDownloaded, ewv.getExam().getId()));
+        Log.d(DEBUG_TAG, String.format("ewv.getExam().getNumOfVersions():%d", ewv.getExam().getNumOfVersions()));
+        if (numOfDownloaded == ewv.getExam().getNumOfVersions()) {
+            Exam e = ewv.getExam();
+            e.setDownloaded(true);
+            db.getExamDao().update(e);
+        }
+    }
     private void notifyExamVersionUploaded(Version v) {
         ExamWithVersions ewv = db.getExamDao().getExamWithVersions(v.getExamId());
         int numOfUploaded = 0;
-        for (Version currV:ewv.getVersions()) {
-            if(currV.isUploaded()){
+        for (Version currV : ewv.getVersions()) {
+            if (currV.isUploaded()) {
                 numOfUploaded++;
             }
         }
         Log.d(DEBUG_TAG, String.format("%d versions uploded for e:%d", numOfUploaded, ewv.getExam().getId()));
         Log.d(DEBUG_TAG, String.format("ewv.getExam().getNumOfVersions():%d", ewv.getExam().getNumOfVersions()));
-        if(numOfUploaded == ewv.getExam().getNumOfVersions()){
+        if (numOfUploaded == ewv.getExam().getNumOfVersions()) {
             Exam e = ewv.getExam();
             e.setUploaded(1);
             db.getExamDao().update(e);
@@ -758,9 +816,9 @@ public class RealFacadeImple implements CommunicationFacade {
                     throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("should exist. id:%s", id));
                     remoteDb.validateSolution(es.getRemoteId());
                 },
-                ()->{
+                () -> {
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
-                    if(es.getRemoteId()==null){
+                    if (es.getRemoteId() == null) {
                         throw new CommunicationException("the examinee id should ve stored. nothing to do");
                     }
                     remoteDb.validateSolution(es.getRemoteId());
@@ -778,14 +836,45 @@ public class RealFacadeImple implements CommunicationFacade {
                     String remoteExamId = db.getExamDao().getById(db.getVersionDao().getById(es.getVersionId()).getExamId()).getRemoteId();
                     remoteDb.updateTotalAndAverageTransaction(remoteExamId, calcGrade);
                 },
-                ()->{
+                () -> {
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
-                    if(es.getRemoteId()==null){
+                    if (es.getRemoteId() == null) {
                         throw new CommunicationException("the examinee id should ve stored. nothing to do");
                     }
                     remoteDb.validateSolution(es.getRemoteId());
                     String remoteExamId = db.getExamDao().getById(db.getVersionDao().getById(es.getVersionId()).getExamId()).getRemoteId();
                     remoteDb.updateTotalAndAverageTransaction(remoteExamId, calcGrade);
+                }
+        );
+    }
+
+    @Override
+    public Completable observeExamDownload(long id) {
+        return Completable.fromAction(
+                ()->{
+                    while (!db.getExamDao().getById(id).isDownloaded()){
+                        try {
+                            sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return;
+                }
+        );
+    }
+    @Override
+    public Completable observeExamUpladed(long id) {
+        return Completable.fromAction(
+                ()->{
+                    while (db.getExamDao().getById(id).getUploaded()==0){
+                        try {
+                            sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return;
                 }
         );
     }
@@ -797,7 +886,7 @@ public class RealFacadeImple implements CommunicationFacade {
         remoteDb.deleteExam(e.getRemoteId());
         rfm.deleteExam(e.getRemoteId());
         ExamWithVersions ewv = db.getExamDao().getExamWithVersions(id);
-        for (Version v:ewv.getVersions()) {
+        for (Version v : ewv.getVersions()) {
             deleteVersion(v);
         }
         db.getExamDao().delete(e);
@@ -806,7 +895,7 @@ public class RealFacadeImple implements CommunicationFacade {
     private void deleteVersion(Version v) {
         remoteDb.deleteVersion(v.getRemoteVersionId());
         VersionWithQuestions vwq = db.getVersionDao().getVersionWithQuestions(v.getId());
-        for(Question q: vwq.getQuestions()){
+        for (Question q : vwq.getQuestions()) {
             remoteDb.deleteQuestion(q.getRemoteId());
         }
     }
@@ -1078,22 +1167,27 @@ public class RealFacadeImple implements CommunicationFacade {
             throw new CommunicationException("Triyng to craete version associated with a version the does not exist");
         try {
             String pathToRemoteBm = PathsGenerator.genVersionPath(e.getRemoteId(), num);
-            final Version version = new Version(num, examId, null,false);
+            final Version version = new Version(num, examId, null, false, true);
             final long ans = db.getVersionDao().insert(version);
             remoteDb.createVersion(num, e.getRemoteId(), pathToRemoteBm)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-            .subscribe(remotrId->{
-                Version v = db.getVersionDao().getById(ans);
-                v.setRemoteVersionId(remotrId);
-                db.getVersionDao().update(v);
-            }, throwable -> {throw  new CommunicationException(throwable);})
+                    .subscribe(remotrId -> {
+                        Version v = db.getVersionDao().getById(ans);
+                        v.setRemoteVersionId(remotrId);
+                        db.getVersionDao().update(v);
+                    }, throwable -> {
+                        throw new CommunicationException(throwable);
+                    })
             ;
 
             version.setId(ans);
             fm.store(verBm, version._getBitmapPath());
             rfm.store(pathToRemoteBm, toByteArray(verBm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-            .subscribe(()->{}, throwable -> {throw new CommunicationException(throwable);});
+                    .subscribe(() -> {
+                    }, throwable -> {
+                        throw new CommunicationException(throwable);
+                    });
 
             return ans;
         } catch (Throwable t) {
@@ -1132,8 +1226,7 @@ public class RealFacadeImple implements CommunicationFacade {
             return ans;
         } catch (IOException e) {
             throw new CommunicationException(e);
-        }
-        catch (SQLiteConstraintException e){
+        } catch (SQLiteConstraintException e) {
             throw new CommunicationException(e);
         }
     }
@@ -1289,6 +1382,11 @@ public class RealFacadeImple implements CommunicationFacade {
             @Override
             public int getUploaded() {
                 return theExam.getUploaded();
+            }
+
+            @Override
+            public boolean getDownloaded() {
+                return theExam.isDownloaded();
             }
 
         };

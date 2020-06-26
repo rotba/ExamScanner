@@ -42,7 +42,10 @@ public class ExamConverter implements Converter<ExamEntityInterface, Exam> {
                 examEntityInterface.getYear(),
                 examEntityInterface.getNumOfQuestions(),
                 examEntityInterface.getUploaded(),
-                ()->communicationFacade.observeExamineeIds(examEntityInterface.getID())
+                ()->communicationFacade.observeExamineeIds(examEntityInterface.getID()),
+                examEntityInterface.getDownloaded(),
+                ()->communicationFacade.observeExamDownload(examEntityInterface.getID()),
+                ()->communicationFacade.observeExamUpladed(examEntityInterface.getID())
         );
     }
 
