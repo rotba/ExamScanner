@@ -76,6 +76,13 @@ public class BitmapsInstancesFactoryAndroidTest {
     private static String comp191_V1_ins_27 = "instances/comp191_v1/_27.jpg";
     private static String comp191_V1_ins_28 = "instances/comp191_v1/_28.jpg";
     private static String ex0_V1_pdf_ins_in = "instances/example_0/ex0_v1.pdf";;
+    private static String ex0_V2_pdf_ins_in = "instances/example_0/ex0_v2.pdf";;
+    private static String ex0_V3_pdf_ins_in = "instances/example_0/ex0_v3.pdf";;
+    private static String ex0_V4_pdf_ins_in = "instances/example_0/ex0_v4.pdf";;
+    private static String ex0_V5_pdf_ins_in = "instances/example_0/ex0_v5.pdf";;
+    private static String ex0_V6_pdf_ins_in = "instances/example_0/ex0_v6.pdf";;
+    private static String ex0_V7_pdf_ins_in = "instances/example_0/ex0_v7.pdf";;
+    private static String ex0_V8_pdf_ins_in = "instances/example_0/ex0_v8.pdf";;
 
 
     public static Bitmap getTestJpg1() {
@@ -310,6 +317,31 @@ public class BitmapsInstancesFactoryAndroidTest {
 
     public static Bitmap get_pdf_ex0_V1_ins_in() {
         return getBitmapFromPdfAsset(ex0_V1_pdf_ins_in);
+    }
+
+    public static Bitmap exmp0_ver1() {
+        return getBitmapFromPdfAsset(ex0_V1_pdf_ins_in);
+    }
+    public static Bitmap exmp0_ver2() {
+        return getBitmapFromPdfAsset(ex0_V2_pdf_ins_in);
+    }
+    public static Bitmap exmp0_ver3() {
+        return getBitmapFromPdfAsset(ex0_V3_pdf_ins_in);
+    }
+    public static Bitmap exmp0_ver4() {
+        return getBitmapFromPdfAsset(ex0_V4_pdf_ins_in);
+    }
+    public static Bitmap exmp0_ver5() {
+        return getBitmapFromPdfAsset(ex0_V5_pdf_ins_in);
+    }
+    public static Bitmap exmp0_ver6() {
+        return getBitmapFromPdfAsset(ex0_V6_pdf_ins_in);
+    }
+    public static Bitmap exmp0_ver7() {
+        return getBitmapFromPdfAsset(ex0_V7_pdf_ins_in);
+    }
+    public static Bitmap exmp0_ver8() {
+        return getBitmapFromPdfAsset(ex0_V8_pdf_ins_in);
     }
 
     private static Bitmap getBitmapFromPdfAsset(String path) {

@@ -6,4 +6,7 @@ public class RepositoryException extends RuntimeException{
     public RepositoryException(CommunicationException e) {
         super(e);
     }
+    public RepositoryException() {
+        super();
+    }
 }

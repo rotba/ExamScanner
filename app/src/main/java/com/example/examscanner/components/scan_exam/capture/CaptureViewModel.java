@@ -129,10 +129,10 @@ public class CaptureViewModel extends ViewModel {
             Log.d(TAG, "Scan answers exception", e);
             final Bitmap bitmap = imageProcessor.createFailFeedbackImage(capture.getBitmap());
             scRepo.create(new ScannedCapture(
-                    -1, capture.getBitmap(),capture.getBitmap(), exam.getNumOfQuestions(), 0, new int[0], new float[0], new float[0], new float[0], new float[0], new int[0], version, capture.getExamineeId(), state.getUserEmail()
+                    -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), 0, new int[0], new float[0], new float[0], new float[0], new float[0], new int[0], version, capture.getExamineeId(), state.getUserEmail()
 
             ));
-            throw  e;
+//            throw  e;
         }
 //        imageProcessor.detectCorners(
 //                capture.getBitmap(),

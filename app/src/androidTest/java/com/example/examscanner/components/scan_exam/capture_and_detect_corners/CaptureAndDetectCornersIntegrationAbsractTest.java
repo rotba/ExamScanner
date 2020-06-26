@@ -326,4 +326,34 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
             sleepSingleCaptureProcessingTime();
         }
     }
+
+    protected void test3Caps() {
+        navToCapture();
+        resumeYourLastSession();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 3;
+        for (int i = 0; i < numOfCaptures; i++) {
+            captureASolution();
+            sleepSingleCaptureProcessingTime();
+            sleepSingleCaptureProcessingTime();
+        }
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        sleepCameraPreviewSetupTime();
+        onView(withText(String.format("%d/%d", 1, 3))).check(matches(isDisplayed()));
+    }
+
+    protected void test1FailCap(){
+        navToCapture();
+        resumeYourLastSession();
+        sleepCameraPreviewSetupTime();
+        int numOfCaptures = 1;
+        for (int i = 0; i < numOfCaptures; i++) {
+            captureASolution();
+            sleepSingleCaptureProcessingTime();
+            sleepSingleCaptureProcessingTime();
+        }
+        onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        sleepCameraPreviewSetupTime();
+        onView(withText(String.format("%d/%d", 1, numOfCaptures))).check(matches(isDisplayed()));
+    }
 }

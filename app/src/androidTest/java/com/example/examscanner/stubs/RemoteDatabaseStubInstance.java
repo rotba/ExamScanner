@@ -116,7 +116,7 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
     }
 
     @Override
-    public void offlineUpdateExamineeGrade(String remoteId, float grade) {
+    public void offlineUpdateExamineeGrade(String remoteId,String remotr, float grade) {
 
     }
 
@@ -162,6 +162,11 @@ public class RemoteDatabaseStubInstance implements RemoteDatabaseFacade {
 
     @Override
     public void offilneInsertExamineeSolutionGrader(String remoteId, String graderEmail) {
+
+    }
+
+    @Override
+    public void updateTotalAndAverageTransaction(String examRemoteId, Float grade) {
 
     }
 

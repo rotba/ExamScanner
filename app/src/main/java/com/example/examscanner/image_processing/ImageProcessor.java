@@ -1525,7 +1525,8 @@ public class ImageProcessor implements ImageProcessingFacade {
     @Override
     public Bitmap createFailFeedbackImage(Bitmap bitmap) {
         Mat mat = matFromBitmap(bitmap);
-        Imgproc.putText(mat, String.format("Scan failed. please retake"), new Point(mat.cols()/2, mat.rows()/2), 5, 20, new Scalar(0,0,255), 3);
+        Imgproc.putText(mat, String.format("Scan failed"), new Point(mat.cols()/10, mat.rows()/2), 5, 10, new Scalar(255,0,0), 5);
+        Imgproc.putText(mat, String.format("Please retake"), new Point(mat.cols()/10, mat.rows()/2 + mat.rows()/10), 5, 10, new Scalar(255,0,0), 5);
         Bitmap ans = Bitmap.createBitmap(mat.width(), mat.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(mat, ans);
         return ans;
