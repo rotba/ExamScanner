@@ -1213,6 +1213,7 @@ public class RealFacadeImple implements CommunicationFacade {
                     });
 
             version.setId(ans);
+            db.getVersionDao().update(version);
             fm.store(verBm, version._getBitmapPath());
             Log.d(DEBUG_TAG, String.format("storing %s verion bitmap", pathToRemoteBm));
             rfm.store(pathToRemoteBm, toByteArray(verBm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())

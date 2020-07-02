@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -424,7 +425,7 @@ public class CreateExamFragment extends Fragment {
     public void onExamCreated() {
         getActivity().findViewById(R.id.progressBar_create_exam).setVisibility(View.INVISIBLE);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.create_exam_dialog_exam_created)
+        builder.setMessage(R.string.create_exam_dialog_exam_is_beeing_uploaded)
                 .setPositiveButton(R.string.create_exam_dialog_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -432,6 +433,7 @@ public class CreateExamFragment extends Fragment {
                     }
                 });
         AlertDialog dialog = builder.create();
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         dialog.show();
     }
 
@@ -486,6 +488,8 @@ public class CreateExamFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onClick(View v) {
+            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             String termString = getSelectedRadioButtonString(term);
             String semesterString = getSelectedRadioButtonString(semester);
             pb.setVisibility(View.VISIBLE);

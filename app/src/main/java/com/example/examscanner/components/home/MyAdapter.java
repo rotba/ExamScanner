@@ -61,11 +61,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
         if (!e.isUploaded()) {
             holder.pb.setVisibility(View.VISIBLE);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
+            holder.itemView.setOnClickListener(v->{});
             e.observeUpload()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -83,36 +79,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     );
         } else if (!e.isDownloaded()) {
             holder.pb.setVisibility(View.VISIBLE);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
-
+            holder.itemView.setOnClickListener(v->{});
             e.observeDownload()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             () -> {
                                 holder.pb.setVisibility(View.INVISIBLE);
-                                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        onItemClick.onItemClick(e);
-                                    }
-                                });
+                                holder.itemView.setOnClickListener(v->onItemClick.onItemClick(e));
                             },
                             t -> Log.d(TAG, "BUG IN Exam:observeDownload", t)
                     );
 
         } else {
             holder.pb.setVisibility(View.INVISIBLE);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClick.onItemClick(e);
-                }
-            });
+            holder.itemView.setOnClickListener(v->onItemClick.onItemClick(e));
         }
 
     }

@@ -52,6 +52,13 @@ public class CreateExamUpdatesGraderBigExamTest {
     private ImageProcessingFacade imageProcessor;
     private Exam theExpectedExam;
     private RemoteDatabaseFacade remoteDatabaseFacade;
+    private final TestObserver to = new TestObserver(){
+        @Override
+        public void onNext(Object value) {
+            StateFactory.get().login(StateHolder.getDefaultHolder(), value);
+        }
+    };
+
     private interface BitmapLambda{
         Bitmap get();
     }
@@ -63,12 +70,6 @@ public class CreateExamUpdatesGraderBigExamTest {
         AppDatabaseFactory.setTestMode();
         FilesManagerFactory.setTestMode(getApplicationContext());
 //        RemoteFilesManagerFactory.setTestMode();
-        TestObserver to = new TestObserver(){
-            @Override
-            public void onNext(Object value) {
-                StateFactory.get().login(StateHolder.getDefaultHolder(), value);
-            }
-        };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
         remoteDatabaseFacade = RemoteDatabaseFacadeFactory.get();
         remoteDatabaseFacade.addGraderIfAbsent("rotemhas@post.bgu.ac.il","5etmuMvCN3aY9aUXWa8rOX0CZXj1");
@@ -114,15 +115,6 @@ public class CreateExamUpdatesGraderBigExamTest {
         List<Exam> exams = examRepository.get((e)->true);
         assert 1 == exams.size();
         theExpectedExam = exams.get(0);
-        theExpectedExam.quziEagerLoad();
-//        theExpectedExam.dontResoveFutures();
-//        tearDown();
-        AppDatabaseFactory.tearDownDb();
-        ExamRepositoryFactory.tearDown();
-        CommunicationFacadeFactory.tearDown();
-        GraderRepoFactory.tearDown();
-        AuthenticationHandlerFactory.getTest().authenticate("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
-        imageProcessor = new ImageProcessorStub();
     }
 
     @After
@@ -136,7 +128,20 @@ public class CreateExamUpdatesGraderBigExamTest {
     }
 
     @Test
-    public void createExamUpdatesGraderTest() {
+    public void createExamUpdatesGraderTestBreakPoint() {
+        int x =1;
+    }
+    @Test
+    public void createExamUpdatesGraderTestLookOnBob() {
+        theExpectedExam.quziEagerLoad();
+//        theExpectedExam.dontResoveFutures();
+//        tearDown();
+        AppDatabaseFactory.tearDownDb();
+        ExamRepositoryFactory.tearDown();
+        CommunicationFacadeFactory.tearDown();
+        GraderRepoFactory.tearDown();
+        AuthenticationHandlerFactory.getTest().authenticate("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
+        imageProcessor = new ImageProcessorStub();
         final List<Exam> exams = examRepository.get(e -> true);
         assertEquals(1,exams.size());
         Exam theActualExam = exams.get(0);
