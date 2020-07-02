@@ -1,6 +1,7 @@
 package com.example.examscanner.components.create_exam.view_model.integration_with_remote_db;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -28,9 +29,12 @@ import com.example.examscanner.repositories.grader.GraderRepoFactory;
 import com.example.examscanner.stubs.ImageProcessorStub;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -56,6 +60,7 @@ public class CreateExamUpdatesGraderTest {
     private RemoteDatabaseFacade remoteDatabaseFacade;
     private AppDatabase esDB;
     private AppDatabase bobDB;
+    private String DEBUG_TAG;
 
     @Before
     public void setUp() throws Exception {
@@ -136,10 +141,25 @@ public class CreateExamUpdatesGraderTest {
         final List<Exam> exams = examRepository.get(e -> true);
         assertEquals(1,exams.size());
         Exam theActualExam = exams.get(0);
-        sleep(5000);
-        assertTrue(theActualExam.isDownloaded());
-        assertTrue(theActualExam.getVersions().size()>0);
-        assertEquals(theExpectedExam, theActualExam);
+        TestObserver testObserver = new TestObserver(){
+            @Override
+            public void onComplete() {
+                super.onComplete();
+                assertTrue(theActualExam.isDownloaded());
+                assertTrue(theActualExam.getVersions().size()>0);
+                assertEquals(theExpectedExam, theActualExam);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                DEBUG_TAG = "DebugExamScanner";
+                Log.d(DEBUG_TAG,"failed",t);
+                Assert.fail();
+            }
+        };
+        Completable comp =theActualExam.observeDownload();
+        comp.subscribe(testObserver);
+        testObserver.awaitCount(1);
     }
 
     @Test
@@ -152,9 +172,28 @@ public class CreateExamUpdatesGraderTest {
 //            e.printStackTrace();
 //            fail("Probably no such file exception");
         }
-        Bitmap expected = theExpectedExam.getVersions().get(0).getPerfectImage();
-        Bitmap actual = exams.get(0).getVersions().get(0).getPerfectImage();
+        List<Exam> finalExams = exams;
+        TestObserver testObserver = new TestObserver(){
+            @Override
+            public void onComplete() {
+                Bitmap expected = theExpectedExam.getVersions().get(0).getPerfectImage();
+                Bitmap actual = finalExams.get(0).getVersions().get(0).getPerfectImage();
+                assertTrue(expected.sameAs(actual));
+                super.onComplete();
+            }
 
-        assertTrue(expected.sameAs(actual));
+            @Override
+            public void onError(Throwable t) {
+                DEBUG_TAG = "DebugExamScanner";
+                Log.d(DEBUG_TAG,"failed",t);
+                Assert.fail();
+            }
+        };
+        Completable comp =exams.get(0).observeDownload();
+        comp.subscribe(testObserver);
+        testObserver.awaitCount(1);
+
+
+
     }
 }

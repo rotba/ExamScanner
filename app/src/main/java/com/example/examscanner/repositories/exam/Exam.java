@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 
 public class Exam {
@@ -222,7 +224,15 @@ public class Exam {
     }
 
     public Completable observeDownload() {
-        return downloadCompletable.observe();
+        return downloadCompletable.observe().andThen(
+                new CompletableSource() {
+                    @Override
+                    public void subscribe(CompletableObserver cs) {
+                        isDownloaded = true;
+                        cs.onComplete();
+                    }
+                }
+        );
     }
 
     public Completable observeUpload() {
