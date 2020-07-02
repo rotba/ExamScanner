@@ -47,13 +47,23 @@ public class Version {
     }
 
     private int verNum;
+    private boolean bitmapUploaded;
 
-    public Version(int verNum, long examId, String remoteVersionId, boolean isUploaded, boolean isDownloaded) {
+    public boolean isBitmapUploaded() {
+        return bitmapUploaded;
+    }
+
+    public void setBitmapUploaded(boolean bitmapUploaded) {
+        this.bitmapUploaded = bitmapUploaded;
+    }
+
+    public Version(int verNum, long examId, String remoteVersionId, boolean isUploaded, boolean isDownloaded, boolean bitmapUploaded) {
         this.verNum = verNum;
         this.examId = examId;
         this.remoteVersionId = remoteVersionId;
         this.isUploaded = isUploaded;
         this.isDownloaded = isDownloaded;
+        this.bitmapUploaded = bitmapUploaded;
     }
 
     public long getId() {

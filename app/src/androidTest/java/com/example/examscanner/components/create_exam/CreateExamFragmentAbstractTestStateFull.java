@@ -58,7 +58,7 @@ public abstract class CreateExamFragmentAbstractTestStateFull extends StateFullT
 
     @Override
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         super.tearDown();
 
     }

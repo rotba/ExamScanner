@@ -80,5 +80,25 @@ class FirebaseBobAuthenticationHandler implements AuthenticationHandler {
         };
     }
 
-
+    @Override
+    public Observable<Object> signIn(String username, String pas) {
+        mAuth = FirebaseAuth.getInstance();
+        return new Observable<Object>() {
+            @Override
+            protected void subscribeActual(Observer<? super Object> observer) {
+                mAuth.createUserWithEmailAndPassword("bobexamscanner80@gmail.com", "Ycombinator")
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    observer.onNext(mAuth);
+                                    observer.onComplete();
+                                } else {
+                                    observer.onError(task.getException());
+                                }
+                            }
+                        });
+            }
+        };
+    }
 }

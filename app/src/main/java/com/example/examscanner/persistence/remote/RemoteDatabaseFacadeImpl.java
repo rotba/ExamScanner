@@ -373,8 +373,12 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                         for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                             ans.add(ds2o.convert(childSnapshot));
                         }
-                        observer.onNext(ans);
-                        observer.onComplete();
+                        try {
+                            observer.onNext(ans);
+                            observer.onComplete();
+                        }catch (NullPointerException e){
+                            observer.onError(e);
+                        }
                     }
 
                     @Override
@@ -581,6 +585,34 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
                 DELETED,
                 StoreTaskPostprocessor.getOffline()
         );
+    }
+
+    private DataSnapshot debugPrintDB(){
+        Observable<DataSnapshot>  o = new Observable<DataSnapshot>() {
+            @Override
+            protected void subscribeActual(Observer<? super DataSnapshot> observer) {
+                DatabaseReference ref = FirebaseDatabaseFactory.get().getReference();
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        try {
+                            observer.onNext(dataSnapshot);
+                            observer.onComplete();
+                        }catch (NullPointerException e){
+                            observer.onError(e);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        observer.onError(databaseError.toException());
+                        observer.onComplete();
+                    }
+                });
+            }
+        };
+        return o.blockingFirst();
     }
 
     private String cannonic(String examineeId) {

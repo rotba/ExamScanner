@@ -1,6 +1,7 @@
 package com.example.examscanner.core_algorithm;
 
 import android.Manifest;
+import android.util.Log;
 
 import androidx.test.rule.GrantPermissionRule;
 
@@ -23,6 +24,7 @@ import com.example.examscanner.use_case_contexts_creators.CornerDetectionContext
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -38,6 +40,7 @@ import static org.junit.Assert.assertTrue;
 
 public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrumentedTest {
 
+    private final String DEBUG_TAG = "DebugExamScanner";
     @Rule
     public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     @Rule
@@ -47,23 +50,28 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
 
     @Before
     public void setUp() {
-        RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
-        RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
-        FilesManagerFactory.setStubInstance(new FilesManagerStub());
-        if(!USINIG_REAL_DB)
-            FirebaseDatabaseFactory.setTestMode();
+        try {
+            RemoteDatabaseFacadeFactory.setStubInstance(new RemoteDatabaseStubInstance());
+            RemoteFilesManagerFactory.setStubInstabce(new RemoteFilesManagerStub());
+            FilesManagerFactory.setStubInstance(new FilesManagerStub());
+            if(!USINIG_REAL_DB)
+                FirebaseDatabaseFactory.setTestMode();
 
-        super.setUp();
-        useCaseContext = getUseCaseContext();
-        useCaseContext.setup();
-        cvm = new CaptureViewModel(
-                useCaseContext.getSCRepo(),
-                useCaseContext.getImageProcessor(),
+            super.setUp();
+            useCaseContext = getUseCaseContext();
+            useCaseContext.setup();
+            cvm = new CaptureViewModel(
+                    useCaseContext.getSCRepo(),
+                    useCaseContext.getImageProcessor(),
 //                useCaseContext.getCDCRepo(),
-                -1,
-                useCaseContext.getTheExam(),
-                getState()
-        );
+                    -1,
+                    useCaseContext.getTheExam(),
+                    useCaseContext.getState()
+            );
+        }catch (Exception e ){
+            Log.d(DEBUG_TAG, "failed setting up", e);
+            Assert.fail();
+        }
     }
 
     @NotNull
@@ -77,7 +85,15 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
         TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
             @Override
             public void onNext(FirebaseAuth firebaseAuth) {
+                Log.d(DEBUG_TAG, "sign in success");
                 StateFactory.get().login(s->ss[0]=s, firebaseAuth);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.d(DEBUG_TAG, "sign in failed", t);
+                super.onError(t);
+                Assert.fail();
             }
         };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
@@ -86,7 +102,7 @@ public abstract class CoreAlgorithmAbstractTest extends AbstractComponentInstrum
     }
 
     @Override
-    public void tearDown() throws Exception {
+    public void tearDown(){
         useCaseContext.tearDown();
         StateFactory.tearDown();
         super.tearDown();

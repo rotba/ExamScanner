@@ -44,7 +44,6 @@ public abstract class CreateExamModelViewAbstractTest {
 
     private CreateExamModelView out;
     private Repository<Exam> examRepository;
-    private ImageProcessorStub imageProcessor;
     private ImageProcessingFacade realIP;
 
     @Before
@@ -59,7 +58,6 @@ public abstract class CreateExamModelViewAbstractTest {
         };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
         to.awaitCount(1);
-        imageProcessor = new ImageProcessorStub();
         ImageProcessingFactory.ONLYFORTESTINGsetTestInstance(new ImageProcessor(getApplicationContext()));
         realIP = new ImageProcessingFactory().create();
         out  = new CreateExamModelView(
@@ -83,29 +81,32 @@ public abstract class CreateExamModelViewAbstractTest {
 
     @Test
     public void testAddVersion() {
-        final int[] expectedNumOfAnswers = new int[1];
-        imageProcessor.scanAnswers(null, new ScanAnswersConsumer() {
-            @Override
-            public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
-                expectedNumOfAnswers[0] = numOfAnswersDetected;
-                for (int i = 0; i <selections.length ; i++) {
-                    if (selections[i]==-1)
-                        expectedNumOfAnswers[0]--;
-                }
-            }
-        });
+//        final int[] expectedNumOfAnswers = new int[1];
+//        realIP.scanAnswers(null, new ScanAnswersConsumer() {
+//            @Override
+//            public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
+//                expectedNumOfAnswers[0] = numOfAnswersDetected;
+//                for (int i = 0; i <selections.length ; i++) {
+//                    if (selections[i]==-1)
+//                        expectedNumOfAnswers[0]--;
+//                }
+//            }
+//        });
+        final int expectedNumOfQuestions = 50;
         out.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getTestJpg1());
         out.holdVersionNumber(3);
+        out.holdNumOfQuestions(String.valueOf(expectedNumOfQuestions));
+        out.addVersion();
         out.holdGraderIdentifier("bobexamscanner80@gmail.com");
         out.addGrader();
-        out.addVersion();
+        out.holdExamUrl("/d/asdasd");
         out.create("testAddVersion()_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
         assertEquals(exams.size(),1);
         Exam theExam = exams.get(0);
         assertTrue(theExam.getVersions().size()==1);
         final Version version = theExam.getVersions().get(0);
-        assertEquals(expectedNumOfAnswers[0] ,version.getQuestions().size());
+        assertEquals(expectedNumOfQuestions,version.getQuestions().size());
     }
     @Test
     public void testAddVersion2RealIP(){

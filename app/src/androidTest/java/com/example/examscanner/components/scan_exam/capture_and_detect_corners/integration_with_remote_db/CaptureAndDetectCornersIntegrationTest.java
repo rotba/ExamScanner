@@ -20,7 +20,7 @@ public class CaptureAndDetectCornersIntegrationTest extends CaptureAndDetectCorn
 
     @Override
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(){
         super.tearDown();
         USINIG_REAL_DB =false;
         CornerDetectionContext2Setuper.stubExamRepo= true;

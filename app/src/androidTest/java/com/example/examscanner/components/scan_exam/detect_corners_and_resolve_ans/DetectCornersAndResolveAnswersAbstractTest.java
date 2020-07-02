@@ -52,7 +52,7 @@ public abstract class DetectCornersAndResolveAnswersAbstractTest extends StateFu
     }
 
     @Override
-    public void tearDown() throws Exception {
+    public void tearDown(){
         usecaseContext.tearDown();
         super.tearDown();
     }

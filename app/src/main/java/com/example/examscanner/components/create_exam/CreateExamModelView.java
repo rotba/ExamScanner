@@ -57,7 +57,12 @@ public class CreateExamModelView extends ViewModel {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void create(String courseName, String term, String semester, String year){
-        int startIndex = spreadsheetUrl.indexOf("/d/");
+        int startIndex;
+        try{
+            startIndex= spreadsheetUrl.indexOf("/d/");
+        }catch (Exception e){
+            throw new SpreadsheetException(e);
+        }
         int endIndex = spreadsheetUrl.indexOf("/", startIndex+4);
         String spreadsheetID = (startIndex > 0) ?
                 spreadsheetUrl.substring(startIndex+3, endIndex): spreadsheetUrl;
@@ -188,5 +193,11 @@ public class CreateExamModelView extends ViewModel {
 
     public Bitmap getVersionFeedbackImag() {
         return versionFeedbackImag;
+    }
+
+    public class SpreadsheetException extends RuntimeException {
+        public SpreadsheetException(Exception e) {
+            super(e);
+        }
     }
 }

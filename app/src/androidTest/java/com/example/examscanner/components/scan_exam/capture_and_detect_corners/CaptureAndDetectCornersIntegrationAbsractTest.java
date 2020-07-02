@@ -79,7 +79,7 @@ public abstract class CaptureAndDetectCornersIntegrationAbsractTest extends Stat
 
     @Override
     @After
-    public void tearDown() throws Exception {
+    public void tearDown()  {
         super.tearDown();
     }
 

@@ -52,7 +52,7 @@ public abstract class StateFullTest extends AbstractComponentInstrumentedTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         AppDatabaseFactory.tearDownDb();
         RemoteDatabaseFacadeFactory.tearDown();
         StateFactory.get().logout(StateHolder.getDefaultHolder());

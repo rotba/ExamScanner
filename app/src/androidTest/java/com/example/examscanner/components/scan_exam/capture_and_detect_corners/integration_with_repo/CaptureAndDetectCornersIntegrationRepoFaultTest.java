@@ -22,7 +22,7 @@ public class CaptureAndDetectCornersIntegrationRepoFaultTest extends CaptureAndD
 
     @Override
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         CornerDetectionContext2Setuper.stubExamRepo=true;
         super.tearDown();
     }

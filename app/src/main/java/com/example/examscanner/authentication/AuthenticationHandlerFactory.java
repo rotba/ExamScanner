@@ -2,7 +2,7 @@ package com.example.examscanner.authentication;
 
 public class AuthenticationHandlerFactory {
     public static AuthenticationHandler getTest(){
-        return new FirebaseAuthenticationHandler();
+        return new FirebaseAuthenticationTestHandler();
     }
     public static AuthenticationHandler getBobTest(){
         return new FirebaseBobAuthenticationHandler();

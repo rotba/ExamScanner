@@ -2,6 +2,7 @@ package com.example.examscanner.communication;
 
 import android.Manifest;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -19,6 +20,7 @@ import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,11 +28,13 @@ import org.junit.runner.RunWith;
 
 import io.reactivex.observers.TestObserver;
 
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class CommunicationFacadeTest {
     private static final int QAD_NUM_OF_QUESTIONS = 50;
     private static final String DONT_KNOW_EXAMINEE_ID = "DONT_KNOW_EXAMINEE_ID";
+    private final String DEBUG_TAG = "DebugExamScanner";
     CommunicationFacade oot;
     AppDatabase db;
     private String currentUserId;
@@ -40,28 +44,45 @@ public class CommunicationFacadeTest {
     public GrantPermissionRule write = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     @Rule
     public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+
     @Before
     public void setUp() throws Exception {
-        AppDatabaseFactory.setTestMode();
-        db = AppDatabaseFactory.getInstance();
-        oot = new CommunicationFacadeFactory().create();
-        FirebaseDatabaseFactory.setTestMode();
-        TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
-            @Override
-            public void onNext(FirebaseAuth firebaseAuth) {
-                currentUserId = firebaseAuth.getUid();
-            }
-        };
-        AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
-        observer.awaitCount(1);
-        observer.assertComplete();
-        DEFAULT_VERSION_BITMAP = BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1();
+        try {
+            AppDatabaseFactory.setTestMode();
+            db = AppDatabaseFactory.getInstance();
+            oot = new CommunicationFacadeFactory().create();
+            FirebaseDatabaseFactory.setTestMode();
+            TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
+                @Override
+                public void onNext(FirebaseAuth firebaseAuth) {
+                    Log.d(DEBUG_TAG, "logn succcess");
+                    currentUserId = firebaseAuth.getUid();
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    Log.d(DEBUG_TAG, "logn failed", t);
+                    Assert.fail();
+                }
+            };
+            AuthenticationHandlerFactory.getTest().authenticate().subscribe(observer);
+            observer.awaitCount(1);
+            observer.assertComplete();
+            DEFAULT_VERSION_BITMAP = BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1();
+        }catch (Exception e){
+            Log.d(DEBUG_TAG, "failed setup", e);
+            Assert.fail();
+        }
     }
 
     @After
-    public void tearDown() throws Exception {
-        AppDatabaseFactory.tearDownDb();
-        RemoteDatabaseFacadeFactory.tearDown();
+    public void tearDown() {
+        try {
+            AppDatabaseFactory.tearDownDb();
+            RemoteDatabaseFacadeFactory.tearDown();
+        }catch (Exception e){
+            Log.d(DEBUG_TAG, "failed teardown", e);
+        }
     }
 
     private ExamContext setUpExamContext() {
@@ -131,9 +152,14 @@ public class CommunicationFacadeTest {
 
     @Test
     public void testSessionIdUpdates() {
-        ExamContext e1 = setUpExamContext();
-        ExamContext e2 = setUpExamContext();
-        assertTrue(oot.createNewScanExamSession(e1.eId) != oot.createNewScanExamSession(e1.eId));
+        try {
+            ExamContext e1 = setUpExamContext();
+            ExamContext e2 = setUpExamContext();
+            assertTrue(oot.createNewScanExamSession(e1.eId) != oot.createNewScanExamSession(e1.eId));
+        }catch ( Throwable t){
+            Log.d(DEBUG_TAG, "fail", t);
+            Assert.fail();
+        }
     }
 
     @Test
@@ -269,21 +295,27 @@ public class CommunicationFacadeTest {
     }
     @Test
     public void testQuestionEntityInterface() {
-        VersionContext versionContext = setUpVersionContext();
-        final int qNum = 3;
-        final int correctAnswer = 4;
-        final int leftX = 1;
-        final int upY = 2;
-        final int rightX = 3;
-        final int bottomY = 4;
-        oot.addQuestion(versionContext.vId, qNum, correctAnswer, leftX, upY, rightX, bottomY);
-        QuestionEntityInterface ei = oot.getQuestionByExamIdVerNumAndQNum(versionContext.eId,versionContext.vNum,qNum);
-        assertEquals(ei.getLeftX(),leftX);
-        assertEquals(ei.getUpY(),upY);
-        assertEquals(ei.getBottomY(),bottomY);
-        assertEquals(ei.getRightX(),rightX);
-        assertEquals(ei.getCorrectAnswer(),correctAnswer);
-        assertEquals(ei.getVersionId(),versionContext.vId);
+        try {
+            VersionContext versionContext = setUpVersionContext();
+            final int qNum = 3;
+            final int correctAnswer = 4;
+            final int leftX = 1;
+            final int upY = 2;
+            final int rightX = 3;
+            final int bottomY = 4;
+            oot.addQuestion(versionContext.vId, qNum, correctAnswer, leftX, upY, rightX, bottomY);
+            QuestionEntityInterface ei = oot.getQuestionByExamIdVerNumAndQNum(versionContext.eId,versionContext.vNum,qNum);
+            assertEquals(ei.getLeftX(),leftX);
+            assertEquals(ei.getUpY(),upY);
+            assertEquals(ei.getBottomY(),bottomY);
+            assertEquals(ei.getRightX(),rightX);
+            assertEquals(ei.getCorrectAnswer(),correctAnswer);
+            assertEquals(ei.getVersionId(),versionContext.vId);
+            sleep(3000);
+        }catch (Throwable t){
+            Log.d(DEBUG_TAG, "fail", t);
+            Assert.fail();
+        }
     }
 
 

@@ -47,49 +47,49 @@ public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
 
     @Test
     public void scanAnswersByPositionsInsatnce1() {
-        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_1());
+        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_1(), getState());
         lateSetup();
         super.scanAnswersByPositions();
     }
     @Test
     public void scanAnswersByPositionsInsatnce2() {
-        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_2());
+        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_2(), getState());
         lateSetup();
         super.scanAnswersByPositions();
     }
     @Test
     public void scanAnswersByPositionsInsatnce3() {
-        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_3());
+        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_3(), getState());
         lateSetup();
         super.scanAnswersByPositions();
     }
     @Test
     public void scanAnswersByPositionsInsatnce4() {
-        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_4());
+        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_4(), getState());
         lateSetup();
         super.scanAnswersByPositions();
     }
     @Test
     public void scanAnswersByPositionsInsatnce5() {
-        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_5());
+        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_5(), getState());
         lateSetup();
         super.scanAnswersByPositions();
     }
     @Test
     public void scanAnswersByPositionsInsatnce6() {
-        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_6());
+        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_6(), getState());
         lateSetup();
         super.scanAnswersByPositions();
     }
     @Test
     public void scanAnswersByPositionsInsatnce7() {
-        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_7());
+        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_7(), getState());
         lateSetup();
         super.scanAnswersByPositions();
     }
     @Test
     public void scanAnswersByPositionsInsatnce8() {
-        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_8());
+        setupCallback = ()->new CornerDetectionContext2Setuper(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_8(), getState());
         lateSetup();
         super.scanAnswersByPositions();
     }
@@ -98,7 +98,8 @@ public class CoreAlgorithmPDFTest extends CoreAlgorithmAbstractTest {
     public void scanAnswersByPositionsInsatnce9() {
         setupCallback = ()->new CornerDetectionContext2Setuper(
                 BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_9(),
-                BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1()
+                BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1(),
+                getState()
         );
         lateSetup();
         super.scanAnswersByPositions();

@@ -105,7 +105,7 @@ public class ResolveConflictsTest extends StateFullTest {
 
     @Override
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(){
         context.tearDown();
         super.tearDown();
         AbstractComponentInstrumentedTest.USINIG_REAL_DB = false;

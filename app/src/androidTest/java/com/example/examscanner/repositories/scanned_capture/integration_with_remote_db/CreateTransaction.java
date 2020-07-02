@@ -1,6 +1,7 @@
 package com.example.examscanner.repositories.scanned_capture.integration_with_remote_db;
 
 import android.Manifest;
+import android.util.Log;
 
 import androidx.test.rule.GrantPermissionRule;
 
@@ -19,6 +20,7 @@ import com.example.examscanner.image_processing.ImageProcessingFactory;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
+import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacade;
 import com.example.examscanner.persistence.remote.RemoteDatabaseFacadeFactory;
 import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
@@ -34,6 +36,7 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCaptureRepositoryFactory;
 import com.example.examscanner.stubs.FilesManagerStub;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
@@ -56,6 +59,7 @@ import static org.junit.Assert.fail;
 
 public class CreateTransaction {
     private static String examineeId;
+    String TAG = "DebugExamScanner";
     Repository<Exam> eRepo;
     Repository<ScannedCapture> out1;
     RemoteDatabaseFacade out2;
@@ -73,6 +77,7 @@ public class CreateTransaction {
     public void setUp() throws Exception {
         ContextProvider.set(getInstrumentation().getContext());
         AppDatabaseFactory.setTestMode();
+        FirebaseDatabaseFactory.setTestMode();
         getState();
         FilesManagerFactory.setStubInstance(new FilesManagerStub());
         eRepo = new ExamRepositoryFactory().create();
@@ -95,13 +100,7 @@ public class CreateTransaction {
         GraderRepoFactory.tearDown();
     }
 
-    private void tearDown(String versionId) {
-        for (Version v : out2.getVersions().blockingFirst()) {
-            if (v._getId().equals(versionId)) {
-                out2.deleteExam(v.examId);
-            }
-        }
-    }
+
 
     @NotNull
     private State getState() {
@@ -109,6 +108,22 @@ public class CreateTransaction {
         TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>() {
             @Override
             public void onNext(FirebaseAuth firebaseAuth) {
+
+                Log.d(TAG,"signed in succefully");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.d(TAG,"signed in errorly",t);
+                super.onError(t);
+            }
+        };
+//        AuthenticationHandlerFactory.getTest().signIn(null,null).subscribe(observer);
+//        observer.awaitCount(1);
+        observer = new TestObserver<FirebaseAuth>() {
+            @Override
+            public void onNext(FirebaseAuth firebaseAuth) {
+                Log.d(TAG,"logged in succefully");
                 StateFactory.get().login(s -> ss[0] = s, firebaseAuth);
             }
         };
@@ -159,7 +174,6 @@ public class CreateTransaction {
                         if (es.examineeId.equals(examineeId)) {
                             assertNotEquals(es._getId(), "null");
                             assertEquals(es.isValid, true);
-                            tearDown(es.versionId);
                             return;
                         }
                     }

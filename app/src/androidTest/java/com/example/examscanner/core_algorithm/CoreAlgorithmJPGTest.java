@@ -56,7 +56,7 @@ public class CoreAlgorithmJPGTest extends CoreAlgorithmAbstractTest {
 
     @Override
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(){
         CornerDetectionContext2Setuper.stubExamRepo = false;
         super.tearDown();
     }

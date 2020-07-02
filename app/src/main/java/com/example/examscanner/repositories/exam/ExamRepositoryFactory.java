@@ -14,5 +14,6 @@ public class ExamRepositoryFactory {
     }
     public static void tearDown(){
         ExamRepository.tearDown();
+        testInstance = null;
     }
 }

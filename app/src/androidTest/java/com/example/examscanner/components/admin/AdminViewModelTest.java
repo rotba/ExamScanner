@@ -1,6 +1,7 @@
 package com.example.examscanner.components.admin;
 
 import android.Manifest;
+import android.util.Log;
 
 import androidx.room.Room;
 import androidx.test.rule.GrantPermissionRule;
@@ -43,6 +44,7 @@ import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
 
 public class AdminViewModelTest {
+    private final String DEBUG_TAG = "DebugExamScanner";
     private AdminViewModel out;
     private CreateExamModelView createExamModelView;
     private Repository<Exam> examRepository;
@@ -63,85 +65,106 @@ public class AdminViewModelTest {
 
     @Before
     public void setUp() throws Exception {
-        if(!AdminViewModelTest.WITH_REAL_REMOTE_DB)FirebaseDatabaseFactory.setTestMode();
-        aliceDB = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase.class).build();
-        AppDatabaseFactory.setTestInstance(aliceDB);
-        FilesManagerFactory.setTestMode(getApplicationContext());
-        if(!AdminViewModelTest.WITH_REAL_REMOTE_DB)RemoteFilesManagerFactory.setTestMode();
-        remoteDatabaseFacade = RemoteDatabaseFacadeFactory.get();
-        remoteDatabaseFacade.addGraderIfAbsent("bobexamscanner80@gmail.com","QR6JunUJDvaZr1kSOWEq3iiCToQ2");
-        remoteDatabaseFacade.addGraderIfAbsent("aliceexamscanner80@gmail.com","vtXTnHcehjdRmBvg38r5S0K1R8p1");
-        sleep(2000);
-        TestObserver to = new TestObserver(){
-            @Override
-            public void onNext(Object value) {
-                StateFactory.get().login(StateFactory.getStateHolder(), value);
-            }
-        };
-        AuthenticationHandlerFactory.getAliceTest().authenticate().subscribe(to);
-        to.awaitCount(1);
-        ImageProcessingFactory.setTestMode(getApplicationContext());
-        imageProcessor = new ImageProcessingFactory().create();
-        createExamModelView  = new CreateExamModelView(
-                new ExamRepositoryFactory().create(),
-                new GraderRepoFactory().create(),
-                imageProcessor,
-                StateFactory.get(),
-                0
-        );
-        examRepository = new ExamRepositoryFactory().create();
-        graderRepository = new GraderRepoFactory().create();
-        graderRepository.create(new Grader("bobexamscanner80@gmail.com", BOB_ID));
-        createExamModelView.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1());
-        createExamModelView.holdVersionNumber(3);
-        createExamModelView.holdGraderIdentifier("bobexamscanner80@gmail.com");
-        createExamModelView.addGrader();
-        createExamModelView.holdNumOfQuestions("50");
-        createExamModelView.addVersion();
-        createExamModelView.holdExamUrl("/durlurl");
-        createExamModelView.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
-        sleep(1000);
-        List<Exam> exams = examRepository.get((e)->true);
-        assert 1 == exams.size();
-        theExpectedExam = exams.get(0);
-        theExpectedExam.quziEagerLoad();
+        try {
+            if(!AdminViewModelTest.WITH_REAL_REMOTE_DB)FirebaseDatabaseFactory.setTestMode();
+            aliceDB = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase.class).build();
+            AppDatabaseFactory.setTestInstance(aliceDB);
+            FilesManagerFactory.setTestMode(getApplicationContext());
+            if(!AdminViewModelTest.WITH_REAL_REMOTE_DB)RemoteFilesManagerFactory.setTestMode();
+            RemoteDatabaseFacadeFactory.tearDown();
+            remoteDatabaseFacade = RemoteDatabaseFacadeFactory.get();
+            remoteDatabaseFacade.addGraderIfAbsent("bobexamscanner80@gmail.com","QR6JunUJDvaZr1kSOWEq3iiCToQ2");
+            remoteDatabaseFacade.addGraderIfAbsent("aliceexamscanner80@gmail.com","vtXTnHcehjdRmBvg38r5S0K1R8p1");
+            sleep(2000);
+            TestObserver to = new TestObserver(){
+                @Override
+                public void onNext(Object value) {
+                    Log.d(DEBUG_TAG, "alice logged in");
+                    StateFactory.get().login(StateFactory.getStateHolder(), value);
+                }
+            };
+            AuthenticationHandlerFactory.getAliceTest().authenticate().subscribe(to);
+            to.awaitCount(1);
+            ImageProcessingFactory.setTestMode(getApplicationContext());
+            imageProcessor = new ImageProcessingFactory().create();
+            createExamModelView  = new CreateExamModelView(
+                    new ExamRepositoryFactory().create(),
+                    new GraderRepoFactory().create(),
+                    imageProcessor,
+                    StateFactory.get(),
+                    0
+            );
+            examRepository = new ExamRepositoryFactory().create();
+            graderRepository = new GraderRepoFactory().create();
+            graderRepository.create(new Grader("bobexamscanner80@gmail.com", BOB_ID));
+            createExamModelView.holdVersionBitmap(BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1());
+            createExamModelView.holdVersionNumber(3);
+            createExamModelView.holdGraderIdentifier("bobexamscanner80@gmail.com");
+            createExamModelView.addGrader();
+            createExamModelView.holdNumOfQuestions("50");
+            createExamModelView.addVersion();
+            createExamModelView.holdExamUrl("/durlurl");
+            createExamModelView.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
+            sleep(1000);
+            List<Exam> exams = examRepository.get((e)->true);
+            assert 1 == exams.size();
+            theExpectedExam = exams.get(0);
+            theExpectedExam.quziEagerLoad();
 //        theExpectedExam.dontResoveFutures();
 //        tearDown();
 //        AppDatabaseFactory.tearDownDb();
-        ExamRepositoryFactory.tearDown();
-        CommunicationFacadeFactory.tearDown();
-        GraderRepoFactory.tearDown();
-        StateFactory.get().logout(StateFactory.getStateHolder());
-        AuthenticationHandlerFactory.getBobTest().authenticate().subscribe(to);
-        bobDB = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase.class).build();
-        AppDatabaseFactory.setTestInstance(bobDB);
-        imageProcessor = new ImageProcessorStub();
-        examRepository = new ExamRepositoryFactory().create();
-        sleep(1000);
-        final List<Exam> exams2 = examRepository.get(e -> true);
-        assert 1==exams2.size();
-        StateFactory.get().logout(StateHolder.getDefaultHolder());
+            ExamRepositoryFactory.tearDown();
+            CommunicationFacadeFactory.tearDown();
+            GraderRepoFactory.tearDown();
+            StateFactory.get().logout(StateFactory.getStateHolder());
+            sleep(2000);
+            to = new TestObserver(){
+                @Override
+                public void onNext(Object value) {
+                    Log.d(DEBUG_TAG, "bob logged in");
+                    StateFactory.get().login(StateFactory.getStateHolder(), value);
+                }
+            };
+            AuthenticationHandlerFactory.getBobTest().authenticate().subscribe(to);
+            bobDB = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase.class).build();
+            AppDatabaseFactory.setTestInstance(bobDB);
+            imageProcessor = new ImageProcessorStub();
+            examRepository = new ExamRepositoryFactory().create();
+            sleep(1000);
+            final List<Exam> exams2 = examRepository.get(e -> true);
+            assert 1==exams2.size();
+            StateFactory.get().logout(StateHolder.getDefaultHolder());
 //        AppDatabaseFactory.tearDownDb();
-        ExamRepositoryFactory.tearDown();
-        CommunicationFacadeFactory.tearDown();
-        GraderRepoFactory.tearDown();
-        AppDatabaseFactory.setTestInstance(aliceDB);
+            ExamRepositoryFactory.tearDown();
+            CommunicationFacadeFactory.tearDown();
+            GraderRepoFactory.tearDown();
+            AppDatabaseFactory.setTestInstance(aliceDB);
 //        TestObserver to = new TestObserver(){
 //            @Override
 //            public void onNext(Object value) {
 //                StateFactory.get().login(StateHolder.getDefaultHolder(), value);
 //            }
 //        };
-        AuthenticationHandlerFactory.getAliceTest().authenticate().subscribe(to);
-        examRepository = new ExamRepositoryFactory().create();
-        out = new AdminViewModel(
-                examRepository,
-                examRepository.get(x->true).get(0)
-        );
-        out.delete();
-        ExamRepositoryFactory.tearDown();
-        CommunicationFacadeFactory.tearDown();
-        GraderRepoFactory.tearDown();
+            to = new TestObserver(){
+                @Override
+                public void onNext(Object value) {
+                    Log.d(DEBUG_TAG, "alice logged in again");
+                    StateFactory.get().login(StateFactory.getStateHolder(), value);
+                }
+            };
+            AuthenticationHandlerFactory.getAliceTest().authenticate().subscribe(to);
+            examRepository = new ExamRepositoryFactory().create();
+            out = new AdminViewModel(
+                    examRepository,
+                    examRepository.get(x->true).get(0)
+            );
+            out.delete();
+            ExamRepositoryFactory.tearDown();
+            CommunicationFacadeFactory.tearDown();
+            GraderRepoFactory.tearDown();
+        }catch (Throwable e){
+            tearDown();
+        }
     }
     @After
     public void tearDown() throws Exception {
@@ -160,6 +183,7 @@ public class AdminViewModelTest {
         TestObserver to = new TestObserver(){
             @Override
             public void onNext(Object value) {
+                Log.d(DEBUG_TAG, "bob logged in again");
                 StateFactory.get().login(StateHolder.getDefaultHolder(), value);
             }
         };
@@ -168,7 +192,7 @@ public class AdminViewModelTest {
         imageProcessor = new ImageProcessorStub();
         examRepository = new ExamRepositoryFactory().create();
         try {
-            sleep(1000);
+            sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

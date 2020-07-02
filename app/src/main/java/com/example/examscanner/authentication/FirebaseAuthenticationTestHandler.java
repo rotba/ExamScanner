@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
-class FirebaseAuthenticationHandler implements AuthenticationHandler<FirebaseAuth> {
+class FirebaseAuthenticationTestHandler implements AuthenticationHandler<FirebaseAuth> {
     private FirebaseAuth mAuth;
 
 
@@ -65,6 +65,28 @@ class FirebaseAuthenticationHandler implements AuthenticationHandler<FirebaseAut
             @Override
             protected void subscribeActual(Observer<? super FirebaseAuth> observer) {
                 mAuth.signInWithEmailAndPassword(userEmail, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    observer.onNext(mAuth);
+                                    observer.onComplete();
+                                } else {
+                                    observer.onError(task.getException());
+                                }
+                            }
+                        });
+            }
+        };
+    }
+
+    @Override
+    public Observable<Object> signIn(String username, String pas) {
+        mAuth = FirebaseAuth.getInstance();
+        return new Observable<Object>() {
+            @Override
+            protected void subscribeActual(Observer<? super Object> observer) {
+                mAuth.createUserWithEmailAndPassword("examscanner80@gmail.com", "Ycombinator")
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {

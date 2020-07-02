@@ -2,6 +2,7 @@ package com.example.examscanner.components.create_exam.view_model.integration_wi
 
 import android.graphics.Bitmap;
 
+import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.examscanner.authentication.AuthenticationHandlerFactory;
@@ -12,6 +13,7 @@ import com.example.examscanner.components.create_exam.CreateExamModelView;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.local.files_management.FilesManagerFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
@@ -31,12 +33,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.observers.TestObserver;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static com.example.examscanner.components.create_exam.CreateExamFragmentAbstractTestStateFull.BOB_ID;
 import static com.example.examscanner.components.scan_exam.AbstractComponentInstrumentedTest.USINIG_REAL_DB;
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -49,12 +54,15 @@ public class CreateExamUpdatesGraderTest {
     private ImageProcessingFacade imageProcessor;
     private Exam theExpectedExam;
     private RemoteDatabaseFacade remoteDatabaseFacade;
+    private AppDatabase esDB;
+    private AppDatabase bobDB;
 
     @Before
     public void setUp() throws Exception {
         USINIG_REAL_DB = false;
         if(!USINIG_REAL_DB)FirebaseDatabaseFactory.setTestMode();
-        AppDatabaseFactory.setTestMode();
+        esDB = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase.class).build();
+        AppDatabaseFactory.setTestInstance(esDB);
         FilesManagerFactory.setTestMode(getApplicationContext());
         if(!USINIG_REAL_DB)RemoteFilesManagerFactory.setTestMode();
         TestObserver to = new TestObserver(){
@@ -64,6 +72,7 @@ public class CreateExamUpdatesGraderTest {
             }
         };
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
+        RemoteDatabaseFacadeFactory.tearDown();
         remoteDatabaseFacade = RemoteDatabaseFacadeFactory.get();
         remoteDatabaseFacade.addGraderIfAbsent("bobexamscanner80@gmail.com","QR6JunUJDvaZr1kSOWEq3iiCToQ2");
         to.awaitCount(1);
@@ -91,6 +100,11 @@ public class CreateExamUpdatesGraderTest {
         assert 1 == exams.size();
         theExpectedExam = exams.get(0);
         theExpectedExam.quziEagerLoad();
+        try {
+            sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 //        theExpectedExam.dontResoveFutures();
 //        tearDown();
         AppDatabaseFactory.tearDownDb();
@@ -99,11 +113,17 @@ public class CreateExamUpdatesGraderTest {
         GraderRepoFactory.tearDown();
         AuthenticationHandlerFactory.getTest().authenticate("bobexamscanner80@gmail.com", "Ycombinator").subscribe(to);
         imageProcessor = new ImageProcessorStub();
+        bobDB = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase.class).build();
+        AppDatabaseFactory.setTestInstance(bobDB);
+        imageProcessor = new ImageProcessorStub();
+        examRepository = new ExamRepositoryFactory().create();
+        sleep(1000);
     }
 
     @After
     public void tearDown() throws Exception {
-        AppDatabaseFactory.tearDownDb();
+        esDB.clearAllTables();
+        bobDB.clearAllTables();
         RemoteDatabaseFacadeFactory.tearDown();
         ExamRepositoryFactory.tearDown();
         FilesManagerFactory.tearDown();
@@ -112,10 +132,12 @@ public class CreateExamUpdatesGraderTest {
     }
 
     @Test
-    public void createExamUpdatesGraderTest() {
+    public void createExamUpdatesGraderTest() throws InterruptedException {
         final List<Exam> exams = examRepository.get(e -> true);
         assertEquals(1,exams.size());
         Exam theActualExam = exams.get(0);
+        sleep(5000);
+        assertTrue(theActualExam.isDownloaded());
         assertTrue(theActualExam.getVersions().size()>0);
         assertEquals(theExpectedExam, theActualExam);
     }

@@ -47,13 +47,15 @@ public class CornerDetectionContext2Setuper {
         this.theCDCBitmap = comp191_v1_ins_1;
     }
 
-    public CornerDetectionContext2Setuper(Bitmap cdcBitmap) {
+    public CornerDetectionContext2Setuper(Bitmap cdcBitmap, State s) {
         this.theCDCBitmap = cdcBitmap;
+        this.state = s;
     }
 
-    public CornerDetectionContext2Setuper(Bitmap cdcBitmap, Bitmap examBitmap) {
+    public CornerDetectionContext2Setuper(Bitmap cdcBitmap, Bitmap examBitmap, State s) {
         this.theCDCBitmap = cdcBitmap;
         createExamBitmap = examBitmap;
+        this.state = s;
     }
 
     public CornerDetectionContext2Setuper() {
@@ -251,5 +253,9 @@ public class CornerDetectionContext2Setuper {
 
     public void setSCRepo(Repository<ScannedCapture> repository) {
         scRepo=repository;
+    }
+
+    public State getState() {
+        return state;
     }
 }

@@ -35,7 +35,7 @@ public class CornerDetectionViewModelTest extends AbstractComponentInstrumentedT
     }
 
     @Override
-    public void tearDown() throws Exception {
+    public void tearDown(){
         useCaseContext.tearDown();
         super.tearDown();
     }

@@ -97,7 +97,7 @@ class RemoteFilesManagerImpl implements RemoteFilesManager {
         return new Observable<String>() {
             @Override
             protected void subscribeActual(Observer<? super String> observer) {
-                storage.getReference(pathToRemoteBm).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                storage.getReference(toPathString(pathToRemoteBm)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         observer.onNext(uri.toString());

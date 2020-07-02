@@ -1,7 +1,9 @@
 package com.example.examscanner.components.scan_exam;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.test.espresso.core.internal.deps.guava.collect.Lists;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -32,6 +34,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class AbstractComponentInstrumentedTest {
+    private final String DEBUG_TAG = "DebugExamScanner";
     protected AppDatabase db;
     protected DBCallback dbCallback = (theDb -> {
     });
@@ -59,18 +62,22 @@ public abstract class AbstractComponentInstrumentedTest {
     }
 
     @After
-    public void tearDown() throws Exception {
-        MainActivity.testMode=false;
-        AppDatabaseFactory.tearDownDb();
-        RemoteDatabaseFacadeFactory.tearDown();
-        CommunicationFacadeFactory.tearDown();
-        RemoteDatabaseFacadeFactory.tearDown();
-        FilesManagerFactory.tearDown();
-        ExamRepositoryFactory.tearDown();
-        CDCRepositoryFacrory.tearDown();
-        ScannedCaptureRepositoryFactory.tearDown();
-        GraderRepoFactory.tearDown();
-        UIAuthenticationHandlerFactory.tearDown();
+    public void tearDown() {
+        try {
+            MainActivity.testMode=false;
+            AppDatabaseFactory.tearDownDb();
+            RemoteDatabaseFacadeFactory.tearDown();
+            CommunicationFacadeFactory.tearDown();
+            RemoteDatabaseFacadeFactory.tearDown();
+            FilesManagerFactory.tearDown();
+            ExamRepositoryFactory.tearDown();
+            CDCRepositoryFacrory.tearDown();
+            ScannedCaptureRepositoryFactory.tearDown();
+            GraderRepoFactory.tearDown();
+            UIAuthenticationHandlerFactory.tearDown();
+        }catch (Exception e ){
+            Log.d(DEBUG_TAG, "failed to teardown", e);
+        }
     }
 
     protected interface DBCallback {

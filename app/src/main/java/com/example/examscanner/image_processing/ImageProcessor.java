@@ -874,8 +874,12 @@ public class ImageProcessor implements ImageProcessingFacade {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void scanAnswers(Bitmap bitmap, int amountOfQuestions, ScanAnswersConsumer consumer) {
 
-        if (bitmap == null || amountOfQuestions <= 0 || consumer == null)
-            throw new NullPointerException("invalid input");
+        if (bitmap == null )
+            throw new NullPointerException("bitmap null");
+        if (amountOfQuestions <= 0 )
+            throw new NullPointerException("amountOfQuestions <= 0");
+        if (consumer == null)
+            throw new NullPointerException("consumer == null");
 
         Mat exam = matFromBitmap(bitmap);
         int answersIds[] = new int[amountOfQuestions];
@@ -894,8 +898,10 @@ public class ImageProcessor implements ImageProcessingFacade {
 
     public void scanAnswers(Bitmap bitmap, ScanAnswersConsumer consumer) {
 
-        if (bitmap == null || consumer == null)
-            throw new NullPointerException("given input is null");
+        if (bitmap == null )
+            throw new NullPointerException("bitmap == null");
+        if (consumer == null)
+            throw new NullPointerException("consumer == null");
 
         Mat exam = matFromBitmap(bitmap);
 

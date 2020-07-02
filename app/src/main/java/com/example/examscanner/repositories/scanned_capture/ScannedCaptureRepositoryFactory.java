@@ -7,6 +7,7 @@ public class ScannedCaptureRepositoryFactory {
 
     public static void tearDown() {
         ScannedCaptureRepository.tearDown();
+        testInstance=null;
     }
 
     public Repository<ScannedCapture> create(){
