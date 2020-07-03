@@ -204,7 +204,7 @@ public class CornerDetectionFragment extends Fragment {
 //            /* TODO : replace -1 with version num */
 //            cornerDetectionViewModel.scanAnswers(cdc);
             cornerDetectionViewModel.approve(sc);
-            cornerDetectionViewModel.remove(sc);
+ //           cornerDetectionViewModel.remove(sc);
             return "Done";
         })
                 .subscribeOn(Schedulers.io())

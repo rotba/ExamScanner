@@ -866,6 +866,7 @@ public class RealFacadeImple implements CommunicationFacade {
         if(es.isApproved() && es.isBitmapUploaded()){
             Log.d(DEBUG_TAG, "validating solution");
             remoteDb.validateSolution(es.getRemoteId());
+            removeExamineeSolutionFromCache(es.getId());
         }
     }
 
