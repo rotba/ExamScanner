@@ -110,5 +110,6 @@ public class ScannedCaptureInserted_ExamineeSolutionIsStored extends AbstractCom
             Integer expectedAns = new Integer(a.getSelection());
             assertEquals(expectedAns, actualAns );
         }
+
     }
 }

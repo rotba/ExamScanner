@@ -162,17 +162,18 @@ public class CreateTransaction {
         List<ExamineeSolution> remoteSolutions = new ArrayList<>();
         TasksManager tasks = TasksManagerFactory.get();
         try {
-            Thread.sleep(20 * 1000);
+            Thread.sleep(30 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        final List<ScannedCapture> scannedCaptures = out1.get(x -> true);
         scs[0].approve();
         try {
-            Thread.sleep(7 * 1000);
+            Thread.sleep(10 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        tasks.get(IdsGenerator.forSolution(out1.get(x -> true).get(0).getId())).addContinuation(() -> {
+        tasks.get(IdsGenerator.forSolution(scannedCaptures.get(0).getId())).addContinuation(() -> {
                     out2.getExamineeSolutions().blockingSubscribe(l -> remoteSolutions.addAll(l), throwable -> {
                         throw new RuntimeException(throwable);
                     });

@@ -41,12 +41,14 @@ public class CornerDetectionContext3Setuper extends CornerDetectionContext2Setup
                     @Override
                     public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                         sc = new ScannedCapture(-1, getCapture().getBitmap(), getCapture().getBitmap(), getTheExam().getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, getCapture().getVersion(), DONT_KNOW_EAMINEE_ID, QAD_GRADER_EMAIL);
+                        Log.d(DEBUG_TAG, "CornerDetectionContext3Setuper: creating sc");
                         getSCRepo().create(sc);
                         try {
-                            sleep(20*1000);
+                            sleep(30*1000);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
+                        Log.d(DEBUG_TAG, "CornerDetectionContext3Setuper: approving sc");
                         Completable.fromAction(() -> sc.approve()).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).blockingAwait();
                     }
                 },

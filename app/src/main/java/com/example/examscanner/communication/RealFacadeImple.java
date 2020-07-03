@@ -53,6 +53,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -1330,6 +1331,8 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void uploadExamineeSolutionBitmaps(Bitmap bm, Bitmap origBm, long id) {
+        final AtomicBoolean[] bitmapUploaded ={new AtomicBoolean(false)};
+        final AtomicBoolean[] origBitmapUploaded ={new AtomicBoolean(false)};
         ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
         throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("id:%d", id));
         final Version v = db.getVersionDao().getById(es.getVersionId());
@@ -1347,9 +1350,14 @@ public class RealFacadeImple implements CommunicationFacade {
                                         ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
                                         Log.d(TAG, String.format("done creating the solution bitmap url es.getId():%d", _es.getId()));
                                         remoteDb.setSolutionBitmapUrl(url, _es.getRemoteId());
-                                        _es.setBitmapUploaded(true);
-                                        Log.d(DEBUG_TAG, "bitmap uploaded. notifying");
-                                        notifyExamineeSolution(_es);
+                                        bitmapUploaded[0].set(true);
+                                        Log.d(DEBUG_TAG, "bitmap uploaded");
+                                        if(bitmapUploaded[0].get() && origBitmapUploaded[0].get()){
+                                            Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
+                                            _es.setBitmapUploaded(true);
+                                            notifyExamineeSolution(_es);
+                                        }
+
                                     },
                                     throwable -> {
                                         Log.d(TAG, "failed creating url for bitmap of examinee solution", throwable);
@@ -1373,6 +1381,13 @@ public class RealFacadeImple implements CommunicationFacade {
                                         ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
                                         remoteDb.setOriginialBitmapUrl(url, _es.getRemoteId());
                                         Log.d(TAG, String.format("done creating the orig bitmap url es.getId():%d", _es.getId()));
+                                        origBitmapUploaded[0].set(true);
+                                        Log.d(DEBUG_TAG, "orig bitmap uploaded");
+                                        if(bitmapUploaded[0].get() && origBitmapUploaded[0].get()){
+                                            Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
+                                            _es.setBitmapUploaded(true);
+                                            notifyExamineeSolution(_es);
+                                        }
                                     },
                                     throwable -> {
                                         Log.d(TAG, "failed creating url for orig bitmap", throwable);
