@@ -10,7 +10,7 @@ import java.util.List;
 
 class UIFirebaseAuthenticationHandler implements UIAuthenticationHandler<FirebaseAuth> {
 
-    static boolean smartLockEnabled =false;
+    static boolean smartLockEnabled =true;
 
     @Override
     public Intent generateAuthenticationIntent() {
