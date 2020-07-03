@@ -55,7 +55,7 @@ public abstract class AbstractComponentInstrumentedTest {
     public void setUp() {
         AppDatabaseFactory.setTestMode();
         UIAuthenticationHandlerFactory.setTestMode();
-        if(!USINIG_REAL_DB)FirebaseDatabaseFactory.setTestMode();
+        if(USINIG_REAL_DB)FirebaseDatabaseFactory.setTestMode();
         db = AppDatabaseFactory.getInstance();
         dbCallback.call(db);
         setupCallback.run();

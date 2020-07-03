@@ -47,8 +47,8 @@ public class ScannedCaptureInserted_ExamineeSolutionIsStored extends AbstractCom
                 getState()
         );
         usecaseContext.setSCRepo(new ScannedCaptureRepositoryFactory().create());
-        usecaseContext.setup();
         RemoteDatabaseFacadeFactory.tearDown();
+        usecaseContext.setup();
         out = RemoteDatabaseFacadeFactory.get();
     }
 

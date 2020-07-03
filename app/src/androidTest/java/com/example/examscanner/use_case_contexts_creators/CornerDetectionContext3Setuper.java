@@ -43,7 +43,7 @@ public class CornerDetectionContext3Setuper extends CornerDetectionContext2Setup
                         sc = new ScannedCapture(-1, getCapture().getBitmap(), getCapture().getBitmap(), getTheExam().getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, getCapture().getVersion(), DONT_KNOW_EAMINEE_ID, QAD_GRADER_EMAIL);
                         getSCRepo().create(sc);
                         try {
-                            sleep(10*1000);
+                            sleep(20*1000);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
