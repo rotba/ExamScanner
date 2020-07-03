@@ -45,6 +45,7 @@ public class CaptureViewModel extends ViewModel {
     private boolean thereAreScannedCaptures;
     private boolean aBoolean;
     private State state;
+    private String DEBUG_TAG = "DebugExamScanner";;
 
 
     public CaptureViewModel(Repository<ScannedCapture> scRepo, ImageProcessingFacade imageProcessor, long sessionId, Exam exam, State state) {
@@ -69,6 +70,7 @@ public class CaptureViewModel extends ViewModel {
 
     private void consumeExamineeId(String s) {
         synchronized (examineeIds){
+            Log.d(DEBUG_TAG, String.format("consumed examineeid:%s",s));
             if(s.indexOf(REMOVE_INDICATION)!=-1){
                 String sRemove =s.replace(REMOVE_INDICATION,"");
                 if(!examineeIds.contains(sRemove)){

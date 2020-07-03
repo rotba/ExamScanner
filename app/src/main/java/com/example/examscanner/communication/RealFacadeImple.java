@@ -1306,7 +1306,11 @@ public class RealFacadeImple implements CommunicationFacade {
         Log.d(TAG, String.format("Acquiring examineeid %s for %d", examineeId, id));
         ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
         throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("id:%d", id));
-        remoteDb.insertExamineeIDOrReturnNull(es.getRemoteId(), examineeId).subscribe(
+        Version v = db.getVersionDao().getById(es.getVersionId());
+        throwCommunicationExceptionWhenNull(v, Version.class, String.format("id:%d", v.getId()));
+        Exam e = db.getExamDao().getById(v.getExamId());
+        throwCommunicationExceptionWhenNull(e, Exam.class, String.format("id:%d", e.getId()));
+        remoteDb.insertExamineeIDOrReturnNull(e.getRemoteId(), examineeId).subscribe(
                 result -> {
                     String reservedExamineeId;
                     if (result == null) {
