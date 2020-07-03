@@ -49,7 +49,7 @@ public class ExamIsCreatedTest extends ExamRepositoryTest {
         Version v = versions.get(0);
         assertNotNull(v.getPerfectImage());
         try {
-            sleep(7*1000);
+            sleep(10*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

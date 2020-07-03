@@ -72,15 +72,20 @@ public class CreateTransaction {
     @Rule
     public GrantPermissionRule rule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
     private String QAD_GRADER_ENAIL;
+    private static final boolean USE_REAL_DB =false;
 
 
     @Before
     public void setUp() throws Exception {
         ContextProvider.set(getInstrumentation().getContext());
         AppDatabaseFactory.setTestMode();
-        FirebaseDatabaseFactory.setTestMode();
+        if(!USE_REAL_DB){
+            FirebaseDatabaseFactory.setTestMode();
+            RemoteDatabaseFacadeFactory.tearDown();
+        }
         getState();
         FilesManagerFactory.setStubInstance(new FilesManagerStub());
+        RemoteFilesManagerFactory.setTestMode();
         eRepo = new ExamRepositoryFactory().create();
         theExam = ExamInstancesGenerator.getInstance1();
         eRepo.create(theExam);
@@ -157,7 +162,7 @@ public class CreateTransaction {
         List<ExamineeSolution> remoteSolutions = new ArrayList<>();
         TasksManager tasks = TasksManagerFactory.get();
         try {
-            Thread.sleep(10 * 1000);
+            Thread.sleep(20 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

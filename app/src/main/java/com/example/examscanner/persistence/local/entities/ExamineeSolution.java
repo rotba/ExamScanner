@@ -7,9 +7,7 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(
-        indices = {@Index(value = {"examineeId"},unique = true)}
-)
+@Entity
 public class ExamineeSolution {
     public static final String pkName = "id";
     @PrimaryKey(autoGenerate = true)

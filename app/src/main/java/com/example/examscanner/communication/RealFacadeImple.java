@@ -843,7 +843,7 @@ public class RealFacadeImple implements CommunicationFacade {
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
                     throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("should exist. id:%s", id));
                     es.setApproved(true);
-                    db.getExamineeSolutionDao().update(es);
+//                    db.getExamineeSolutionDao().update(es);
                     Log.d(DEBUG_TAG, "solution approved. notifying");
                     notifyExamineeSolution(es);
                 },
@@ -853,7 +853,7 @@ public class RealFacadeImple implements CommunicationFacade {
                         throw new CommunicationException("the examinee id should ve stored. nothing to do");
                     }
                     es.setApproved(true);
-                    db.getExamineeSolutionDao().update(es);
+//                    db.getExamineeSolutionDao().update(es);
                     Log.d(DEBUG_TAG, "solution approved. notifying");
                     notifyExamineeSolution(es);
 
@@ -862,6 +862,7 @@ public class RealFacadeImple implements CommunicationFacade {
     }
 
     private synchronized void notifyExamineeSolution(ExamineeSolution es) {
+        db.getExamineeSolutionDao().update(es);
         if(es.isApproved() && es.isBitmapUploaded()){
             Log.d(DEBUG_TAG, "validating solution");
             remoteDb.validateSolution(es.getRemoteId());
@@ -1272,10 +1273,12 @@ public class RealFacadeImple implements CommunicationFacade {
             Log.d(TAG, String.format("inserted %d solution to the local db", ans));
             es.setId(ans);
             tasksManager.post(
-                    Completable.fromObservable(remoteDb.onlineInsertExamineeSolution(null, remoteVersionId, false).doOnNext(s -> {
+                    Completable.fromObservable(remoteDb.onlineInsertExamineeSolution(null, remoteVersionId, false).doOnNext(
+                            s -> {
                         ExamineeSolution _es = db.getExamineeSolutionDao().getById(ans);
                         _es.setRemoteId(s);
                         db.getExamineeSolutionDao().update(_es);
+                        Log.d(DEBUG_TAG, String.format("allocated remote id %s for es.id:%d", s, _es.getId()));
                     })),
                     IdsGenerator.forSolution(es.getId()),
                     "Solution uploading"
@@ -1340,12 +1343,12 @@ public class RealFacadeImple implements CommunicationFacade {
                             Log.d(TAG, String.format("done storing the bitmap es.getId():%d", es.getId()));
                             rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
                                     url -> {
-                                        Log.d(TAG, String.format("done creating the solution bitmap url es.getId():%d", es.getId()));
-                                        remoteDb.setSolutionBitmapUrl(url, es.getRemoteId());
-                                        es.setBitmapUploaded(true);
-                                        db.getExamineeSolutionDao().update(es);
+                                        ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
+                                        Log.d(TAG, String.format("done creating the solution bitmap url es.getId():%d", _es.getId()));
+                                        remoteDb.setSolutionBitmapUrl(url, _es.getRemoteId());
+                                        _es.setBitmapUploaded(true);
                                         Log.d(DEBUG_TAG, "bitmap uploaded. notifying");
-                                        notifyExamineeSolution(es);
+                                        notifyExamineeSolution(_es);
                                     },
                                     throwable -> {
                                         Log.d(TAG, "failed creating url for bitmap of examinee solution", throwable);
@@ -1366,8 +1369,9 @@ public class RealFacadeImple implements CommunicationFacade {
                             Log.d(TAG, String.format("done storring the orig bitmap of es.getId():%d", es.getId()));
                             rfm.createUrl(origBitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
                                     url -> {
-                                        remoteDb.setOriginialBitmapUrl(url, es.getRemoteId());
-                                        Log.d(TAG, String.format("done creating the orig bitmap url es.getId():%d", es.getId()));
+                                        ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
+                                        remoteDb.setOriginialBitmapUrl(url, _es.getRemoteId());
+                                        Log.d(TAG, String.format("done creating the orig bitmap url es.getId():%d", _es.getId()));
                                     },
                                     throwable -> {
                                         Log.d(TAG, "failed creating url for orig bitmap", throwable);
