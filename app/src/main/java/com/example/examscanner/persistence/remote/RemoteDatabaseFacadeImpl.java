@@ -511,7 +511,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     public void offlineUpdateExamineeGrade(String remoteId, String examRemoteId, float grade) {
         putObjectInLocation(
                 String.format("%s/%s/%s", Paths.toSolutions,remoteId, ExamineeSolution.metaGrade),
-                new Integer((int)grade),
+                new Float(grade),
                 StoreTaskPostprocessor.getOffline()
         );
 
