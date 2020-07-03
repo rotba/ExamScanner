@@ -36,6 +36,8 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
                         captureViewModel.getCurrentVersion().getValue()
                 )
         );
+        captureViewModel.clearExamineeId();
+        captureViewModel.clearVersion();
         cont.cont();
         processRequestDisposableContainer.add(
                 Completable.fromAction(this::processCapture)

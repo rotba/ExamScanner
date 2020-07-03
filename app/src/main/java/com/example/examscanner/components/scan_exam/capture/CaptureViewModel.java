@@ -151,8 +151,6 @@ public class CaptureViewModel extends ViewModel {
 
     public void postProcessCapture() {
 //        mNumOfProcessedCaptures.setValue(scRepo.get(sc -> sc.getSession() == sessionId).size());
-        mVersion.postValue(null);
-        mExamineeId.postValue(null);
         mNumOfProcessedCaptures.postValue(mNumOfProcessedCaptures.getValue()+1);
     }
 
@@ -234,5 +232,13 @@ public class CaptureViewModel extends ViewModel {
 
     public void unconsumeExamineeId(String examineeId) {
         consumeExamineeId(REMOVE_INDICATION+examineeId);
+    }
+
+    public void clearExamineeId() {
+        mExamineeId.postValue(null);
+    }
+
+    public void clearVersion() {
+        mVersion.postValue(null);
     }
 }
