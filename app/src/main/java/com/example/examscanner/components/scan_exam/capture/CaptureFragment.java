@@ -200,7 +200,7 @@ public class CaptureFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!captureViewModel.isHoldingValidExamineeId() && (examineeEditText.getText().length()!=0)){
+                if(!captureViewModel.isHoldingValidExamineeId() || (examineeEditText.getText().length()==0)){
 
                     if(!consumeExamineeIdOrHandleIfInvalid(examineeEditText.getText().toString())){
                         return;
