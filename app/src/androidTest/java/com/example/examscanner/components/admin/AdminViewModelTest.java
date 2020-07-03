@@ -105,7 +105,7 @@ public class AdminViewModelTest {
             createExamModelView.addVersion();
             createExamModelView.holdExamUrl("/durlurl");
             createExamModelView.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
-            sleep(1000);
+            sleep(7*1000);
             List<Exam> exams = examRepository.get((e)->true);
             assert 1 == exams.size();
             theExpectedExam = exams.get(0);

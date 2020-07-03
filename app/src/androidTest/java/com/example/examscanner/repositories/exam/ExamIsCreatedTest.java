@@ -8,6 +8,7 @@ import com.example.examscanner.communication.ContextProvider;
 import com.example.examscanner.repositories.Repository;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
 
 import org.junit.Rule;
@@ -47,5 +48,10 @@ public class ExamIsCreatedTest extends ExamRepositoryTest {
         assert versions.size()==1;
         Version v = versions.get(0);
         assertNotNull(v.getPerfectImage());
+        try {
+            sleep(7*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

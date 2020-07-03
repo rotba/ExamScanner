@@ -10,6 +10,8 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCaptureReposi
 import io.reactivex.Completable;
 import io.reactivex.schedulers.Schedulers;
 
+import static java.lang.Thread.sleep;
+
 public class CornerDetectionContext3Setuper extends CornerDetectionContext2Setuper {
     private static final String DONT_KNOW_EAMINEE_ID = "DONT_KNOW_EAMINEE_ID";
     private static final String QAD_GRADER_EMAIL = "QAD_GRADER_EMAIL";
@@ -40,6 +42,11 @@ public class CornerDetectionContext3Setuper extends CornerDetectionContext2Setup
                     public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                         sc = new ScannedCapture(-1, getCapture().getBitmap(), getCapture().getBitmap(), getTheExam().getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, getCapture().getVersion(), DONT_KNOW_EAMINEE_ID, QAD_GRADER_EMAIL);
                         getSCRepo().create(sc);
+                        try {
+                            sleep(10*1000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                         Completable.fromAction(() -> sc.approve()).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).blockingAwait();
                     }
                 },
