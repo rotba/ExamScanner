@@ -25,6 +25,25 @@ public class ExamineeSolution {
     private boolean examineeIdOccupied;
     private boolean isValid;
 
+    public boolean isApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved) {
+        isApproved = approved;
+    }
+
+    public boolean isBitmapUploaded() {
+        return bitmapUploaded;
+    }
+
+    public void setBitmapUploaded(boolean bitmapUploaded) {
+        this.bitmapUploaded = bitmapUploaded;
+    }
+
+    private boolean isApproved;
+    private boolean bitmapUploaded;
+
     public boolean isValid() {
         return isValid;
     }
@@ -33,11 +52,13 @@ public class ExamineeSolution {
         isValid = valid;
     }
 
-    public ExamineeSolution(String examineeId, long sessionId, long versionId, String remoteId, boolean isValid) {
+    public ExamineeSolution(String examineeId, long sessionId, long versionId, String remoteId, boolean isValid, boolean isApproved, boolean bitmapUploaded) {
         this.examineeId = examineeId;
         this.sessionId = sessionId;
         this.versionId = versionId;
         this.remoteId = remoteId;
+        this.isApproved = isApproved;
+        this.bitmapUploaded = bitmapUploaded;
         examineeIdOccupied = false;
         this.isValid = isValid;
     }

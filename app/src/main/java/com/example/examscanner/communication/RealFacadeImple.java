@@ -842,17 +842,29 @@ public class RealFacadeImple implements CommunicationFacade {
         tasksManager.get(IdsGenerator.forSolution(id)).addContinuation(() -> {
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
                     throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("should exist. id:%s", id));
-                    remoteDb.validateSolution(es.getRemoteId());
+                    es.setApproved(true);
+                    db.getExamineeSolutionDao().update(es);
+                    Log.d(DEBUG_TAG, "solution approved. notifying");
+                    notifyExamineeSolution(es);
                 },
                 () -> {
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
                     if (es.getRemoteId() == null) {
                         throw new CommunicationException("the examinee id should ve stored. nothing to do");
                     }
-                    remoteDb.validateSolution(es.getRemoteId());
+                    es.setApproved(true);
+                    db.getExamineeSolutionDao().update(es);
+                    Log.d(DEBUG_TAG, "solution approved. notifying");
+                    notifyExamineeSolution(es);
 
                 }
         );
+    }
+
+    private synchronized void notifyExamineeSolution(ExamineeSolution es) {
+        if(es.isApproved() && es.isBitmapUploaded()){
+            remoteDb.validateSolution(es.getRemoteId());
+        }
     }
 
     @Override
@@ -860,8 +872,10 @@ public class RealFacadeImple implements CommunicationFacade {
         tasksManager.get(IdsGenerator.forSolution(id)).addContinuation(() -> {
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
                     throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, String.format("should exist. id:%s", id));
-                    remoteDb.validateSolution(es.getRemoteId());
                     String remoteExamId = db.getExamDao().getById(db.getVersionDao().getById(es.getVersionId()).getExamId()).getRemoteId();
+                    es.setApproved(true);
+                    Log.d(DEBUG_TAG, "solution approved. notifying");
+                    notifyExamineeSolution(es);
                     remoteDb.updateTotalAndAverageTransaction(remoteExamId, calcGrade);
                 },
                 () -> {
@@ -869,8 +883,10 @@ public class RealFacadeImple implements CommunicationFacade {
                     if (es.getRemoteId() == null) {
                         throw new CommunicationException("the examinee id should ve stored. nothing to do");
                     }
-                    remoteDb.validateSolution(es.getRemoteId());
                     String remoteExamId = db.getExamDao().getById(db.getVersionDao().getById(es.getVersionId()).getExamId()).getRemoteId();
+                    es.setApproved(true);
+                    Log.d(DEBUG_TAG, "solution approved. notifying");
+                    notifyExamineeSolution(es);
                     remoteDb.updateTotalAndAverageTransaction(remoteExamId, calcGrade);
                 }
         );
@@ -1250,7 +1266,7 @@ public class RealFacadeImple implements CommunicationFacade {
         throwCommunicationExceptionWhenNull(v, Version.class, String.format("This student solution's version is null, verid:%d", versionId));
         String remoteVersionId = v.getRemoteVersionId();
         try {
-            final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId, null, false);
+            final ExamineeSolution es = new ExamineeSolution(examineeId, session, versionId, null, false, false, false);
             final long ans = db.getExamineeSolutionDao().insert(es);
             Log.d(TAG, String.format("inserted %d solution to the local db", ans));
             es.setId(ans);
@@ -1323,8 +1339,12 @@ public class RealFacadeImple implements CommunicationFacade {
                             Log.d(TAG, String.format("done storing the bitmap es.getId():%d", es.getId()));
                             rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
                                     url -> {
-                                        remoteDb.setSolutionBitmapUrl(url, es.getRemoteId());
                                         Log.d(TAG, String.format("done creating the solution bitmap url es.getId():%d", es.getId()));
+                                        remoteDb.setSolutionBitmapUrl(url, es.getRemoteId());
+                                        es.setBitmapUploaded(true);
+                                        db.getExamineeSolutionDao().update(es);
+                                        Log.d(DEBUG_TAG, "bitmap uploaded. notifying");
+                                        notifyExamineeSolution(es);
                                     },
                                     throwable -> {
                                         Log.d(TAG, "failed creating url for bitmap of examinee solution", throwable);

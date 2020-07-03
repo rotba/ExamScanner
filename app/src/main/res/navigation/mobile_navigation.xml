@@ -38,6 +38,12 @@
                 android:defaultValue="-1L"
                 app:argType="long" />
         </action>
+        <action
+            android:id="@+id/action_nav_home_self"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_home_to_galleryFragment"
+            app:destination="@id/galleryFragment" />
     </fragment>
 
     <activity
@@ -154,4 +160,8 @@
             android:id="@+id/action_admin_page_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="com.example.examscanner.ui.gallery.GalleryFragment"
+        android:label="GalleryFragment" />
 </navigation>

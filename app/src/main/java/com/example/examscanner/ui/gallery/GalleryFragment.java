@@ -16,6 +16,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
+import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -55,6 +56,9 @@ public class GalleryFragment extends Fragment {
 //                startActivity(new Intent(getActivity(), ScanExamActivity.class));
             }
         });
+        ((Button)root.findViewById(R.id.button_clear_all_tables)).setOnClickListener(
+                v -> AppDatabaseFactory.getInstance().clearAllTables()
+        );
         ((Button)root.findViewById(R.id.button_galley_logout)).setOnClickListener(this::logout);
         return root;
     }
