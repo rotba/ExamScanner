@@ -24,10 +24,10 @@
 
     <Button
         android:id="@+id/button_home_admin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="42dp"
+        android:layout_height="47dp"
         android:background="#FFFFFF"
-        android:foreground="@android:drawable/ic_menu_edit"
+        android:foreground="@drawable/ic_my_edit_exam"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
