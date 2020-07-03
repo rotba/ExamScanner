@@ -201,12 +201,14 @@ public class CaptureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!captureViewModel.isHoldingValidExamineeId() || (examineeEditText.getText().length()==0)){
-
+                    Log.d(DEBUG_TAG, "from Capture fragment "+ !captureViewModel.isHoldingValidExamineeId() + " _ " + (examineeEditText.getText().length()==0));
+                    Log.d(DEBUG_TAG, "from Capture fragment 2"+ examineeEditText.getText().toString());
                     if(!consumeExamineeIdOrHandleIfInvalid(examineeEditText.getText().toString())){
                         return;
                     }
                 }
                 if(!captureViewModel.isHoldingVersion() && versionIsChosen()){
+                    Log.d(DEBUG_TAG, "from Capture fragment version "+ !captureViewModel.isHoldingVersion() + " _ " + versionIsChosen());
                     if(!consumeVersionIdOrHandleIfInvalid(versionSpinner.getSelectedItem().toString())){
                         return;
                     }

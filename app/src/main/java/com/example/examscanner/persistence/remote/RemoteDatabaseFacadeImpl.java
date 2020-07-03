@@ -247,7 +247,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
     @Override
     public void offlineDeleteExamineeSolution(String solutionId, String examineeId, String remoteExamId) {
         putObjectInLocation(
-                String.format("%s/%s/%s", Paths.examineeIds, remoteExamId, examineeId),
+                String.format("%s/%s/%s", Paths.examineeIds, remoteExamId, cannonic(examineeId)),
                 null,
                 StoreTaskPostprocessor.getOffline()
         ).subscribe();
