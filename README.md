@@ -27,5 +27,5 @@ We designed our system in a way that each use case, has a corresponding MVVM "in
 
 ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
-A more detailed description of the system can be found in the project #[site.](https://rotemb271.wixsite.com/examscanner)#
+A more detailed description of the system can be found in the project [site.](https://rotemb271.wixsite.com/examscanner)
 
