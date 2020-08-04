@@ -23,7 +23,7 @@ Here we can see the Use-Case diagram of the project.
 
 ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
-We designed our system in a way that each use case, has a corresponding MVVM "instance" as described in the following diagram, meaning that each use-case *aUseCase* has an associated ***view*** class (probably named aUseCaseFragment.java), associated ***view-mode*** class (aUseCaseViewModel.java) and associated ***model*** classes that are associated to the logic of the use-case. We belive that the use-case diagram is intuive and a comfortable way to devide the system, while building it and on maintanence.
+We designed our system in a way that each use case, has a corresponding MVVM "instance" as described in the following diagram, meaning that each use-case *aUseCase* has an associated ***view*** class (probably named aUseCaseFragment.java), associated ***view-mode*** class (aUseCaseViewModel.java) and associated ***model*** classes that are associated to the logic of the use-case. We belive that the use-case diagram is intuitive and a comfortable way to devide the system, while building it and on maintanence.
 
 ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
