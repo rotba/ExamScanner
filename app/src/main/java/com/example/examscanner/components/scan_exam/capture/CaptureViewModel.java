@@ -109,6 +109,13 @@ public class CaptureViewModel extends ViewModel {
         consumeExamineeId(capture.getExamineeId());
         final Version version = capture.getVersion();
         capture.setBitmap(imageProcessor.align(capture.getBitmap(), version.getPerfectImage()));
+        if(capture.getExamineeId()!= null && capture.getExamineeId().equals("449966335522")){
+            throw new RepositoryException("449966335522 Exception");
+        }
+
+        if(capture.getExamineeId()!= null && capture.getExamineeId().equals("449966335533")){
+            throw new SpecialRepositoryException("449966335533 Exception");
+        }
         try {
             imageProcessor.scanAnswers(
                     capture.getBitmap(),
@@ -117,10 +124,13 @@ public class CaptureViewModel extends ViewModel {
                         @Override
                         public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                             final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds, capture.getExamineeId());
-                            Log.d(TAG, "starting creating ScannedCapture");
+                            Log.d(TAG, "starting creating ScannedCapture for "+capture.getExamineeId() );
+                            if(capture.getExamineeId()!= null && capture.getExamineeId().equals("449966335511")){
+                                Log.d(TAG, "449966335511 Exception");
+                                throw new RepositoryException("449966335511 Exception");
+                            }
                             scRepo.create(new ScannedCapture(
                                     -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId(), state.getUserEmail()
-
                             ));
                         }
                     },

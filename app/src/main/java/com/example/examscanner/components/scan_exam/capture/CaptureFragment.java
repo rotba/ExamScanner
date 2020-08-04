@@ -465,6 +465,9 @@ public class CaptureFragment extends Fragment {
 
     private void handleError(String errorPerefix, Throwable t) {
         Log.d(TAG, errorPerefix, t);
+        if(t instanceof SpecialRepositoryException){
+            throw (SpecialRepositoryException)t;
+        }
         try {
             new AlertDialog.Builder(getActivity())
                     .setTitle("An error occured")

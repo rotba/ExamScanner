@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
 //                com.example.examscanner.components.admin.AdminViewModelTest.class,
 //                com.example.examscanner.repositories.scanned_capture.integration_with_remote_db.CreateTransaction.class,
 //                com.example.examscanner.components.create_exam.view_model.unit.CreateExamModelViewTest.class,
-//                com.example.examscanner.repositories.exam.ExamIsCreatedTest.class,
+                com.example.examscanner.repositories.exam.ExamIsCreatedTest.class,
                 com.example.examscanner.components.integrations.ScannedCaptureInserted_ExamineeSolutionIsStored.class,
 //                com.example.examscanner.communication.CommunicationFacadeTest.class,
 //                com.example.examscanner.core_algorithm.SmallCoreAlgorithmPDFTest.class,

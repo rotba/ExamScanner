@@ -72,8 +72,22 @@ public class CreateExamUpdatesGraderBigExamTest {
 //        RemoteFilesManagerFactory.setTestMode();
         AuthenticationHandlerFactory.getTest().authenticate().subscribe(to);
         remoteDatabaseFacade = RemoteDatabaseFacadeFactory.get();
-        remoteDatabaseFacade.addGraderIfAbsent("rotemhas@post.bgu.ac.il","5etmuMvCN3aY9aUXWa8rOX0CZXj1");
-        remoteDatabaseFacade.addGraderIfAbsent("rotemb271@gmail.com","n5BDz7ckJpT45JP772xnAVhQtWn2");
+        List<Pair<String, String>> graders = new ArrayList<>(
+                Arrays.asList(
+                        new Pair<>("rotemhas@post.bgu.ac.il","5etmuMvCN3aY9aUXWa8rOX0CZXj1"),
+                        new Pair<>("shperbsh@post.bgu.ac.il","n5BDz7ckJpT45JP772xnAVhQtWn2"),
+                        new Pair<>("sofya@post.bgu.ac.il","kw6gupv7AhaIt87a9Y9xlpscVl63"),
+                        new Pair<>("hayounav@post.bgu.ac.il","MG1HbAaykuXcEVp3vyamxwDXlui2"),
+                        new Pair<>("mayer.goldberg@gmail.com","nZTRnGSSEnVffQeZXLHR5uqsIa93"),
+                        new Pair<>("rotemb271@gmail.com","n5BDz7ckJpT45JP772xnAVhQtWn2"),
+                        new Pair<>("omrihim@post.bgu.ac.il","cPY77QNpc0RrkGxjWIlvvI1V1Vf2")
+
+                )
+        );
+        for (Pair<String, String> grader:graders
+             ) {
+            remoteDatabaseFacade.addGraderIfAbsent(grader.first,grader.second);
+        }
         sleep(2000);
         to.awaitCount(1);
         ImageProcessingFactory.setTestMode(getApplicationContext());
@@ -88,10 +102,10 @@ public class CreateExamUpdatesGraderBigExamTest {
         examRepository = new ExamRepositoryFactory().create();
         graderRepository = new GraderRepoFactory().create();
         graderRepository.create(new Grader("bobexamscanner80@gmail.com", BOB_ID));
-        out.holdGraderIdentifier("rotemhas@post.bgu.ac.il");
-        out.addGrader();
-        out.holdGraderIdentifier("rotemb271@gmail.com");
-        out.addGrader();
+        for (Pair<String, String> grader:graders) {
+            out.holdGraderIdentifier(grader.first);
+            out.addGrader();
+        }
         out.holdNumOfQuestions("80");
         List<Pair<Integer, BitmapLambda>> versions = new ArrayList<>(
                 Arrays.asList(
