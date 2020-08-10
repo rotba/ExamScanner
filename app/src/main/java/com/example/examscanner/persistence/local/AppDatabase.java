@@ -32,7 +32,7 @@ import com.example.examscanner.persistence.local.entities.Version;
                 SemiScannedCapture.class,
                 ExamCreationSession.class
         },
-        version = 5
+        version = 6
 )
 
 

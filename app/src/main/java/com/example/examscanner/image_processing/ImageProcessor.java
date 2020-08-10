@@ -1548,6 +1548,8 @@ public class ImageProcessor implements ImageProcessingFacade {
             final int scaledTempH = (int) (tempH * yScaleConcreteToOrig);
             Selection selection = new Selection(selecetions[i], xs[i], ys[i], scaledTempW, scaledTempH);
             Id id = new Id(ids[i], xs[i], ys[i], scaledTempW, scaledTempH);
+            if(selection.getRep().equals("-1"))
+
             Imgproc.rectangle(
                     mat,
                     new Point(xs[i], ys[i]),

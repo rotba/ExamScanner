@@ -11,6 +11,7 @@ import java.util.List;
 public class ResolvedAnswer extends Answer{
     private final PointF upperLeft;
     private final PointF bottomRight;
+    private int wasConflictedBefore = 0;
 
     public PointF getUpperLeft() {
         return upperLeft;
@@ -63,6 +64,10 @@ public class ResolvedAnswer extends Answer{
     @Override
     public boolean isCorrect(Question questionByNumber) {
         return questionByNumber.getAns()==selection;
+    }
+
+    public void answerBeenConflictedThenResolved() {
+        wasConflictedBefore = 1;
     }
 
     @NonNull

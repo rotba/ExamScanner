@@ -140,6 +140,8 @@ public class ScannedCapture {
     public void commitResolutions() {
         List<Answer> newAnswers = new ArrayList<>();
         for (Answer a:getAnswers()) {
+            if(a instanceof ResolvedAnswer)
+                ((ResolvedAnswer) a).answerBeenConflictedThenResolved();
             newAnswers.add(a.commitResolution());
         }
         setAnswers(newAnswers);
