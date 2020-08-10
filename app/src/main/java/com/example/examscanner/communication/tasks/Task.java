@@ -14,14 +14,18 @@ public class Task {
     private AtomicBoolean completed;
     private Continuation mainCont;
     private ConcurrentLinkedQueue<Continuation> conts;
+    private Boolean canceled = false;
 
     public Task(Completable completable, String desc) {
         this.completable = completable;
         completed = new AtomicBoolean(false);
         conts = new ConcurrentLinkedQueue<>();
         mainCont = () -> {
-            while (!conts.isEmpty()) {
+            while (!conts.isEmpty() && !canceled) {
                 conts.remove().cont();
+                if(canceled) {
+                    Log.d("ExamScanner", "cancel task");
+                }
             }
         };
         completable.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(() -> {
@@ -33,6 +37,10 @@ public class Task {
         });
     }
 
+    public void cancelTask(){
+        this.canceled = true;
+    }
+
     public void addContinuation(Continuation continuation, Continuation onVeporized) {
         if (completed.get()) {
             continuation.cont();
@@ -41,4 +49,7 @@ public class Task {
         }
     }
 
+    public boolean isCanceled() {
+        return canceled;
+    }
 }

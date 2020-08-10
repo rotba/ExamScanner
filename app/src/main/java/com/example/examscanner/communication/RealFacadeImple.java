@@ -1077,6 +1077,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public void deleteExamineeSolution(long id) {
+        tasksManager.get(IdsGenerator.forSolution(id)).cancelTask();
         ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
         String remoteId = es.getRemoteId();
         removeExamineeSolutionFromCache(id);
@@ -1346,69 +1347,75 @@ public class RealFacadeImple implements CommunicationFacade {
         throwCommunicationExceptionWhenNull(v, Version.class, String.format("id:%d", es.getVersionId()));
         Exam e = db.getExamDao().getById(v.getExamId());
         throwCommunicationExceptionWhenNull(e, Exam.class, String.format("id:%d", v.getExamId()));
-        Log.d(TAG, String.format("started storring the bitmaps of es.getId():%d", es.getId()));
-        String bitmapPath = PathsGenerator.genExamineeSolution(e.getRemoteId(), es.getRemoteId());
-        String origBitmapPath = PathsGenerator.genExamineeSolutionOrig(e.getRemoteId(), es.getRemoteId());
-        rfm.store(bitmapPath, toByteArray(bm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-                .subscribe(() -> {
-                            Log.d(TAG, String.format("done storing the bitmap es.getId():%d", es.getId()));
-                            rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-                                    url -> {
-                                        ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
-                                        Log.d(TAG, String.format("done creating the solution bitmap url es.getId():%d", _es.getId()));
-                                        remoteDb.setSolutionBitmapUrl(url, _es.getRemoteId());
-                                        bitmapUploaded[0].set(true);
-                                        Log.d(DEBUG_TAG, "bitmap uploaded");
-                                        if(bitmapUploaded[0].get() && origBitmapUploaded[0].get()){
-                                            Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
-                                            _es.setBitmapUploaded(true);
-                                            notifyExamineeSolution(_es);
-                                        }
+        if(!tasksManager.get(IdsGenerator.forSolution(id)).isCanceled()) {
+            Log.d(TAG, String.format("started storring the bitmaps of es.getId():%d", es.getId()));
+            String bitmapPath = PathsGenerator.genExamineeSolution(e.getRemoteId(), es.getRemoteId());
+            String origBitmapPath = PathsGenerator.genExamineeSolutionOrig(e.getRemoteId(), es.getRemoteId());
+            rfm.store(bitmapPath, toByteArray(bm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+                    .subscribe(() -> {
+                                Log.d(TAG, String.format("done storing the bitmap es.getId():%d", es.getId()));
+                                rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+                                        url -> {
+                                            if (!tasksManager.get(IdsGenerator.forSolution(id)).isCanceled()) {
+                                                ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
+                                                Log.d(TAG, String.format("done creating the solution bitmap url es.getId():%d", _es.getId()));
+                                                remoteDb.setSolutionBitmapUrl(url, _es.getRemoteId());
+                                                bitmapUploaded[0].set(true);
+                                                Log.d(DEBUG_TAG, "bitmap uploaded");
+                                                if (bitmapUploaded[0].get() && origBitmapUploaded[0].get()) {
+                                                    Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
+                                                    _es.setBitmapUploaded(true);
+                                                    notifyExamineeSolution(_es);
+                                                }
+                                            }
 
-                                    },
-                                    throwable -> {
-                                        ESLogeerFactory.getInstance().log(TAG, "failed creating url for bitmap of examinee solution", throwable);
-                                        throwable.printStackTrace();
-                                        throw new CommunicationException(throwable);
-                                    }
-                            );
-                        },
-                        throwable -> {
-                            ESLogeerFactory.getInstance().log(TAG, "failed storing orig bitmap", throwable);
-                            throwable.printStackTrace();
-                            throw new CommunicationException(throwable);
-                        }
-                );
-        rfm.store(origBitmapPath, toByteArray(origBm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-                .subscribe(
-                        () -> {
-                            Log.d(TAG, String.format("done storring the orig bitmap of es.getId():%d", es.getId()));
-                            rfm.createUrl(origBitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-                                    url -> {
-                                        ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
-                                        remoteDb.setOriginialBitmapUrl(url, _es.getRemoteId());
-                                        Log.d(TAG, String.format("done creating the orig bitmap url es.getId():%d", _es.getId()));
-                                        origBitmapUploaded[0].set(true);
-                                        Log.d(DEBUG_TAG, "orig bitmap uploaded");
-                                        if(bitmapUploaded[0].get() && origBitmapUploaded[0].get()){
-                                            Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
-                                            _es.setBitmapUploaded(true);
-                                            notifyExamineeSolution(_es);
+                                        },
+                                        throwable -> {
+                                            ESLogeerFactory.getInstance().log(TAG, "failed creating url for bitmap of examinee solution", throwable);
+                                            throwable.printStackTrace();
+                                            throw new CommunicationException(throwable);
                                         }
-                                    },
-                                    throwable -> {
-                                        ESLogeerFactory.getInstance().log(TAG, "failed creating url for orig bitmap", throwable);
-                                        throwable.printStackTrace();
-                                        throw new CommunicationException(throwable);
-                                    }
-                            );
-                        },
-                        throwable -> {
-                            ESLogeerFactory.getInstance().log(TAG, "failed storing orig bitmap", throwable);
-                            throwable.printStackTrace();
-                            throw new CommunicationException(throwable);
-                        }
-                );
+                                );
+                            },
+                            throwable -> {
+                                ESLogeerFactory.getInstance().log(TAG, "failed storing orig bitmap", throwable);
+                                throwable.printStackTrace();
+                                throw new CommunicationException(throwable);
+                            }
+                    );
+            rfm.store(origBitmapPath, toByteArray(origBm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+                    .subscribe(
+                            () -> {
+                                Log.d(TAG, String.format("done storring the orig bitmap of es.getId():%d", es.getId()));
+                                rfm.createUrl(origBitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+                                        url -> {
+                                            if (!tasksManager.get(IdsGenerator.forSolution(id)).isCanceled()) {
+                                                ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
+                                                remoteDb.setOriginialBitmapUrl(url, _es.getRemoteId());
+                                                Log.d(TAG, String.format("done creating the orig bitmap url es.getId():%d", _es.getId()));
+                                                origBitmapUploaded[0].set(true);
+                                                Log.d(DEBUG_TAG, "orig bitmap uploaded");
+                                                if (bitmapUploaded[0].get() && origBitmapUploaded[0].get()) {
+                                                    Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
+                                                    _es.setBitmapUploaded(true);
+                                                    notifyExamineeSolution(_es);
+                                                }
+                                            }
+                                        },
+                                        throwable -> {
+                                            ESLogeerFactory.getInstance().log(TAG, "failed creating url for orig bitmap", throwable);
+                                            throwable.printStackTrace();
+                                            throw new CommunicationException(throwable);
+                                        }
+                                );
+                            },
+                            throwable -> {
+                                ESLogeerFactory.getInstance().log(TAG, "failed storing orig bitmap", throwable);
+                                throwable.printStackTrace();
+                                throw new CommunicationException(throwable);
+                            }
+                    );
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
