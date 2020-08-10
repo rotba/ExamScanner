@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel;
 import com.example.examscanner.authentication.UIAuthenticationHandler;
 import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.authentication.state.StateHolder;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.grader.Grader;
-import com.example.examscanner.repositories.grader.GraderRepository;
 
 import io.reactivex.Completable;
 
@@ -40,6 +40,7 @@ public class MainActivityViewModel<T> extends ViewModel implements StateHolder {
                 graderRepo.create(new Grader(theState.getUserEmail(), theState.getId())))
                 .subscribe(()->{},
                         (t)-> { Log.d(APP_TAG, MSG_PREF, t);});
+        ESLogeerFactory.getInstance().setupUserIdentifier(theState.getUserEmail());
 
     }
 

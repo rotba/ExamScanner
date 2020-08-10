@@ -21,4 +21,9 @@ public class MainActivityTest extends StateFullTest {
     public void testAfterLoginHomeIsDisplayed() {
         onView(withId(R.id.home)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testCrash() {
+        onView(withId(R.id.home)).check(matches(isDisplayed()));
+    }
 }

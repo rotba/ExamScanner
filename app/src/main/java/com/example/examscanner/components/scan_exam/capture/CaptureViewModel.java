@@ -5,7 +5,6 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
-import androidx.camera.core.ImageCaptureException;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,6 +13,7 @@ import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.image_processing.ImageProcessingError;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.RepositoryException;
 import com.example.examscanner.repositories.exam.Exam;
@@ -29,6 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class CaptureViewModel extends ViewModel {
+
     private final String REMOVE_INDICATION = "REMOVE:";
     private final String TAG = "ExamScanner";
     private MutableLiveData<Integer> mNumOfTotalCaptures;
@@ -128,13 +129,13 @@ public class CaptureViewModel extends ViewModel {
                     version.getRealtiveUps()
             );
         }catch (RepositoryException | ImageProcessingError e){
+//            ESLogeerFactory.getInstance().log(TAG, "Scan answers exception", e);
             Log.d(TAG, "Scan answers exception", e);
             final Bitmap bitmap = imageProcessor.createFailFeedbackImage(capture.getBitmap());
             scRepo.create(new ScannedCapture(
                     -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), 0, new int[0], new float[0], new float[0], new float[0], new float[0], new int[0], version, capture.getExamineeId(), state.getUserEmail()
 
             ));
-//            throw  e;
         }
 //        imageProcessor.detectCorners(
 //                capture.getBitmap(),
