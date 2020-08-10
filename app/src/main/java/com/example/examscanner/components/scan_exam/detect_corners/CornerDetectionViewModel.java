@@ -15,6 +15,8 @@ import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.repositories.exam.Version;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -48,7 +50,14 @@ public class CornerDetectionViewModel extends ViewModel {
 
     public void refresh(){
         scannedCaptures = new ArrayList<>();
-        for (ScannedCapture sc : this.scRepo.get(c -> c.isAssocaitedWith(exam))) {
+        List<ScannedCapture> allSCs = this.scRepo.get(c -> c.isAssocaitedWith(exam));
+        allSCs.sort(new Comparator<ScannedCapture>() {
+            @Override
+            public int compare(ScannedCapture o1, ScannedCapture o2) {
+                return Integer.compare(o2.getId(), o1.getId());
+            }
+        });
+        for (ScannedCapture sc : allSCs) {
             scannedCaptures.add(new MutableLiveData<ScannedCapture>(sc));
         }
     }
