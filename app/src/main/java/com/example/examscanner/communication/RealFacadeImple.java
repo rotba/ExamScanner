@@ -504,14 +504,14 @@ public class RealFacadeImple implements CommunicationFacade {
                                                 }
                                             },
                                             throwable -> {
-                                                Log.d(TAG, "problems", throwable);
+                                                ESLogeerFactory.getInstance().log(TAG, "problems", throwable);
                                                 throwable.printStackTrace();
                                                 throw new CommunicationException(throwable);
                                             });
 
                         },
                         throwable -> {
-                            Log.d(TAG, String.format("rfm.get(rv.bitmapPath=%s)",rv.bitmapPath), throwable);
+                            ESLogeerFactory.getInstance().log(TAG, String.format("rfm.get(rv.bitmapPath=%s)",rv.bitmapPath), throwable);
                             throwable.printStackTrace();
                             throw new CommunicationException(throwable);
                         }
@@ -549,7 +549,7 @@ public class RealFacadeImple implements CommunicationFacade {
         try {
             remoteId = db.getExamDao().getById(id).getRemoteId();
         } catch (Throwable e) {
-            Log.d(TAG, "", e);
+            ESLogeerFactory.getInstance().log(TAG, "nom", e);
             e.printStackTrace();
             throw new MyAssertionError("assert updateExam::db.getExamDao().getById(id).getRemoteId()!=null violated", e);
         }
@@ -603,14 +603,14 @@ public class RealFacadeImple implements CommunicationFacade {
                         db.getQuestionDao().update(q);
                         notifyVersionElementUploaded(q.getVerId());
                     }, throwable -> {
-                        Log.d(TAG, "", throwable);
+                        ESLogeerFactory.getInstance().log(TAG, "", throwable);
                         throwable.printStackTrace();
                         throw new CommunicationException(throwable);
                     });
             return ret;
         } catch (Throwable t) {
             /*TODO - delete exam*/
-            Log.d(TAG, "", t);
+            ESLogeerFactory.getInstance().log(TAG, "nom", t);
             t.printStackTrace();
             throw new CommunicationException(t);
         }
@@ -665,7 +665,7 @@ public class RealFacadeImple implements CommunicationFacade {
                 }
             }
         } catch (NullPointerException np) {
-            Log.d(DEBUG_TAG, String.format("v.id:%d", v.getId()), np);
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, String.format("v.id:%d", v.getId()), np);
             throw np;
         }
 
@@ -1230,7 +1230,7 @@ public class RealFacadeImple implements CommunicationFacade {
                         db.getVersionDao().update(v);
 
                     }, throwable -> {
-                        Log.d(TAG, "", throwable);
+                        ESLogeerFactory.getInstance().log(TAG, "nom", throwable);
                         throwable.printStackTrace();
                         throw new CommunicationException(throwable);
                     });
@@ -1247,7 +1247,7 @@ public class RealFacadeImple implements CommunicationFacade {
                         db.getVersionDao().update(v);
                         notifyVersionElementUploaded(v.getId());
                     }, throwable -> {
-                        Log.d(TAG, String.format("failed uploading %s version bitmap", version._getBitmapPath()), throwable);
+                        ESLogeerFactory.getInstance().log(TAG, String.format("failed uploading %s version bitmap", version._getBitmapPath()), throwable);
                         throwable.printStackTrace();
                         throw new CommunicationException(throwable);
                     });
@@ -1255,7 +1255,7 @@ public class RealFacadeImple implements CommunicationFacade {
             return ans;
         } catch (Throwable t) {
             /*TODO - delete exam*/
-            Log.d(TAG, "", t);
+            ESLogeerFactory.getInstance().log(TAG, "", t);
             t.printStackTrace();
             throw new CommunicationException(t);
         }
@@ -1329,7 +1329,7 @@ public class RealFacadeImple implements CommunicationFacade {
                     remoteDb.insertReserevedExamineeId(es.getRemoteId(), reservedExamineeId);
                 },
                 throwable -> {
-                    Log.d(TAG, "", throwable);
+                    ESLogeerFactory.getInstance().log(TAG, "", throwable);
                     throwable.printStackTrace();
                     throw new CommunicationException(throwable);
                 }
@@ -1367,14 +1367,14 @@ public class RealFacadeImple implements CommunicationFacade {
 
                                     },
                                     throwable -> {
-                                        Log.d(TAG, "failed creating url for bitmap of examinee solution", throwable);
+                                        ESLogeerFactory.getInstance().log(TAG, "failed creating url for bitmap of examinee solution", throwable);
                                         throwable.printStackTrace();
                                         throw new CommunicationException(throwable);
                                     }
                             );
                         },
                         throwable -> {
-                            Log.d(TAG, "failed storing orig bitmap", throwable);
+                            ESLogeerFactory.getInstance().log(TAG, "failed storing orig bitmap", throwable);
                             throwable.printStackTrace();
                             throw new CommunicationException(throwable);
                         }
@@ -1397,14 +1397,14 @@ public class RealFacadeImple implements CommunicationFacade {
                                         }
                                     },
                                     throwable -> {
-                                        Log.d(TAG, "failed creating url for orig bitmap", throwable);
+                                        ESLogeerFactory.getInstance().log(TAG, "failed creating url for orig bitmap", throwable);
                                         throwable.printStackTrace();
                                         throw new CommunicationException(throwable);
                                     }
                             );
                         },
                         throwable -> {
-                            Log.d(TAG, "failed storing orig bitmap", throwable);
+                            ESLogeerFactory.getInstance().log(TAG, "failed storing orig bitmap", throwable);
                             throwable.printStackTrace();
                             throw new CommunicationException(throwable);
                         }
