@@ -26,6 +26,7 @@ import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
@@ -109,7 +110,8 @@ public class CornerDetectionFragment extends Fragment {
                 cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 String examineeId = sc.getExamineeId();
                 long versionId = sc.getVersion().getId();
-                Completable.fromAction(() -> cornerDetectionViewModel.delete(sc)).subscribeOn(Schedulers.io()).subscribe(()->{}, t ->{Log.d(TAG, "delete scanned capture", t);});
+                Completable.fromAction(() -> cornerDetectionViewModel.delete(sc)).subscribeOn(Schedulers.io()).subscribe(()->{}, t ->{
+                    ESLogeerFactory.getInstance().log(TAG, "delete scanned capture", t);});
 //                waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
                 CornerDetectionFragmentDirections.ActionCornerDetectionFragmentToCaptureFragment2 action = CornerDetectionFragmentDirections.actionCornerDetectionFragmentToCaptureFragment2();
                 action.setExamId(cornerDetectionViewModel.getExamId());
@@ -261,7 +263,7 @@ public class CornerDetectionFragment extends Fragment {
     private void handleError(String errorPerefix, Throwable t){
         onBackPressedCallback.setEnabled(true);
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        Log.d(TAG, errorPerefix, t);
+        ESLogeerFactory.getInstance().log(TAG, errorPerefix, t);
         new androidx.appcompat.app.AlertDialog.Builder(getActivity())
                 .setTitle("An error occured")
                 .setMessage(String.format(

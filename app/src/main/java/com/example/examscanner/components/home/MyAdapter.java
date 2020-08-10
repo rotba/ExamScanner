@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.examscanner.R;
 import com.example.examscanner.authentication.state.State;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.repositories.exam.Exam;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: called");
+        ESLogeerFactory.getInstance().log(TAG, "onBindViewHolder: called");
         Exam e = mExams.get(position).getValue();
         holder.examName.setText(e.toString());
         if (e.getManagerId().equals(state.getId())) {
@@ -75,7 +76,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                                     }
                                 });
                             },
-                            t -> Log.d(TAG, "BUG IN Exam:observeDownload", t)
+                            t -> ESLogeerFactory.getInstance().log(TAG, "BUG IN Exam:observeDownload", t)
                     );
         } else if (!e.isDownloaded()) {
             holder.pb.setVisibility(View.VISIBLE);
@@ -88,7 +89,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                                 holder.pb.setVisibility(View.INVISIBLE);
                                 holder.itemView.setOnClickListener(v->onItemClick.onItemClick(e));
                             },
-                            t -> Log.d(TAG, "BUG IN Exam:observeDownload", t)
+                            t -> ESLogeerFactory.getInstance().log(TAG, "BUG IN Exam:observeDownload", t)
                     );
 
         } else {

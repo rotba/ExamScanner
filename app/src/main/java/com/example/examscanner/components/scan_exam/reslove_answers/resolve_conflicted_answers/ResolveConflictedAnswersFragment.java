@@ -28,6 +28,7 @@ import com.example.examscanner.components.scan_exam.detect_corners.CornerDetecti
 import com.example.examscanner.components.scan_exam.detect_corners.CornerDetectionViewModel;
 import com.example.examscanner.components.scan_exam.reslove_answers.ResolveAnswersViewModel;
 import com.example.examscanner.components.scan_exam.reslove_answers.RAViewModelFactory;
+import com.example.examscanner.log.ESLogeerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,7 +163,7 @@ public class ResolveConflictedAnswersFragment extends Fragment {
     }
 
     private void handleError(String errorPerefix, Throwable t) {
-        Log.d(TAG, errorPerefix, t);
+        ESLogeerFactory.getInstance().log(TAG, errorPerefix, t);
         new androidx.appcompat.app.AlertDialog.Builder(getActivity())
                 .setTitle("An error occured")
                 .setMessage(String.format(

@@ -41,6 +41,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.examscanner.R;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetter;
 import com.example.examscanner.components.create_exam.get_version_file.VersionImageGetterFactory;
+import com.example.examscanner.log.ESLogeerFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -117,7 +118,7 @@ public class CreateExamFragment extends Fragment {
         versionNumEdit.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    Log.d(DEBUG_TAG, "versionNumEdit.setOnKeyListener");
+                    ESLogeerFactory.getInstance().log(DEBUG_TAG, "versionNumEdit.setOnKeyListener");
                     consumeVersionNumIfNotEmpty();
                     refreshAddVersionButton();
                     return true;
@@ -128,9 +129,9 @@ public class CreateExamFragment extends Fragment {
         versionNumEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Log.d(DEBUG_TAG, "versionNumEdit.setOnFocusChangeListener");
+                ESLogeerFactory.getInstance().log(DEBUG_TAG, "versionNumEdit.setOnFocusChangeListener");
                 if(!hasFocus){
-                    Log.d(DEBUG_TAG, "versionNumEdit.setOnFocusChangeListener && !hasFocus");
+                    ESLogeerFactory.getInstance().log(DEBUG_TAG, "versionNumEdit.setOnFocusChangeListener && !hasFocus");
                     consumeVersionNumIfNotEmpty();
                 }
             }
@@ -287,7 +288,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onVersionAddedFailed(Throwable throwable) {
-        Log.d(TAG, MSG_PREF, throwable);
+        ESLogeerFactory.getInstance().log(TAG, MSG_PREF, throwable);
         throwable.printStackTrace();
         ((ProgressBar) getActivity().findViewById(R.id.progressBar_create_exam)).setVisibility(View.INVISIBLE);
     }
@@ -329,7 +330,7 @@ public class CreateExamFragment extends Fragment {
             AlertDialog dialog = builder.create();
             dialog.show();
         }catch (Exception e){
-            Log.d(TAG, "PROBABLY espresso wtupid stuff "+MSG_PREF, e);
+            ESLogeerFactory.getInstance().log(TAG, "PROBABLY espresso wtupid stuff "+MSG_PREF, e);
             successCont.cont();
         }
     }
@@ -366,7 +367,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void onGraderAddedFailed(Throwable throwable) {
-        Log.d(TAG, MSG_PREF, throwable);
+        ESLogeerFactory.getInstance().log(TAG, MSG_PREF, throwable);
         CharSequence text = String.format("Failed adding grader, are you sure %s is a correct username?", viewModel.getCurrentGrader());
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(getActivity(), text, duration).show();
@@ -377,7 +378,7 @@ public class CreateExamFragment extends Fragment {
     }
 
     private void handleError(String errorPerefix, Throwable t){
-        Log.d(TAG, errorPerefix, t);
+        ESLogeerFactory.getInstance().log(TAG, errorPerefix, t);
         try {
             new AlertDialog.Builder(getActivity())
                     .setTitle("An error occured")
@@ -400,7 +401,7 @@ public class CreateExamFragment extends Fragment {
                     })
                     .show();
         }catch (Exception e){
-            Log.d(TAG, "Espressoissues", t);
+            ESLogeerFactory.getInstance().log(TAG, "Espressoissues", t);
         }
         t.printStackTrace();
     }

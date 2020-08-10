@@ -23,6 +23,7 @@ import com.example.examscanner.communication.tasks.IdsGenerator;
 import com.example.examscanner.communication.tasks.Task;
 import com.example.examscanner.communication.tasks.TasksManager;
 import com.example.examscanner.communication.tasks.TasksManagerFactory;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.local.entities.Exam;
@@ -112,12 +113,13 @@ public class RealFacadeImple implements CommunicationFacade {
         try {
             String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId, numberOfQuestions, uploaded, numOfVer)
                     .blockingFirst();
-            Log.d(DEBUG_TAG, String.format("created exam %s", remoteId));
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, String.format("created exam %s", remoteId));
             long ans = db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions, managerId, graders, uploaded, numOfVer, true));
-            Log.d(TAG, String.format("examid %d was created", ans));
+            ESLogeerFactory.getInstance().log(TAG, String.format("examid %d was created", ans));
             return ans;
         } catch (Throwable e) {
             /*TODO - delete exam*/
+            ESLogeerFactory.getInstance().log(TAG,"nom",e);
             throw new CommunicationException(e);
         }
     }
@@ -267,7 +269,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId, Bitmap orig) {
-        Log.d(TAG, String.format("inserted the eaminieeid %s to the eaxminee ids table. solution local id is %d", result, es.getId()));
+        ESLogeerFactory.getInstance().log(TAG, String.format("inserted the eaminieeid %s to the eaxminee ids table. solution local id is %d", result, es.getId()));
         String examineeId = es.getExamineeId();
         if (result == null) {
             es.setExamineeIdOccupied(true);
@@ -280,16 +282,17 @@ public class RealFacadeImple implements CommunicationFacade {
         String bitmapPath = PathsGenerator.genExamineeSolution(remoetExamId, examineeId);
         String origBitmapPath = PathsGenerator.genExamineeSolutionOrig(remoetExamId, examineeId);
         try {
-            Log.d(TAG, String.format("started storring the bitmap of es.getId():%d", es.getId()));
+            ESLogeerFactory.getInstance().log(TAG, String.format("started storring the bitmap of es.getId():%d", es.getId()));
             rfm.store(bitmapPath, toByteArray(fm.get(es.getBitmapPath()))).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                     .subscribe(() -> {
                                 rfm.store(origBitmapPath, toByteArray(orig)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                                         .subscribe(
                                                 () -> {
-                                                    Log.d(TAG, String.format("done storring the bitmap of es.getId():%d", es.getId()));
+                                                    ESLogeerFactory.getInstance().log(TAG, String.format("done storring the bitmap of es.getId():%d", es.getId()));
                                                     handleSolutionBitmapStorageSuccess(bitmapPath, origBitmapPath, es, finalExamineeID, remoteversionId, answers, grade);
                                                 },
                                                 throwable -> {
+                                                    ESLogeerFactory.getInstance().log(TAG,"nom",throwable);
                                                     throw new CommunicationException(throwable);
                                                 }
                                         );
@@ -305,10 +308,10 @@ public class RealFacadeImple implements CommunicationFacade {
                 url -> {
                     rfm.createUrl(origBitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
                             urlOrig -> {
-                                Log.d(TAG, String.format("created the url of es.getId():%d", es.getId()));
+                                ESLogeerFactory.getInstance().log(TAG, String.format("created the url of es.getId():%d", es.getId()));
                                 remoteDb.offlineInsertExamineeSolutionTransaction(finalExamineeID, remoteversionId, answers, grade, url, urlOrig, false).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
                                         s -> {
-                                            Log.d(TAG, String.format("done inserting es.getId():%d as %s", es.getId(), s));
+                                            ESLogeerFactory.getInstance().log(TAG, String.format("done inserting es.getId():%d as %s", es.getId(), s));
                                             es.setRemoteId(s);
                                             db.getExamineeSolutionDao().update(es);
                                         }
@@ -501,7 +504,7 @@ public class RealFacadeImple implements CommunicationFacade {
                                                 }
                                             },
                                             throwable -> {
-                                                Log.d(TAG, "", throwable);
+                                                Log.d(TAG, "problems", throwable);
                                                 throwable.printStackTrace();
                                                 throw new CommunicationException(throwable);
                                             });

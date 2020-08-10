@@ -14,8 +14,14 @@ class EsLoggeImpl implements ESLogger {
     }
 
     @Override
-    public void log(String tag, String message, Exception e) {
+    public void log(String tag, String message, Throwable e) {
         Log.d(tag, message, e);
         remoteLogger.log(tag, message, e);
+    }
+
+    @Override
+    public void log(String tag, String format) {
+        Log.d(tag, format);
+        remoteLogger.log(tag, format);
     }
 }

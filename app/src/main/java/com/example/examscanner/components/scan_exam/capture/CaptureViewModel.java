@@ -71,11 +71,11 @@ public class CaptureViewModel extends ViewModel {
 
     private void consumeExamineeId(String s) {
         synchronized (examineeIds){
-            Log.d(DEBUG_TAG, String.format("consumed examineeid:%s",s));
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, String.format("consumed examineeid:%s",s));
             if(s.indexOf(REMOVE_INDICATION)!=-1){
                 String sRemove =s.replace(REMOVE_INDICATION,"");
                 if(!examineeIds.contains(sRemove)){
-                    Log.d(TAG, String.format("BUG in examinee ids removal. dont want to crach the app: s:%s, sRemove:%s",s,sRemove));
+                    ESLogeerFactory.getInstance().log(TAG, String.format("BUG in examinee ids removal. dont want to crach the app: s:%s, sRemove:%s",s,sRemove));
                 }else{
                     examineeIds.remove(sRemove);
                 }
@@ -118,7 +118,7 @@ public class CaptureViewModel extends ViewModel {
                         @Override
                         public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                             final Bitmap bitmap = imageProcessor.createFeedbackImage(capture.getBitmap(), lefts, tops,selections,answersIds, capture.getExamineeId());
-                            Log.d(TAG, "starting creating ScannedCapture");
+                            ESLogeerFactory.getInstance().log(TAG, "starting creating ScannedCapture");
                             scRepo.create(new ScannedCapture(
                                     -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId(), state.getUserEmail()
 
@@ -130,7 +130,7 @@ public class CaptureViewModel extends ViewModel {
             );
         }catch (RepositoryException | ImageProcessingError e){
 //            ESLogeerFactory.getInstance().log(TAG, "Scan answers exception", e);
-            Log.d(TAG, "Scan answers exception", e);
+            ESLogeerFactory.getInstance().log(TAG, "Scan answers exception", e);
             final Bitmap bitmap = imageProcessor.createFailFeedbackImage(capture.getBitmap());
             scRepo.create(new ScannedCapture(
                     -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), 0, new int[0], new float[0], new float[0], new float[0], new float[0], new int[0], version, capture.getExamineeId(), state.getUserEmail()
@@ -168,18 +168,18 @@ public class CaptureViewModel extends ViewModel {
     public boolean isValidVersion() {
         aBoolean = mVersion.getValue() != null;
         if(!aBoolean){
-            Log.d(TAG, String.format("in valid version :%s", mVersion.getValue()));
+            ESLogeerFactory.getInstance().log(TAG, String.format("in valid version :%s", mVersion.getValue()));
         }
         return aBoolean;
     }
 
     public boolean isValidExamineeId() {
         if(mExamineeId.getValue() == null){
-            Log.d(TAG, String.format("in valid examineeId :%s", mExamineeId.getValue()));
+            ESLogeerFactory.getInstance().log(TAG, String.format("in valid examineeId :%s", mExamineeId.getValue()));
             return false;
         }
         if(mExamineeId.getValue().equals("")){
-            Log.d(TAG, String.format("in valid examineeId :%s", mExamineeId.getValue()));
+            ESLogeerFactory.getInstance().log(TAG, String.format("in valid examineeId :%s", mExamineeId.getValue()));
             return false;
         }
         return true;
@@ -201,7 +201,7 @@ public class CaptureViewModel extends ViewModel {
         try {
             mVersion.setValue(exam.getVersionByNum(intChoice));
         }catch (Exception e){
-            Log.d(TAG, "mVersion.setValue(exam.getVersionByNum(intChoice)) failed probably because of main thread stuff", e);
+            ESLogeerFactory.getInstance().log(TAG, "mVersion.setValue(exam.getVersionByNum(intChoice)) failed probably because of main thread stuff", e);
             mVersion.postValue(exam.getVersionByNum(intChoice));
         }
     }
@@ -210,7 +210,7 @@ public class CaptureViewModel extends ViewModel {
         try {
             mExamineeId.setValue(toString);
         }catch (Exception e){
-            Log.d(TAG, "mExamineeId.setValue(toString) failed probably because of main thread stuff", e);
+            ESLogeerFactory.getInstance().log(TAG, "mExamineeId.setValue(toString) failed probably because of main thread stuff", e);
             mExamineeId.postValue(toString);
         }
     }

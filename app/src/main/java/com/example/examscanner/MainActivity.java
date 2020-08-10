@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.examscanner.communication.ContextProvider;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.navigation.NavigationView;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         }else{
             createHome();
         }
-
     }
 
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 viewModel.authenticate();
                 createHome();
             } else {
-                Log.d(
+                ESLogeerFactory.getInstance().log(
                         TAG,
                         String.format(
                                 "%s\n"+
