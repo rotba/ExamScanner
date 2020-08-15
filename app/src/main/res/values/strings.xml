@@ -62,7 +62,7 @@
     <string name="year_2013">2013</string>
     <string name="hint_calculus">Calculus</string>
     <string name="hint_username">bob123@gmail.com</string>
-    <string name="create_exam_dialog_exam_is_being_uploaded">Exam is beeing uploaded</string>
+    <string name="create_exam_dialog_exam_is_beeing_uploaded">Exam is being uploaded</string>
     <string name="create_exam_dialog_ok">OK</string>
     <string name="home_would_you_like_to_resume">Would you like resume your last session?</string>
     <string name="home_dialog_yes">Yes</string>
