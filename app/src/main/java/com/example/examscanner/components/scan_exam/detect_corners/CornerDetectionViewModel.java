@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.scanned_capture.Answer;
 import com.example.examscanner.repositories.scanned_capture.ResolvedAnswer;
+import com.example.examscanner.repositories.scanned_capture.ResolvedConflictedAnswer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.corner_detected_capture.CornerDetectedCapture;
@@ -161,13 +162,12 @@ public class CornerDetectionViewModel extends ViewModel {
 
     public void commitResolutions(long scanId) {
         ScannedCapture scannedCapture = getScannedCaptureById(scanId).getValue();
-        scannedCapture.commitResolutions();
         Boolean[] wereResolved = new Boolean[scannedCapture.getAnswers().size()];
         for(int i = 0; i < wereResolved.length; i++){
-            Answer a = scannedCapture.getAnswerByNum(i);
-            if(a instanceof ResolvedAnswer && ((ResolvedAnswer)a).hasBeenConflictedThenResolved())
-                wereResolved[i] = true;
+            Answer a = scannedCapture.getAnswerByNum(i+1);
+            wereResolved[i] = (a instanceof ResolvedConflictedAnswer) ? true : false;
         }
+        scannedCapture.commitResolutions();
         scannedCapture.setBitmap(
                 imageProcessor.createFeedbackImage(scannedCapture.getBm(), scannedCapture.getRelLefts(), scannedCapture.getRelTops(), scannedCapture.getSelections(), scannedCapture.getIds(), scannedCapture.getExamineeId(), wereResolved)
         );

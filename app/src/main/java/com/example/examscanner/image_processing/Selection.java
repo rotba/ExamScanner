@@ -39,7 +39,7 @@ class Selection {
             color = new Scalar(0,0,200);
             // resolved conflicted answer should be marked with unique color
             if(wasResolved)
-                color = new Scalar(200,0,0);
+                color = new Scalar(0,200,0);
             rep = String.valueOf(selection);
         }else if(selection == NO_ANSWER_ANS){
             color = new Scalar(200,0,0);
