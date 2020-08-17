@@ -11,7 +11,6 @@ class Selection {
     private static int THICKNESS = 3;
     private static final int X_ANS_PADDING = 10;
     private final Point location;
-    private int afterResolve = 0;
     private double FONT_SCALE = 5.0;
 
     public int getThickness() {
@@ -34,12 +33,13 @@ class Selection {
     }
 
     private String rep;
-    public Selection(int selection, int x, int y, int tempW, int tempH) {
+    public Selection(int selection, int x, int y, int tempW, int tempH, Boolean wasResolved) {
         location = new Point(x+ tempW+X_ANS_PADDING, y +tempH- Y_ANS_PADDING);
         if(LOWEST_VALID_ANS<=selection && selection <= HIGHEST_VALID_ANS){
             color = new Scalar(0,0,200);
-            if(afterResolve == 1)
-                color = new Scalar(0,0,0);
+            // resolved conflicted answer should be marked with unique color
+            if(wasResolved)
+                color = new Scalar(200,0,0);
             rep = String.valueOf(selection);
         }else if(selection == NO_ANSWER_ANS){
             color = new Scalar(200,0,0);

@@ -22,6 +22,8 @@ import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.exam.Version;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CreateExamModelView extends ViewModel {
@@ -103,7 +105,9 @@ public class CreateExamModelView extends ViewModel {
             @Override
             public void consume(int numOfAnswersDetected, int[] answersIds, float[] lefts, float[] tops, float[] rights, float[] bottoms, int[] selections) {
                 Version v = new Version(-1,currentVersionNumber,Version.toFuture(examCreated), Version.theEmptyFutureQuestionsList(),currentVersionBitmap);
-                versionFeedbackImag = imageProcessor.createFeedbackImage(currentVersionBitmap , lefts, tops,selections,answersIds, "");
+                Boolean[] wereResolved = new Boolean[answersIds.length];
+                for(int i = 0; i < wereResolved.length; i++) wereResolved[i] = false;
+                versionFeedbackImag = imageProcessor.createFeedbackImage(currentVersionBitmap , lefts, tops,selections,answersIds, "", wereResolved);
                 ScannedCapture scannedCapture = new ScannedCapture(-1,null, null, numOfAnswersDetected,numOfAnswersDetected,answersIds,lefts,tops,rights,bottoms,selections,v, NOT_SUPPORTING_EXAMINEE_IDS_ETRACTIONS, state.getUserEmail());
                 if(versionScanningWentWell(scannedCapture)) {
                     throw new VersionScanningDidntGoWell();

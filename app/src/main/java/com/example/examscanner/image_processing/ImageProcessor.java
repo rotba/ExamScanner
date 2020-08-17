@@ -1515,7 +1515,7 @@ public class ImageProcessor implements ImageProcessingFacade {
     }
 
     @Override
-    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops, int[] selections, int[] ids, String examineeId) {
+    public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops, int[] selections, int[] ids, String examineeId, Boolean[] wasConflicted) {
         int[] leftsI = new int[lefts.length];
         int[] topsI = new int[tops.length];
         for (int i = 0; i < lefts.length; i++) {
@@ -1525,7 +1525,7 @@ public class ImageProcessor implements ImageProcessingFacade {
 //        return generateFeedbackBitmap(
 //                leftsI,topsI, bitmap, questionTemplate.width(), questionTemplate.height()
 //        );
-        return generateFeedbackBitmap(leftsI, topsI, selections, bitmap, questionTemplate.width(), questionTemplate.height(),  ids, examineeId);
+        return generateFeedbackBitmap(leftsI, topsI, selections, bitmap, questionTemplate.width(), questionTemplate.height(), ids, examineeId, wasConflicted);
     }
 
     @Override
@@ -1538,7 +1538,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         return ans;
     }
 
-    private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH,  int[] ids, String examineeId) {
+    private Bitmap generateFeedbackBitmap(int[] xs, int[] ys, int[] selecetions, Bitmap bm, int tempW, int tempH,  int[] ids, String examineeId, Boolean[] wasConflicted) {
         final float xScaleConcreteToOrig = (float) bm.getWidth() / (float) ORIGINAL_WIDTH;
         final float yScaleConcreteToOrig = (float) bm.getHeight() / (float) ORIGINAL_HEIGHT;
         Mat mat = matFromBitmap(bm);
@@ -1546,7 +1546,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         for (int i = 0; i < xs.length; i++) {
             final int scaledTempW = (int) (tempW * xScaleConcreteToOrig);
             final int scaledTempH = (int) (tempH * yScaleConcreteToOrig);
-            Selection selection = new Selection(selecetions[i], xs[i], ys[i], scaledTempW, scaledTempH);
+            Selection selection = new Selection(selecetions[i], xs[i], ys[i], scaledTempW, scaledTempH, wasConflicted[i]);
             Id id = new Id(ids[i], xs[i], ys[i], scaledTempW, scaledTempH);
             if(selection.getRep().equals("-1"))
 
@@ -1573,7 +1573,7 @@ public class ImageProcessor implements ImageProcessingFacade {
         for (int i = 0; i < xs.length; i++) {
             final int scaledTempW = (int) (tempW * xScaleConcreteToOrig);
             final int scaledTempH = (int) (tempH * yScaleConcreteToOrig);
-            Selection selection = new Selection(selecetions[i], xs[i], ys[i], scaledTempW, scaledTempH);
+            Selection selection = new Selection(selecetions[i], xs[i], ys[i], scaledTempW, scaledTempH, false);
             Imgproc.rectangle(
                     mat,
                     new Point(xs[i], ys[i]),

@@ -42,8 +42,8 @@ public class ImageProcessorStubFactory {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s) {
-                return real.createFeedbackImage(bitmap, lefts, tops, selections, ids, s);
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s, Boolean[] wasConflicted) {
+                return real.createFeedbackImage(bitmap, lefts, tops, selections, ids, s, wasConflicted);
             }
 
             @Override

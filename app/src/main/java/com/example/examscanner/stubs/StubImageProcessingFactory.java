@@ -65,7 +65,7 @@ public class StubImageProcessingFactory {
             }
 
             @Override
-            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s) {
+            public Bitmap createFeedbackImage(Bitmap bitmap, float[] lefts, float[] tops,int[] selections, int[] ids, String s, Boolean[] wasConflicted) {
                 return bmFact.getRandom();
             }
 

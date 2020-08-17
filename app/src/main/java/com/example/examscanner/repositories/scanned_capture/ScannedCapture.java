@@ -141,7 +141,7 @@ public class ScannedCapture {
         List<Answer> newAnswers = new ArrayList<>();
         for (Answer a:getAnswers()) {
             if(a instanceof ResolvedAnswer)
-                ((ResolvedAnswer) a).answerBeenConflictedThenResolved();
+                ((ResolvedAnswer) a).updateBeenConflictedThenResolved();
             newAnswers.add(a.commitResolution());
         }
         setAnswers(newAnswers);
