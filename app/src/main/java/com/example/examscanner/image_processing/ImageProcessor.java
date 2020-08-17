@@ -561,6 +561,7 @@ import org.opencv.imgproc.Imgproc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -1542,6 +1543,8 @@ public class ImageProcessor implements ImageProcessingFacade {
         final float xScaleConcreteToOrig = (float) bm.getWidth() / (float) ORIGINAL_WIDTH;
         final float yScaleConcreteToOrig = (float) bm.getHeight() / (float) ORIGINAL_HEIGHT;
         Mat mat = matFromBitmap(bm);
+        if(Arrays.stream(wasConflicted).anyMatch(b -> b == true))
+            Imgproc.putText(mat, "all conflicts resolved", new Point(0, mat.rows()/15), 5, 4.0, new Scalar(0,200,0), 3);
         Imgproc.putText(mat, examineeId, new Point(mat.cols()/2, mat.rows()/10), 5, 8.0, new Scalar(0,0,200), 3);
         for (int i = 0; i < xs.length; i++) {
             final int scaledTempW = (int) (tempW * xScaleConcreteToOrig);
