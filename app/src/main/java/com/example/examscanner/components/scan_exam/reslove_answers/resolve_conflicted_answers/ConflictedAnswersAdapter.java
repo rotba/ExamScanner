@@ -19,6 +19,7 @@ import com.example.examscanner.R;
 import com.example.examscanner.repositories.scanned_capture.ConflictedAnswer;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         Bitmap bm = scannedCapture.getValue().getBm();
         holder.answerFrameImageView.setImageBitmap(generateCAnswerFrame(ca, bm));
         holder.qNum.setText(String.format("Q#%d", ca.getAnsNum()));
+        holder.examineeNum.setText(String.format("student:%s", getExamineeNum()));
 //        resolutionMap.put(holder, new ResolutionSubscriber(position + 1,scannedCapture,ca, holder));
         resolutionSubscribers.add(new ResolutionSubscriber(position + 1,scannedCapture,ca, holder));
     }
@@ -89,6 +91,11 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         });
         return cas.get(position);
     }
+
+    private String getExamineeNum() {
+        return scannedCapture.getValue().getExamineeId();
+    }
+
 
 
     private Bitmap generateCAnswerFrame(ConflictedAnswer ca, Bitmap bm) {
@@ -119,11 +126,13 @@ class ConflictedAnswersAdapter extends RecyclerView.Adapter<ConflictedAnswersAda
         ImageView answerFrameImageView;
         TextView resolutionTextView;
         private TextView qNum;
+        private TextView examineeNum;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             answerFrameImageView = itemView.findViewById(R.id.imageView_conflicted_answer_frame);
             resolutionTextView = itemView.findViewById(R.id.textView_resolution);
             qNum = itemView.findViewById(R.id.textView_ra_qnum);
+            examineeNum = itemView.findViewById(R.id.textView_ra_enum);
 
         }
     }
