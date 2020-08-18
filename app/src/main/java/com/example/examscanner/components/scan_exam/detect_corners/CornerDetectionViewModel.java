@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.repositories.exam.Exam;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 import com.example.examscanner.repositories.Repository;
@@ -22,7 +23,9 @@ import java.util.List;
 
 public class CornerDetectionViewModel extends ViewModel {
     private static final String NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET = "NOT_SUPPORTING_EXAMINEE_ID_EXTRACTION_YET";
+    private static final String TAG = "ExamScanner";
     private static int QAD_counter = (int)(Math.random()*1000);
+//    private boolean isRefreshed;
     private List<MutableLiveData<ScannedCapture>> scannedCaptures;
     private MutableLiveData<Integer> mNumberOfCornerDetectedCaptures;
     private MutableLiveData<Integer> mNumberOfAnswersScannedCaptures;
@@ -32,6 +35,7 @@ public class CornerDetectionViewModel extends ViewModel {
     private List<Long> thisSessionProcessedCaptures;
     private String FOR_DEBUGGING_resultOfScanAnswers;
     private Exam exam;
+//    private boolean isRefreshed;
 
 
     public CornerDetectionViewModel(ImageProcessingFacade imageProcessor, Repository<ScannedCapture> scRepo , Exam exam) {
@@ -40,15 +44,27 @@ public class CornerDetectionViewModel extends ViewModel {
         this.imageProcessor = imageProcessor;
         this.exam = exam;
         scannedCaptures = new ArrayList<>();
-//        for (ScannedCapture sc : this.scRepo.get(c -> c.isAssocaitedWith(exam))) {
-//            scannedCaptures.add(new MutableLiveData<ScannedCapture>(sc));
-//        }
         mNumberOfCornerDetectedCaptures = new MutableLiveData<>(this.scannedCaptures.size());
         mNumberOfAnswersScannedCaptures = new MutableLiveData<>(0);
         thisSessionProcessedCaptures = new ArrayList<Long>();
+        refresh();
+//        this.isRefreshed = true;
+        ESLogeerFactory.getInstance().log(TAG, "constructor of capture view model called");
+
+    }
+    public void clear(){
+        while (!scannedCaptures.isEmpty()){
+            scannedCaptures.remove(0);
+        }
+//        isRefreshed=false;
+        ESLogeerFactory.getInstance().log(TAG, "cleared the capture view model");
     }
 
     public void refresh(){
+        if (!scannedCaptures.isEmpty()){
+            return;
+        }
+        ESLogeerFactory.getInstance().log(TAG, "refreshing the capture view model");
         scannedCaptures = new ArrayList<>();
         List<ScannedCapture> allSCs = this.scRepo.get(c -> c.isAssocaitedWith(exam));
         allSCs.sort(new Comparator<ScannedCapture>() {

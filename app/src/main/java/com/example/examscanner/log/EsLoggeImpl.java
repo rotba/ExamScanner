@@ -20,6 +20,11 @@ class EsLoggeImpl implements ESLogger {
     }
 
     @Override
+    public void logmem() {
+        remoteLogger.logmem();
+    }
+
+    @Override
     public void log(String tag, String format) {
         Log.d(tag, format);
         remoteLogger.log(tag, format);

@@ -2,11 +2,13 @@ package com.example.examscanner.components.scan_exam.detect_corners;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,6 +25,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
@@ -63,11 +66,53 @@ public class CornerDetectionFragment extends Fragment {
         onBackPressedCallback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
+                clearViewModel();
                 Navigation.findNavController(root).navigateUp();
+                ESLogeerFactory.getInstance().logmem();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), onBackPressedCallback);
+        ESLogeerFactory.getInstance().logmem();
         return root;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        setHasOptionsMenu(true);
+
+        requireActivity()
+                .getOnBackPressedDispatcher()
+                .addCallback(new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        ESLogeerFactory.getInstance().log(TAG, "CornerDetectionFragment::onAttach");
+                    }
+                });
+    {
+
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        ESLogeerFactory.getInstance().log(TAG, "CornerDetectionFragment::onOptionsItemSelected");
+        if (item.getItemId() == android.R.id.home) {
+            ESLogeerFactory.getInstance().log(TAG, "hope it's overriding the back pressed button");
+            clearViewModel();
+            requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            return true; // must return true to consume it here;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void clearViewModel() {
+        ESLogeerFactory.getInstance().log(TAG, "CornerDetectionFragment::clearViewModel");
+        if(cornerDetectionViewModel!=null){
+            cornerDetectionViewModel.clear();
+        }
     }
 
     @Override
@@ -97,6 +142,7 @@ public class CornerDetectionFragment extends Fragment {
                 ScannedCapture sc = cornerDetectionViewModel.getScannedCaptureById(cdcId).getValue();
                 cornerDetectionCapturesAdapter.notifyProcessBegun(adapterBasedOPosition);
                 processRequestDisposableContainer.add(generateApprovalCompletable(sc));
+                ESLogeerFactory.getInstance().logmem();
 //                waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
             }
         });
@@ -112,6 +158,8 @@ public class CornerDetectionFragment extends Fragment {
                 long versionId = sc.getVersion().getId();
                 Completable.fromAction(() -> cornerDetectionViewModel.delete(sc)).subscribeOn(Schedulers.io()).subscribe(()->{}, t ->{
                     ESLogeerFactory.getInstance().log(TAG, "delete scanned capture", t);});
+                clearViewModel();
+                ESLogeerFactory.getInstance().logmem();
 //                waitABitAndSwipeLeft(viewPager, cornerDetectionCapturesAdapter);
                 CornerDetectionFragmentDirections.ActionCornerDetectionFragmentToCaptureFragment2 action = CornerDetectionFragmentDirections.actionCornerDetectionFragmentToCaptureFragment2();
                 action.setExamId(cornerDetectionViewModel.getExamId());

@@ -62,7 +62,9 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
                 () -> {captureViewModel.postProcessCapture();}
         ).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(()->{}, t->{
+        .subscribe(()->{
+            ESLogeerFactory.getInstance().logmem();
+        }, t->{
             ESLogeerFactory.getInstance().log(TAG, MSG_PREF,t );});
         onEnd.cont();
     }

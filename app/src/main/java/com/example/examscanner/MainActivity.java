@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             createHome();
         }
+        ESLogeerFactory.getInstance().logmem();
     }
 
 

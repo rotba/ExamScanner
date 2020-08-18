@@ -457,6 +457,7 @@ public class CaptureFragment extends Fragment {
             }
         });
         unlockWindow();
+        ESLogeerFactory.getInstance().logmem();
     }
 
     private void onVersionNumbersRetrivedError(Throwable throwable) {
