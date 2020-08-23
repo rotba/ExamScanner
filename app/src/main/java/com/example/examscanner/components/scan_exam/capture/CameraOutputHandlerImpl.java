@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
+import com.example.examscanner.log.ESLogeerFactory;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -61,7 +62,8 @@ public class CameraOutputHandlerImpl implements CameraOutputHander {
                 () -> {captureViewModel.postProcessCapture();}
         ).subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(()->{}, t->Log.d(TAG, MSG_PREF,t ));
+        .subscribe(()->{}, t->{
+            ESLogeerFactory.getInstance().log(TAG, MSG_PREF,t );});
         onEnd.cont();
     }
     public interface OnBeggining {

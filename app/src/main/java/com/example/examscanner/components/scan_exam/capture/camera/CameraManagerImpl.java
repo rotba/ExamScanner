@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.capture.CameraOutputHandlerImpl;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.ByteArrayOutputStream;
@@ -61,7 +62,7 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
                 bindPreview(cameraProvider);
             } catch (ExecutionException | InterruptedException e) {
-                Log.d(TAG, "setUp()");
+                ESLogeerFactory.getInstance().log(TAG, "setUp()", e);
                 e.printStackTrace();
             }
         }, executor);
@@ -107,7 +108,7 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
                             @SuppressLint("RestrictedApi")
                             @Override
                             public void onError(@NonNull ImageCaptureException exception) {
-                                Log.d(TAG, "imageCapture.takePicture()");
+                                ESLogeerFactory.getInstance().log(TAG, "imageCapture.takePicture()", exception);
                                 CameraManagerImpl.this.onDestroy();
                                 exception.printStackTrace();
                             }
@@ -134,7 +135,7 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
 //                cameraProvider.shutdown();
                 Log.d(TAG, "CameraManagerImpl::onDestroy");
             } catch (ExecutionException | InterruptedException e) {
-                Log.d(TAG, "CameraManagerImpl::onDestroy ERROR", e);
+                ESLogeerFactory.getInstance().log(TAG, "CameraManagerImpl::onDestroy ERROR", e);
                 e.printStackTrace();
             }
         }, ContextCompat.getMainExecutor(activity));
@@ -147,7 +148,7 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
                 unbind(cameraProvider);
             } catch (ExecutionException | InterruptedException e) {
-                Log.d(TAG, "onPause()");
+                ESLogeerFactory.getInstance().log(TAG, "onPause()", e);
                 e.printStackTrace();
             }
         }, ContextCompat.getMainExecutor(activity));

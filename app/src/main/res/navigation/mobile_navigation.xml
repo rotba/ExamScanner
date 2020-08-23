@@ -163,5 +163,7 @@
     <fragment
         android:id="@+id/galleryFragment"
         android:name="com.example.examscanner.ui.gallery.GalleryFragment"
-        android:label="GalleryFragment" />
+        android:label="GalleryFragment"
+        tools:layout="@layout/fragment_gallery"
+        />
 </navigation>

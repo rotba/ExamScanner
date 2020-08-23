@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.examscanner.R;
+import com.example.examscanner.log.ESLogeerFactory;
 
 
 public class CornerDetectionCardFragment extends Fragment {
@@ -381,7 +382,7 @@ public class CornerDetectionCardFragment extends Fragment {
 //        }
 //    }
     private void handleError(String errorPerefix, Throwable t) {
-        Log.d(TAG, errorPerefix, t);
+        ESLogeerFactory.getInstance().log(TAG, errorPerefix, t);
         new androidx.appcompat.app.AlertDialog.Builder(getActivity())
                 .setTitle("An error occured")
                 .setMessage(String.format(

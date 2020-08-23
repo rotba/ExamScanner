@@ -85,6 +85,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.github.barteksc:android-pdf-viewer:2.0.3'
 
+    implementation 'com.google.firebase:firebase-analytics:17.4.4'
+
+    // Add the Firebase Crashlytics SDK.
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
+
     // androidTest
     androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
     androidTestImplementation 'androidx.test:core-ktx:' + rootProject.coreVersion
@@ -124,5 +129,6 @@ dependencies {
     debugImplementation 'androidx.test:monitor:' + rootProject.coreVersion
 
     apply plugin: "androidx.navigation.safeargs"
+    apply plugin: 'com.google.firebase.crashlytics'
     implementation project(path: ':openCVLibrary343')
 }

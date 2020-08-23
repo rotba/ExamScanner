@@ -91,4 +91,5 @@
     <string name="examinee_id_duplication">This examinee already exist. Check spreadsheet to resolve the conflict.</string>
     <string name="delete_exam">Delete</string>
     <string name="admin_exam_deleted">Exam deleted!</string>
+    <string name="crash">Crash</string>
 </resources>

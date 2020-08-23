@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.examscanner.R;
+import com.example.examscanner.log.ESLogeerFactory;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -69,6 +70,6 @@ public class ResolveAnswersFragment extends Fragment {
     }
 
     private void onModelViewCreatedFailure(Throwable throwable) {
-        Log.d(TAG, MSG_PREF, throwable);
+        ESLogeerFactory.getInstance().log(TAG, MSG_PREF, throwable);
     }
 }

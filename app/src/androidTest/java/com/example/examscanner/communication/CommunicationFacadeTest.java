@@ -13,6 +13,7 @@ import com.example.examscanner.communication.entities_interfaces.QuestionEntityI
 import com.example.examscanner.communication.entities_interfaces.SemiScannedCaptureEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
 import com.example.examscanner.components.scan_exam.BitmapsInstancesFactoryAndroidTest;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.remote.FirebaseDatabaseFactory;
@@ -55,13 +56,13 @@ public class CommunicationFacadeTest {
             TestObserver<FirebaseAuth> observer = new TestObserver<FirebaseAuth>(){
                 @Override
                 public void onNext(FirebaseAuth firebaseAuth) {
-                    Log.d(DEBUG_TAG, "logn succcess");
+                    ESLogeerFactory.getInstance().log(DEBUG_TAG, "logn succcess");
                     currentUserId = firebaseAuth.getUid();
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Log.d(DEBUG_TAG, "logn failed", t);
+                    ESLogeerFactory.getInstance().log(DEBUG_TAG, "logn failed", t);
                     Assert.fail();
                 }
             };
@@ -70,7 +71,7 @@ public class CommunicationFacadeTest {
             observer.assertComplete();
             DEFAULT_VERSION_BITMAP = BitmapsInstancesFactoryAndroidTest.getComp191_V1_ins_in1();
         }catch (Exception e){
-            Log.d(DEBUG_TAG, "failed setup", e);
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, "failed setup", e);
             Assert.fail();
         }
     }
@@ -81,7 +82,7 @@ public class CommunicationFacadeTest {
             AppDatabaseFactory.tearDownDb();
             RemoteDatabaseFacadeFactory.tearDown();
         }catch (Exception e){
-            Log.d(DEBUG_TAG, "failed teardown", e);
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, "failed teardown", e);
         }
     }
 
@@ -157,7 +158,7 @@ public class CommunicationFacadeTest {
             ExamContext e2 = setUpExamContext();
             assertTrue(oot.createNewScanExamSession(e1.eId) != oot.createNewScanExamSession(e1.eId));
         }catch ( Throwable t){
-            Log.d(DEBUG_TAG, "fail", t);
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, "fail", t);
             Assert.fail();
         }
     }
@@ -313,7 +314,7 @@ public class CommunicationFacadeTest {
             assertEquals(ei.getVersionId(),versionContext.vId);
             sleep(3000);
         }catch (Throwable t){
-            Log.d(DEBUG_TAG, "fail", t);
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, "fail", t);
             Assert.fail();
         }
     }

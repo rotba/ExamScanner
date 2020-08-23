@@ -38,6 +38,7 @@ import com.example.examscanner.R;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraManager;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraMangerFactory;
 import com.example.examscanner.components.scan_exam.capture.camera.CameraOutputHander;
+import com.example.examscanner.log.ESLogeerFactory;
 
 import org.reactivestreams.Subscription;
 
@@ -151,7 +152,7 @@ public class CaptureFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void onViewModelCreated() {
-        Log.d(TAG, "onViewModelCreated");
+        ESLogeerFactory.getInstance().log(TAG, "onViewModelCreated");
         captureViewModel.getNumOfTotalCaptures().observe(getActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer totalCaptures) {
@@ -201,14 +202,14 @@ public class CaptureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!captureViewModel.isHoldingValidExamineeId() || (examineeEditText.getText().length()==0)){
-                    Log.d(DEBUG_TAG, "from Capture fragment "+ !captureViewModel.isHoldingValidExamineeId() + " _ " + (examineeEditText.getText().length()==0));
-                    Log.d(DEBUG_TAG, "from Capture fragment 2"+ examineeEditText.getText().toString());
+                    ESLogeerFactory.getInstance().log(DEBUG_TAG, "from Capture fragment "+ !captureViewModel.isHoldingValidExamineeId() + " _ " + (examineeEditText.getText().length()==0));
+                    ESLogeerFactory.getInstance().log(DEBUG_TAG, "from Capture fragment 2"+ examineeEditText.getText().toString());
                     if(!consumeExamineeIdOrHandleIfInvalid(examineeEditText.getText().toString())){
                         return;
                     }
                 }
                 if(!captureViewModel.isHoldingVersion() && versionIsChosen()){
-                    Log.d(DEBUG_TAG, "from Capture fragment version "+ !captureViewModel.isHoldingVersion() + " _ " + versionIsChosen());
+                    ESLogeerFactory.getInstance().log(DEBUG_TAG, "from Capture fragment version "+ !captureViewModel.isHoldingVersion() + " _ " + versionIsChosen());
                     if(!consumeVersionIdOrHandleIfInvalid(versionSpinner.getSelectedItem().toString())){
                         return;
                     }
@@ -291,7 +292,7 @@ public class CaptureFragment extends Fragment {
         examineeEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    Log.d(DEBUG_TAG, "done predd on examinee id edittext");
+                    ESLogeerFactory.getInstance().log(DEBUG_TAG, "done predd on examinee id edittext");
                     final String examineeID = examineeEditText.getText().toString();
                     consumeExamineeIdOrHandleIfInvalid(examineeID);
                     return true;
@@ -399,7 +400,7 @@ public class CaptureFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "CaptureFragment::onDestroy");
+        ESLogeerFactory.getInstance().log(TAG, "CaptureFragment::onDestroy");
         cameraManager.onDestroy();
         super.onDestroyView();
     }
@@ -408,7 +409,7 @@ public class CaptureFragment extends Fragment {
 
     @Override
     public void onPause() {
-        Log.d(TAG, "CaptureFragment::onPause");
+        ESLogeerFactory.getInstance().log(TAG, "CaptureFragment::onPause");
         super.onPause();
 //        cameraManager.onPause();
     }
@@ -464,7 +465,7 @@ public class CaptureFragment extends Fragment {
     }
 
     private void handleError(String errorPerefix, Throwable t) {
-        Log.d(TAG, errorPerefix, t);
+        ESLogeerFactory.getInstance().log(TAG, errorPerefix, t);
         try {
             new AlertDialog.Builder(getActivity())
                     .setTitle("An error occured")
@@ -487,7 +488,7 @@ public class CaptureFragment extends Fragment {
                     })
                     .show();
         } catch (Exception e) {
-            Log.d(TAG, "Espresso issues");
+            ESLogeerFactory.getInstance().log(TAG, "Espresso issues",e);
         }
         t.printStackTrace();
     }

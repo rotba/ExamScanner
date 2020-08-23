@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.examscanner.authentication.state.State;
 import com.example.examscanner.image_processing.ImageProcessingFacade;
 import com.example.examscanner.image_processing.ScanAnswersConsumer;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.repositories.Repository;
 import com.example.examscanner.repositories.RepositoryException;
 import com.example.examscanner.repositories.exam.Exam;
@@ -84,7 +85,7 @@ public class CreateExamModelView extends ViewModel {
                     )
             );
         } catch (RepositoryException e) {
-            Log.d("ExamScanner", "createExam failed and not handled. furture work", e);
+            ESLogeerFactory.getInstance().log("ExamScanner", "createExam failed and not handled. furture work", e);
             e.printStackTrace();
             throw new RuntimeException(e);
         }

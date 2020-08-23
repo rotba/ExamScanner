@@ -15,18 +15,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.examscanner.communication.ContextProvider;
-import com.example.examscanner.image_processing.ImageProcessingFactory;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
-import com.example.examscanner.stubs.StubImageProcessingFactory;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.navigation.NavigationView;
 
 import org.opencv.android.OpenCVLoader;
 
-import io.reactivex.Completable;
-import io.reactivex.schedulers.Schedulers;
-
 public class MainActivity extends AppCompatActivity {
+
 
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 0;
@@ -95,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 viewModel.authenticate();
                 createHome();
             } else {
-                Log.d(
+                ESLogeerFactory.getInstance().log(
                         TAG,
                         String.format(
                                 "%s\n"+

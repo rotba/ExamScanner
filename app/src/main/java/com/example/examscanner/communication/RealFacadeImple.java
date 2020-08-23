@@ -23,6 +23,7 @@ import com.example.examscanner.communication.tasks.IdsGenerator;
 import com.example.examscanner.communication.tasks.Task;
 import com.example.examscanner.communication.tasks.TasksManager;
 import com.example.examscanner.communication.tasks.TasksManagerFactory;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.persistence.local.AppDatabase;
 import com.example.examscanner.persistence.local.AppDatabaseFactory;
 import com.example.examscanner.persistence.local.entities.Exam;
@@ -112,12 +113,13 @@ public class RealFacadeImple implements CommunicationFacade {
         try {
             String remoteId = remoteDb.createExam(courseName, url, year, term, semester, managerId, graders, false, sessionId, numberOfQuestions, uploaded, numOfVer)
                     .blockingFirst();
-            Log.d(DEBUG_TAG, String.format("created exam %s", remoteId));
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, String.format("created exam %s", remoteId));
             long ans = db.getExamDao().insert(new Exam(courseName, term, year, url, semester, sessionId, remoteId, numberOfQuestions, managerId, graders, uploaded, numOfVer, true));
-            Log.d(TAG, String.format("examid %d was created", ans));
+            ESLogeerFactory.getInstance().log(TAG, String.format("examid %d was created", ans));
             return ans;
         } catch (Throwable e) {
             /*TODO - delete exam*/
+            ESLogeerFactory.getInstance().log(TAG,"nom",e);
             throw new CommunicationException(e);
         }
     }
@@ -267,7 +269,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleExamineeIdSuccessInsertion(String result, ExamineeSolution es, String remoteversionId, int[][] answers, float grade, String remoetExamId, Bitmap orig) {
-        Log.d(TAG, String.format("inserted the eaminieeid %s to the eaxminee ids table. solution local id is %d", result, es.getId()));
+        ESLogeerFactory.getInstance().log(TAG, String.format("inserted the eaminieeid %s to the eaxminee ids table. solution local id is %d", result, es.getId()));
         String examineeId = es.getExamineeId();
         if (result == null) {
             es.setExamineeIdOccupied(true);
@@ -280,16 +282,17 @@ public class RealFacadeImple implements CommunicationFacade {
         String bitmapPath = PathsGenerator.genExamineeSolution(remoetExamId, examineeId);
         String origBitmapPath = PathsGenerator.genExamineeSolutionOrig(remoetExamId, examineeId);
         try {
-            Log.d(TAG, String.format("started storring the bitmap of es.getId():%d", es.getId()));
+            ESLogeerFactory.getInstance().log(TAG, String.format("started storring the bitmap of es.getId():%d", es.getId()));
             rfm.store(bitmapPath, toByteArray(fm.get(es.getBitmapPath()))).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                     .subscribe(() -> {
                                 rfm.store(origBitmapPath, toByteArray(orig)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                                         .subscribe(
                                                 () -> {
-                                                    Log.d(TAG, String.format("done storring the bitmap of es.getId():%d", es.getId()));
+                                                    ESLogeerFactory.getInstance().log(TAG, String.format("done storring the bitmap of es.getId():%d", es.getId()));
                                                     handleSolutionBitmapStorageSuccess(bitmapPath, origBitmapPath, es, finalExamineeID, remoteversionId, answers, grade);
                                                 },
                                                 throwable -> {
+                                                    ESLogeerFactory.getInstance().log(TAG,"nom",throwable);
                                                     throw new CommunicationException(throwable);
                                                 }
                                         );
@@ -305,10 +308,10 @@ public class RealFacadeImple implements CommunicationFacade {
                 url -> {
                     rfm.createUrl(origBitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
                             urlOrig -> {
-                                Log.d(TAG, String.format("created the url of es.getId():%d", es.getId()));
+                                ESLogeerFactory.getInstance().log(TAG, String.format("created the url of es.getId():%d", es.getId()));
                                 remoteDb.offlineInsertExamineeSolutionTransaction(finalExamineeID, remoteversionId, answers, grade, url, urlOrig, false).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
                                         s -> {
-                                            Log.d(TAG, String.format("done inserting es.getId():%d as %s", es.getId(), s));
+                                            ESLogeerFactory.getInstance().log(TAG, String.format("done inserting es.getId():%d as %s", es.getId(), s));
                                             es.setRemoteId(s);
                                             db.getExamineeSolutionDao().update(es);
                                         }
@@ -501,14 +504,14 @@ public class RealFacadeImple implements CommunicationFacade {
                                                 }
                                             },
                                             throwable -> {
-                                                Log.d(TAG, "", throwable);
+                                                ESLogeerFactory.getInstance().log(TAG, "problems", throwable);
                                                 throwable.printStackTrace();
                                                 throw new CommunicationException(throwable);
                                             });
 
                         },
                         throwable -> {
-                            Log.d(TAG, String.format("rfm.get(rv.bitmapPath=%s)",rv.bitmapPath), throwable);
+                            ESLogeerFactory.getInstance().log(TAG, String.format("rfm.get(rv.bitmapPath=%s)",rv.bitmapPath), throwable);
                             throwable.printStackTrace();
                             throw new CommunicationException(throwable);
                         }
@@ -546,7 +549,7 @@ public class RealFacadeImple implements CommunicationFacade {
         try {
             remoteId = db.getExamDao().getById(id).getRemoteId();
         } catch (Throwable e) {
-            Log.d(TAG, "", e);
+            ESLogeerFactory.getInstance().log(TAG, "nom", e);
             e.printStackTrace();
             throw new MyAssertionError("assert updateExam::db.getExamDao().getById(id).getRemoteId()!=null violated", e);
         }
@@ -600,14 +603,14 @@ public class RealFacadeImple implements CommunicationFacade {
                         db.getQuestionDao().update(q);
                         notifyVersionElementUploaded(q.getVerId());
                     }, throwable -> {
-                        Log.d(TAG, "", throwable);
+                        ESLogeerFactory.getInstance().log(TAG, "", throwable);
                         throwable.printStackTrace();
                         throw new CommunicationException(throwable);
                     });
             return ret;
         } catch (Throwable t) {
             /*TODO - delete exam*/
-            Log.d(TAG, "", t);
+            ESLogeerFactory.getInstance().log(TAG, "nom", t);
             t.printStackTrace();
             throw new CommunicationException(t);
         }
@@ -662,7 +665,7 @@ public class RealFacadeImple implements CommunicationFacade {
                 }
             }
         } catch (NullPointerException np) {
-            Log.d(DEBUG_TAG, String.format("v.id:%d", v.getId()), np);
+            ESLogeerFactory.getInstance().log(DEBUG_TAG, String.format("v.id:%d", v.getId()), np);
             throw np;
         }
 
@@ -1074,6 +1077,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public void deleteExamineeSolution(long id) {
+        tasksManager.get(IdsGenerator.forSolution(id)).cancelTask();
         ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
         String remoteId = es.getRemoteId();
         removeExamineeSolutionFromCache(id);
@@ -1227,7 +1231,7 @@ public class RealFacadeImple implements CommunicationFacade {
                         db.getVersionDao().update(v);
 
                     }, throwable -> {
-                        Log.d(TAG, "", throwable);
+                        ESLogeerFactory.getInstance().log(TAG, "nom", throwable);
                         throwable.printStackTrace();
                         throw new CommunicationException(throwable);
                     });
@@ -1244,7 +1248,7 @@ public class RealFacadeImple implements CommunicationFacade {
                         db.getVersionDao().update(v);
                         notifyVersionElementUploaded(v.getId());
                     }, throwable -> {
-                        Log.d(TAG, String.format("failed uploading %s version bitmap", version._getBitmapPath()), throwable);
+                        ESLogeerFactory.getInstance().log(TAG, String.format("failed uploading %s version bitmap", version._getBitmapPath()), throwable);
                         throwable.printStackTrace();
                         throw new CommunicationException(throwable);
                     });
@@ -1252,7 +1256,7 @@ public class RealFacadeImple implements CommunicationFacade {
             return ans;
         } catch (Throwable t) {
             /*TODO - delete exam*/
-            Log.d(TAG, "", t);
+            ESLogeerFactory.getInstance().log(TAG, "", t);
             t.printStackTrace();
             throw new CommunicationException(t);
         }
@@ -1326,7 +1330,7 @@ public class RealFacadeImple implements CommunicationFacade {
                     remoteDb.insertReserevedExamineeId(es.getRemoteId(), reservedExamineeId);
                 },
                 throwable -> {
-                    Log.d(TAG, "", throwable);
+                    ESLogeerFactory.getInstance().log(TAG, "", throwable);
                     throwable.printStackTrace();
                     throw new CommunicationException(throwable);
                 }
@@ -1343,69 +1347,75 @@ public class RealFacadeImple implements CommunicationFacade {
         throwCommunicationExceptionWhenNull(v, Version.class, String.format("id:%d", es.getVersionId()));
         Exam e = db.getExamDao().getById(v.getExamId());
         throwCommunicationExceptionWhenNull(e, Exam.class, String.format("id:%d", v.getExamId()));
-        Log.d(TAG, String.format("started storring the bitmaps of es.getId():%d", es.getId()));
-        String bitmapPath = PathsGenerator.genExamineeSolution(e.getRemoteId(), es.getRemoteId());
-        String origBitmapPath = PathsGenerator.genExamineeSolutionOrig(e.getRemoteId(), es.getRemoteId());
-        rfm.store(bitmapPath, toByteArray(bm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-                .subscribe(() -> {
-                            Log.d(TAG, String.format("done storing the bitmap es.getId():%d", es.getId()));
-                            rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-                                    url -> {
-                                        ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
-                                        Log.d(TAG, String.format("done creating the solution bitmap url es.getId():%d", _es.getId()));
-                                        remoteDb.setSolutionBitmapUrl(url, _es.getRemoteId());
-                                        bitmapUploaded[0].set(true);
-                                        Log.d(DEBUG_TAG, "bitmap uploaded");
-                                        if(bitmapUploaded[0].get() && origBitmapUploaded[0].get()){
-                                            Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
-                                            _es.setBitmapUploaded(true);
-                                            notifyExamineeSolution(_es);
-                                        }
+        if(!tasksManager.get(IdsGenerator.forSolution(id)).isCanceled()) {
+            Log.d(TAG, String.format("started storring the bitmaps of es.getId():%d", es.getId()));
+            String bitmapPath = PathsGenerator.genExamineeSolution(e.getRemoteId(), es.getRemoteId());
+            String origBitmapPath = PathsGenerator.genExamineeSolutionOrig(e.getRemoteId(), es.getRemoteId());
+            rfm.store(bitmapPath, toByteArray(bm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+                    .subscribe(() -> {
+                                Log.d(TAG, String.format("done storing the bitmap es.getId():%d", es.getId()));
+                                rfm.createUrl(bitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+                                        url -> {
+                                            if (!tasksManager.get(IdsGenerator.forSolution(id)).isCanceled()) {
+                                                ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
+                                                Log.d(TAG, String.format("done creating the solution bitmap url es.getId():%d", _es.getId()));
+                                                remoteDb.setSolutionBitmapUrl(url, _es.getRemoteId());
+                                                bitmapUploaded[0].set(true);
+                                                Log.d(DEBUG_TAG, "bitmap uploaded");
+                                                if (bitmapUploaded[0].get() && origBitmapUploaded[0].get()) {
+                                                    Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
+                                                    _es.setBitmapUploaded(true);
+                                                    notifyExamineeSolution(_es);
+                                                }
+                                            }
 
-                                    },
-                                    throwable -> {
-                                        Log.d(TAG, "failed creating url for bitmap of examinee solution", throwable);
-                                        throwable.printStackTrace();
-                                        throw new CommunicationException(throwable);
-                                    }
-                            );
-                        },
-                        throwable -> {
-                            Log.d(TAG, "failed storing orig bitmap", throwable);
-                            throwable.printStackTrace();
-                            throw new CommunicationException(throwable);
-                        }
-                );
-        rfm.store(origBitmapPath, toByteArray(origBm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-                .subscribe(
-                        () -> {
-                            Log.d(TAG, String.format("done storring the orig bitmap of es.getId():%d", es.getId()));
-                            rfm.createUrl(origBitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-                                    url -> {
-                                        ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
-                                        remoteDb.setOriginialBitmapUrl(url, _es.getRemoteId());
-                                        Log.d(TAG, String.format("done creating the orig bitmap url es.getId():%d", _es.getId()));
-                                        origBitmapUploaded[0].set(true);
-                                        Log.d(DEBUG_TAG, "orig bitmap uploaded");
-                                        if(bitmapUploaded[0].get() && origBitmapUploaded[0].get()){
-                                            Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
-                                            _es.setBitmapUploaded(true);
-                                            notifyExamineeSolution(_es);
+                                        },
+                                        throwable -> {
+                                            ESLogeerFactory.getInstance().log(TAG, "failed creating url for bitmap of examinee solution", throwable);
+                                            throwable.printStackTrace();
+                                            throw new CommunicationException(throwable);
                                         }
-                                    },
-                                    throwable -> {
-                                        Log.d(TAG, "failed creating url for orig bitmap", throwable);
-                                        throwable.printStackTrace();
-                                        throw new CommunicationException(throwable);
-                                    }
-                            );
-                        },
-                        throwable -> {
-                            Log.d(TAG, "failed storing orig bitmap", throwable);
-                            throwable.printStackTrace();
-                            throw new CommunicationException(throwable);
-                        }
-                );
+                                );
+                            },
+                            throwable -> {
+                                ESLogeerFactory.getInstance().log(TAG, "failed storing orig bitmap", throwable);
+                                throwable.printStackTrace();
+                                throw new CommunicationException(throwable);
+                            }
+                    );
+            rfm.store(origBitmapPath, toByteArray(origBm)).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+                    .subscribe(
+                            () -> {
+                                Log.d(TAG, String.format("done storring the orig bitmap of es.getId():%d", es.getId()));
+                                rfm.createUrl(origBitmapPath).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+                                        url -> {
+                                            if (!tasksManager.get(IdsGenerator.forSolution(id)).isCanceled()) {
+                                                ExamineeSolution _es = db.getExamineeSolutionDao().getById(es.getId());
+                                                remoteDb.setOriginialBitmapUrl(url, _es.getRemoteId());
+                                                Log.d(TAG, String.format("done creating the orig bitmap url es.getId():%d", _es.getId()));
+                                                origBitmapUploaded[0].set(true);
+                                                Log.d(DEBUG_TAG, "orig bitmap uploaded");
+                                                if (bitmapUploaded[0].get() && origBitmapUploaded[0].get()) {
+                                                    Log.d(DEBUG_TAG, "both bitmap uploaded. motifying");
+                                                    _es.setBitmapUploaded(true);
+                                                    notifyExamineeSolution(_es);
+                                                }
+                                            }
+                                        },
+                                        throwable -> {
+                                            ESLogeerFactory.getInstance().log(TAG, "failed creating url for orig bitmap", throwable);
+                                            throwable.printStackTrace();
+                                            throw new CommunicationException(throwable);
+                                        }
+                                );
+                            },
+                            throwable -> {
+                                ESLogeerFactory.getInstance().log(TAG, "failed storing orig bitmap", throwable);
+                                throwable.printStackTrace();
+                                throw new CommunicationException(throwable);
+                            }
+                    );
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

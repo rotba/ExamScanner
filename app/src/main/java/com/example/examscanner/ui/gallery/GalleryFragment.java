@@ -60,6 +60,7 @@ public class GalleryFragment extends Fragment {
                 v -> AppDatabaseFactory.getInstance().clearAllTables()
         );
         ((Button)root.findViewById(R.id.button_galley_logout)).setOnClickListener(this::logout);
+        ((Button)root.findViewById(R.id.button_crash)).setOnClickListener(v -> {throw new RuntimeException("Force Crash");});
         return root;
     }
 
