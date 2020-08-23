@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.persistence.remote.entities.Exam;
 import com.example.examscanner.persistence.remote.entities.ExamineeSolution;
 import com.example.examscanner.persistence.remote.entities.Grader;
@@ -406,7 +407,7 @@ class RemoteDatabaseFacadeImpl implements RemoteDatabaseFacade {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                ESLogeerFactory.getInstance().log(TAG, "nom", databaseError.toException());
             }
         });
     }
