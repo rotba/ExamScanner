@@ -34,6 +34,7 @@ public class CaptureViewModel extends ViewModel {
     private final String TAG = "ExamScanner";
     private MutableLiveData<Integer> mNumOfTotalCaptures;
     private MutableLiveData<Integer> mNumOfProcessedCaptures;
+    private MutableLiveData<String> mLastExamineeId;
     private Queue<Capture> unProcessedCaptures;
     private Repository<ScannedCapture> scRepo;
     private MutableLiveData<Version> mVersion;
@@ -65,9 +66,19 @@ public class CaptureViewModel extends ViewModel {
         exam.observeExamineeIds()
         .subscribeOn(Schedulers.io())
         .subscribe(this::consumeExamineeId);
-        thereAreScannedCaptures = !scRepo.get(sc->true).isEmpty();
+        final List<ScannedCapture> scannedCaptures = scRepo.get(sc -> true);
+        thereAreScannedCaptures = !scannedCaptures.isEmpty();
+        if(thereAreScannedCaptures){
+            mLastExamineeId = new MutableLiveData<>(scannedCaptures.get(0).getExamineeId());
+        }else{
+            if(mLastExamineeId == null){
+                mLastExamineeId = new MutableLiveData<>();
+            }
+        }
         this.state = state;
     }
+
+
 
     private void consumeExamineeId(String s) {
         synchronized (examineeIds){
@@ -128,6 +139,7 @@ ESLogeerFactory.getInstance().log(TAG, "starting creating ScannedCapture");
                                     -1, bitmap,capture.getBitmap(), exam.getNumOfQuestions(), numOfAnswersDetected, answersIds, lefts, tops, rights, bottoms, selections, version, capture.getExamineeId(), state.getUserEmail()
 
                             ));
+                            updateLastExamineeIdChecked(capture.getExamineeId());
                         }
                     },
                     version.getRealtiveLefts(),
@@ -248,5 +260,16 @@ ESLogeerFactory.getInstance().log(TAG, "starting creating ScannedCapture");
 
     public void clearVersion() {
         mVersion.postValue(null);
+    }
+
+    private void updateLastExamineeIdChecked(String examineeId) {
+        if (mLastExamineeId == null){
+            mLastExamineeId = new MutableLiveData<>();
+        }
+        mLastExamineeId.postValue(examineeId);
+    }
+
+    public MutableLiveData<String> getLastExamineeId() {
+        return mLastExamineeId;
     }
 }

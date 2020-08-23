@@ -192,6 +192,7 @@ public class CornerDetectionCardFragment extends Fragment {
         pb.setVisibility(View.INVISIBLE);
         onBackPressedCallback.setEnabled(true);
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        int x= 1;
     }
 
 //    private void onVersionNumbersRetrived(int[] versionNumbers) {

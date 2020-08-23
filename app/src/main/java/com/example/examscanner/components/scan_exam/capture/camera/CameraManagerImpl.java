@@ -72,7 +72,8 @@ class CameraManagerImpl implements CameraXConfig.Provider,CameraManager{
         Preview preview = new Preview.Builder()
                 .setTargetName("Preview")
                 .build();
-        PreviewView previewView = (PreviewView)root.findViewById(R.id.preview_view);
+        PreviewView previewView = (PreviewView)root.findViewById(R.id
+                .preview_view);
         preview.setSurfaceProvider(previewView.getPreviewSurfaceProvider());
         imageCapture =
                 new ImageCapture.Builder()

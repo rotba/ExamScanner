@@ -76,6 +76,7 @@ public class CaptureFragment extends Fragment {
     private String theEmptyChoice;
     private OnBackPressedCallback onBackPressedCallback;
     private Button nextStepButton;
+    private TextView viewById;
     //    private Msg2BitmapMapper m2bmMapper;
 
 
@@ -111,6 +112,8 @@ public class CaptureFragment extends Fragment {
         });
         lockWindow();
         requestCamera();
+        viewById = (TextView) root.findViewById(R.id.textView_capture_last_eid_checked);
+        viewById.setText("");
         return root;
     }
     private void lockWindow(){
@@ -191,7 +194,6 @@ public class CaptureFragment extends Fragment {
                                 if(pb == null) return;
                                 pb.setVisibility(View.INVISIBLE);
                             }
-
                         },
                         (pref, t) -> handleError(pref, t)
                 );
@@ -310,10 +312,25 @@ public class CaptureFragment extends Fragment {
                     setText(examineeId);
         }
         pb.setVisibility(View.VISIBLE);
+        captureViewModel.getLastExamineeId().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                updateLastCheckedExaminee(s);
+            }
+        });
+        updateLastCheckedExaminee(captureViewModel.getLastExamineeId().getValue());
         Observable.fromCallable(() -> captureViewModel.getVersionNumbers())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onVersionNumbersRetrived, this::onVersionNumbersRetrivedError);
+    }
+
+    protected void updateLastCheckedExaminee(String s) {
+        if(s == null || s.equals("") ){
+            return;
+        }else{
+            viewById.setText(String.format("Last examinee checked: %s", s));
+        }
     }
 
     private boolean consumeVersionIdOrHandleIfInvalid(String toString) {
@@ -457,6 +474,7 @@ public class CaptureFragment extends Fragment {
             }
         });
         unlockWindow();
+        ESLogeerFactory.getInstance().logmem();
     }
 
     private void onVersionNumbersRetrivedError(Throwable throwable) {
