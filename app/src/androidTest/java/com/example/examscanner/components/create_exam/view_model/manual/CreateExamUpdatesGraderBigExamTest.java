@@ -110,7 +110,7 @@ public class CreateExamUpdatesGraderBigExamTest {
             out.holdVersionBitmap(pair.second.get());
             out.addVersion();
         }
-        out.holdExamUrl("https://docs.google.com/spreadsheets/d/1ByBHLwEsRbl6nSvM82CILYmwO_p1l1Z-NYrfcXOiqfk/edit?usp=sharing");
+        out.holdExamUrl("https://docs.google.com/spreadsheets/d/16qSAOL4RxBzbfvtIkuB8NHWlGWcRCoBLP6vp9Vyk970/edit?usp=sharing");
         out.create("CreateExamUpdatesGraderTest_courseName","A","Fall","2020");
         List<Exam> exams = examRepository.get((e)->true);
         assert 1 == exams.size();

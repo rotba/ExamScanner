@@ -21,6 +21,7 @@ import com.example.examscanner.repositories.exam.Version;
 import com.example.examscanner.repositories.scanned_capture.ScannedCapture;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -69,7 +70,15 @@ public class CaptureViewModel extends ViewModel {
         final List<ScannedCapture> scannedCaptures = scRepo.get(sc -> true);
         thereAreScannedCaptures = !scannedCaptures.isEmpty();
         if(thereAreScannedCaptures){
-            mLastExamineeId = new MutableLiveData<>(scannedCaptures.get(0).getExamineeId());
+            scannedCaptures.sort(
+                    new Comparator<ScannedCapture>() {
+                        @Override
+                        public int compare(ScannedCapture o1, ScannedCapture o2) {
+                            return new Integer(o1.getId()).compareTo(o2.getId());
+                        }
+                    }
+            );
+            mLastExamineeId = new MutableLiveData<>(scannedCaptures.get(scannedCaptures.size()-1).getExamineeId());
         }else{
             if(mLastExamineeId == null){
                 mLastExamineeId = new MutableLiveData<>();

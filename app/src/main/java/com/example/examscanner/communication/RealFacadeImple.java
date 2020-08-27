@@ -887,6 +887,7 @@ public class RealFacadeImple implements CommunicationFacade {
                 },
                 () -> {
                     ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
+                    throwCommunicationExceptionWhenNull(es, ExamineeSolution.class, "should exist");
                     if (es.getRemoteId() == null) {
                         throw new CommunicationException("the examinee id should ve stored. nothing to do");
                     }
@@ -1067,6 +1068,7 @@ public class RealFacadeImple implements CommunicationFacade {
 
     @Override
     public void removeExamineeSolutionFromCache(long id) {
+        ESLogeerFactory.getInstance().log(TAG, String.format("Removing examinee soultion:%d from cache", id),new Exception());
         ExamineeSolution es = db.getExamineeSolutionDao().getById(id);
         if (es == null) {
             throw new CommunicationException(String.format("ExamineeSolution %d should be in db", id));
