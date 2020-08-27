@@ -253,6 +253,7 @@ public class CornerDetectionFragment extends Fragment {
 //            cornerDetectionViewModel.align(cdc);
 //            /* TODO : replace -1 with version num */
 //            cornerDetectionViewModel.scanAnswers(cdc);
+            ESLogeerFactory.getInstance().log(TAG, String.format("approving %d scanned capture", sc.getId()), new Exception());
             cornerDetectionViewModel.approve(sc);
  //           cornerDetectionViewModel.remove(sc);
             return "Done";

@@ -29,4 +29,8 @@ public class CaptureAndDetectStressTest extends CaptureAndDetectCornersIntegrati
     public void testTake5() {
         super.testTake5();
     }
+    @Test
+    public void testQuickRetake() {
+        super.testQuickRetake();
+    }
 }

@@ -957,7 +957,7 @@ public class RealFacadeImple implements CommunicationFacade {
         if (o == null) {
             throw new CommunicationException(
                     String.format(
-                            "The entity associated with %s ahould not be null\nmsg:%s",
+                            "The entity associated with %s should not be null\nmsg:%s",
                             c.toString(),
                             msg
                     )

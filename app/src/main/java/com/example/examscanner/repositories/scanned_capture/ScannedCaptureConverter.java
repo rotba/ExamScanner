@@ -6,6 +6,7 @@ import com.example.examscanner.communication.CommunicationFacade;
 import com.example.examscanner.communication.entities_interfaces.ExamineeAnswerEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.ExamineeSolutionsEntityInterface;
 import com.example.examscanner.communication.entities_interfaces.VersionEntityInterface;
+import com.example.examscanner.log.ESLogeerFactory;
 import com.example.examscanner.repositories.Converter;
 import com.example.examscanner.repositories.exam.ExamConverter;
 import com.example.examscanner.repositories.exam.Version;
@@ -18,10 +19,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 class ScannedCaptureConverter implements Converter<ExamineeSolutionsEntityInterface, ScannedCapture> {
+    private final String TAG = "ExamScanner";
     private CommunicationFacade comFacade;
+    private OnApprovalCont approvalCont;
 
     public ScannedCaptureConverter(CommunicationFacade comFacade) {
+
         this.comFacade = comFacade;
+        approvalCont = ()-> ESLogeerFactory.getInstance().log(TAG, "empty approval cont");
     }
 
 
@@ -42,7 +47,7 @@ class ScannedCaptureConverter implements Converter<ExamineeSolutionsEntityInterf
                 ei.getExaimneeId(),
                 ei.getExamieeIdIsOccupiedByAnotherSolution(),
                 ei.getIsValid(),
-                g -> comFacade.approveSolutionAndStats((int)ei.getId(), g)
+                g -> {comFacade.approveSolutionAndStats((int)ei.getId(), g);approvalCont.cont();}
         );
     }
 
@@ -110,5 +115,10 @@ class ScannedCaptureConverter implements Converter<ExamineeSolutionsEntityInterf
 
     private static float toRel(int param, int dimLength){
         return ((float) param)/((float)dimLength);
+    }
+
+
+    public void onApprove(OnApprovalCont cont) {
+        this.approvalCont = cont;
     }
 }

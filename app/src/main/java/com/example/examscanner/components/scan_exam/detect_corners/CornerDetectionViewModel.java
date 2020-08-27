@@ -64,9 +64,9 @@ public class CornerDetectionViewModel extends ViewModel {
     }
 
     public void refresh(){
-        if (!scannedCaptures.isEmpty()){
-            return;
-        }
+//        if (!scannedCaptures.isEmpty()){
+//            return;
+//        }
         ESLogeerFactory.getInstance().log(TAG, "refreshing the capture view model");
         scannedCaptures = new ArrayList<>();
         List<ScannedCapture> allSCs = this.scRepo.get(c -> c.isAssocaitedWith(exam));

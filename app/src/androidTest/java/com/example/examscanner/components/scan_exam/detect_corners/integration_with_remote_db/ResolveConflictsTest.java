@@ -158,6 +158,8 @@ public class ResolveConflictsTest extends StateFullTest {
     @Test
     public void testConflictAndCheckedAMountUpdatesUponResolution() {
         onView(withId(R.id.button_move_to_detect_corners)).perform(click());
+        Utils.sleepScanAnswersTime();
+        Utils.sleepScanAnswersTime();
         onView(withText("Resolve")).perform(click());
         resolveAndSwipe("4");
         Utils.sleepSwipingTime();

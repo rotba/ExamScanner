@@ -21,6 +21,7 @@ import java.util.function.Predicate;
 public class ScannedCaptureRepository implements Repository<ScannedCapture> {
 
     private static ScannedCaptureRepository instance;
+    private boolean dirty;
     private int currAvailableId = 0;
     private ScannedCaptureConverter converter;
     private CommunicationFacade comFacade;
@@ -49,6 +50,10 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
         this.converter = converter;
         this.comFacade = comFacade;
         cache = new ArrayList<>();
+        this.dirty = true;
+        cache = get(x->true);
+        this.dirty = false;
+        converter.onApprove(()-> this.dirty=true);
     }
 
     @Override
@@ -65,13 +70,24 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
     @Override
     public List<ScannedCapture> get(Predicate<ScannedCapture> criteria) {
         List<ScannedCapture> ans = new ArrayList<>();
+        if(!dirty){
+            for (ScannedCapture sc : cache){
+                if(sc.isValid() && criteria.test(sc)){
+                    ans.add(sc);
+                }
+            }
+            return ans;
+        }else{
+            cache.clear();
+        }
         for (ExamineeSolutionsEntityInterface ei: comFacade.getExamineeSoultions()) {
-            ScannedCapture inCache = inCache(ei.getId());
-            final ScannedCapture convert = inCache!=null? inCache:converter.convert(ei);
+            final ScannedCapture convert = converter.convert(ei);
             if(convert.isValid() && criteria.test(convert)){
+                cache.add(convert);
                 ans.add(convert);
             }
         }
+        dirty=false;
         return ans;
     }
 
@@ -86,6 +102,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
 
     @Override
     public void create(ScannedCapture scannedCapture) {
+        dirty=true;
         try {
             final long id = comFacade.createExamineeSolution(
                     -1,
@@ -141,6 +158,7 @@ public class ScannedCaptureRepository implements Repository<ScannedCapture> {
 
     @Override
     public void delete(int id) {
+        dirty=true;
         comFacade.deleteExamineeSolution(id);
     }
 
