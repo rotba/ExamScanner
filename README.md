@@ -6,7 +6,7 @@ Requirments:
 - device with Android operation system
 - internet connectivity
 
-SetUp:
+Initial SetUp:
 - download the .apk file to your device and install it.
 - on your PC, from the 'app' folder run 'firebase deploy' to use the remote DB, storage and functions (one time only)
 
